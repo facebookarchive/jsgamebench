@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [ $USER != "root" ]; then
+                echo 'script must be run sudo'
+                exit
+        fi
+
+
+pkill node
+
+node bin/jsgamebench -80 >& logs/jsgamebench.log &
+

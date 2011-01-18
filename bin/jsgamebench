@@ -1,0 +1,55 @@
+#! /usr/bin/env node
+
+// Copyright 2004-present Facebook. All Rights Reserved.
+
+// Licensed under the Apache License, Version 2.0 (the "License"); you may
+// not use this file except in compliance with the License. You may obtain
+// a copy of the License at
+
+//     http://www.apache.org/licenses/LICENSE-2.0
+
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations
+// under the License.
+
+sys = require('sys');
+fs = require('fs');
+path = require('path');
+events = require('events');
+http = require('http');
+crypto = require('crypto');
+url = require('url');
+querystring = require('querystring');
+net = require('net');
+io = require('socket.io');
+
+Log = require('../lib/log');
+LogProc = require('../lib/logproc');
+
+Utils = require('../public/javascript/shared/utils');
+Users = require('../lib/users');
+Server = require('../lib/server');
+Comm = require('../lib/comm');
+Grid = require('../public/javascript/shared/grid');
+GridSvr = require('../public/javascript/shared/gridsvr');
+Vec = require('../public/javascript/shared/vec');
+Mathx = require('../public/javascript/shared/math');
+Socket = require('../lib/socket');
+SvrGame = require('../lib/svrgame');
+SvrCmds = require('../lib/svrcmds');
+
+sys.puts("starting server");
+var production_mode = false;
+SvrGame.init();
+for(var i=0;i<process.argv.length;i++) {
+  if (process.argv[i] == '-80') {
+    production_mode = true;
+  }
+}
+
+sys.puts("reading log file");
+LogProc.start('logs/stats.log',null);
+
+Server.init(Server.serverCallback,production_mode ? 80 : 8081);
