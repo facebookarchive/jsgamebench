@@ -243,7 +243,11 @@ var Game = (function() {
 
   function fbLogin() {
     var client_id, redirect_url;
-    redirect_url = location.href+'oauth_redirect';
+    redirect_url = location.href;
+    if (redirect_url[redirect_url.length-1]!='/'){
+      redirect_url += '/';
+    }
+    redirect_url += 'oauth_redirect';
     window.location = 'https://graph.facebook.com/oauth/authorize?client_id=' + client_user.app_id + '&redirect_uri=' + redirect_url +
     '&scope=publish_stream,read_stream,user_about_me';
     //user_photos,user_photo_video_tags,friends_photo_video_tags,
