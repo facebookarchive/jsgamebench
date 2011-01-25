@@ -17,8 +17,9 @@ var ClientCmd = (function() {
       client_user.unique_id = 0;
     }
 
-    function startSession(id) {
+    function startSession(id, app_id) {
       client_user.unique_id = id;
+      client_user.app_id = app_id;
       Init.reset();
     }
 
