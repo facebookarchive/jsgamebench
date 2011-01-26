@@ -31,7 +31,12 @@ var PerfTest = (function() {
 
     function incShip(count, x, y) {
       var sprite = ship_sprites[count % ship_sprites.length];
-      Gob.add(Utils.uuidv4(), sprite, parseInt(Math.random() * 8), [Math.random() * x, Math.random() * y], [Math.random() * 10 + 1, 0]);
+      Gob.add(Utils.uuidv4(), sprite, parseInt(Math.random() * 8), [Math.random() * x, Math.random() * y], [Math.random() * 10 + 1, 0], Math.random()*2000);
+    }
+
+    function incShipScaled(count, x, y) {
+      var sprite = ship_sprites[count % ship_sprites.length];
+      Gob.add(Utils.uuidv4(), sprite, parseInt(Math.random() * 8), [Math.random() * x, Math.random() * y], [Math.random() * 10 + 1, 0], Math.random()*2000, Math.random()*2+0.25);
     }
 
     function incShipRot(count, x, y) {
@@ -159,7 +164,8 @@ var PerfTest = (function() {
     var sprites = {aa: {sp: ship, inc: incShip, num: 20},
                    ninja: {sp: ninjas, inc: incNinja, num: 15},
                    ninjarot: {sp: ninjas, inc: incNinjaRot, num: 5},
-                   rot: {sp: ship, inc: incShipRot, num: 5}};
+                   rot: {sp: ship, inc: incShipRot, num: 5},
+                   scale: {sp: ship, inc: incShipScaled, num: 5}};
 
     function scrollBackground() {
       Sprites.add('world', {url: '/images/stars.png', frames: 1,

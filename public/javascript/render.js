@@ -244,7 +244,7 @@ var Render = (function() {
                 if (framedata.dirty) {
                   DomRender.transformedProp(gobel,
                                             framedata.pos,
-                                            framedata.size,
+                                            [framedata.size[0]*framedata.scale,framedata.size[1]*framedata.scale],
                                             framedata.vel, framedata.discon);
                 }
                 if (GameFrame.settings.use_div_background) {
@@ -260,7 +260,7 @@ var Render = (function() {
                   drawar.push('<div id="' + id + '" class="spriteholder" ' +
                               'style="position:absolute;overflow:hidden;' +
                               DomRender.transformed(framedata.pos,
-                                                    framedata.size,
+                                                    [framedata.size[0]*framedata.scale,framedata.size[1]*framedata.scale],
                                                     framedata.vel) +
                               'background:url(\'' + framedata.url +
                               '\');background-position: -' + framedata.x +
@@ -269,11 +269,11 @@ var Render = (function() {
                   drawar.push('<div id="' + id + '" class="spriteholder" ' +
                               'style="position:absolute;overflow:hidden;' +
                               DomRender.transformed(framedata.pos,
-                                                    framedata.size,
+                                                    [framedata.size[0]*framedata.scale,framedata.size[1]*framedata.scale],
                                                     framedata.vel) +
                               '"><img class="sprite" src="' + framedata.url +
                               '" style="left:-' + framedata.x +
-                              'px;top:-' + framedata.y + 'px;"></img></div>');
+                              'px;top:-' + framedata.y + 'px;width:'+framedata.size[0]*framedata.scale+'px;height:'+framedata.size[1]*framedata.scale+'px;"></img></div>');
                 }
               }
             }
