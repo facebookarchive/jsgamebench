@@ -294,11 +294,11 @@ var Game = (function() {
       }
     } else {
       var accel = UI.getGyro();
-      if (accel[2] < -5) {
+      if (accel[2] > 5) {
         forward = accel[2] / 40;
       }
       if (accel[1] > 5 || accel[1] < -5) {
-        angle += accel[1] / 100;
+        angle -= accel[1] / 100;
       }
     }
     if (angle < 0) {
