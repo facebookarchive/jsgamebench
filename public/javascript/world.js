@@ -89,8 +89,8 @@ var World = (function() {
 
       var startx = parseInt(scroll_pos / eachx);
 
-      var edgex = parseInt(GameFrame.getViewport().dstyle.width / eachx) + 2 + startx;
-      var edgey = parseInt(GameFrame.getViewport().dstyle.height / eachy) + 1;
+      var edgex = parseInt(GameFrame.getViewport().dstyle.width / eachx) + startx;
+      var edgey = parseInt(GameFrame.getViewport().dstyle.height / eachy);
 
       if (startx != lastx) {
         for (var i = lastx; i < startx; i++) {

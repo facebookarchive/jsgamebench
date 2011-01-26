@@ -214,7 +214,7 @@ var ClientCmd = (function() {
     function rotDemo() {
       UI.del('buttons');
       UI.del('perf');
-      PerfTest.addTest({viewport: 'fluid_width', settings: {render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: true, rotate_only: true, css_transitions: true}, tfps: 30, background: 'world', sprites: 'rot', demo: true });
+      PerfTest.addTest({viewport: 'normal', settings: {render_mode: GameFrame.CANVAS_ONLY, update_existing: true, canvas_background: true, sprite_sheets: true}, tfps: 20, background: 'world', sprites: 'rot', demo: true });
       PerfTest.doAll();
     }
 
