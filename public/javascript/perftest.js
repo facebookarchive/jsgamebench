@@ -31,7 +31,7 @@ var PerfTest = (function() {
 
     function incShip(count, x, y) {
       var sprite = ship_sprites[count % ship_sprites.length];
-      Gob.add(Utils.uuidv4(), sprite, parseInt(Math.random() * 8), [Math.random() * x, Math.random() * y], [Math.random() * 10 + 1, 0]);
+      Gob.add(Utils.uuidv4(), sprite, parseInt(Math.random() * 8), [Math.random() * x, Math.random() * y], [Math.random() * 10 + 1, 0], Math.random()*2000);
     }
 
     function incShipRot(count, x, y) {

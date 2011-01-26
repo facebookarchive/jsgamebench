@@ -16,7 +16,7 @@ var Gob = (function() {
     var gobs = {};
     var Gob = {};
 
-    function add(id, spriteid, frame, pos, vel) {
+    function add(id, spriteid, frame, pos, vel, z, scale) {
       var basesprite = spriteid;
       if (!GameFrame.settings.sprite_sheets) {
         spriteid += "0";
@@ -24,13 +24,12 @@ var Gob = (function() {
       var sprite = Sprites.spritedictionary[spriteid];
       if (frame >= sprite.frames)
         frame = 0;
-      gobs[id] = {id: id, spriteid: basesprite, frame: frame, pos: pos, vel: vel, z: Math.random() * 2000, dirty: true, time: Tick.current, atime: Tick.current, animate: false, discon: true};
+      gobs[id] = {id: id, spriteid: basesprite, frame: frame, pos: pos, vel: (vel ? vel : vel), scale: (scale ? scale : 1), z: (z ? z : Math.random() * 2000), dirty: true, time: Tick.current, atime: Tick.current, animate: false, discon: true};
       return gobs[id];
     }
 
     function addSimple(id, spriteid, pos, z, frame) {
-      gobs[id] = { id: id, spriteid: spriteid, frame: frame, pos: pos, vel: [0, 0], z: z, dirty: true};
-      return gobs[id];
+      return add(id, spriteid, frame, pos, [0,0], z, 1);
     }
 
     function del(id) {
@@ -71,9 +70,10 @@ var Gob = (function() {
       gob.frame = gob.frame % sprite.frames;
 
       var retval = {dirty: gob.dirty, animating: sprite.frames > 1 ? true : false,
-                    pos: [gob.pos[0] - sprite.width * 0.5 - sprite.left,
-                          gob.pos[1] - sprite.height * 0.5 - sprite.top],
+                    pos: [gob.pos[0] - sprite.width * 0.5 * gob.scale - sprite.left,
+                          gob.pos[1] - sprite.height * 0.5 * gob.scale - sprite.top],
                     vel: gob.vel, discon: gob.discon,
+                    scale: gob.scale,
                     size: [sprite.width, sprite.height],
                     x: offset[0] * sprite.width,
                     y: offset[1] * sprite.height,
