@@ -47,6 +47,4 @@ Get the stable build of nodejs from http://nodejs.org/#download
 
 ## OPTIONAL install node-inspector for server debugging: (https://github.com/dannycoates/node-inspector)
 
-<code>
-npm install node-inspector
-</code>
+  npm install node-inspector
