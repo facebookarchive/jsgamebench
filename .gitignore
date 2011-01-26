@@ -1,4 +1,5 @@
 *.log
+*.swp
 a.out
 app_secret
 
