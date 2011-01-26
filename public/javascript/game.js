@@ -292,19 +292,19 @@ var Game = (function() {
       if (JSGlobal.key_state[Key.LEFT] > 0 || keyDown('A')) {
         angle += 0.2;
       }
-      if (angle < 0) {
-        angle += 2 * Math.PI;
-      }
-      angle %= (2 * Math.PI);
     } else {
       var accel = UI.getGyro();
-      if (accel[2] > 10 || accel[2] < -10) {
-        forward = accel[2] / 20;
+      if (accel[2] < -5) {
+        forward = accel[2] / 40;
       }
-      if (accel[1] > 10 || accel[1] < -10) {
+      if (accel[1] > 5 || accel[1] < -5) {
         angle += accel[1] / 100;
       }
     }
+    if (angle < 0) {
+	    angle += 2 * Math.PI;
+    }
+    angle %= (2 * Math.PI);
 
     var MAXVEL = 18;
     var FRICTION = .98;
