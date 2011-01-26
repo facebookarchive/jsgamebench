@@ -14,25 +14,34 @@
 
 var Xhr = (function() {
     var socket;
-    var options = {transports: ['xhr-polling']};
-    switch (JSGlobal.browser) {
-      case JSGlobal.CHROME:
-      case JSGlobal.WEBKIT:
+  
+    function init() {
+      var options = {transports: ['xhr-polling']};
+      switch (JSGlobal.browser) {
+        case JSGlobal.CHROME:
+        case JSGlobal.WEBKIT:
         options.transports = ['websocket', 'xhr-polling'];
-        //socket = new io.Socket(null, {transports: ['websocket', 'xhr-polling']});
         break;
-    }
-    var transports = {'websocket':1, 'xhr-polling':1, 'flashsocket':1};
-    var list = document.URL.split('/');
-    for(var i in list) {
-      if (transports[list[i]]) {
-        options.transports = list[i];
       }
-    }
-    console.log('transports: ' + JSON.stringify(options));
-    socket = new io.Socket(null, options);
-    socket.connect();
+      var transports = {'websocket':1, 'xhr-polling':1, 'flashsocket':1};
+      var list = document.URL.split('/');
+      for(var i in list) {
+        if (transports[list[i]]) {
+          options.transports = list[i];
+        }
+      }
+      console.log('transports: ' + JSON.stringify(options));
+      socket = new io.Socket(null, options);
+      socket.connect();
 
+      socket.on('message', function(data) {
+          data = JSON.parse(data.replace('<', '&lt;').replace('>', '&gt;'));
+          for (var i = 0, len = data.cmds.length; i < len; i++) {
+            ClientCmd.exec(data.cmds[i]);
+          }
+        });
+    }
+  
     function reconnect() {
       socket.connect();
       toServer({cmd:"",args:[]});
@@ -45,13 +54,6 @@ var Xhr = (function() {
       socket.send(JSON.stringify({user_id: unique_id, req_id: req_id, cmd: cmd}));
     }
 
-    socket.on('message', function(data) {
-        data = JSON.parse(data.replace('<', '&lt;').replace('>', '&gt;'));
-        for (var i = 0, len = data.cmds.length; i < len; i++) {
-          ClientCmd.exec(data.cmds[i]);
-        }
-      });
-
     function test() 	{
       var uuid = Utils.uuidv4();
       GridClient.add({extent: [[0, 0], [1, 2]], uuid: uuid});
@@ -61,6 +63,7 @@ var Xhr = (function() {
     var Xhr = {};
     Xhr.toServer = toServer;
     Xhr.test = test;
+    Xhr.init = init;
     Xhr.reconnect = reconnect;
     return Xhr;
   })();

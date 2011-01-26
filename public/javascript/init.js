@@ -25,6 +25,7 @@ var Init = (function() {
     function timer_kick_off() {
       JSGlobal.TIMERS_LAUNCHED = true;
       Render.setupBrowserSpecific();
+      Xhr.init();
       setInterval('Game.tick();', 33);
       setInterval('Init.tick();', 1);
       Xhr.toServer({cmd: '', args: []});
