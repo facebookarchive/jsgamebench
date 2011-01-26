@@ -177,6 +177,8 @@ var ClientCmd = (function() {
       UI.addButton('buttons', 'htmldemo', {pos: [210, 5], width: 95, height: 20, text: 'HTML Demo', command: {cmd: 'htmldemo', args: []}});
       UI.addButton('buttons', 'rotdemo', {pos: [315, 5], width: 95, height: 20, text: 'Rotate Demo', command: {cmd: 'rotdemo', args: []}});
       UI.addButton('buttons', 'scrollableddemo', {pos: [420, 5], width: 95, height: 20, text: 'Scroll Demo', command: {cmd: 'scrolldemo', args: []}});
+      UI.addButton('buttons', 'scaledcdemo', {pos: [525, 5], width: 95, height: 20, text: 'Scaled Canvas', command: {cmd: 'scanvasdemo', args: []}});
+      UI.addButton('buttons', 'scaledhdemo', {pos: [630, 5], width: 95, height: 20, text: 'Scaled HTML', command: {cmd: 'shtmldemo', args: []}});
       UI.addCollection(null, 'perf', {pos: [100, 50], width: 260});
       if (JSGlobal.myscore) {
         UI.addHTML('perf', 'myscore', {pos: [350, 10], width:1000,uiclass: 'perfscore', markup: "Your score is " + JSGlobal.myscore + " sprites!"});
@@ -223,6 +225,20 @@ var ClientCmd = (function() {
       UI.del('buttons');
       UI.del('perf');
       PerfTest.addTest({viewport: 'fluid_width', settings: {render_mode: GameFrame.CANVAS_ONLY, canvas_background: false, canvas_bake_background: false}, tfps: 30, background: 'scroll', sprites: 'aa', demo: true });
+      PerfTest.doAll();
+    }
+
+    function sCanvasDemo() {
+      UI.del('buttons');
+      UI.del('perf');
+      PerfTest.addTest({viewport: 'fluid_width', settings: {render_mode: GameFrame.CANVAS_ONLY, canvas_background: true, sprite_sheets: false}, tfps: 30, background: 'world', sprites: 'scale', demo: true });
+      PerfTest.doAll();
+    }
+
+    function sHtmlDemo() {
+      UI.del('buttons');
+      UI.del('perf');
+      PerfTest.addTest({viewport: 'fluid_width', settings: {render_mode: GameFrame.HTML_ONLY, update_existing: false, use_div_background: false, rotate_only: true, css_transitions: false, sprite_sheets: false}, tfps: 30, background: 'world', sprites: 'scale', demo: true });
       PerfTest.doAll();
     }
 
@@ -273,6 +289,8 @@ var ClientCmd = (function() {
     install('canvasdemo', canvasDemo);
     install('htmldemo', htmlDemo);
     install('rotdemo', rotDemo);
+    install('scanvasdemo', sCanvasDemo);
+    install('shtmldemo', sHtmlDemo);
     install('scrolldemo', scrollDemo);
     install('playgame', playGame);
     install('playgamehtml', playGameHTML);

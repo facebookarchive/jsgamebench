@@ -253,7 +253,7 @@ var Render = (function() {
                     'px -' + framedata.y + 'px';
                 } else {
                   gobel.childNodes[0].style.cssText = 'left:-' + framedata.x +
-                    'px;top:-' + framedata.y + 'px;'+'width:'+framedata.size[0]*framedata.scale+'px;height:'+framedata.size[1]*framedata.scale+'px;';
+                    'px;top:-' + framedata.y + 'px;';
                 }
               } else {
                 if (GameFrame.settings.use_div_background) {
