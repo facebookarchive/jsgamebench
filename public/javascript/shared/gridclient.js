@@ -29,7 +29,7 @@ var GridClient = (function() {
       Xhr.toServer({cmd: 'remove', args: [grid.idx, uuid]});
     }
 
-     function recvAdd(grid, obj) {
+    function recvAdd(grid, obj) {
         if (grid.interp && obj.extent) {
          grid.interp[obj.uuid] = { updates: [{extent: obj.extent, date: obj.date}] };
        }

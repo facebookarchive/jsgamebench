@@ -457,7 +457,7 @@ var Game = (function() {
     GridClient.interpReceived(client_user.ent_grid);
     // GridClient.interpReceived(client_user.world_grid); // maybe not?
     // Draw entities
-    Gob.delAll();
+    //Gob.delAll();
     var list = Grid.findByArea(client_user.ent_grid, scr_pos,[TILE_X + JSGlobal.w, TILE_Y + JSGlobal.h]);
 
     for (var i in list) {
@@ -504,18 +504,20 @@ var Game = (function() {
 
     function init(test) {
       PerfTest.pushTest(function() {
-          Gob.delAll();
-          UI.hookUIEvents('gamebody');
-          GameFrame.updateSettings(test.settings, true);
-          GameFrame.setXbyY(test.viewport);
+        Gob.delAll();
+        UI.hookUIEvents('gamebody');
+        GameFrame.updateSettings(test.settings, true);
+        GameFrame.setXbyY(test.viewport);
 
-          loadTiles();
-          client_user.game_active = true;
-        });
+        loadTiles();
+        client_user.game_active = true;
+      });
 
       PerfTest.pushStop(function() {
         sprites_loaded = false;
       });
+      client_user.grids[0].removeCB = World.del;
+      client_user.grids[1].removeCB = Gob.del;
     }
 
     var Game = {};

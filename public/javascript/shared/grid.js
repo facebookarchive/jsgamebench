@@ -136,6 +136,7 @@ var Grid = (function() {
       if (grid.field_versions && grid.field_versions[uuid]) {
         delete grid.field_versions[uuid];
       }
+      grid.removeCB && grid.removeCB(uuid);
       return obj;
     }
 
