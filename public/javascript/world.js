@@ -58,12 +58,12 @@ var World = (function() {
 
     function initScrollable(data) {
       scrolling = data.scrollx;
-      var eachx = data.eachx;
+      var eachx = data.eachx - 2;
       var eachy = data.eachy;
 
       var startx = 0;
-      var edgex = parseInt(GameFrame.getViewport().dstyle.width / eachx) + 2;
-      var edgey = parseInt(GameFrame.getViewport().dstyle.height / eachy) + 1;
+      var edgex = parseInt(GameFrame.getViewport().dstyle.width / eachx)+2;
+      var edgey = parseInt(GameFrame.getViewport().dstyle.height / eachy)+1;
 
       var tilelist = data.tilelist;
       var len = tilelist.length;
@@ -71,7 +71,7 @@ var World = (function() {
       for (var i = 0; i < edgex; i++) {
         for (var j = 0; j < edgey; j++) {
           add((j + 1) * 1000000 + i, tilelist[parseInt(Math.random() * len)],
-              [(i + 0.5) * eachx, j * eachy], z++);
+              [(i+0.5) * eachx, j * eachy], z++);
         }
       }
       sdata = data;
@@ -84,13 +84,13 @@ var World = (function() {
       var offsetx = 0;
       var offsety = 0;
 
-      var eachx = sdata.eachx;
+      var eachx = sdata.eachx - 2;
       var eachy = sdata.eachy;
 
       var startx = parseInt(scroll_pos / eachx);
 
-      var edgex = parseInt(GameFrame.getViewport().dstyle.width / eachx) + startx;
-      var edgey = parseInt(GameFrame.getViewport().dstyle.height / eachy);
+      var edgex = parseInt(GameFrame.getViewport().dstyle.width / eachx) + startx + 2;
+      var edgey = parseInt(GameFrame.getViewport().dstyle.height / eachy) + 1;
 
       if (startx != lastx) {
         for (var i = lastx; i < startx; i++) {
