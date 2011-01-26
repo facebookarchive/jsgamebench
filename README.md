@@ -24,6 +24,29 @@ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 License for the specific language governing permissions and limitations
 under the License.
 
-# How to use
+# How to run it
 
-# More info than you wanted
+## install nodejs
+Get the stable build of nodejs from http://nodejs.org/#download
+    ./configure --prefix=~/local
+    make;make install
+    add ~/local/bin to your PATH
+
+## install npm (node package manager https://github.com/isaacs/npm)
+
+    curl http://npmjs.org/install.sh | sh
+
+    install node socket.io package
+    npm install socket.io
+
+## run it:
+
+    node bin/jsgamebench
+
+(runs on port 8081 by default)
+
+## OPTIONAL install node-inspector for server debugging: (https://github.com/dannycoates/node-inspector)
+
+<code>
+npm install node-inspector
+</code>
