@@ -14,16 +14,23 @@
 
 var Xhr = (function() {
     var socket;
+    var options = {transports: ['xhr-polling']};
     switch (JSGlobal.browser) {
       case JSGlobal.CHROME:
       case JSGlobal.WEBKIT:
-        socket = new io.Socket(null, {transports: ['websocket', 'xhr-polling']});
-        break;
-      default:
-        socket = new io.Socket(null, {transports: ['xhr-polling']});
+        options.transports = ['websocket', 'xhr-polling'];
+        //socket = new io.Socket(null, {transports: ['websocket', 'xhr-polling']});
         break;
     }
-
+    var transports = {'websocket':1, 'xhr-polling':1, 'flashsocket':1};
+    var list = document.URL.split('/');
+    for(var i in list) {
+      if (transports[list[i]]) {
+        options.transports = list[i];
+      }
+    }
+    console.log('transports: ' + JSON.stringify(options));
+    socket = new io.Socket(null, options);
     socket.connect();
 
     function reconnect() {

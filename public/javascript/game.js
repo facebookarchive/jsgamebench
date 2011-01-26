@@ -427,6 +427,9 @@ var Game = (function() {
     if (!Sprites.fullyLoaded() || !sprites_loaded) {
       return;
     }
+    if (keyDown('P')) {
+      Xhr.toServer({cmd: 'ping', args: [(new Date).getTime()]});
+    }
     if (keyDown('L')) {
       if (!client_user.is_logging_in) {
         fbLogin();
