@@ -24,6 +24,7 @@
 // entries[] - obj pointers
 
 var Grid = (function() {
+    var clock_skew = 0;
     var cell_size = 1024;
     function cellSnap(p) {
       var t = parseInt((p + (1 << 24)) / cell_size, 10);
@@ -128,7 +129,7 @@ var Grid = (function() {
         console.log('cant find for remove: ' + uuid);
         return;
       }
-      obj.date = (new Date).getTime();
+      obj.date = (new Date).getTime() + clock_skew;
       //console.log("remove from p("+obj.extent[0][0]+","+obj.extent[0][1]+")");
       var cell = unlink(grid, obj);
       addCommand(grid, cell, 'remove', uuid, [uuid]);
@@ -146,7 +147,9 @@ var Grid = (function() {
         console.log('cant find for update: ' + uuid);
         return;
       }
-      options.date = (new Date).getTime();
+      if (!options.date) {
+        options.date = (new Date).getTime();
+      }
       var cell = findCell(grid, obj.extent[0]);
       if (!cell) {
         // FIXMEBRUCE - should only need to call this for objects the client is controlling
@@ -214,6 +217,10 @@ var Grid = (function() {
       return list;
     }
 
+    function setClockSkew(skew) {
+      Grid.clock_skew = clock_skew;
+    }
+    
     var Grid = {};
     Grid.add = add;
     Grid.remove = remove;
@@ -223,6 +230,7 @@ var Grid = (function() {
     Grid.walkCells = walkCells;
     Grid.cell_size = cell_size;
     Grid.debugObjCellPos = debugObjCellPos;
+    Grid.setClockSkew = setClockSkew;
     return Grid;
   })();
 

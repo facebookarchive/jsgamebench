@@ -48,6 +48,7 @@ var ClientCmd = (function() {
       clock = parseInt(curr_msecs);
       GridClient.params.clock_skew = clock - (new Date).getTime();
       GridClient.params.frame_msecs = parseInt(frame_msecs);
+      Grid.setClockSkew(GridClient.params.clock_skew);
       if (last_clock) {
         var push_latency = clock - last_clock;
       }
