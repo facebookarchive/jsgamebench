@@ -139,6 +139,7 @@ var Game = (function() {
       return best;
     }
 
+  var g_ver = 0;
   function makeMob(pos, vel, type) {
     var sprite;
     var life;
@@ -302,7 +303,7 @@ var Game = (function() {
       }
     }
     if (angle < 0) {
-	    angle += 2 * Math.PI;
+      angle += 2 * Math.PI;
     }
     angle %= (2 * Math.PI);
 
@@ -369,39 +370,37 @@ var Game = (function() {
       if (!client_user.dir || Vec.mag(vel) > 0.01) {
         client_user.dir = Vec.norm(vel);
       }
-      if (1) {
-        var hit = getRock(me);
-        if (hit) {
-          var center = Vec.add(hit.extent[0],Vec.scale(hit.extent[1],.5));
-          var ship = Vec.add(me.extent[0],Vec.scale(me.extent[1],.5));
-          var normal = (Vec.sub(ship,center));
-          var r = reflect(vel,normal);
-          vel = r;
-        }
-        plr_pos[0] += vel[0];
-        plr_pos[1] += vel[1];
-      } else {
-        if (!hitWall(Vec.add(plr_pos, [vel[0], 0]), horngirl_id))
-          plr_pos[0] += vel[0];
-        if (!hitWall(Vec.add(plr_pos, [0, vel[1]]), horngirl_id))
-          plr_pos[1] += vel[1];
+      var hit = getRock(me);
+      if (hit) {
+        var center = Vec.add(hit.extent[0],Vec.scale(hit.extent[1],.5));
+        var ship = Vec.add(me.extent[0],Vec.scale(me.extent[1],.5));
+        var normal = (Vec.sub(ship,center));
+        var r = reflect(vel,normal);
+        vel = r;
       }
-      if (vel[0] || vel[1] || angle != me.angle || forward) {
-        if (forward) {
-          if (me.state < 2) {
-            me.state++;
-          }
+      plr_pos[0] += vel[0];
+      plr_pos[1] += vel[1];
+    } else {
+      if (!hitWall(Vec.add(plr_pos, [vel[0], 0]), horngirl_id))
+      plr_pos[0] += vel[0];
+      if (!hitWall(Vec.add(plr_pos, [0, vel[1]]), horngirl_id))
+      plr_pos[1] += vel[1];
+    }
+    if (vel[0] || vel[1] || angle != me.angle || forward) {
+      if (forward) {
+        if (me.state < 2) {
+          me.state++;
         }
-        else {
-          me.state = 0;
-        }
-        GridClient.transform(client_user.ent_grid, horngirl_id, {angle:angle, extent: [Utils.clone(plr_pos), [TILE_X, TILE_Y]], vel: vel, state:me.state});
       }
-      if (JSGlobal.key_state[32] > 0 || JSGlobal.mouse.buttons[0]) {
-        JSGlobal.key_state[32] = 0;
-        JSGlobal.mouse.buttons[0] = 0;
-        shootForward(me);
+      else {
+        me.state = 0;
       }
+      GridClient.transform(client_user.ent_grid, horngirl_id, {angle:angle, extent: [Utils.clone(plr_pos), [TILE_X, TILE_Y]], vel: vel, state:me.state});
+    }
+    if (JSGlobal.key_state[32] > 0 || JSGlobal.mouse.buttons[0]) {
+      JSGlobal.key_state[32] = 0;
+      JSGlobal.mouse.buttons[0] = 0;
+      shootForward(me);
     }
   }
 

@@ -54,7 +54,7 @@ var GridClient = (function() {
 
     var params = {
       clock_skew: 0,
-      frame_msecs: 100
+      frame_msecs: 200
     };
     function interpReceived(grid) {
       var curr_time = (new Date).getTime() + params.clock_skew - params.frame_msecs;

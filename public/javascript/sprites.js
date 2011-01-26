@@ -30,6 +30,16 @@ var Sprites = (function() {
       if (!spriteel)
         spriteel = document.getElementById('spritecache');
 
+      if (data.half_res) {
+        data.halfres = 0;
+        var idx = data.url.lastIndexOf('.');
+        var base = data.url.substr(0,idx);
+        var ext = data.url.substr(idx);
+        data.url = base+'_half'+ext;
+        console.log('half url: ' +data.url);
+        data.width /= 2;
+        data.height /= 2;
+      }
       if (spritedictionary[id] === undefined) {
         if (data.left === undefined) {
           data.left = 0;

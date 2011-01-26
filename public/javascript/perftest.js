@@ -140,6 +140,7 @@ var PerfTest = (function() {
                 width: 128, height: 128});
         }
 
+        // FIXMECORY - this should be a magical loader thingy
         for (var i=6;i<59;i++) {
           var s = i-6;
           Sprites.add('boom'+s, {url: '/images/explosion/Test_Explosion_0000'+(i<10?'0'+i:i)+'.png', frames: 53,
