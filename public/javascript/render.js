@@ -210,11 +210,11 @@ var Render = (function() {
                 gobel.src = framedata.url;
                 DomRender.transformedProp(gobel,
                                           framedata.pos,
-                                          framedata.size,
                                           [0, 0]);
               }
             }
           }
+
           World.dirty = false;
 
           for (var id in Gob.gobs) {
@@ -226,7 +226,7 @@ var Render = (function() {
                   if (framedata.animating) {
                     gobel = document.createElement('div');
                     gobel.id = id;
-                    gobel.style.cssText = 'position:absolute;overflow:hidden;left:0px;top:0px;';
+                    gobel.style.cssText = 'position:absolute;overflow:hidden;left:0px;top:0px;width:'+framedata.size[0]*framedata.scale+'px;height:'+framedata.size[1]*framedata.scale+'px;';
                     if (GameFrame.settings.use_div_background) {
                       gobel.style.backgroundImage = 'url(' + framedata.url + ')';
                       gobel.style.backgroundPosition = '-' + framedata.x +
@@ -246,8 +246,7 @@ var Render = (function() {
                 }
                 if (framedata.dirty) {
                   DomRender.transformedProp(gobel,
-                                            framedata.pos,
-                                            [framedata.size[0]*framedata.scale,framedata.size[1]*framedata.scale],
+                                            [framedata.pos[0]|0,framedata.pos[1]|0],
                                             framedata.vel, framedata.discon);
                 }
                 if (framedata.animating) {

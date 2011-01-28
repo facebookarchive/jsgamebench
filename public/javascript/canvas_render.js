@@ -39,9 +39,9 @@ var CanvasRender = (function() {
     }
 
     function bgdraw(framedata) {
-      bctx.drawImage(framedata.image, framedata.x, framedata.y, framedata.size[0],
-                               framedata.size[1], framedata.pos[0], framedata.pos[1],
-                               framedata.size[0], framedata.size[1]);
+      bctx.drawImage(framedata.image, framedata.x | 0, framedata.y | 0, framedata.size[0] | 0,
+                               framedata.size[1] | 0, framedata.pos[0] | 0, framedata.pos[1]| 0,
+                               framedata.size[0] | 0, framedata.size[1] | 0);
     }
 
     function bg2fg() {
@@ -63,7 +63,7 @@ var CanvasRender = (function() {
       } else {
         ctx.drawImage(framedata.image, framedata.x | 0, framedata.y | 0, framedata.size[0],
                     framedata.size[1], framedata.pos[0] | 0, framedata.pos[1] | 0,
-                      framedata.size[0]*framedata.scale, framedata.size[1]*framedata.scale);
+                      (framedata.size[0]*framedata.scale)|0, (framedata.size[1]*framedata.scale)|0);
       }
 
     }

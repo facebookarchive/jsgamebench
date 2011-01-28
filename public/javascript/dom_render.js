@@ -72,19 +72,19 @@ var DomRender = (function() {
         size[0] + 'px;height:' + size[1] + 'px;';
     }
 
-    function axisAlignedProp(domel, pos, size, vel, discon) {
+    function axisAlignedProp(domel, pos, vel, discon) {
       var dstyle = domel.style;
       if (GameFrame.settings.css_transitions) {
         if (!discon) {
           var time = GameFrame.settings.transition_time;
-          dstyle[transition] = 'all ' + parseInt(time * 0.001) + 's linear';
-          dstyle[transformprop] = 'translate(' + (pos[0] + vel[0] * time * 0.01) + 'px, ' + (pos[1] + vel[1] * time * 0.01) + 'px)';
+          dstyle[transition] = transform+' ' + parseInt(time * 0.001) + 's linear';
+          dstyle[transformprop] = 'translate(' + ((pos[0] + vel[0] * time * 0.01)|0) + 'px, ' + ((pos[1] + vel[1] * time * 0.01)|0) + 'px)';
         } else {
           dstyle[transition] = '';
-          dstyle[transformprop] = 'translate(' + pos[0] + 'px, ' + pos[1] + 'px)';
+          dstyle[transformprop] = 'translate(' + (pos[0] | 0) + 'px, ' + (pos[1]|0) + 'px)';
         }
       } else {
-        dstyle[transformprop] = 'translate(' + pos[0] + 'px, ' + pos[1] + 'px)';
+        dstyle[transformprop] = 'translate(' + (pos[0] | 0) + 'px, ' + (pos[1] | 0) + 'px)';
       }
  }
 
@@ -134,12 +134,10 @@ var DomRender = (function() {
         }
       }
     }
-    function transformedProp(domel, pos, size, vel, discon) {
+    function transformedProp(domel, pos, vel, discon) {
       var dstyle = domel.style;
-      dstyle.width = size[0] + 'px';
-      dstyle.height = size[1] + 'px';
       if (vel[1] == 0) {
-        axisAlignedProp(domel, pos, size, vel, discon);
+        axisAlignedProp(domel, pos, vel, discon);
         return;
       }
       var theta = Math.atan2(vel[1], vel[0]);

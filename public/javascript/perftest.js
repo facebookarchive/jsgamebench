@@ -196,7 +196,7 @@ var PerfTest = (function() {
     function noBackground() {
     }
 
-    var background_loaders = {world: worldBackground, scroll: scrollBackground, none: noBackground, ninja: ninjaBackground};
+    var background_loaders = {world: worldBackground, scroll: scrollBackground, none: noBackground, ninja: ninjaBackground, none:noBackground};
 
     var PerfTest = {};
 

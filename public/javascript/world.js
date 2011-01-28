@@ -152,7 +152,7 @@ var World = (function() {
                     pos: [element.pos[0] - sprite.width * 0.5,
                           element.pos[1] - sprite.height * 0.5],
                     size: [sprite.width, sprite.height],
-                    vel: [0, 0],
+                    vel: [0, 0],scale:1,
                     x: 0,
                     y: 0,
                     zindex: sprite.zindex,
