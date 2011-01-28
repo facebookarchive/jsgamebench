@@ -57,12 +57,12 @@ var CanvasRender = (function() {
         var nst = -st;
         ctx.transform(ct + 0.000001, st, nst, ct + 0.000001, framedata.pos[0], framedata.pos[1]);
 //        ctx.transform(ct, st, nst, ct, framedata.pos[0], framedata.pos[1]);
-        ctx.drawImage(framedata.image, framedata.x, framedata.y, framedata.size[0],
+        ctx.drawImage(framedata.image, framedata.x | 0, framedata.y | 0, framedata.size[0],
                       framedata.size[1], 0, 0, framedata.size[0]*framedata.scale, framedata.size[1]*framedata.scale);
         ctx.setTransform(1, 0, 0, 1, 0, 0);
       } else {
-        ctx.drawImage(framedata.image, framedata.x, framedata.y, framedata.size[0],
-                    framedata.size[1], framedata.pos[0], framedata.pos[1],
+        ctx.drawImage(framedata.image, framedata.x | 0, framedata.y | 0, framedata.size[0],
+                    framedata.size[1], framedata.pos[0] | 0, framedata.pos[1] | 0,
                       framedata.size[0]*framedata.scale, framedata.size[1]*framedata.scale);
       }
 
