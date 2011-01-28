@@ -42,13 +42,12 @@ var IGob = (function() {
       var gobel;
       gobel = document.createElement('div');
       gobel.id = id;
-      gobel.className="animating";
-      createPath(id, waypoints[0]);
-      gobel.style.cssText = 'position:absolute;overflow:hidden;left:0px;top:0px;width:'+sprite.width+'px;height:'+sprite.height+'px;-webkit-animation-name: \''+id+'\'';
-
-      gobel.innerHTML = '<img class="sprite animating" src="' + sprite.url +'"></img>';
-
+      gobel.className = "parent";
+//      createPath(id, waypoints[0]);
+      gobel.style.cssText = 'position:absolute';
+      gobel.innerHTML = '<div style="overflow:hidden;left:0px;top:0px;width:'+sprite.width+'px;height:'+sprite.height+'px;" class="animating"><img class="sprite animating" src="' + sprite.url +'"></img></div>';
       domel.appendChild(gobel);
+      DomRender.transformedProp3d(gobel, waypoints[0], [0,0], true);
       return igobs[id];
     }
 

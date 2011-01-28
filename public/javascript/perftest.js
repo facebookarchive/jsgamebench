@@ -38,7 +38,7 @@ var PerfTest = (function() {
     function incIShip(count, x, y) {
       var sprite = ship_sprites[count % ship_sprites.length];
       var sprite = "ship";
-      IGob.add(count, sprite, Math.random()*2000, 1, [[Math.random() * x, Math.random() * y]]);
+      IGob.add(Utils.uuidv4(), sprite, Math.random()*2000, 1, [[Math.random() * x, Math.random() * y]]);
     }
 
     function incShipScaled(count, x, y) {

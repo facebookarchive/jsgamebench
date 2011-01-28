@@ -216,7 +216,7 @@ var ClientCmd = (function() {
     function iDemo() {
       UI.del('buttons');
       UI.del('perf');
-      PerfTest.addTest({viewport: 'fluid_width', settings: {render_mode: GameFrame.HTML_ONLY, sprite_sheets: true, transform3d:true}, tfps: 5, background: 'world', sprites: 'igob', demo: true });
+      PerfTest.addTest({viewport: 'fluid_width', settings: {render_mode: GameFrame.HTML_ONLY, sprite_sheets: true, transform3d:true}, tfps: 20, background: 'world', sprites: 'igob', demo: true });
       PerfTest.doAll();
     }
 
