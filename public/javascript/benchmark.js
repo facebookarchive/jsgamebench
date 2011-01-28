@@ -53,7 +53,7 @@ var Benchmark = (function() {
           for (var i = 0; i < num; i++) {
             inc(count++, w, h);
           }
-        } else if (fps < 5) {
+        } else if (fps < 0) {
           if (!demo && backoff > 5) {
             runtest = false;
             if (!demo) {

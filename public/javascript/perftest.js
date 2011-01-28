@@ -161,7 +161,7 @@ var PerfTest = (function() {
       }
     }
 
-    var sprites = {aa: {sp: ship, inc: incShip, num: 20},
+    var sprites = {aa: {sp: ship, inc: incShip, num: 1},
                    ninja: {sp: ninjas, inc: incNinja, num: 15},
                    ninjarot: {sp: ninjas, inc: incNinjaRot, num: 5},
                    rot: {sp: ship, inc: incShipRot, num: 5},

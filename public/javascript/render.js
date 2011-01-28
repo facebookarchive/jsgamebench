@@ -113,10 +113,6 @@ var Render = (function() {
           break;
       }
 
-      if (JSGlobal.os == 'Android' || JSGlobal.os == 'Win Mobile' || JSGlobal.os == 'iPod' || JSGlobal.os == 'iPhone' || JSGlobal.os == 'iPad')
-        setInterval('Xhr.reconnect();', 5000);
-
-
       JSGlobal.browser_version = JSGlobal.os + ' ' + JSGlobal.browser_version;
 
       DomRender.setupBrowserSpecific();
@@ -227,17 +223,24 @@ var Render = (function() {
               if (GameFrame.settings.update_existing) {
                 gobel = document.getElementById(id);
                 if (!gobel) {
-                  gobel = document.createElement('div');
-                  gobel.id = id;
-                  gobel.style.cssText = 'position:absolute;overflow:hidden;';
-                  if (GameFrame.settings.use_div_background) {
-                    gobel.style.backgroundImage = 'url(' + framedata.url + ')';
-                    gobel.style.backgroundPosition = '-' + framedata.x +
-                      'px -' + framedata.y + 'px';
+                  if (framedata.animating) {
+                    gobel = document.createElement('div');
+                    gobel.id = id;
+                    gobel.style.cssText = 'position:absolute;overflow:hidden;left:0px;top:0px;';
+                    if (GameFrame.settings.use_div_background) {
+                      gobel.style.backgroundImage = 'url(' + framedata.url + ')';
+                      gobel.style.backgroundPosition = '-' + framedata.x +
+                        'px -' + framedata.y + 'px';
+                    } else {
+                      gobel.innerHTML = '<img class="sprite" src="' + framedata.url +
+                        '" style="left:-' + framedata.x +
+                        'px;top:-' + framedata.y + 'px;"></img>';
+                    }
                   } else {
-                    gobel.innerHTML = '<img class="sprite" src="' + framedata.url +
-                      '" style="left:-' + framedata.x +
-                      'px;top:-' + framedata.y + 'px;"></img>';
+                    gobel = document.createElement('img');
+                    gobel.id = id;
+                    gobel.style.cssText = 'position:absolute;overflow:hidden;left:0px;top:0px;';
+                    gobel.src = framedata.url;
                   }
                   domel.appendChild(gobel);
                 }
@@ -247,13 +250,17 @@ var Render = (function() {
                                             [framedata.size[0]*framedata.scale,framedata.size[1]*framedata.scale],
                                             framedata.vel, framedata.discon);
                 }
-                if (GameFrame.settings.use_div_background) {
-                  gobel.style.backgroundImage = 'url(' + framedata.url + ')';
-                  gobel.style.backgroundPosition = '-' + framedata.x +
-                    'px -' + framedata.y + 'px';
+                if (framedata.animating) {
+                  if (GameFrame.settings.use_div_background) {
+                    gobel.style.backgroundImage = 'url(' + framedata.url + ')';
+                    gobel.style.backgroundPosition = '-' + framedata.x +
+                      'px -' + framedata.y + 'px';
+                  } else {
+                    gobel.childNodes[0].style.cssText = 'left:-' + framedata.x +
+                      'px;top:-' + framedata.y + 'px;';
+                  }
                 } else {
-                  gobel.childNodes[0].style.cssText = 'left:-' + framedata.x +
-                    'px;top:-' + framedata.y + 'px;';
+
                 }
               } else {
                 if (GameFrame.settings.use_div_background) {
@@ -273,7 +280,7 @@ var Render = (function() {
                                                     framedata.vel) +
                               '"><img class="sprite" src="' + framedata.url +
                               '" style="left:-' + framedata.x +
-                              'px;top:-' + framedata.y + 'px;width:'+framedata.size[0]*framedata.scale+'px;height:'+framedata.size[1]*framedata.scale+'px;"></img></div>');
+                              'px;top:-' + framedata.y + 'px;"></img></div>');
                 }
               }
             }

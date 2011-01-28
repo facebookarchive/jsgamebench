@@ -25,7 +25,14 @@
   draggable: false;
 }
 
+div {
+  -webkit-transform: rotateZ(0rad);
+  -moz-transfrom: rotateZ(0rad);
+}
+
 img {
+  -webkit-transform: rotateZ(0rad);
+  -moz-transfrom: rotateZ(0rad);
   border: 0;
 }
 
@@ -40,8 +47,6 @@ body {
 }
 
 div {
-  -webkit-transform: rotate(0deg);
-  -moz-transform: rotate(0deg);
 }
 
 .ui_html {

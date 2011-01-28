@@ -14,7 +14,7 @@
 
 var Xhr = (function() {
     var socket;
-  
+
     function init() {
       var options = {transports: ['xhr-polling']};
       switch (JSGlobal.browser) {
@@ -30,7 +30,7 @@ var Xhr = (function() {
           options.transports = list[i];
         }
       }
-      console.log('transports: ' + JSON.stringify(options));
+//      console.log('transports: ' + JSON.stringify(options));
       socket = new io.Socket(null, options);
       socket.connect();
 
@@ -40,11 +40,6 @@ var Xhr = (function() {
             ClientCmd.exec(data.cmds[i]);
           }
         });
-    }
-  
-    function reconnect() {
-      socket.connect();
-      toServer({cmd:"",args:[]});
     }
 
     function toServer(cmd) {
@@ -64,6 +59,5 @@ var Xhr = (function() {
     Xhr.toServer = toServer;
     Xhr.test = test;
     Xhr.init = init;
-    Xhr.reconnect = reconnect;
     return Xhr;
   })();

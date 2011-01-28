@@ -210,14 +210,15 @@ var ClientCmd = (function() {
     function htmlDemo() {
       UI.del('buttons');
       UI.del('perf');
-      PerfTest.addTest({viewport: 'fluid_width', settings: {render_mode: GameFrame.HTML_ONLY, update_existing: false, use_div_background: false, rotate_only: false, css_transitions: false, sprite_sheets: false}, tfps: 30, background: 'world', sprites: 'aa', demo: true });
+      PerfTest.addTest({viewport: 'fluid_width', settings: {render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: true, rotate_only: true, css_transitions: false, sprite_sheets: true}, tfps: 30, background: 'world', sprites: 'rot', demo: true });
       PerfTest.doAll();
     }
 
     function rotDemo() {
       UI.del('buttons');
       UI.del('perf');
-      PerfTest.addTest({viewport: 'normal', settings: {render_mode: GameFrame.CANVAS_ONLY, update_existing: true, canvas_background: true, sprite_sheets: true}, tfps: 20, background: 'world', sprites: 'rot', demo: true });
+//      PerfTest.addTest({viewport: 'normal', settings: {render_mode: GameFrame.CANVAS_ONLY, update_existing: true, canvas_background: true, sprite_sheets: true}, tfps: 20, background: 'world', sprites: 'rot', demo: true });
+      PerfTest.addTest({viewport: 'fluid_width', settings: {render_mode: GameFrame.HTML_ONLY, update_existing: false, use_div_background: false, rotate_only: true, css_transitions: false, sprite_sheets: false}, tfps: 30, background: 'world', sprites: 'rot', demo: true });
       PerfTest.doAll();
     }
 
@@ -255,7 +256,7 @@ var ClientCmd = (function() {
       UI.del('buttons');
       UI.del('perf');
 
-      Game.init({viewport: 'fluid', settings: {render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: false, rotate_only: true}, tfps: 30, background: 'world', sprites: 'cute', demo: true, hack: true });
+      Game.init({viewport: 'fluid_width', settings: {render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background:false, rotate_only: true, sprite_sheets:true}, tfps: 30, background: 'world', sprites: 'cute', demo: true, hack: true });
 
       PerfTest.doAll();
     }

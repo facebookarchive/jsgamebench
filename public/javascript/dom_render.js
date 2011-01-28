@@ -77,18 +77,14 @@ var DomRender = (function() {
       if (GameFrame.settings.css_transitions) {
         if (!discon) {
           var time = GameFrame.settings.transition_time;
-          dstyle[transition] = 'left ' + parseInt(time * 0.001) + 's linear 0s, top ' + parseInt(time * 0.001) + 's linear 0s';
-          dstyle[transformprop] = 'rotate(0rad)';
-          dstyle.left = (pos[0] + vel[0] * time * 0.01) + 'px';
-          dstyle.top = (pos[1] + vel[1] * time * 0.01) + 'px';
+          dstyle[transition] = 'all ' + parseInt(time * 0.001) + 's linear';
+          dstyle[transformprop] = 'translate(' + (pos[0] + vel[0] * time * 0.01) + 'px, ' + (pos[1] + vel[1] * time * 0.01) + 'px)';
         } else {
           dstyle[transition] = '';
-          dstyle.left = pos[0] + 'px';
-          dstyle.top = pos[1] + 'px';
+          dstyle[transformprop] = 'translate(' + pos[0] + 'px, ' + pos[1] + 'px)';
         }
       } else {
-        dstyle.left = pos[0] + 'px';
-        dstyle.top = pos[1] + 'px';
+        dstyle[transformprop] = 'translate(' + pos[0] + 'px, ' + pos[1] + 'px)';
       }
  }
 
@@ -167,18 +163,18 @@ var DomRender = (function() {
                 dstyle[transition] = 'left ' + parseInt(time * 0.001) + 's linear, top ' + parseInt(time * 0.001) + 's linear';
                 dstyle.left = (pos[0] + vel[0] * time * 0.01) + 'px';
                 dstyle.top = (pos[1] + vel[1] * time * 0.01) + 'px';
-                dstyle[transformprop] = 'rotate(' + theta + 'rad)';
+                dstyle[transformprop] = 'rotateZ(' + theta + 'rad)';
               } else {
                 dstyle[transition] = '';
                 dstyle.left = pos[0] + 'px';
                 dstyle.top = pos[1] + 'px';
-                dstyle[transformprop] = 'rotate(' + theta + 'rad)';
+                dstyle[transformprop] = 'rotateZ(' + theta + 'rad)';
               }
             } else {
               dstyle[transition] = '';
               dstyle.left = pos[0] + 'px';
               dstyle.top = pos[1] + 'px';
-              dstyle[transformprop] = 'rotate(' + theta + 'rad)';
+              dstyle[transformprop] = 'rotateZ(' + theta + 'rad)';
             }
             break;
         }

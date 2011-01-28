@@ -58,18 +58,24 @@ var Gob = (function() {
       var gob = gobs[id];
       var spid = gob.spriteid;
       var frame = gob.frame;
+      var animating = true;
+      var sprite;
       if (!GameFrame.settings.sprite_sheets) {
         spid += gob.frame;
         frame = 0;
+        animating = false;
+        sprite = Sprites.spritedictionary[spid];
+      } else {
+        sprite = Sprites.spritedictionary[spid];
+        animating = sprite.frames > 1 ? true : false;
       }
-      var sprite = Sprites.spritedictionary[spid];
       var offset = sprite.framepos[frame];
       if (!sprite.no_anim) {
         gob.frame++;
       }
       gob.frame = gob.frame % sprite.frames;
 
-      var retval = {dirty: gob.dirty, animating: sprite.frames > 1 ? true : false,
+      var retval = {dirty: gob.dirty, animating: animating,
                     pos: [gob.pos[0] - sprite.width * 0.5 * gob.scale - sprite.left,
                           gob.pos[1] - sprite.height * 0.5 * gob.scale - sprite.top],
                     vel: gob.vel, discon: gob.discon,
