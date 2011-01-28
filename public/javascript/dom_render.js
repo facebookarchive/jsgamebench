@@ -72,25 +72,34 @@ var DomRender = (function() {
         size[0] + 'px;height:' + size[1] + 'px;';
     }
 
+    function axisAlignedTranslate(pos) {
+      return 'translate3d(' + pos[0] + 'px, ' + pos[1] + 'px,0);';
+    }
+
     function axisAlignedProp(domel, pos, vel, discon) {
       var dstyle = domel.style;
       if (GameFrame.settings.css_transitions) {
         if (!discon) {
           var time = GameFrame.settings.transition_time;
           dstyle[transition] = transform+' ' + parseInt(time * 0.001) + 's linear';
-          dstyle[transformprop] = 'translate(' + ((pos[0] + vel[0] * time * 0.01)|0) + 'px, ' + ((pos[1] + vel[1] * time * 0.01)|0) + 'px)';
+          dstyle[transformprop] = 'translate3d(' + (pos[0] + vel[0] * time * 0.01) + 'px, ' + (pos[1] + vel[1] * time * 0.01) + 'px,0)';
         } else {
           dstyle[transition] = '';
-          dstyle[transformprop] = 'translate(' + (pos[0] | 0) + 'px, ' + (pos[1]|0) + 'px)';
+          dstyle[transformprop] = 'translate3d(' + pos[0] + 'px, ' + pos[1] + 'px,0)';
         }
       } else {
-        dstyle[transformprop] = 'translate(' + (pos[0] | 0) + 'px, ' + (pos[1] | 0) + 'px)';
+        dstyle[transformprop] = 'translate3d(' + pos[0] + 'px, ' + pos[1] + 'px,0)';
       }
  }
 
     function transformed(pos, size, vel) {
       if (vel[1] == 0) {
-        return axisAligned(pos, size);
+        switch (JSGlobal.browser) {
+          case JSGlobal.EI:
+            return axisAligned(pos, size);
+          default:
+            return "width:"+size[0]+"px;height:"+size[1]+"px;"+transform + ":" + axisAlignedTranslate(pos);
+        }
       }
 
       var theta = Math.atan2(vel[1], vel[0]);
@@ -108,7 +117,7 @@ var DomRender = (function() {
               '\',sizingMethod=\'auto expand\');';
           default:
             return transform + ':rotate(' + theta + 'rad);' +
-              transformoriginstring + ':0 0;' + axisAligned(pos, size);
+              transformoriginstring + ':0 0;' + axisAlignedTranslate(pos, size);
         }
       } else {
         switch (JSGlobal.browser) {

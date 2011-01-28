@@ -29,6 +29,8 @@ var GameFrame = (function() {
       canvas_background: true,
       canvas_bake_background: true,
       sprite_sheets: true,
+      css_keyframe: true,
+      int_snap: true,
       viewport: 'fluid'
     };
 

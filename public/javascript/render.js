@@ -118,6 +118,18 @@ var Render = (function() {
       DomRender.setupBrowserSpecific();
     }
 
+    function createIfNeeded(id) {
+      var ss = document.styleSheets;
+      for (var i = 0; i < ss.length; ++i) {
+        for (var j = 0; j < ss[i].cssRules.length; ++j) {
+          if (ss[i].cssRules[j].type == window.CSSRule.WEBKIT_KEYFRAMES_RULE && ss[i].cssRules[j].name == id)
+            return;
+        }
+      }
+      var lastSheet = document.styleSheets[document.styleSheets.length - 1];
+      lastSheet.insertRule("@-webkit-keyframes '"+id+"' { from,49.99% { -webkit-transform: translate(0px,0px); } 50%,to { -webkit-transform: translate(-128px,0px); } }", lastSheet.cssRules.length);
+    }
+
     function tick() {
       var drawar = [];
       var framedata = {};
@@ -227,12 +239,13 @@ var Render = (function() {
                     gobel = document.createElement('div');
                     gobel.id = id;
                     gobel.style.cssText = 'position:absolute;overflow:hidden;left:0px;top:0px;width:'+framedata.size[0]*framedata.scale+'px;height:'+framedata.size[1]*framedata.scale+'px;';
+
                     if (GameFrame.settings.use_div_background) {
                       gobel.style.backgroundImage = 'url(' + framedata.url + ')';
                       gobel.style.backgroundPosition = '-' + framedata.x +
                         'px -' + framedata.y + 'px';
                     } else {
-                      gobel.innerHTML = '<img class="sprite" src="' + framedata.url +
+                      gobel.innerHTML = '<img class="sprite" src="' + framedata.url +'"></img>';
                         '" style="left:-' + framedata.x +
                         'px;top:-' + framedata.y + 'px;"></img>';
                     }

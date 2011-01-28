@@ -63,7 +63,7 @@ var Gob = (function() {
       if (!GameFrame.settings.sprite_sheets) {
         spid += gob.frame;
         frame = 0;
-        animating = false;
+        animating = true;
         sprite = Sprites.spritedictionary[spid];
       } else {
         sprite = Sprites.spritedictionary[spid];
@@ -75,9 +75,13 @@ var Gob = (function() {
       }
       gob.frame = gob.frame % sprite.frames;
 
+      var pos = [gob.pos[0] - sprite.width * 0.5, gob.pos[1] - sprite.height * 0.5];
+      if (GameFrame.settings.int_snap) {
+        pos = [pos[0]|0,pos[1]|0];
+      }
+
       var retval = {dirty: gob.dirty, animating: animating,
-                    pos: [gob.pos[0] - sprite.width * 0.5 * gob.scale - sprite.left,
-                          gob.pos[1] - sprite.height * 0.5 * gob.scale - sprite.top],
+                    pos: pos,
                     vel: gob.vel, discon: gob.discon,
                     scale: gob.scale,
                     size: [sprite.width, sprite.height],

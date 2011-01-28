@@ -25,14 +25,22 @@
   draggable: false;
 }
 
-div {
-  -webkit-transform: rotateZ(0rad);
-  -moz-transfrom: rotateZ(0rad);
+img.animating {
+  -webkit-animation-name: 'ship';
+  -webkit-transform: translate3d(0px,0px,0);
+  -webkit-animation-timing-function: linear;
+  -webkit-animation-duration: 0.25s;
+  -webkit-animation-iteration-count: infinite;
 }
 
+
+@-webkit-keyframes 'ship' {
+from,49.99% { -webkit-transform: translate3d(0px,0px,0); }
+50%,to { -webkit-transform: translate3d(-128px,0px,0); }
+}
+
+
 img {
-  -webkit-transform: rotateZ(0rad);
-  -moz-transfrom: rotateZ(0rad);
   border: 0;
 }
 
