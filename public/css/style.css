@@ -33,10 +33,25 @@ img.animating {
   -webkit-animation-iteration-count: infinite;
 }
 
+div.animating {
+  -webkit-transform: translate3d(0px,0px,0);
+  -webkit-animation-timing-function: linear;
+  -webkit-animation-duration: 4s;
+  -webkit-animation-iteration-count: infinite;
+}
+
 
 @-webkit-keyframes 'ship' {
 from,49.99% { -webkit-transform: translate3d(0px,0px,0); }
 50%,to { -webkit-transform: translate3d(-128px,0px,0); }
+}
+
+@-webkit-keyframes 'pos' {
+from { -webkit-transform: translate3d(0px,0px,0); }
+25% { -webkit-transform: translate3d(0px,200px,0); }
+50% { -webkit-transform: translate3d(200px,200px,0); }
+75% { -webkit-transform: translate3d(200px,0px,0); }
+to { -webkit-transform: translate3d(0px,0px,0); }
 }
 
 

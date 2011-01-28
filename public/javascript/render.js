@@ -118,18 +118,6 @@ var Render = (function() {
       DomRender.setupBrowserSpecific();
     }
 
-    function createIfNeeded(id) {
-      var ss = document.styleSheets;
-      for (var i = 0; i < ss.length; ++i) {
-        for (var j = 0; j < ss[i].cssRules.length; ++j) {
-          if (ss[i].cssRules[j].type == window.CSSRule.WEBKIT_KEYFRAMES_RULE && ss[i].cssRules[j].name == id)
-            return;
-        }
-      }
-      var lastSheet = document.styleSheets[document.styleSheets.length - 1];
-      lastSheet.insertRule("@-webkit-keyframes '"+id+"' { from,49.99% { -webkit-transform: translate(0px,0px); } 50%,to { -webkit-transform: translate(-128px,0px); } }", lastSheet.cssRules.length);
-    }
-
     function tick() {
       var drawar = [];
       var framedata = {};

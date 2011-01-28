@@ -22,6 +22,7 @@ var Benchmark = (function() {
     var dec;
     var desc;
     var tid;
+    var nodel;
     var targetfps;
     var timenear;
     var testover;
@@ -38,6 +39,7 @@ var Benchmark = (function() {
        tid = criteria.tid;
        w = criteria.w || JSGlobal.winsize[0];
        h = criteria.h || JSGlobal.winsize[1];
+       nodel = criteria.nodel;
        count = 0;
        frame = 0;
        backoff = 0;
@@ -75,15 +77,17 @@ var Benchmark = (function() {
               PerfTest.done(tid, count);
             }
           } else {
-            for (var i = 0; i < num; i++) {
-              if (count > 1)
-                dec(--count);
+            if (!nodel) {
+              for (var i = 0; i < num; i++) {
+                if (count > 1)
+                  dec(--count);
+              }
+              if (num > 1)
+                num--;
+              else
+                backoff++;
             }
-            if (num > 1)
-              num--;
-            else
-              backoff++;
-            }
+          }
         }
       }
     }
