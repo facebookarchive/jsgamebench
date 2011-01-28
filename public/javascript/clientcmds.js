@@ -210,7 +210,7 @@ var ClientCmd = (function() {
     function htmlDemo() {
       UI.del('buttons');
       UI.del('perf');
-      PerfTest.addTest({viewport: 'fluid_width', settings: {render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: true, rotate_only: true, css_transitions: false, css_keyframe: false, sprite_sheets: false, int_snap: true}, tfps: 30, background: 'world', sprites: 'aa', demo: true });
+      PerfTest.addTest({viewport: 'fluid_width', settings: {render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: true, rotate_only: true, css_transitions: false, css_keyframe: false, sprite_sheets: false, int_snap: true, transform3d:true}, tfps: 30, background: 'world', sprites: 'aa', demo: true });
       PerfTest.doAll();
     }
 

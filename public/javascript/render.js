@@ -220,9 +220,15 @@ var Render = (function() {
                   backgroundel.appendChild(gobel);
                 }
                 gobel.src = framedata.url;
-                DomRender.transformedProp(gobel,
+                if (GameFrame.settings.transform3d) {
+                  DomRender.transformedProp(gobel,
                                           framedata.pos,
                                           [0, 0]);
+                } else {
+                  DomRender.transformedProp3d(gobel,
+                                              framedata.pos,
+                                              [0, 0]);
+                }
               }
             }
           }
@@ -258,9 +264,15 @@ var Render = (function() {
                   domel.appendChild(gobel);
                 }
                 if (framedata.dirty) {
-                  DomRender.transformedProp(gobel,
-                                            [framedata.pos[0]|0,framedata.pos[1]|0],
-                                            framedata.vel, framedata.discon);
+                  if (GameFrame.settings.transform3d) {
+                    DomRender.transformedProp(gobel,
+                                              [framedata.pos[0]|0,framedata.pos[1]|0],
+                                              framedata.vel, framedata.discon);
+                  } else {
+                    DomRender.transformedProp3d(gobel,
+                                              [framedata.pos[0]|0,framedata.pos[1]|0],
+                                              framedata.vel, framedata.discon);
+                  }
                 }
                 if (framedata.animating) {
                   if (GameFrame.settings.use_div_background) {
@@ -276,23 +288,45 @@ var Render = (function() {
                 }
               } else {
                 if (GameFrame.settings.use_div_background) {
-                  drawar.push('<div id="' + id + '" class="spriteholder" ' +
-                              'style="position:absolute;overflow:hidden;' +
-                              DomRender.transformed(framedata.pos,
-                                                    [framedata.size[0]*framedata.scale,framedata.size[1]*framedata.scale],
-                                                    framedata.vel) +
-                              'background:url(\'' + framedata.url +
-                              '\');background-position: -' + framedata.x +
-                              'px -' + framedata.y + 'px;"></div>');
+                  if (GameFrame.settings.transform3d) {
+                    drawar.push('<div id="' + id + '" class="spriteholder" ' +
+                                'style="position:absolute;overflow:hidden;' +
+                                DomRender.transformed3d(framedata.pos,
+                                                      [framedata.size[0]*framedata.scale,framedata.size[1]*framedata.scale],
+                                                      framedata.vel) +
+                                'background:url(\'' + framedata.url +
+                                '\');background-position: -' + framedata.x +
+                                'px -' + framedata.y + 'px;"></div>');
+                  } else {
+                    drawar.push('<div id="' + id + '" class="spriteholder" ' +
+                                'style="position:absolute;overflow:hidden;' +
+                                DomRender.transformed(framedata.pos,
+                                                      [framedata.size[0]*framedata.scale,framedata.size[1]*framedata.scale],
+                                                      framedata.vel) +
+                                'background:url(\'' + framedata.url +
+                                '\');background-position: -' + framedata.x +
+                                'px -' + framedata.y + 'px;"></div>');
+                  }
                 } else {
-                  drawar.push('<div id="' + id + '" class="spriteholder" ' +
-                              'style="position:absolute;overflow:hidden;' +
-                              DomRender.transformed(framedata.pos,
-                                                    [framedata.size[0]*framedata.scale,framedata.size[1]*framedata.scale],
-                                                    framedata.vel) +
-                              '"><img class="sprite" src="' + framedata.url +
-                              '" style="left:-' + framedata.x +
-                              'px;top:-' + framedata.y + 'px;"></img></div>');
+                  if (GameFrame.settings.transform3d) {
+                    drawar.push('<div id="' + id + '" class="spriteholder" ' +
+                                'style="position:absolute;overflow:hidden;' +
+                                DomRender.transformed3d(framedata.pos,
+                                                      [framedata.size[0]*framedata.scale,framedata.size[1]*framedata.scale],
+                                                      framedata.vel) +
+                                '"><img class="sprite" src="' + framedata.url +
+                                '" style="left:-' + framedata.x +
+                                'px;top:-' + framedata.y + 'px;"></img></div>');
+                  } else {
+                    drawar.push('<div id="' + id + '" class="spriteholder" ' +
+                                'style="position:absolute;overflow:hidden;' +
+                                DomRender.transformed(framedata.pos,
+                                                      [framedata.size[0]*framedata.scale,framedata.size[1]*framedata.scale],
+                                                      framedata.vel) +
+                                '"><img class="sprite" src="' + framedata.url +
+                                '" style="left:-' + framedata.x +
+                                'px;top:-' + framedata.y + 'px;"></img></div>');
+                  }
                 }
               }
             }

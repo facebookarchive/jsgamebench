@@ -31,6 +31,7 @@ var GameFrame = (function() {
       sprite_sheets: true,
       css_keyframe: true,
       int_snap: true,
+      transform3d: true,
       viewport: 'fluid'
     };
 
