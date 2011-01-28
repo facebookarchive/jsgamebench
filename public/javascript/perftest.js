@@ -113,6 +113,13 @@ var PerfTest = (function() {
             width: 128, height: 128});
     }
 
+    function iship() {
+      Sprites.add('ship', {url: '/images/ship_fbmark.png', frames: 2,
+            framepos: [[0, 0], [1, 0]],
+            width: 128, height: 128});
+    }
+
+
     function ship() {
       if (GameFrame.settings.sprite_sheets) {
         Sprites.add('ship', {url: '/images/ship_fbmark.png', frames: 2,
@@ -176,7 +183,7 @@ var PerfTest = (function() {
     }
 
     var sprites = {aa: {sp: ship, inc: incShip, num: 5},
-                   igob: {sp: ship, inc: incIShip, dec: idec, num: 10, nodel:true},
+                   igob: {sp: iship, inc: incIShip, dec: idec, num: 10, nodel:true},
                    ninja: {sp: ninjas, inc: incNinja, num: 15},
                    ninjarot: {sp: ninjas, inc: incNinjaRot, num: 5},
                    rot: {sp: ship, inc: incShipRot, num: 5},
