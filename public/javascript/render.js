@@ -113,10 +113,6 @@ var Render = (function() {
           break;
       }
 
-      if (JSGlobal.os == 'Android' || JSGlobal.os == 'Win Mobile' || JSGlobal.os == 'iPod' || JSGlobal.os == 'iPhone' || JSGlobal.os == 'iPad')
-        setInterval('Xhr.reconnect();', 5000);
-
-
       JSGlobal.browser_version = JSGlobal.os + ' ' + JSGlobal.browser_version;
 
       DomRender.setupBrowserSpecific();
@@ -212,13 +208,19 @@ var Render = (function() {
                   backgroundel.appendChild(gobel);
                 }
                 gobel.src = framedata.url;
-                DomRender.transformedProp(gobel,
+                if (GameFrame.settings.transform3d) {
+                  DomRender.transformedProp(gobel,
                                           framedata.pos,
-                                          framedata.size,
                                           [0, 0]);
+                } else {
+                  DomRender.transformedProp3d(gobel,
+                                              framedata.pos,
+                                              [0, 0]);
+                }
               }
             }
           }
+
           World.dirty = false;
 
           for (var id in Gob.gobs) {
@@ -227,53 +229,92 @@ var Render = (function() {
               if (GameFrame.settings.update_existing) {
                 gobel = document.getElementById(id);
                 if (!gobel) {
-                  gobel = document.createElement('div');
-                  gobel.id = id;
-                  gobel.style.cssText = 'position:absolute;overflow:hidden;';
+                  if (framedata.animating) {
+                    gobel = document.createElement('div');
+                    gobel.id = id;
+                    gobel.style.cssText = 'position:absolute;overflow:hidden;left:0px;top:0px;width:'+framedata.size[0]*framedata.scale+'px;height:'+framedata.size[1]*framedata.scale+'px;';
+
+                    if (GameFrame.settings.use_div_background) {
+                      gobel.style.backgroundImage = 'url(' + framedata.url + ')';
+                      gobel.style.backgroundPosition = '-' + framedata.x +
+                        'px -' + framedata.y + 'px';
+                    } else {
+                      gobel.innerHTML = '<img class="sprite" src="' + framedata.url +'"></img>';
+                        '" style="left:-' + framedata.x +
+                        'px;top:-' + framedata.y + 'px;"></img>';
+                    }
+                  } else {
+                    gobel = document.createElement('img');
+                    gobel.id = id;
+                    gobel.style.cssText = 'position:absolute;overflow:hidden;left:0px;top:0px;';
+                    gobel.src = framedata.url;
+                  }
+                  domel.appendChild(gobel);
+                }
+                if (framedata.dirty) {
+                  if (GameFrame.settings.transform3d) {
+                    DomRender.transformedProp(gobel,
+                                              [framedata.pos[0]|0,framedata.pos[1]|0],
+                                              framedata.vel, framedata.discon);
+                  } else {
+                    DomRender.transformedProp3d(gobel,
+                                              [framedata.pos[0]|0,framedata.pos[1]|0],
+                                              framedata.vel, framedata.discon);
+                  }
+                }
+                if (framedata.animating) {
                   if (GameFrame.settings.use_div_background) {
                     gobel.style.backgroundImage = 'url(' + framedata.url + ')';
                     gobel.style.backgroundPosition = '-' + framedata.x +
                       'px -' + framedata.y + 'px';
                   } else {
-                    gobel.innerHTML = '<img class="sprite" src="' + framedata.url +
-                      '" style="left:-' + framedata.x +
-                      'px;top:-' + framedata.y + 'px;"></img>';
+                    gobel.childNodes[0].style.cssText = 'left:-' + framedata.x +
+                      'px;top:-' + framedata.y + 'px;';
                   }
-                  domel.appendChild(gobel);
-                }
-                if (framedata.dirty) {
-                  DomRender.transformedProp(gobel,
-                                            framedata.pos,
-                                            [framedata.size[0]*framedata.scale,framedata.size[1]*framedata.scale],
-                                            framedata.vel, framedata.discon);
-                }
-                if (GameFrame.settings.use_div_background) {
-                  gobel.style.backgroundImage = 'url(' + framedata.url + ')';
-                  gobel.style.backgroundPosition = '-' + framedata.x +
-                    'px -' + framedata.y + 'px';
                 } else {
-                  gobel.childNodes[0].style.cssText = 'left:-' + framedata.x +
-                    'px;top:-' + framedata.y + 'px;';
+
                 }
               } else {
                 if (GameFrame.settings.use_div_background) {
-                  drawar.push('<div id="' + id + '" class="spriteholder" ' +
-                              'style="position:absolute;overflow:hidden;' +
-                              DomRender.transformed(framedata.pos,
-                                                    [framedata.size[0]*framedata.scale,framedata.size[1]*framedata.scale],
-                                                    framedata.vel) +
-                              'background:url(\'' + framedata.url +
-                              '\');background-position: -' + framedata.x +
-                              'px -' + framedata.y + 'px;"></div>');
+                  if (GameFrame.settings.transform3d) {
+                    drawar.push('<div id="' + id + '" class="spriteholder" ' +
+                                'style="position:absolute;overflow:hidden;' +
+                                DomRender.transformed3d(framedata.pos,
+                                                      [framedata.size[0]*framedata.scale,framedata.size[1]*framedata.scale],
+                                                      framedata.vel) +
+                                'background:url(\'' + framedata.url +
+                                '\');background-position: -' + framedata.x +
+                                'px -' + framedata.y + 'px;"></div>');
+                  } else {
+                    drawar.push('<div id="' + id + '" class="spriteholder" ' +
+                                'style="position:absolute;overflow:hidden;' +
+                                DomRender.transformed(framedata.pos,
+                                                      [framedata.size[0]*framedata.scale,framedata.size[1]*framedata.scale],
+                                                      framedata.vel) +
+                                'background:url(\'' + framedata.url +
+                                '\');background-position: -' + framedata.x +
+                                'px -' + framedata.y + 'px;"></div>');
+                  }
                 } else {
-                  drawar.push('<div id="' + id + '" class="spriteholder" ' +
-                              'style="position:absolute;overflow:hidden;' +
-                              DomRender.transformed(framedata.pos,
-                                                    [framedata.size[0]*framedata.scale,framedata.size[1]*framedata.scale],
-                                                    framedata.vel) +
-                              '"><img class="sprite" src="' + framedata.url +
-                              '" style="left:-' + framedata.x +
-                              'px;top:-' + framedata.y + 'px;width:'+framedata.size[0]*framedata.scale+'px;height:'+framedata.size[1]*framedata.scale+'px;"></img></div>');
+                  if (GameFrame.settings.transform3d) {
+                    drawar.push('<div id="' + id + '" class="spriteholder" ' +
+                                'style="position:absolute;overflow:hidden;' +
+                                DomRender.transformed3d(framedata.pos,
+                                                      [framedata.size[0]*framedata.scale,framedata.size[1]*framedata.scale],
+                                                      framedata.vel) +
+                                '"><img class="sprite" src="' + framedata.url +
+                                '" style="left:-' + framedata.x +
+                                'px;top:-' + framedata.y + 'px;"></img></div>');
+                  } else {
+                    drawar.push('<div id="' + id + '" class="spriteholder" ' +
+                                'style="position:absolute;overflow:hidden;' +
+                                DomRender.transformed(framedata.pos,
+                                                      [framedata.size[0]*framedata.scale,framedata.size[1]*framedata.scale],
+                                                      framedata.vel) +
+                                '"><img class="sprite" src="' + framedata.url +
+                                '" style="left:-' + framedata.x +
+                                'px;top:-' + framedata.y + 'px;"></img></div>');
+                  }
                 }
               }
             }

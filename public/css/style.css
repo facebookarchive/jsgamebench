@@ -25,6 +25,42 @@
   draggable: false;
 }
 
+img.animating {
+  -webkit-animation-name: 'ship';
+  -webkit-transform: translate3d(0px,0px,0);
+  -webkit-animation-timing-function: linear;
+  -webkit-animation-duration: 0.25s;
+  -webkit-animation-iteration-count: infinite;
+}
+
+div.parent {
+  -webkit-transform-style: preserve-3d;
+  -webkit-perspective: 400;
+}
+
+div.animating {
+  position:absolute;
+  -webkit-animation-name: 'box';
+  -webkit-animation-timing-function: linear;
+  -webkit-animation-duration: 5s;
+  -webkit-animation-iteration-count: infinite;
+}
+
+
+@-webkit-keyframes 'ship' {
+from,49.99% { -webkit-transform: translate3d(0px,0px,0); }
+50%,to { -webkit-transform: translate3d(-128px,0px,0); }
+}
+
+@-webkit-keyframes 'box' {
+from { -webkit-transform: translate3d(-50px,-50px,200px) rotateZ(0deg); }
+25% { -webkit-transform: translate3d(-50px,50px,-200px) rotateZ(90deg);}
+50% { -webkit-transform: translate3d(50px,50px,200px) rotateZ(180deg); }
+75% { -webkit-transform: translate3d(50px,-50px,-200px) rotateZ(270deg); }
+to { -webkit-transform: translate3d(-50px,-50px,200px) rotateZ(360deg); }
+}
+
+
 img {
   border: 0;
 }
@@ -40,8 +76,6 @@ body {
 }
 
 div {
-  -webkit-transform: rotate(0deg);
-  -moz-transform: rotate(0deg);
 }
 
 .ui_html {
