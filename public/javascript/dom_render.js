@@ -72,29 +72,54 @@ var DomRender = (function() {
         size[0] + 'px;height:' + size[1] + 'px;';
     }
 
-    function axisAlignedProp(domel, pos, size, vel, discon) {
+    function axisAlignedTranslate(pos) {
+      return 'translate(' + pos[0] + 'px, ' + pos[1] + 'px);';
+    }
+
+    function axisAlignedTranslate3d(pos) {
+      return 'translate3d(' + pos[0] + 'px, ' + pos[1] + 'px,0px);';
+    }
+
+    function axisAlignedProp(domel, pos, vel, discon) {
       var dstyle = domel.style;
       if (GameFrame.settings.css_transitions) {
         if (!discon) {
           var time = GameFrame.settings.transition_time;
-          dstyle[transition] = 'left ' + parseInt(time * 0.001) + 's linear 0s, top ' + parseInt(time * 0.001) + 's linear 0s';
-          dstyle[transformprop] = 'rotate(0rad)';
-          dstyle.left = (pos[0] + vel[0] * time * 0.01) + 'px';
-          dstyle.top = (pos[1] + vel[1] * time * 0.01) + 'px';
+          dstyle[transition] = transform+' ' + parseInt(time * 0.001) + 's linear';
+          dstyle[transformprop] = 'translate(' + (pos[0] + vel[0] * time * 0.01) + 'px, ' + (pos[1] + vel[1] * time * 0.01) + 'px)';
         } else {
           dstyle[transition] = '';
-          dstyle.left = pos[0] + 'px';
-          dstyle.top = pos[1] + 'px';
+          dstyle[transformprop] = 'translate(' + pos[0] + 'px, ' + pos[1] + 'px)';
         }
       } else {
-        dstyle.left = pos[0] + 'px';
-        dstyle.top = pos[1] + 'px';
+        dstyle[transformprop] = 'translate(' + pos[0] + 'px, ' + pos[1] + 'px)';
       }
- }
+    }
+
+    function axisAlignedProp3d(domel, pos, vel, discon) {
+      var dstyle = domel.style;
+      if (GameFrame.settings.css_transitions) {
+        if (!discon) {
+          var time = GameFrame.settings.transition_time;
+          dstyle[transition] = transform+' ' + parseInt(time * 0.001) + 's linear';
+          dstyle[transformprop] = 'translate3d(' + (pos[0] + vel[0] * time * 0.01) + 'px, ' + (pos[1] + vel[1] * time * 0.01) + 'px,0)';
+        } else {
+          dstyle[transition] = '';
+          dstyle[transformprop] = 'translate3d(' + pos[0] + 'px, ' + pos[1] + 'px,0)';
+        }
+      } else {
+        dstyle[transformprop] = 'translate3d(' + pos[0] + 'px, ' + pos[1] + 'px,0)';
+      }
+    }
 
     function transformed(pos, size, vel) {
       if (vel[1] == 0) {
-        return axisAligned(pos, size);
+        switch (JSGlobal.browser) {
+          case JSGlobal.EI:
+            return axisAligned(pos, size);
+          default:
+            return "width:"+size[0]+"px;height:"+size[1]+"px;"+transform + ":" + axisAlignedTranslate(pos);
+        }
       }
 
       var theta = Math.atan2(vel[1], vel[0]);
@@ -112,7 +137,7 @@ var DomRender = (function() {
               '\',sizingMethod=\'auto expand\');';
           default:
             return transform + ':rotate(' + theta + 'rad);' +
-              transformoriginstring + ':0 0;' + axisAligned(pos, size);
+              transformoriginstring + ':0 0;' + axisAlignedTranslate(pos, size);
         }
       } else {
         switch (JSGlobal.browser) {
@@ -138,12 +163,38 @@ var DomRender = (function() {
         }
       }
     }
-    function transformedProp(domel, pos, size, vel, discon) {
-      var dstyle = domel.style;
-      dstyle.width = size[0] + 'px';
-      dstyle.height = size[1] + 'px';
+
+    function transformed3d(pos, size, vel) {
       if (vel[1] == 0) {
-        axisAlignedProp(domel, pos, size, vel, discon);
+        switch (JSGlobal.browser) {
+          case JSGlobal.EI:
+            return axisAligned3d(pos, size);
+          default:
+            return "width:"+size[0]+"px;height:"+size[1]+"px;"+transform + ":" + axisAlignedTranslate3d(pos);
+        }
+      }
+
+      var theta = Math.atan2(vel[1], vel[0]);
+      var ct = Math.cos(theta);
+      var st = Math.sin(theta);
+      var nst = -st;
+
+      switch (JSGlobal.browser) {
+        case JSGlobal.IE:
+          return 'width:' + size[0] + 'px;height:' + size[1] + 'px;left:' +
+            pos[0] + 'px;top:' + pos[1] +
+            'px;filter:progid:DXImageTransform.Microsoft.Matrix(M11=\'' +
+            ct + '\',M12=\'' + nst + '\',M21=\'' + st + '\',M22=\'' + ct +
+            '\',sizingMethod=\'auto expand\');';
+        default:
+          return transform + ':' + axisAlignedTranslate3d(pos, size) + ' ' +transformoriginstring + ':0 0;  rotate3d(0,0,1,' + theta + 'rad);';
+      }
+    }
+
+    function transformedProp(domel, pos, vel, discon) {
+      var dstyle = domel.style;
+      if (vel[1] == 0) {
+        axisAlignedProp(domel, pos, vel, discon);
         return;
       }
       var theta = Math.atan2(vel[1], vel[0]);
@@ -167,18 +218,18 @@ var DomRender = (function() {
                 dstyle[transition] = 'left ' + parseInt(time * 0.001) + 's linear, top ' + parseInt(time * 0.001) + 's linear';
                 dstyle.left = (pos[0] + vel[0] * time * 0.01) + 'px';
                 dstyle.top = (pos[1] + vel[1] * time * 0.01) + 'px';
-                dstyle[transformprop] = 'rotate(' + theta + 'rad)';
+                dstyle[transformprop] = 'rotateZ(' + theta + 'rad)';
               } else {
                 dstyle[transition] = '';
                 dstyle.left = pos[0] + 'px';
                 dstyle.top = pos[1] + 'px';
-                dstyle[transformprop] = 'rotate(' + theta + 'rad)';
+                dstyle[transformprop] = 'rotateZ(' + theta + 'rad)';
               }
             } else {
               dstyle[transition] = '';
               dstyle.left = pos[0] + 'px';
               dstyle.top = pos[1] + 'px';
-              dstyle[transformprop] = 'rotate(' + theta + 'rad)';
+              dstyle[transformprop] = 'rotateZ(' + theta + 'rad)';
             }
             break;
         }
@@ -215,11 +266,46 @@ var DomRender = (function() {
       }
     }
 
+    function transformedProp3d(domel, pos, vel, discon) {
+      var dstyle = domel.style;
+      if (vel[1] == 0) {
+        axisAlignedProp3d(domel, pos, vel, discon);
+        return;
+      }
+      var theta = Math.atan2(vel[1], vel[0]);
+      var ct = Math.cos(theta);
+      var st = Math.sin(theta);
+      var nst = -st;
+
+      switch (JSGlobal.browser) {
+        case JSGlobal.IE:
+          dstyle.left = pos[0] + 'px';
+          dstyle.top = pos[1] + 'px';
+          dstyle.filter = 'progid:DXImageTransform.Microsoft.Matrix(M11=\'' +
+            ct + '\',M12=\'' + nst + '\',M21=\'' + st + '\',M22=\'' + ct +
+            '\',sizingMethod=\'auto expand\')';
+          break;
+        default:
+          if (GameFrame.settings.css_transitions) {
+            if (!discon) {
+              dstyle[transformprop] = axisAlignedTranslate3d(pos, size) + ' ' +transformoriginstring + ':0 0; rotate3d(0,0,1,' + theta + 'rad)';
+            } else {
+              dstyle[transition] = '';
+              dstyle[transformprop] = axisAlignedTranslate3d(pos, size) + ' ' +transformoriginstring + ':0 0; rotate3d(0,0,1,' + theta + 'rad)';
+            }
+          } else {
+            dstyle[transition] = '';
+            dstyle[transformprop] = axisAlignedTranslate3d(pos, size) + ' ' +transformoriginstring + ':0 0; rotate3d(0,0,1,' + theta + 'rad)';
+          }
+          break;
+      }
+    }
+
     var DomRender = {};
     DomRender.setupBrowserSpecific = setupBrowserSpecific;
-    DomRender.axisAligned = axisAligned;
-    DomRender.axisAlignedProp = axisAlignedProp;
     DomRender.transformed = transformed;
     DomRender.transformedProp = transformedProp;
+    DomRender.transformed3d = transformed3d;
+    DomRender.transformedProp3d = transformedProp3d;
     return DomRender;
   })();

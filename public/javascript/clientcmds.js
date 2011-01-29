@@ -174,11 +174,10 @@ var ClientCmd = (function() {
       UI.addCollection('', 'buttons', {pos: [0, 0]});
       UI.addButton('buttons', 'perftest', {pos: [5, 5], width: 95, height: 20, text: 'Start Test', command: {cmd: 'startperftest', args: []}});
       UI.addButton('buttons', 'canvasdemo', {pos: [105, 5], width: 95, height: 20, text: 'Canvas Demo', command: {cmd: 'canvasdemo', args: []}});
-      UI.addButton('buttons', 'htmldemo', {pos: [210, 5], width: 95, height: 20, text: 'HTML Demo', command: {cmd: 'htmldemo', args: []}});
-      UI.addButton('buttons', 'rotdemo', {pos: [315, 5], width: 95, height: 20, text: 'Rotate Demo', command: {cmd: 'rotdemo', args: []}});
-      UI.addButton('buttons', 'scrollableddemo', {pos: [420, 5], width: 95, height: 20, text: 'Scroll Demo', command: {cmd: 'scrolldemo', args: []}});
-      UI.addButton('buttons', 'scaledcdemo', {pos: [525, 5], width: 95, height: 20, text: 'Scaled Canvas', command: {cmd: 'scanvasdemo', args: []}});
-      UI.addButton('buttons', 'scaledhdemo', {pos: [630, 5], width: 95, height: 20, text: 'Scaled HTML', command: {cmd: 'shtmldemo', args: []}});
+      UI.addButton('buttons', 'idemo', {pos: [210, 5], width: 95, height: 20, text: 'iPhone Demo', command: {cmd: 'idemo', args: []}});
+      UI.addButton('buttons', 'htmldemo', {pos: [315, 5], width: 95, height: 20, text: 'HTML Demo', command: {cmd: 'htmldemo', args: []}});
+      UI.addButton('buttons', 'rotdemo', {pos: [420, 5], width: 95, height: 20, text: 'Rotate Demo', command: {cmd: 'rotdemo', args: []}});
+      UI.addButton('buttons', 'scrollableddemo', {pos: [535, 5], width: 95, height: 20, text: 'Scroll Demo', command: {cmd: 'scrolldemo', args: []}});
       UI.addCollection(null, 'perf', {pos: [100, 50], width: 260});
       if (JSGlobal.myscore) {
         UI.addHTML('perf', 'myscore', {pos: [350, 10], width:1000,uiclass: 'perfscore', markup: "Your score is " + JSGlobal.myscore + " sprites!"});
@@ -210,14 +209,22 @@ var ClientCmd = (function() {
     function htmlDemo() {
       UI.del('buttons');
       UI.del('perf');
-      PerfTest.addTest({viewport: 'fluid_width', settings: {render_mode: GameFrame.HTML_ONLY, update_existing: false, use_div_background: false, rotate_only: false, css_transitions: false, sprite_sheets: false}, tfps: 30, background: 'world', sprites: 'aa', demo: true });
+      PerfTest.addTest({viewport: 'fluid_width', settings: {render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: true, rotate_only: true, css_transitions: false, css_keyframe: true, sprite_sheets: true, int_snap: true, transform3d:true}, tfps: 30, background: 'world', sprites: 'aa', demo: true });
+      PerfTest.doAll();
+    }
+
+    function iDemo() {
+      UI.del('buttons');
+      UI.del('perf');
+      PerfTest.addTest({viewport: 'fluid_width', settings: {render_mode: GameFrame.HTML_ONLY, sprite_sheets: true, transform3d:true}, tfps: 20, background: 'world', sprites: 'igob', demo: true });
       PerfTest.doAll();
     }
 
     function rotDemo() {
       UI.del('buttons');
       UI.del('perf');
-      PerfTest.addTest({viewport: 'normal', settings: {render_mode: GameFrame.CANVAS_ONLY, update_existing: true, canvas_background: true, sprite_sheets: true}, tfps: 20, background: 'world', sprites: 'rot', demo: true });
+//      PerfTest.addTest({viewport: 'normal', settings: {render_mode: GameFrame.CANVAS_ONLY, update_existing: true, canvas_background: true, sprite_sheets: true}, tfps: 20, background: 'world', sprites: 'rot', demo: true });
+      PerfTest.addTest({viewport: 'fluid_width', settings: {render_mode: GameFrame.HTML_ONLY, update_existing: false, use_div_background: false, rotate_only: true, css_transitions: false, sprite_sheets: false}, tfps: 30, background: 'world', sprites: 'rot', demo: true });
       PerfTest.doAll();
     }
 
@@ -225,20 +232,6 @@ var ClientCmd = (function() {
       UI.del('buttons');
       UI.del('perf');
       PerfTest.addTest({viewport: 'fluid_width', settings: {render_mode: GameFrame.CANVAS_ONLY, canvas_background: false, canvas_bake_background: false}, tfps: 30, background: 'scroll', sprites: 'aa', demo: true });
-      PerfTest.doAll();
-    }
-
-    function sCanvasDemo() {
-      UI.del('buttons');
-      UI.del('perf');
-      PerfTest.addTest({viewport: 'fluid_width', settings: {render_mode: GameFrame.CANVAS_ONLY, canvas_background: true, sprite_sheets: false}, tfps: 30, background: 'world', sprites: 'scale', demo: true });
-      PerfTest.doAll();
-    }
-
-    function sHtmlDemo() {
-      UI.del('buttons');
-      UI.del('perf');
-      PerfTest.addTest({viewport: 'fluid_width', settings: {render_mode: GameFrame.HTML_ONLY, update_existing: false, use_div_background: false, rotate_only: true, css_transitions: false, sprite_sheets: false}, tfps: 30, background: 'world', sprites: 'scale', demo: true });
       PerfTest.doAll();
     }
 
@@ -255,7 +248,7 @@ var ClientCmd = (function() {
       UI.del('buttons');
       UI.del('perf');
 
-      Game.init({viewport: 'fluid', settings: {render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: false, rotate_only: true}, tfps: 30, background: 'world', sprites: 'cute', demo: true, hack: true });
+      Game.init({viewport: 'fluid_width', settings: {render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background:false, rotate_only: true, sprite_sheets:true}, tfps: 30, background: 'world', sprites: 'cute', demo: true, hack: true });
 
       PerfTest.doAll();
     }
@@ -288,9 +281,8 @@ var ClientCmd = (function() {
     install('stopperftest', stopPerfTest);
     install('canvasdemo', canvasDemo);
     install('htmldemo', htmlDemo);
+    install('idemo', iDemo);
     install('rotdemo', rotDemo);
-    install('scanvasdemo', sCanvasDemo);
-    install('shtmldemo', sHtmlDemo);
     install('scrolldemo', scrollDemo);
     install('playgame', playGame);
     install('playgamehtml', playGameHTML);

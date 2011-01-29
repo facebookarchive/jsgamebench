@@ -31,7 +31,14 @@ var PerfTest = (function() {
 
     function incShip(count, x, y) {
       var sprite = ship_sprites[count % ship_sprites.length];
+      var sprite = "ship";
       Gob.add(Utils.uuidv4(), sprite, parseInt(Math.random() * 8), [Math.random() * x, Math.random() * y], [Math.random() * 10 + 1, 0], Math.random()*2000);
+    }
+
+    function incIShip(count, x, y) {
+      var sprite = ship_sprites[count % ship_sprites.length];
+      var sprite = "ship";
+      IGob.add(Utils.uuidv4(), sprite, Math.random()*2000, 1, [[Math.random() * x, Math.random() * y]]);
     }
 
     function incShipScaled(count, x, y) {
@@ -57,6 +64,13 @@ var PerfTest = (function() {
     function dec(count) {
       for (var id in Gob.gobs) {
         Gob.del(id);
+        return;
+      }
+    }
+
+    function idec(count) {
+      for (var id in IGob.igobs) {
+        IGob.del(id);
         return;
       }
     }
@@ -98,6 +112,13 @@ var PerfTest = (function() {
                        [0, 2], [1, 2], [2, 2], [3, 2], [4, 2], [5, 2], [6, 2], [7, 2]],
             width: 128, height: 128});
     }
+
+    function iship() {
+      Sprites.add('ship', {url: '/images/ship_fbmark.png', frames: 2,
+            framepos: [[0, 0], [1, 0]],
+            width: 128, height: 128});
+    }
+
 
     function ship() {
       if (GameFrame.settings.sprite_sheets) {
@@ -161,7 +182,8 @@ var PerfTest = (function() {
       }
     }
 
-    var sprites = {aa: {sp: ship, inc: incShip, num: 20},
+    var sprites = {aa: {sp: ship, inc: incShip, num: 5},
+                   igob: {sp: iship, inc: incIShip, dec: idec, num: 10, nodel:true},
                    ninja: {sp: ninjas, inc: incNinja, num: 15},
                    ninjarot: {sp: ninjas, inc: incNinjaRot, num: 5},
                    rot: {sp: ship, inc: incShipRot, num: 5},
@@ -196,7 +218,7 @@ var PerfTest = (function() {
     function noBackground() {
     }
 
-    var background_loaders = {world: worldBackground, scroll: scrollBackground, none: noBackground, ninja: ninjaBackground};
+    var background_loaders = {world: worldBackground, scroll: scrollBackground, none: noBackground, ninja: ninjaBackground, none:noBackground};
 
     var PerfTest = {};
 
@@ -242,12 +264,13 @@ var PerfTest = (function() {
           tid.sprites = test.sprites;
 
           Benchmark.setup({inc: sprites[test.sprites].inc,
-                dec: dec,
+                dec: sprites[test.sprites].dec ? sprites[test.sprites].dec : dec,
                 tfps: test.tfps,
                 num: sprites[test.sprites].num,
                 w: JSGlobal.w,
                 h: JSGlobal.h,
                 tid: tid,
+                nodel: sprites[test.sprites].nodel ? true : false,
                 demo: test.demo});
           if (!test.hack) {
             UI.addButton('', 'stoptest', {pos: [5, 5], width: 100, height: 20, text: 'Stop Perf Test', command: {cmd: 'stopperftest', args: []}});
@@ -313,6 +336,7 @@ var PerfTest = (function() {
       UI.del('perf');
       UI.del('stoptest');
       Gob.delAll();
+      IGob.delAll();
       World.reset();
       Benchmark.reset();
       tests = [];

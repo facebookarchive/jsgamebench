@@ -147,12 +147,15 @@ var World = (function() {
     function framedata(id) {
       var element = elements[id];
       var sprite = Sprites.spritedictionary[element.spriteid];
+      var pos = [element.pos[0] - sprite.width * 0.5, element.pos[1] - sprite.height * 0.5];
+      if (GameFrame.settings.int_snap) {
+        pos = [pos[0]|0,pos[1]|0];
+      }
 
       var retval = {dirty: element.dirty,
-                    pos: [element.pos[0] - sprite.width * 0.5,
-                          element.pos[1] - sprite.height * 0.5],
+                    pos: pos,
                     size: [sprite.width, sprite.height],
-                    vel: [0, 0],
+                    vel: [0, 0],scale:1,
                     x: 0,
                     y: 0,
                     zindex: sprite.zindex,
