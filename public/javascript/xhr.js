@@ -30,7 +30,7 @@ var Xhr = (function() {
           options.transports = list[i];
         }
       }
-      console.log('transports: ' + JSON.stringify(options));
+      //console.log('transports: ' + JSON.stringify(options));
       socket = new io.Socket(null, options);
       socket.connect();
 
