@@ -116,7 +116,7 @@ var DomRender = (function() {
           dstyle[transformprop] = 'translate3d(' + pos[0] + 'px, ' + pos[1] + 'px,0)';
         }
       } else {
-        dstyle[transformprop] = 'translate3d(' + pos[0] + 'px, ' + pos[1] + 'px,0)';
+        dstyle[transformprop] = 'translate3d(' + pos[0] + ', ' + pos[1] + ',0)';
       }
     }
 
