@@ -224,18 +224,18 @@ var DomRender = (function() {
                 dstyle[transition] = 'left ' + parseInt(time * 0.001) + 's linear, top ' + parseInt(time * 0.001) + 's linear';
                 dstyle.left = (pos[0] + vel[0] * time * 0.01) + 'px';
                 dstyle.top = (pos[1] + vel[1] * time * 0.01) + 'px';
-                dstyle[transformprop] = 'rotateZ(' + theta + 'rad)';
+                dstyle[transformprop] = 'rotate(' + theta + 'rad)';
               } else {
                 dstyle[transition] = '';
                 dstyle.left = pos[0] + 'px';
                 dstyle.top = pos[1] + 'px';
-                dstyle[transformprop] = 'rotateZ(' + theta + 'rad)';
+                dstyle[transformprop] = 'rotate(' + theta + 'rad)';
               }
             } else {
               dstyle[transition] = '';
               dstyle.left = pos[0] + 'px';
               dstyle.top = pos[1] + 'px';
-              dstyle[transformprop] = 'rotateZ(' + theta + 'rad)';
+              dstyle[transformprop] = 'rotate(' + theta + 'rad)';
             }
             break;
         }
