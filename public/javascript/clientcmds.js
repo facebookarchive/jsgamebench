@@ -153,6 +153,11 @@ var ClientCmd = (function() {
                     stats += '3d ';
                   }
                   break;
+                case 'css_keyframe':
+                  if (sub[det + 1] == 'true') {
+                    stats += 'css keyframe ';
+                  }
+                  break;
               }
             }
             stats += (s == 0 ? '</b>' : '') + '<br />';
@@ -175,7 +180,7 @@ var ClientCmd = (function() {
       stats += '<br />"dom update": update values in dom object when sprites move<br />"innerHTML": rebuild scene each frame when sprites move<br />"div with background": animating sprites are a div element with changing offsets on background image<br />';
       stats += '"div masking img": animating sprites are a div element masking img element<br />"rotate": use css transform property for rotation, left/top for position of sprites<br />"transform": use css transform property for rotation and position of sprites<br />';
       stats += '"css transition": use css transition to rather than updating every frame<br />"sprite sheets": combine animating sprites into sprite sheets';
-      stats += '"int": snap sprite positions to integer values<br />"3d": use 3d transforms where possible';
+      stats += '"int": snap sprite positions to integer values<br />"3d": use 3d transforms where possible<br />"css keyframe":use css animation to keyframe sprite animation';
       UI.addHTML('details', 'detailinfo', {pos: [5, 105], uiclass: 'renderdetails', markup: stats});
     }
 
