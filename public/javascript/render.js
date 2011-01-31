@@ -235,7 +235,20 @@ var Render = (function() {
 
                     if (GameFrame.settings.use_div_background) {
                       if (GameFrame.settings.css_keyframe) {
-                        gobel.className = "rock_animating";
+                        switch(framedata.spriteid) {
+                          case 'ship':
+                            gobel.className = "ship_animating";
+                            break;
+                          case 'rock':
+                            gobel.className = "rock_animating";
+                            break;
+                          case 'boom':
+                            gobel.className = "boom_animating";
+                            break;
+                          case 'powerup':
+                            gobel.className = "powerup_animating";
+                            break;
+                        }
                       } else {
                         gobel.style.backgroundPosition = '-' + framedata.x +
                           'px -' + framedata.y + 'px';
