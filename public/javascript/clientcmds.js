@@ -80,7 +80,7 @@ var ClientCmd = (function() {
     function showDetails(data) {
       UI.del('details');
       UI.del('glossary');
-      UI.addCollection('perf', 'details', {uiclass: 'perfblock', pos: [265, 0], width: 1000, height: 1200, command: {cmd:'hidedetails', args:[]}});
+      UI.addCollection('perf', 'details', {uiclass: 'perfblock', pos: [265, 0], width: 1000, height: 3000, command: {cmd:'hidedetails', args:[]}});
       var subscores = data.details;
       var stats = '';
       for (var rm in subscores) {
@@ -148,6 +148,11 @@ var ClientCmd = (function() {
                     stats += 'ints ';
                   }
                   break;
+                case 'transform3d':
+                  if (sub[det + 1] == 'true') {
+                    stats += '3d ';
+                  }
+                  break;
               }
             }
             stats += (s == 0 ? '</b>' : '') + '<br />';
@@ -170,7 +175,7 @@ var ClientCmd = (function() {
       stats += '<br />"dom update": update values in dom object when sprites move<br />"innerHTML": rebuild scene each frame when sprites move<br />"div with background": animating sprites are a div element with changing offsets on background image<br />';
       stats += '"div masking img": animating sprites are a div element masking img element<br />"rotate": use css transform property for rotation, left/top for position of sprites<br />"transform": use css transform property for rotation and position of sprites<br />';
       stats += '"css transition": use css transition to rather than updating every frame<br />"sprite sheets": combine animating sprites into sprite sheets';
-      stats += '"int": snap sprite positions to integer values<br />';
+      stats += '"int": snap sprite positions to integer values<br />"3d": use 3d transforms where possible';
       UI.addHTML('details', 'detailinfo', {pos: [5, 105], uiclass: 'renderdetails', markup: stats});
     }
 

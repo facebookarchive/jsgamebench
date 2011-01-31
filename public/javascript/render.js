@@ -208,11 +208,11 @@ var Render = (function() {
                 }
                 gobel.src = framedata.url;
                 if (GameFrame.settings.transform3d) {
-                  DomRender.transformedProp(gobel,
+                  DomRender.transformedProp3d(gobel,
                                           framedata.pos,
                                           [0, 0]);
                 } else {
-                  DomRender.transformedProp3d(gobel,
+                  DomRender.transformedProp(gobel,
                                               framedata.pos,
                                               [0, 0]);
                 }
@@ -250,11 +250,11 @@ var Render = (function() {
                 }
                 if (framedata.dirty) {
                   if (GameFrame.settings.transform3d) {
-                    DomRender.transformedProp(gobel,
+                    DomRender.transformedProp3d(gobel,
                                               [framedata.pos[0]|0,framedata.pos[1]|0],
                                               framedata.vel, framedata.discon);
                   } else {
-                    DomRender.transformedProp3d(gobel,
+                    DomRender.transformedProp(gobel,
                                               [framedata.pos[0]|0,framedata.pos[1]|0],
                                               framedata.vel, framedata.discon);
                   }

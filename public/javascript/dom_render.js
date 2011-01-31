@@ -69,11 +69,11 @@ var DomRender = (function() {
 
     function axisAligned(pos, size) {
       return 'left:' + pos[0] + 'px;top:' + pos[1] + 'px;width:' +
-        size[0] + 'px;height:' + size[1] + 'px;';
+        size[0] + 'px;height:' + size[1] + 'px';
     }
 
     function axisAlignedTranslate(pos) {
-      return 'translate(' + pos[0] + 'px, ' + pos[1] + 'px);';
+      return 'translate(' + pos[0] + 'px, ' + pos[1] + 'px)';
     }
 
     function axisAlignedTranslate3d(pos) {
@@ -144,8 +144,7 @@ var DomRender = (function() {
               ct + '\',M12=\'' + nst + '\',M21=\'' + st + '\',M22=\'' + ct +
               '\',sizingMethod=\'auto expand\');';
           default:
-            return transform + ':rotate(' + theta + 'rad);' +
-              transformoriginstring + ':0 0;' + axisAlignedTranslate(pos, size);
+            return "width:"+size[0]+"px;height:"+size[1]+"px;"+transformoriginstring + ':0 0;' + transform + ':rotate(' + theta + 'rad) ' + axisAlignedTranslate(pos, size) + ";";
         }
       } else {
         switch (JSGlobal.browser) {
@@ -165,9 +164,8 @@ var DomRender = (function() {
               'px,' + pos[1] + 'px);width:' + size[0] + 'px;height:' + size[1] + 'px;' +
               transformoriginstring + ':0 0;';
           default:
-            return transform + ':matrix(' + ct + ',' + st + ',' + nst + ',' + ct + ',' + pos[0] +
-              ',' + pos[1] + ');width:' + size[0] + 'px;height:' + size[1] + 'px;' +
-              transformoriginstring + ':0 0;';
+            return transformoriginstring + ':0 0;' + transform + ':matrix(' + ct + ',' + st + ',' + nst + ',' + ct + ',' + pos[0] +
+              ',' + pos[1] + ');width:' + size[0] + 'px;height:' + size[1] + 'px;';
         }
       }
     }
@@ -297,16 +295,16 @@ var DomRender = (function() {
           if (GameFrame.settings.css_transitions) {
             if (!discon) {
               dstyle[transformorigin] = '0 0';
-              dstyle[transformprop] = axisAlignedTranslate3d(pos, size) + ' rotate3d(0,0,1,' + theta + 'rad)';
+              dstyle[transformprop] = axisAlignedTranslate3d(pos) + ' rotate3d(0,0,1,' + theta + 'rad)';
             } else {
               dstyle[transformorigin] = '0 0';
               dstyle[transition] = '';
-              dstyle[transformprop] = axisAlignedTranslate3d(pos, size) + ' rotate3d(0,0,1,' + theta + 'rad)';
+              dstyle[transformprop] = axisAlignedTranslate3d(pos) + ' rotate3d(0,0,1,' + theta + 'rad)';
             }
           } else {
             dstyle[transformorigin] = '0 0';
             dstyle[transition] = '';
-            dstyle[transformprop] = axisAlignedTranslate3d(pos, size) + ' rotate3d(0,0,1,' + theta + 'rad)';
+            dstyle[transformprop] = axisAlignedTranslate3d(pos) + ' rotate3d(0,0,1,' + theta + 'rad)';
           }
           break;
       }
