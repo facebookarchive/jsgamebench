@@ -25,11 +25,43 @@
   draggable: false;
 }
 
-img.animating {
+img.ship_animating {
   -webkit-animation-name: 'ship';
   -webkit-transform: translate3d(0px,0px,0);
   -webkit-animation-timing-function: linear;
   -webkit-animation-duration: 0.25s;
+  -webkit-animation-iteration-count: infinite;
+}
+
+img.rock_animating {
+  -webkit-animation-name: 'rock';
+  -webkit-transform: translate3d(0px,0px,0);
+  -webkit-animation-timing-function: linear;
+  -webkit-animation-duration: 1s;
+  -webkit-animation-iteration-count: infinite;
+}
+
+div.rock_animating {
+  -webkit-animation-name: 'rockbkg';
+  -webkit-transform: translate3d(0px,0px,0);
+  -webkit-animation-timing-function: linear;
+  -webkit-animation-duration: 1s;
+  -webkit-animation-iteration-count: infinite;
+}
+
+img.boom_animating {
+  -webkit-animation-name: 'boom';
+  -webkit-transform: translate3d(0px,0px,0);
+  -webkit-animation-timing-function: linear;
+  -webkit-animation-duration: 1s;
+  -webkit-animation-iteration-count: infinite;
+}
+
+img.powerup_animating {
+  -webkit-animation-name: 'powerup';
+  -webkit-transform: translate3d(0px,0px,0);
+  -webkit-animation-timing-function: linear;
+  -webkit-animation-duration: 2s;
   -webkit-animation-iteration-count: infinite;
 }
 
@@ -48,8 +80,460 @@ div.animating {
 
 
 @-webkit-keyframes 'ship' {
-from,49.99% { -webkit-transform: translate3d(0px,0px,0); }
-50%,to { -webkit-transform: translate3d(-128px,0px,0); }
+from { -webkit-transform: translate3d(0px,0px,0); }
+49.99% { -webkit-transform: translate3d(0px,0px,0); }
+50% { -webkit-transform: translate3d(-128px,0px,0); }
+to { -webkit-transform: translate3d(-128px,0px,0); }
+}
+
+perftest.js:141@-webkit-keyframes 'rock' {
+from { -webkit-transform: translate3d(0px,0px,0px); }
+1.6566% { -webkit-transform: translate3d(0px,0px,0px); }
+1.6666% { -webkit-transform: translate3d(-128px,0px,0px); }
+3.3233% { -webkit-transform: translate3d(-128px,0px,0px); }
+3.3333% { -webkit-transform: translate3d(-256px,0px,0px); }
+4.99% { -webkit-transform: translate3d(-256px,0px,0px); }
+5% { -webkit-transform: translate3d(-384px,0px,0px); }
+6.6566% { -webkit-transform: translate3d(-384px,0px,0px); }
+6.6666% { -webkit-transform: translate3d(-512px,0px,0px); }
+8.3233% { -webkit-transform: translate3d(-512px,0px,0px); }
+8.3333% { -webkit-transform: translate3d(-640px,0px,0px); }
+9.99% { -webkit-transform: translate3d(-640px,0px,0px); }
+10% { -webkit-transform: translate3d(-768px,0px,0px); }
+11.656600000000001% { -webkit-transform: translate3d(-768px,0px,0px); }
+11.6666% { -webkit-transform: translate3d(-896px,0px,0px); }
+13.3233% { -webkit-transform: translate3d(-896px,0px,0px); }
+13.3333% { -webkit-transform: translate3d(0px,-128px,0px); }
+14.99% { -webkit-transform: translate3d(0px,-128px,0px); }
+15% { -webkit-transform: translate3d(-128px,-128px,0px); }
+16.656599999999997% { -webkit-transform: translate3d(-128px,-128px,0px); }
+16.6666% { -webkit-transform: translate3d(-256px,-128px,0px); }
+18.3233% { -webkit-transform: translate3d(-256px,-128px,0px); }
+18.3333% { -webkit-transform: translate3d(-384px,-128px,0px); }
+19.99% { -webkit-transform: translate3d(-384px,-128px,0px); }
+20% { -webkit-transform: translate3d(-512px,-128px,0px); }
+21.656599999999997% { -webkit-transform: translate3d(-512px,-128px,0px); }
+21.6666% { -webkit-transform: translate3d(-640px,-128px,0px); }
+23.3233% { -webkit-transform: translate3d(-640px,-128px,0px); }
+23.3333% { -webkit-transform: translate3d(-768px,-128px,0px); }
+24.99% { -webkit-transform: translate3d(-768px,-128px,0px); }
+25% { -webkit-transform: translate3d(-896px,-128px,0px); }
+26.656599999999997% { -webkit-transform: translate3d(-896px,-128px,0px); }
+26.6666% { -webkit-transform: translate3d(0px,-256px,0px); }
+28.3233% { -webkit-transform: translate3d(0px,-256px,0px); }
+28.3333% { -webkit-transform: translate3d(-128px,-256px,0px); }
+29.99% { -webkit-transform: translate3d(-128px,-256px,0px); }
+30% { -webkit-transform: translate3d(-256px,-256px,0px); }
+31.656599999999997% { -webkit-transform: translate3d(-256px,-256px,0px); }
+31.6666% { -webkit-transform: translate3d(-384px,-256px,0px); }
+33.3233% { -webkit-transform: translate3d(-384px,-256px,0px); }
+33.3333% { -webkit-transform: translate3d(-512px,-256px,0px); }
+34.99% { -webkit-transform: translate3d(-512px,-256px,0px); }
+35% { -webkit-transform: translate3d(-640px,-256px,0px); }
+36.656600000000005% { -webkit-transform: translate3d(-640px,-256px,0px); }
+36.6666% { -webkit-transform: translate3d(-768px,-256px,0px); }
+38.3233% { -webkit-transform: translate3d(-768px,-256px,0px); }
+38.3333% { -webkit-transform: translate3d(-896px,-256px,0px); }
+39.99% { -webkit-transform: translate3d(-896px,-256px,0px); }
+40% { -webkit-transform: translate3d(0px,-384px,0px); }
+41.656600000000005% { -webkit-transform: translate3d(0px,-384px,0px); }
+41.6666% { -webkit-transform: translate3d(-128px,-384px,0px); }
+43.3233% { -webkit-transform: translate3d(-128px,-384px,0px); }
+43.3333% { -webkit-transform: translate3d(-256px,-384px,0px); }
+44.99% { -webkit-transform: translate3d(-256px,-384px,0px); }
+45% { -webkit-transform: translate3d(-384px,-384px,0px); }
+46.656600000000005% { -webkit-transform: translate3d(-384px,-384px,0px); }
+46.6666% { -webkit-transform: translate3d(-512px,-384px,0px); }
+48.3233% { -webkit-transform: translate3d(-512px,-384px,0px); }
+48.3333% { -webkit-transform: translate3d(-640px,-384px,0px); }
+49.99% { -webkit-transform: translate3d(-640px,-384px,0px); }
+50% { -webkit-transform: translate3d(-768px,-384px,0px); }
+51.656600000000005% { -webkit-transform: translate3d(-768px,-384px,0px); }
+51.6666% { -webkit-transform: translate3d(-896px,-384px,0px); }
+53.3233% { -webkit-transform: translate3d(-896px,-384px,0px); }
+53.3333% { -webkit-transform: translate3d(0px,-512px,0px); }
+54.99% { -webkit-transform: translate3d(0px,-512px,0px); }
+55% { -webkit-transform: translate3d(-128px,-512px,0px); }
+56.656600000000005% { -webkit-transform: translate3d(-128px,-512px,0px); }
+56.6666% { -webkit-transform: translate3d(-256px,-512px,0px); }
+58.3233% { -webkit-transform: translate3d(-256px,-512px,0px); }
+58.3333% { -webkit-transform: translate3d(-384px,-512px,0px); }
+59.99% { -webkit-transform: translate3d(-384px,-512px,0px); }
+60% { -webkit-transform: translate3d(-512px,-512px,0px); }
+61.656600000000005% { -webkit-transform: translate3d(-512px,-512px,0px); }
+61.6666% { -webkit-transform: translate3d(-640px,-512px,0px); }
+63.3233% { -webkit-transform: translate3d(-640px,-512px,0px); }
+63.3333% { -webkit-transform: translate3d(-768px,-512px,0px); }
+64.99% { -webkit-transform: translate3d(-768px,-512px,0px); }
+65% { -webkit-transform: translate3d(-896px,-512px,0px); }
+66.6566% { -webkit-transform: translate3d(-896px,-512px,0px); }
+66.6666% { -webkit-transform: translate3d(0px,-640px,0px); }
+68.32329999999999% { -webkit-transform: translate3d(0px,-640px,0px); }
+68.3333% { -webkit-transform: translate3d(-128px,-640px,0px); }
+69.99% { -webkit-transform: translate3d(-128px,-640px,0px); }
+70% { -webkit-transform: translate3d(-256px,-640px,0px); }
+71.6566% { -webkit-transform: translate3d(-256px,-640px,0px); }
+71.6666% { -webkit-transform: translate3d(-384px,-640px,0px); }
+73.32329999999999% { -webkit-transform: translate3d(-384px,-640px,0px); }
+73.3333% { -webkit-transform: translate3d(-512px,-640px,0px); }
+74.99% { -webkit-transform: translate3d(-512px,-640px,0px); }
+75% { -webkit-transform: translate3d(-640px,-640px,0px); }
+76.6566% { -webkit-transform: translate3d(-640px,-640px,0px); }
+76.6666% { -webkit-transform: translate3d(-768px,-640px,0px); }
+78.32329999999999% { -webkit-transform: translate3d(-768px,-640px,0px); }
+78.3333% { -webkit-transform: translate3d(-896px,-640px,0px); }
+79.99% { -webkit-transform: translate3d(-896px,-640px,0px); }
+80% { -webkit-transform: translate3d(0px,-768px,0px); }
+81.6566% { -webkit-transform: translate3d(0px,-768px,0px); }
+81.6666% { -webkit-transform: translate3d(-128px,-768px,0px); }
+83.32329999999999% { -webkit-transform: translate3d(-128px,-768px,0px); }
+83.3333% { -webkit-transform: translate3d(-256px,-768px,0px); }
+84.99% { -webkit-transform: translate3d(-256px,-768px,0px); }
+85% { -webkit-transform: translate3d(-384px,-768px,0px); }
+86.6566% { -webkit-transform: translate3d(-384px,-768px,0px); }
+86.6666% { -webkit-transform: translate3d(-512px,-768px,0px); }
+88.32329999999999% { -webkit-transform: translate3d(-512px,-768px,0px); }
+88.3333% { -webkit-transform: translate3d(-640px,-768px,0px); }
+89.99% { -webkit-transform: translate3d(-640px,-768px,0px); }
+90% { -webkit-transform: translate3d(-768px,-768px,0px); }
+91.6566% { -webkit-transform: translate3d(-768px,-768px,0px); }
+91.6666% { -webkit-transform: translate3d(-896px,-768px,0px); }
+93.32329999999999% { -webkit-transform: translate3d(-896px,-768px,0px); }
+93.3333% { -webkit-transform: translate3d(0px,-896px,0px); }
+94.99% { -webkit-transform: translate3d(0px,-896px,0px); }
+95% { -webkit-transform: translate3d(-128px,-896px,0px); }
+96.6566% { -webkit-transform: translate3d(-128px,-896px,0px); }
+96.6666% { -webkit-transform: translate3d(-256px,-896px,0px); }
+98.32329999999999% { -webkit-transform: translate3d(-256px,-896px,0px); }
+98.3333% { -webkit-transform: translate3d(-384px,-896px,0px); }
+99.99% { -webkit-transform: translate3d(-384px,-896px,0px); }
+}
+
+perftest.js:146@-webkit-keyframes 'rockbkg' {
+from { background-position: 0px 0px; }
+1.6566% { background-position: 0px 0px; }
+1.6666% { background-position: -128px 0px; }
+3.3233% { background-position: -128px 0px; }
+3.3333% { background-position: -256px 0px; }
+4.99% { background-position: -256px 0px; }
+5% { background-position: -384px 0px; }
+6.6566% { background-position: -384px 0px; }
+6.6666% { background-position: -512px 0px; }
+8.3233% { background-position: -512px 0px; }
+8.3333% { background-position: -640px 0px; }
+9.99% { background-position: -640px 0px; }
+10% { background-position: -768px 0px; }
+11.656600000000001% { background-position: -768px 0px; }
+11.6666% { background-position: -896px 0px; }
+13.3233% { background-position: -896px 0px; }
+13.3333% { background-position: 0px -128px; }
+14.99% { background-position: 0px -128px; }
+15% { background-position: -128px -128px; }
+16.656599999999997% { background-position: -128px -128px; }
+16.6666% { background-position: -256px -128px; }
+18.3233% { background-position: -256px -128px; }
+18.3333% { background-position: -384px -128px; }
+19.99% { background-position: -384px -128px; }
+20% { background-position: -512px -128px; }
+21.656599999999997% { background-position: -512px -128px; }
+21.6666% { background-position: -640px -128px; }
+23.3233% { background-position: -640px -128px; }
+23.3333% { background-position: -768px -128px; }
+24.99% { background-position: -768px -128px; }
+25% { background-position: -896px -128px; }
+26.656599999999997% { background-position: -896px -128px; }
+26.6666% { background-position: 0px -256px; }
+28.3233% { background-position: 0px -256px; }
+28.3333% { background-position: -128px -256px; }
+29.99% { background-position: -128px -256px; }
+30% { background-position: -256px -256px; }
+31.656599999999997% { background-position: -256px -256px; }
+31.6666% { background-position: -384px -256px; }
+33.3233% { background-position: -384px -256px; }
+33.3333% { background-position: -512px -256px; }
+34.99% { background-position: -512px -256px; }
+35% { background-position: -640px -256px; }
+36.656600000000005% { background-position: -640px -256px; }
+36.6666% { background-position: -768px -256px; }
+38.3233% { background-position: -768px -256px; }
+38.3333% { background-position: -896px -256px; }
+39.99% { background-position: -896px -256px; }
+40% { background-position: 0px -384px; }
+41.656600000000005% { background-position: 0px -384px; }
+41.6666% { background-position: -128px -384px; }
+43.3233% { background-position: -128px -384px; }
+43.3333% { background-position: -256px -384px; }
+44.99% { background-position: -256px -384px; }
+45% { background-position: -384px -384px; }
+46.656600000000005% { background-position: -384px -384px; }
+46.6666% { background-position: -512px -384px; }
+48.3233% { background-position: -512px -384px; }
+48.3333% { background-position: -640px -384px; }
+49.99% { background-position: -640px -384px; }
+50% { background-position: -768px -384px; }
+51.656600000000005% { background-position: -768px -384px; }
+51.6666% { background-position: -896px -384px; }
+53.3233% { background-position: -896px -384px; }
+53.3333% { background-position: 0px -512px; }
+54.99% { background-position: 0px -512px; }
+55% { background-position: -128px -512px; }
+56.656600000000005% { background-position: -128px -512px; }
+56.6666% { background-position: -256px -512px; }
+58.3233% { background-position: -256px -512px; }
+58.3333% { background-position: -384px -512px; }
+59.99% { background-position: -384px -512px; }
+60% { background-position: -512px -512px; }
+61.656600000000005% { background-position: -512px -512px; }
+61.6666% { background-position: -640px -512px; }
+63.3233% { background-position: -640px -512px; }
+63.3333% { background-position: -768px -512px; }
+64.99% { background-position: -768px -512px; }
+65% { background-position: -896px -512px; }
+66.6566% { background-position: -896px -512px; }
+66.6666% { background-position: 0px -640px; }
+68.32329999999999% { background-position: 0px -640px; }
+68.3333% { background-position: -128px -640px; }
+69.99% { background-position: -128px -640px; }
+70% { background-position: -256px -640px; }
+71.6566% { background-position: -256px -640px; }
+71.6666% { background-position: -384px -640px; }
+73.32329999999999% { background-position: -384px -640px; }
+73.3333% { background-position: -512px -640px; }
+74.99% { background-position: -512px -640px; }
+75% { background-position: -640px -640px; }
+76.6566% { background-position: -640px -640px; }
+76.6666% { background-position: -768px -640px; }
+78.32329999999999% { background-position: -768px -640px; }
+78.3333% { background-position: -896px -640px; }
+79.99% { background-position: -896px -640px; }
+80% { background-position: 0px -768px; }
+81.6566% { background-position: 0px -768px; }
+81.6666% { background-position: -128px -768px; }
+83.32329999999999% { background-position: -128px -768px; }
+83.3333% { background-position: -256px -768px; }
+84.99% { background-position: -256px -768px; }
+85% { background-position: -384px -768px; }
+86.6566% { background-position: -384px -768px; }
+86.6666% { background-position: -512px -768px; }
+88.32329999999999% { background-position: -512px -768px; }
+88.3333% { background-position: -640px -768px; }
+89.99% { background-position: -640px -768px; }
+90% { background-position: -768px -768px; }
+91.6566% { background-position: -768px -768px; }
+91.6666% { background-position: -896px -768px; }
+93.32329999999999% { background-position: -896px -768px; }
+93.3333% { background-position: 0px -896px; }
+94.99% { background-position: 0px -896px; }
+95% { background-position: -128px -896px; }
+96.6566% { background-position: -128px -896px; }
+96.6666% { background-position: -256px -896px; }
+98.32329999999999% { background-position: -256px -896px; }
+98.3333% { background-position: -384px -896px; }
+99.99% { background-position: -384px -896px; }
+}
+
+perftest.js:141@-webkit-keyframes 'boom' {
+from { -webkit-transform: translate3d(0px,0px,0px); }
+1.6849% { -webkit-transform: translate3d(0px,0px,0px); }
+1.6949% { -webkit-transform: translate3d(-256px,0px,0px); }
+3.3798000000000004% { -webkit-transform: translate3d(-256px,0px,0px); }
+3.3898% { -webkit-transform: translate3d(-512px,0px,0px); }
+5.0747% { -webkit-transform: translate3d(-512px,0px,0px); }
+5.0847% { -webkit-transform: translate3d(-768px,0px,0px); }
+6.7696000000000005% { -webkit-transform: translate3d(-768px,0px,0px); }
+6.7796% { -webkit-transform: translate3d(-1024px,0px,0px); }
+8.464500000000001% { -webkit-transform: translate3d(-1024px,0px,0px); }
+8.4745% { -webkit-transform: translate3d(-1280px,0px,0px); }
+10.1594% { -webkit-transform: translate3d(-1280px,0px,0px); }
+10.1694% { -webkit-transform: translate3d(-1536px,0px,0px); }
+11.8544% { -webkit-transform: translate3d(-1536px,0px,0px); }
+11.8644% { -webkit-transform: translate3d(-1792px,0px,0px); }
+13.5493% { -webkit-transform: translate3d(-1792px,0px,0px); }
+13.5593% { -webkit-transform: translate3d(0px,-256px,0px); }
+15.244200000000001% { -webkit-transform: translate3d(0px,-256px,0px); }
+15.2542% { -webkit-transform: translate3d(-256px,-256px,0px); }
+16.9391% { -webkit-transform: translate3d(-256px,-256px,0px); }
+16.9491% { -webkit-transform: translate3d(-512px,-256px,0px); }
+18.633999999999997% { -webkit-transform: translate3d(-512px,-256px,0px); }
+18.644% { -webkit-transform: translate3d(-768px,-256px,0px); }
+20.328899999999997% { -webkit-transform: translate3d(-768px,-256px,0px); }
+20.3389% { -webkit-transform: translate3d(-1024px,-256px,0px); }
+22.023799999999998% { -webkit-transform: translate3d(-1024px,-256px,0px); }
+22.0338% { -webkit-transform: translate3d(-1280px,-256px,0px); }
+23.718799999999998% { -webkit-transform: translate3d(-1280px,-256px,0px); }
+23.7288% { -webkit-transform: translate3d(-1536px,-256px,0px); }
+25.4137% { -webkit-transform: translate3d(-1536px,-256px,0px); }
+25.4237% { -webkit-transform: translate3d(-1792px,-256px,0px); }
+27.1086% { -webkit-transform: translate3d(-1792px,-256px,0px); }
+27.1186% { -webkit-transform: translate3d(0px,-512px,0px); }
+28.8035% { -webkit-transform: translate3d(0px,-512px,0px); }
+28.8135% { -webkit-transform: translate3d(-256px,-512px,0px); }
+30.4984% { -webkit-transform: translate3d(-256px,-512px,0px); }
+30.5084% { -webkit-transform: translate3d(-512px,-512px,0px); }
+32.1933% { -webkit-transform: translate3d(-512px,-512px,0px); }
+32.2033% { -webkit-transform: translate3d(-768px,-512px,0px); }
+33.8883% { -webkit-transform: translate3d(-768px,-512px,0px); }
+33.8983% { -webkit-transform: translate3d(-1024px,-512px,0px); }
+35.583200000000005% { -webkit-transform: translate3d(-1024px,-512px,0px); }
+35.5932% { -webkit-transform: translate3d(-1280px,-512px,0px); }
+37.2781% { -webkit-transform: translate3d(-1280px,-512px,0px); }
+37.2881% { -webkit-transform: translate3d(-1536px,-512px,0px); }
+38.973% { -webkit-transform: translate3d(-1536px,-512px,0px); }
+38.983% { -webkit-transform: translate3d(-1792px,-512px,0px); }
+40.6679% { -webkit-transform: translate3d(-1792px,-512px,0px); }
+40.6779% { -webkit-transform: translate3d(0px,-768px,0px); }
+42.3628% { -webkit-transform: translate3d(0px,-768px,0px); }
+42.3728% { -webkit-transform: translate3d(-256px,-768px,0px); }
+44.057700000000004% { -webkit-transform: translate3d(-256px,-768px,0px); }
+44.0677% { -webkit-transform: translate3d(-512px,-768px,0px); }
+45.752700000000004% { -webkit-transform: translate3d(-512px,-768px,0px); }
+45.7627% { -webkit-transform: translate3d(-768px,-768px,0px); }
+47.4476% { -webkit-transform: translate3d(-768px,-768px,0px); }
+47.4576% { -webkit-transform: translate3d(-1024px,-768px,0px); }
+49.142500000000005% { -webkit-transform: translate3d(-1024px,-768px,0px); }
+49.1525% { -webkit-transform: translate3d(-1280px,-768px,0px); }
+50.8374% { -webkit-transform: translate3d(-1280px,-768px,0px); }
+50.8474% { -webkit-transform: translate3d(-1536px,-768px,0px); }
+52.5323% { -webkit-transform: translate3d(-1536px,-768px,0px); }
+52.5423% { -webkit-transform: translate3d(-1792px,-768px,0px); }
+54.2272% { -webkit-transform: translate3d(-1792px,-768px,0px); }
+54.2372% { -webkit-transform: translate3d(0px,-1024px,0px); }
+55.922200000000004% { -webkit-transform: translate3d(0px,-1024px,0px); }
+55.9322% { -webkit-transform: translate3d(-256px,-1024px,0px); }
+57.6171% { -webkit-transform: translate3d(-256px,-1024px,0px); }
+57.6271% { -webkit-transform: translate3d(-512px,-1024px,0px); }
+59.312000000000005% { -webkit-transform: translate3d(-512px,-1024px,0px); }
+59.322% { -webkit-transform: translate3d(-768px,-1024px,0px); }
+61.0069% { -webkit-transform: translate3d(-768px,-1024px,0px); }
+61.0169% { -webkit-transform: translate3d(-1024px,-1024px,0px); }
+62.7018% { -webkit-transform: translate3d(-1024px,-1024px,0px); }
+62.7118% { -webkit-transform: translate3d(-1280px,-1024px,0px); }
+64.3967% { -webkit-transform: translate3d(-1280px,-1024px,0px); }
+64.4067% { -webkit-transform: translate3d(-1536px,-1024px,0px); }
+66.0916% { -webkit-transform: translate3d(-1536px,-1024px,0px); }
+66.1016% { -webkit-transform: translate3d(-1792px,-1024px,0px); }
+67.78659999999999% { -webkit-transform: translate3d(-1792px,-1024px,0px); }
+67.7966% { -webkit-transform: translate3d(0px,-1280px,0px); }
+69.4815% { -webkit-transform: translate3d(0px,-1280px,0px); }
+69.4915% { -webkit-transform: translate3d(-256px,-1280px,0px); }
+71.1764% { -webkit-transform: translate3d(-256px,-1280px,0px); }
+71.1864% { -webkit-transform: translate3d(-512px,-1280px,0px); }
+72.87129999999999% { -webkit-transform: translate3d(-512px,-1280px,0px); }
+72.8813% { -webkit-transform: translate3d(-768px,-1280px,0px); }
+74.5662% { -webkit-transform: translate3d(-768px,-1280px,0px); }
+74.5762% { -webkit-transform: translate3d(-1024px,-1280px,0px); }
+76.2611% { -webkit-transform: translate3d(-1024px,-1280px,0px); }
+76.2711% { -webkit-transform: translate3d(-1280px,-1280px,0px); }
+77.95609999999999% { -webkit-transform: translate3d(-1280px,-1280px,0px); }
+77.9661% { -webkit-transform: translate3d(-1536px,-1280px,0px); }
+79.651% { -webkit-transform: translate3d(-1536px,-1280px,0px); }
+79.661% { -webkit-transform: translate3d(-1792px,-1280px,0px); }
+81.3459% { -webkit-transform: translate3d(-1792px,-1280px,0px); }
+81.3559% { -webkit-transform: translate3d(0px,-1536px,0px); }
+83.04079999999999% { -webkit-transform: translate3d(0px,-1536px,0px); }
+83.0508% { -webkit-transform: translate3d(-256px,-1536px,0px); }
+84.7357% { -webkit-transform: translate3d(-256px,-1536px,0px); }
+84.7457% { -webkit-transform: translate3d(-512px,-1536px,0px); }
+86.4306% { -webkit-transform: translate3d(-512px,-1536px,0px); }
+86.4406% { -webkit-transform: translate3d(-768px,-1536px,0px); }
+88.12549999999999% { -webkit-transform: translate3d(-768px,-1536px,0px); }
+88.1355% { -webkit-transform: translate3d(-1024px,-1536px,0px); }
+89.8205% { -webkit-transform: translate3d(-1024px,-1536px,0px); }
+89.8305% { -webkit-transform: translate3d(-1280px,-1536px,0px); }
+91.5154% { -webkit-transform: translate3d(-1280px,-1536px,0px); }
+91.5254% { -webkit-transform: translate3d(-1536px,-1536px,0px); }
+93.21029999999999% { -webkit-transform: translate3d(-1536px,-1536px,0px); }
+93.2203% { -webkit-transform: translate3d(-1792px,-1536px,0px); }
+94.9052% { -webkit-transform: translate3d(-1792px,-1536px,0px); }
+94.9152% { -webkit-transform: translate3d(0px,-1792px,0px); }
+96.6001% { -webkit-transform: translate3d(0px,-1792px,0px); }
+96.6101% { -webkit-transform: translate3d(-256px,-1792px,0px); }
+98.295% { -webkit-transform: translate3d(-256px,-1792px,0px); }
+98.305% { -webkit-transform: translate3d(-512px,-1792px,0px); }
+99.99% { -webkit-transform: translate3d(-512px,-1792px,0px); }
+}
+
+@-webkit-keyframes 'powerup' {
+from { -webkit-transform: translate3d(0px,0px,0px); }
+2.49% { -webkit-transform: translate3d(0px,0px,0px); }
+2.5% { -webkit-transform: translate3d(-64px,0px,0px); }
+4.99% { -webkit-transform: translate3d(-64px,0px,0px); }
+5% { -webkit-transform: translate3d(-128px,0px,0px); }
+7.49% { -webkit-transform: translate3d(-128px,0px,0px); }
+7.5% { -webkit-transform: translate3d(-192px,0px,0px); }
+9.99% { -webkit-transform: translate3d(-192px,0px,0px); }
+10% { -webkit-transform: translate3d(-256px,0px,0px); }
+12.49% { -webkit-transform: translate3d(-256px,0px,0px); }
+12.5% { -webkit-transform: translate3d(-320px,0px,0px); }
+14.99% { -webkit-transform: translate3d(-320px,0px,0px); }
+15% { -webkit-transform: translate3d(-384px,0px,0px); }
+17.49% { -webkit-transform: translate3d(-384px,0px,0px); }
+17.5% { -webkit-transform: translate3d(-448px,0px,0px); }
+19.99% { -webkit-transform: translate3d(-448px,0px,0px); }
+20% { -webkit-transform: translate3d(0px,-64px,0px); }
+22.49% { -webkit-transform: translate3d(0px,-64px,0px); }
+22.5% { -webkit-transform: translate3d(-64px,-64px,0px); }
+24.99% { -webkit-transform: translate3d(-64px,-64px,0px); }
+25% { -webkit-transform: translate3d(-128px,-64px,0px); }
+27.49% { -webkit-transform: translate3d(-128px,-64px,0px); }
+27.5% { -webkit-transform: translate3d(-192px,-64px,0px); }
+29.99% { -webkit-transform: translate3d(-192px,-64px,0px); }
+30% { -webkit-transform: translate3d(-256px,-64px,0px); }
+32.49% { -webkit-transform: translate3d(-256px,-64px,0px); }
+32.5% { -webkit-transform: translate3d(-320px,-64px,0px); }
+34.99% { -webkit-transform: translate3d(-320px,-64px,0px); }
+35% { -webkit-transform: translate3d(-384px,-64px,0px); }
+37.49% { -webkit-transform: translate3d(-384px,-64px,0px); }
+37.5% { -webkit-transform: translate3d(-448px,-64px,0px); }
+39.99% { -webkit-transform: translate3d(-448px,-64px,0px); }
+40% { -webkit-transform: translate3d(0px,-128px,0px); }
+42.49% { -webkit-transform: translate3d(0px,-128px,0px); }
+42.5% { -webkit-transform: translate3d(-64px,-128px,0px); }
+44.99% { -webkit-transform: translate3d(-64px,-128px,0px); }
+45% { -webkit-transform: translate3d(-128px,-128px,0px); }
+47.49% { -webkit-transform: translate3d(-128px,-128px,0px); }
+47.5% { -webkit-transform: translate3d(-192px,-128px,0px); }
+49.99% { -webkit-transform: translate3d(-192px,-128px,0px); }
+50% { -webkit-transform: translate3d(-256px,-128px,0px); }
+52.49% { -webkit-transform: translate3d(-256px,-128px,0px); }
+52.5% { -webkit-transform: translate3d(-320px,-128px,0px); }
+54.99% { -webkit-transform: translate3d(-320px,-128px,0px); }
+55% { -webkit-transform: translate3d(-384px,-128px,0px); }
+57.49% { -webkit-transform: translate3d(-384px,-128px,0px); }
+57.5% { -webkit-transform: translate3d(-448px,-128px,0px); }
+59.99% { -webkit-transform: translate3d(-448px,-128px,0px); }
+60% { -webkit-transform: translate3d(0px,-192px,0px); }
+62.49% { -webkit-transform: translate3d(0px,-192px,0px); }
+62.5% { -webkit-transform: translate3d(-64px,-192px,0px); }
+64.99% { -webkit-transform: translate3d(-64px,-192px,0px); }
+65% { -webkit-transform: translate3d(-128px,-192px,0px); }
+67.49% { -webkit-transform: translate3d(-128px,-192px,0px); }
+67.5% { -webkit-transform: translate3d(-192px,-192px,0px); }
+69.99% { -webkit-transform: translate3d(-192px,-192px,0px); }
+70% { -webkit-transform: translate3d(-256px,-192px,0px); }
+72.49% { -webkit-transform: translate3d(-256px,-192px,0px); }
+72.5% { -webkit-transform: translate3d(-320px,-192px,0px); }
+74.99% { -webkit-transform: translate3d(-320px,-192px,0px); }
+75% { -webkit-transform: translate3d(-384px,-192px,0px); }
+77.49% { -webkit-transform: translate3d(-384px,-192px,0px); }
+77.5% { -webkit-transform: translate3d(-448px,-192px,0px); }
+79.99% { -webkit-transform: translate3d(-448px,-192px,0px); }
+80% { -webkit-transform: translate3d(0px,-256px,0px); }
+82.49% { -webkit-transform: translate3d(0px,-256px,0px); }
+82.5% { -webkit-transform: translate3d(-64px,-256px,0px); }
+84.99% { -webkit-transform: translate3d(-64px,-256px,0px); }
+85% { -webkit-transform: translate3d(-128px,-256px,0px); }
+87.49% { -webkit-transform: translate3d(-128px,-256px,0px); }
+87.5% { -webkit-transform: translate3d(-192px,-256px,0px); }
+89.99% { -webkit-transform: translate3d(-192px,-256px,0px); }
+90% { -webkit-transform: translate3d(-256px,-256px,0px); }
+92.49% { -webkit-transform: translate3d(-256px,-256px,0px); }
+92.5% { -webkit-transform: translate3d(-320px,-256px,0px); }
+94.99% { -webkit-transform: translate3d(-320px,-256px,0px); }
+95% { -webkit-transform: translate3d(-384px,-256px,0px); }
+97.49% { -webkit-transform: translate3d(-384px,-256px,0px); }
+97.5% { -webkit-transform: translate3d(-448px,-256px,0px); }
+99.99% { -webkit-transform: translate3d(-448px,-256px,0px); }
 }
 
 @-webkit-keyframes 'box' {

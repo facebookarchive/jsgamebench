@@ -87,7 +87,7 @@ var Gob = (function() {
                     size: [sprite.width, sprite.height],
                     x: offset[0] * sprite.width,
                     y: offset[1] * sprite.height,
-                    url: sprite.url,
+                    url: sprite.url, spriteid: gob.spriteid,
                     image: sprite.imageel};
       gob.dirty = false;
       return retval;
