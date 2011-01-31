@@ -178,7 +178,6 @@ var Render = (function() {
                   }
                   DomRender.transformedProp(gobel,
                                             framedata.pos,
-                                            framedata.size,
                                             [0, 0], 0);
                 }
               }
@@ -240,8 +239,6 @@ var Render = (function() {
                         'px -' + framedata.y + 'px';
                     } else {
                       gobel.innerHTML = '<img class="sprite" src="' + framedata.url +'"></img>';
-                        '" style="left:-' + framedata.x +
-                        'px;top:-' + framedata.y + 'px;"></img>';
                     }
                   } else {
                     gobel = document.createElement('img');
@@ -268,11 +265,12 @@ var Render = (function() {
                     gobel.style.backgroundPosition = '-' + framedata.x +
                       'px -' + framedata.y + 'px';
                   } else {
-                    gobel.childNodes[0].style.cssText = 'left:-' + framedata.x +
-                      'px;top:-' + framedata.y + 'px;';
+                    if (GameFrame.settings.transform3d) {
+                      gobel.childNodes[0].style.cssText = DomRender.axisAlignedTranslate3dFull([-framedata.x, -framedata.y]);
+                    } else {
+                      gobel.childNodes[0].style.cssText = DomRender.axisAlignedTranslateFull([-framedata.x, -framedata.y]);
+                    }
                   }
-                } else {
-
                 }
               } else {
                 if (GameFrame.settings.use_div_background) {

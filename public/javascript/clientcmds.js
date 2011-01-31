@@ -143,6 +143,11 @@ var ClientCmd = (function() {
                     stats += 'individual sprites ';
                   }
                   break;
+                case 'int_snap':
+                  if (sub[det + 1] == 'true') {
+                    stats += 'ints ';
+                  }
+                  break;
               }
             }
             stats += (s == 0 ? '</b>' : '') + '<br />';
@@ -165,6 +170,7 @@ var ClientCmd = (function() {
       stats += '<br />"dom update": update values in dom object when sprites move<br />"innerHTML": rebuild scene each frame when sprites move<br />"div with background": animating sprites are a div element with changing offsets on background image<br />';
       stats += '"div masking img": animating sprites are a div element masking img element<br />"rotate": use css transform property for rotation, left/top for position of sprites<br />"transform": use css transform property for rotation and position of sprites<br />';
       stats += '"css transition": use css transition to rather than updating every frame<br />"sprite sheets": combine animating sprites into sprite sheets';
+      stats += '"int": snap sprite positions to integer values<br />';
       UI.addHTML('details', 'detailinfo', {pos: [5, 105], uiclass: 'renderdetails', markup: stats});
     }
 
@@ -202,14 +208,14 @@ var ClientCmd = (function() {
     function canvasDemo() {
       UI.del('buttons');
       UI.del('perf');
-      PerfTest.addTest({viewport: 'fluid_width', settings: {render_mode: GameFrame.CANVAS_ONLY, canvas_background: true, sprite_sheets: false}, tfps: 30, background: 'world', sprites: 'aa', demo: true });
+      PerfTest.addTest({viewport: 'fluid_width', settings: {render_mode: GameFrame.CANVAS_ONLY, canvas_background: false, sprite_sheets: true, int_snap: true, transform3d: false}, tfps: 30, background: 'world', sprites: 'aa', demo: true });
       PerfTest.doAll();
     }
 
     function htmlDemo() {
       UI.del('buttons');
       UI.del('perf');
-      PerfTest.addTest({viewport: 'fluid_width', settings: {render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: true, rotate_only: true, css_transitions: false, css_keyframe: true, sprite_sheets: true, int_snap: true, transform3d:true}, tfps: 30, background: 'world', sprites: 'aa', demo: true });
+      PerfTest.addTest({viewport: 'fluid_width', settings: {render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: true, rotate_only: false, css_transitions: false, css_keyframe: false, sprite_sheets: true, int_snap: true, transform3d:true}, tfps: 30, background: 'world', sprites: 'aa', demo: true });
       PerfTest.doAll();
     }
 
@@ -223,8 +229,7 @@ var ClientCmd = (function() {
     function rotDemo() {
       UI.del('buttons');
       UI.del('perf');
-//      PerfTest.addTest({viewport: 'normal', settings: {render_mode: GameFrame.CANVAS_ONLY, update_existing: true, canvas_background: true, sprite_sheets: true}, tfps: 20, background: 'world', sprites: 'rot', demo: true });
-      PerfTest.addTest({viewport: 'fluid_width', settings: {render_mode: GameFrame.HTML_ONLY, update_existing: false, use_div_background: false, rotate_only: true, css_transitions: false, sprite_sheets: false}, tfps: 30, background: 'world', sprites: 'rot', demo: true });
+      PerfTest.addTest({viewport: 'fluid_width', settings: {render_mode: GameFrame.HTML_ONLY, update_existing: false, use_div_background: false, rotate_only: false, css_transitions: false, sprite_sheets: true}, tfps: 30, background: 'world', sprites: 'rot', demo: true });
       PerfTest.doAll();
     }
 

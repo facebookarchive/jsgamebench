@@ -31,7 +31,6 @@ var PerfTest = (function() {
 
     function incShip(count, x, y) {
       var sprite = ship_sprites[count % ship_sprites.length];
-      var sprite = "ship";
       Gob.add(Utils.uuidv4(), sprite, parseInt(Math.random() * 8), [Math.random() * x, Math.random() * y], [Math.random() * 10 + 1, 0], Math.random()*2000);
     }
 
@@ -182,7 +181,7 @@ var PerfTest = (function() {
       }
     }
 
-    var sprites = {aa: {sp: ship, inc: incShip, num: 5},
+    var sprites = {aa: {sp: ship, inc: incShip, num: 10},
                    igob: {sp: iship, inc: incIShip, dec: idec, num: 10, nodel:true},
                    ninja: {sp: ninjas, inc: incNinja, num: 15},
                    ninjarot: {sp: ninjas, inc: incNinjaRot, num: 5},
@@ -292,35 +291,35 @@ var PerfTest = (function() {
       var vp = 'normal';
       var bg = 'world';
 
-      for (var sp in spar) {
-        if (JSGlobal.browser == JSGlobal.CHROME || JSGlobal.browser == JSGlobal.WEBKIT) {
-          addTest({viewport: vp, settings: {render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: true, rotate_only: true, css_transitions: true, sprite_sheets: true}, tfps: 30, background: bg, sprites: sp });
-          addTest({viewport: vp, settings: {render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: true, rotate_only: false, css_transitions: true, sprite_sheets: true}, tfps: 30, background: bg, sprites: sp });
-        }
+      for (var is=0;is<2;is++) {
+        for (var sp in spar) {
+          if (JSGlobal.browser == JSGlobal.CHROME || JSGlobal.browser == JSGlobal.WEBKIT) {
+            addTest({viewport: vp, settings: {render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: true, rotate_only: true, css_transitions: true, sprite_sheets: true, int_snap: is ? false : true}, tfps: 30, background: bg, sprites: sp });
+            addTest({viewport: vp, settings: {render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: true, rotate_only: false, css_transitions: true, sprite_sheets: true, int_snap: is ? false : true}, tfps: 30, background: bg, sprites: sp });
+          }
 
-        if (JSGlobal.browser != JSGlobal.IE9) {
-          addTest({viewport: vp, settings: {render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: true, rotate_only: true, css_transitions: false, sprite_sheets: true}, tfps: 30, background: bg, sprites: sp });
-          addTest({viewport: vp, settings: {render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: true, rotate_only: false, css_transitions: false, sprite_sheets: true}, tfps: 30, background: bg, sprites: sp });
-          addTest({viewport: vp, settings: {render_mode: GameFrame.HTML_ONLY, update_existing: false, use_div_background: true, rotate_only: false, css_transitions: false, sprite_sheets: true}, tfps: 30, background: bg, sprites: sp });
-          addTest({viewport: vp, settings: {render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: false, rotate_only: false, css_transitions: false, sprite_sheets: true}, tfps: 30, background: bg, sprites: sp });
-          addTest({viewport: vp, settings: {render_mode: GameFrame.HTML_ONLY, update_existing: false, use_div_background: false, rotate_only: false, css_transitions: false, sprite_sheets: true}, tfps: 30, background: bg, sprites: sp });
-          addTest({viewport: vp, settings: {render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: true, rotate_only: true, css_transitions: false, sprite_sheets: false}, tfps: 30, background: bg, sprites: sp });
-          addTest({viewport: vp, settings: {render_mode: GameFrame.HTML_ONLY, update_existing: false, use_div_background: true, rotate_only: true, css_transitions: false, sprite_sheets: false}, tfps: 30, background: bg, sprites: sp });
-          addTest({viewport: vp, settings: {render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: true, rotate_only: false, css_transitions: false, sprite_sheets: false}, tfps: 30, background: bg, sprites: sp });
-          addTest({viewport: vp, settings: {render_mode: GameFrame.HTML_ONLY, update_existing: false, use_div_background: true, rotate_only: false, css_transitions: false, sprite_sheets: false}, tfps: 30, background: bg, sprites: sp });
-          addTest({viewport: vp, settings: {render_mode: GameFrame.HTML_ONLY, update_existing: false, use_div_background: false, rotate_only: false, css_transitions: false, sprite_sheets: false}, tfps: 30, background: bg, sprites: sp });
-          addTest({viewport: vp, settings: {render_mode: GameFrame.HTML_ONLY, update_existing: false, use_div_background: false, rotate_only: true, css_transitions: false, sprite_sheets: true}, tfps: 30, background: bg, sprites: sp });
-          addTest({viewport: vp, settings: {render_mode: GameFrame.HTML_ONLY, update_existing: false, use_div_background: false, rotate_only: true, css_transitions: false, sprite_sheets: false}, tfps: 30, background: bg, sprites: sp });
+          addTest({viewport: vp, settings: {render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: true, rotate_only: true, css_transitions: false, sprite_sheets: true, int_snap: is ? false : true}, tfps: 30, background: bg, sprites: sp });
+          addTest({viewport: vp, settings: {render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: true, rotate_only: false, css_transitions: false, sprite_sheets: true, int_snap: is ? false : true}, tfps: 30, background: bg, sprites: sp });
+          addTest({viewport: vp, settings: {render_mode: GameFrame.HTML_ONLY, update_existing: false, use_div_background: true, rotate_only: false, css_transitions: false, sprite_sheets: true, int_snap: is ? false : true}, tfps: 30, background: bg, sprites: sp });
+          addTest({viewport: vp, settings: {render_mode: GameFrame.HTML_ONLY, update_existing: false, use_div_background: false, rotate_only: false, css_transitions: false, sprite_sheets: true, int_snap: is ? false : true}, tfps: 30, background: bg, sprites: sp });
+          addTest({viewport: vp, settings: {render_mode: GameFrame.HTML_ONLY, update_existing: false, use_div_background: false, rotate_only: false, css_transitions: false, sprite_sheets: false, int_snap: is ? false : true}, tfps: 30, background: bg, sprites: sp });
+          addTest({viewport: vp, settings: {render_mode: GameFrame.HTML_ONLY, update_existing: false, use_div_background: false, rotate_only: true, css_transitions: false, sprite_sheets: true, int_snap: is ? false : true}, tfps: 30, background: bg, sprites: sp });
+          addTest({viewport: vp, settings: {render_mode: GameFrame.HTML_ONLY, update_existing: false, use_div_background: false, rotate_only: true, css_transitions: false, sprite_sheets: false, int_snap: is ? false : true}, tfps: 30, background: bg, sprites: sp });
+          if (sp == 'aa') {
+            addTest({viewport: vp, settings: {render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: false, rotate_only: false, css_transitions: false, sprite_sheets: true, int_snap: is ? false : true}, tfps: 30, background: bg, sprites: sp });
+            addTest({viewport: vp, settings: {render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: false, rotate_only: true, css_transitions: false, sprite_sheets: true, int_snap: is ? false : true}, tfps: 30, background: bg, sprites: sp });
+          }
+          addTest({viewport: vp, settings: {render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: true, rotate_only: true, css_transitions: false, sprite_sheets: false, int_snap: is ? false : true}, tfps: 30, background: bg, sprites: sp });
+          addTest({viewport: vp, settings: {render_mode: GameFrame.HTML_ONLY, update_existing: false, use_div_background: true, rotate_only: true, css_transitions: false, sprite_sheets: false, int_snap: is ? false : true}, tfps: 30, background: bg, sprites: sp });
+          addTest({viewport: vp, settings: {render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: true, rotate_only: false, css_transitions: false, sprite_sheets: false, int_snap: is ? false : true}, tfps: 30, background: bg, sprites: sp });
+          addTest({viewport: vp, settings: {render_mode: GameFrame.HTML_ONLY, update_existing: false, use_div_background: true, rotate_only: false, css_transitions: false, sprite_sheets: false, int_snap: is ? false : true}, tfps: 30, background: bg, sprites: sp });
         }
-        addTest({viewport: vp, settings: {render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: false, rotate_only: true, css_transitions: false, sprite_sheets: false}, tfps: 30, background: bg, sprites: sp });
 
         if (!!document.createElement('canvas').getContext) {
-          addTest({viewport: vp, settings: {render_mode: GameFrame.CANVAS_ONLY, canvas_background: false, canvas_bake_background: false, sprite_sheets: false}, tfps: 30, background: bg, sprites: sp });
-          if (JSGlobal.browser != JSGlobal.IE9) {
-            addTest({viewport: vp, settings: {render_mode: GameFrame.CANVAS_ONLY, canvas_background: true, sprite_sheets: true}, tfps: 30, background: bg, sprites: sp });
-            addTest({viewport: vp, settings: {render_mode: GameFrame.CANVAS_ONLY, canvas_background: false, canvas_bake_background: false, sprite_sheets: true}, tfps: 30, background: bg, sprites: sp });
-            addTest({viewport: vp, settings: {render_mode: GameFrame.CANVAS_ONLY, canvas_background: true, sprite_sheets: false}, tfps: 30, background: bg, sprites: sp });
-          }
+          addTest({viewport: vp, settings: {render_mode: GameFrame.CANVAS_ONLY, canvas_background: false, canvas_bake_background: false, sprite_sheets: false, int_snap: is ? false : true}, tfps: 30, background: bg, sprites: sp });
+          addTest({viewport: vp, settings: {render_mode: GameFrame.CANVAS_ONLY, canvas_background: true, sprite_sheets: true, int_snap: is ? false : true}, tfps: 30, background: bg, sprites: sp });
+          addTest({viewport: vp, settings: {render_mode: GameFrame.CANVAS_ONLY, canvas_background: false, canvas_bake_background: false, sprite_sheets: true, int_snap: is ? false : true}, tfps: 30, background: bg, sprites: sp });
+          addTest({viewport: vp, settings: {render_mode: GameFrame.CANVAS_ONLY, canvas_background: true, sprite_sheets: false, int_snap: is ? false : true}, tfps: 30, background: bg, sprites: sp });
         }
       }
       tests.sort(function(a,b) {return Math.random()-0.5;});
