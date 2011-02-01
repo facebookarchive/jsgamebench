@@ -69,15 +69,23 @@ var DomRender = (function() {
 
     function axisAligned(pos, size) {
       return 'left:' + pos[0] + 'px;top:' + pos[1] + 'px;width:' +
-        size[0] + 'px;height:' + size[1] + 'px;';
+        size[0] + 'px;height:' + size[1] + 'px';
     }
 
     function axisAlignedTranslate(pos) {
-      return 'translate(' + pos[0] + 'px, ' + pos[1] + 'px);';
+      return 'translate(' + pos[0] + 'px, ' + pos[1] + 'px)';
     }
 
     function axisAlignedTranslate3d(pos) {
-      return 'translate3d(' + pos[0] + 'px, ' + pos[1] + 'px,0px);';
+      return 'translate3d(' + pos[0] + 'px, ' + pos[1] + 'px,0px)';
+    }
+
+    function axisAlignedTranslateFull(pos) {
+      return transform + ': translate(' + pos[0] + 'px, ' + pos[1] + 'px)';
+    }
+
+    function axisAlignedTranslate3dFull(pos) {
+      return transform + ': translate3d(' + pos[0] + 'px, ' + pos[1] + 'px, 0px)';
     }
 
     function axisAlignedProp(domel, pos, vel, discon) {
@@ -108,7 +116,7 @@ var DomRender = (function() {
           dstyle[transformprop] = 'translate3d(' + pos[0] + 'px, ' + pos[1] + 'px,0)';
         }
       } else {
-        dstyle[transformprop] = 'translate3d(' + pos[0] + 'px, ' + pos[1] + 'px,0)';
+        dstyle[transformprop] = 'translate3d(' + pos[0] + ', ' + pos[1] + ',0)';
       }
     }
 
@@ -116,9 +124,9 @@ var DomRender = (function() {
       if (vel[1] == 0) {
         switch (JSGlobal.browser) {
           case JSGlobal.EI:
-            return axisAligned(pos, size);
+            return axisAligned(pos, size) + ";";
           default:
-            return "width:"+size[0]+"px;height:"+size[1]+"px;"+transform + ":" + axisAlignedTranslate(pos);
+            return "width:"+size[0]+"px;height:"+size[1]+"px;"+transform + ":" + axisAlignedTranslate(pos)+";";
         }
       }
 
@@ -136,8 +144,7 @@ var DomRender = (function() {
               ct + '\',M12=\'' + nst + '\',M21=\'' + st + '\',M22=\'' + ct +
               '\',sizingMethod=\'auto expand\');';
           default:
-            return transform + ':rotate(' + theta + 'rad);' +
-              transformoriginstring + ':0 0;' + axisAlignedTranslate(pos, size);
+            return "width:"+size[0]+"px;height:"+size[1]+"px;"+transformoriginstring + ':0 0;' + transform + ':rotate(' + theta + 'rad) ' + axisAlignedTranslate(pos, size) + ";";
         }
       } else {
         switch (JSGlobal.browser) {
@@ -157,9 +164,8 @@ var DomRender = (function() {
               'px,' + pos[1] + 'px);width:' + size[0] + 'px;height:' + size[1] + 'px;' +
               transformoriginstring + ':0 0;';
           default:
-            return transform + ':matrix(' + ct + ',' + st + ',' + nst + ',' + ct + ',' + pos[0] +
-              ',' + pos[1] + ');width:' + size[0] + 'px;height:' + size[1] + 'px;' +
-              transformoriginstring + ':0 0;';
+            return transformoriginstring + ':0 0;' + transform + ':matrix(' + ct + ',' + st + ',' + nst + ',' + ct + ',' + pos[0] +
+              ',' + pos[1] + ');width:' + size[0] + 'px;height:' + size[1] + 'px;';
         }
       }
     }
@@ -168,9 +174,9 @@ var DomRender = (function() {
       if (vel[1] == 0) {
         switch (JSGlobal.browser) {
           case JSGlobal.EI:
-            return axisAligned3d(pos, size);
+            return axisAligned3d(pos, size) + ";";
           default:
-            return "width:"+size[0]+"px;height:"+size[1]+"px;"+transform + ":" + axisAlignedTranslate3d(pos);
+            return "width:"+size[0]+"px;height:"+size[1]+"px;"+transform + ":" + axisAlignedTranslate3d(pos)+";";
         }
       }
 
@@ -187,7 +193,7 @@ var DomRender = (function() {
             ct + '\',M12=\'' + nst + '\',M21=\'' + st + '\',M22=\'' + ct +
             '\',sizingMethod=\'auto expand\');';
         default:
-          return transform + ':' + axisAlignedTranslate3d(pos, size) + ' ' +transformoriginstring + ':0 0;  rotate3d(0,0,1,' + theta + 'rad);';
+          return 'width:' + size[0] + 'px;height:' + size[1] + 'px;' + transformoriginstring + ':0 0;' + transform + ':' + axisAlignedTranslate3d(pos) + ' rotate3d(0,0,1,' + theta + 'rad);';
       }
     }
 
@@ -218,18 +224,18 @@ var DomRender = (function() {
                 dstyle[transition] = 'left ' + parseInt(time * 0.001) + 's linear, top ' + parseInt(time * 0.001) + 's linear';
                 dstyle.left = (pos[0] + vel[0] * time * 0.01) + 'px';
                 dstyle.top = (pos[1] + vel[1] * time * 0.01) + 'px';
-                dstyle[transformprop] = 'rotateZ(' + theta + 'rad)';
+                dstyle[transformprop] = 'rotate(' + theta + 'rad)';
               } else {
                 dstyle[transition] = '';
                 dstyle.left = pos[0] + 'px';
                 dstyle.top = pos[1] + 'px';
-                dstyle[transformprop] = 'rotateZ(' + theta + 'rad)';
+                dstyle[transformprop] = 'rotate(' + theta + 'rad)';
               }
             } else {
               dstyle[transition] = '';
               dstyle.left = pos[0] + 'px';
               dstyle.top = pos[1] + 'px';
-              dstyle[transformprop] = 'rotateZ(' + theta + 'rad)';
+              dstyle[transformprop] = 'rotate(' + theta + 'rad)';
             }
             break;
         }
@@ -288,14 +294,17 @@ var DomRender = (function() {
         default:
           if (GameFrame.settings.css_transitions) {
             if (!discon) {
-              dstyle[transformprop] = axisAlignedTranslate3d(pos, size) + ' ' +transformoriginstring + ':0 0; rotate3d(0,0,1,' + theta + 'rad)';
+              dstyle[transformorigin] = '0 0';
+              dstyle[transformprop] = axisAlignedTranslate3d(pos) + ' rotate3d(0,0,1,' + theta + 'rad)';
             } else {
+              dstyle[transformorigin] = '0 0';
               dstyle[transition] = '';
-              dstyle[transformprop] = axisAlignedTranslate3d(pos, size) + ' ' +transformoriginstring + ':0 0; rotate3d(0,0,1,' + theta + 'rad)';
+              dstyle[transformprop] = axisAlignedTranslate3d(pos) + ' rotate3d(0,0,1,' + theta + 'rad)';
             }
           } else {
+            dstyle[transformorigin] = '0 0';
             dstyle[transition] = '';
-            dstyle[transformprop] = axisAlignedTranslate3d(pos, size) + ' ' +transformoriginstring + ':0 0; rotate3d(0,0,1,' + theta + 'rad)';
+            dstyle[transformprop] = axisAlignedTranslate3d(pos) + ' rotate3d(0,0,1,' + theta + 'rad)';
           }
           break;
       }
@@ -307,5 +316,7 @@ var DomRender = (function() {
     DomRender.transformedProp = transformedProp;
     DomRender.transformed3d = transformed3d;
     DomRender.transformedProp3d = transformedProp3d;
+    DomRender.axisAlignedTranslateFull = axisAlignedTranslateFull;
+    DomRender.axisAlignedTranslate3dFull = axisAlignedTranslate3dFull;
     return DomRender;
   })();
