@@ -71,7 +71,7 @@ var Benchmark = (function() {
               backoff++;
           }
         } else if (fps < targetfps) {
-          if (!demo && backoff > 5) {
+          if (!demo && backoff > 20) {
             runtest = false;
             if (!demo) {
               PerfTest.done(tid, count);

@@ -15,14 +15,20 @@
 var Tick = (function() {
     var Tick = {};
     Tick.frames = 0;
-    var lastfps;
+    var lastfps = 1;
+    var timeac = 0;
 
     function tick() {
+      Tick.frames++;
       Tick.last = Tick.current;
       Tick.current = (new Date).getTime();
       Tick.delta = Tick.current - Tick.last;
-      Tick.frames++;
-      lastfps = parseInt(1000 / Tick.delta);
+      if (Tick.frames % 10 == 0) {
+        lastfps = parseInt(10000 / timeac);
+        timeac = 0;
+      } else {
+        timeac += Tick.delta;
+      }
       var name = Benchmark.name;
       if (name) {
         UI.addHTML(null, 'fps', {uiclass: 'testype ui_html', pos: [5, 35], resetlast: true, markup: 'fps: ' + lastfps + '<br />' +
