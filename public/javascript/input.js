@@ -54,6 +54,7 @@ var Input = (function() {
 
       JSGlobal.mouse.x = px;
       JSGlobal.mouse.y = py;
+      return false;
     }
 
     function getMouseWheel(event, delta) {
@@ -85,8 +86,6 @@ var Input = (function() {
       if (document.activeElement.tagName == 'INPUT' || document.activeElement.tagName == 'TEXTAREA')
         return true;
       else if (JSGlobal.key_state[16]) // shift
-        return true;
-      else if (JSGlobal.key_state[17]) // control
         return true;
       else if (JSGlobal.key_state[17]) // control
         return true;

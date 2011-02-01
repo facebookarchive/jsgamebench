@@ -250,9 +250,6 @@ var Game = (function() {
       redirect_url += '/';
     }
     redirect_url += 'oauth_redirect';
-    console.log('location: '+'https://graph.facebook.com/oauth/authorize?client_id=' + client_user.app_id + '&redirect_uri=' + redirect_url +
-    '&scope=publish_stream,read_stream,user_about_me');
-  
     window.location = 'https://graph.facebook.com/oauth/authorize?client_id=' + client_user.app_id + '&redirect_uri=' + redirect_url +
     '&scope=publish_stream,read_stream,user_about_me';
     //user_photos,user_photo_video_tags,friends_photo_video_tags,
@@ -282,9 +279,19 @@ var Game = (function() {
 
   function updatePlayer(me) {
     var plr_pos = client_user.plr_pos;
-    var dx = 0, dy = 0, forward = 0;
+    var dx, dy, forward = 0;
     var angle = me.angle;
-    if (window.DeviceMotionEvent == undefined) {
+    var new_vel = [0,0];
+
+    if (window.DeviceMotionEvent != undefined || JSGlobal.key_state[16]) {
+      var dx = JSGlobal.mouse.x / JSGlobal.w - 0.5;
+      var dy = JSGlobal.mouse.y / JSGlobal.h - 0.5;
+      if (!(Math.abs(dx) < 0.1 && Math.abs(dy) < 0.1)) {
+        var a = Math.atan2(-dy,dx) - Math.PI/2;
+        angle = a;
+        var new_vel = [dx,dy];
+      }
+    } else {
       if (JSGlobal.key_state[Key.UP] > 0 || keyDown('W')) {
         forward = 1;
       }
@@ -297,16 +304,8 @@ var Game = (function() {
       if (JSGlobal.key_state[Key.LEFT] > 0 || keyDown('A')) {
         angle += 0.2;
       }
-    } else {
-      var gesture = Input.getGesture();
-      if (gesture.active) {
-        var rot = gesture.rotation * 2 * Math.PI / 360.0;
-        angle = base_angle - rot;
-        Xhr.toServer({cmd: 'echo', args: ['' + rot]});
-        forward = 0;
-      } else {
-        base_angle = angle;
-      }
+      new_vel[0] += -forward * Math.sin(angle);
+      new_vel[1] += -forward * Math.cos(angle);
     }
     if (angle < 0) {
       angle += 2 * Math.PI;
@@ -317,10 +316,8 @@ var Game = (function() {
     var FRICTION = .98;
     var MINVEL = 0.1;
     vel = me.vel;
-    if (forward) {
-      vel[0] += -forward * Math.sin(angle);
-      vel[1] += -forward * Math.cos(angle);
-    }
+    vel[0] += new_vel[0];
+    vel[1] += new_vel[1];
     for(var i=0;i<2;i++) {
       vel[i] *= FRICTION;
       if (Math.abs(vel[i]) < MINVEL) {
