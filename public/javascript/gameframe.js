@@ -32,6 +32,8 @@ var GameFrame = (function() {
       css_keyframe: true,
       int_snap: true,
       transform3d: true,
+      webgl_blended_canvas: false,
+      webgl_debug: false,
       viewport: 'fluid'
     };
 
@@ -77,7 +79,9 @@ var GameFrame = (function() {
         backgroundel.innerHTML = '';
         switch (settings.render_mode) {
           case WEBGL:
-            WebGLRender.init(gameviewport.id, gameviewport.dstyle.width, gameviewport.dstyle.height);
+            WebGLRender.init(gameviewport.id,
+                             gameviewport.dstyle.width,
+                             gameviewport.dstyle.height);
             break;
           case CANVAS_ONLY:
             CanvasRender.init(gameviewport.id,

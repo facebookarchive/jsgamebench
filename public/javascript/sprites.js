@@ -84,11 +84,18 @@ var Sprites = (function() {
       return true;
     }
 
+    function forEach(callback_func) {
+      for (var id in spritedictionary) {
+        callback_func(spritedictionary[id]);
+      }
+    }
+
     var Sprites = {};
     Sprites.add = add;
     Sprites.del = del;
     Sprites.loaded = loaded;
     Sprites.fullyLoaded = fullyLoaded;
+    Sprites.forEach = forEach;
     Sprites.spritedictionary = spritedictionary;
     return Sprites;
   })();

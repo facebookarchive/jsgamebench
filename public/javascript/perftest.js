@@ -358,6 +358,12 @@ var PerfTest = (function() {
             addTest({viewport: vp, settings: {render_mode: GameFrame.CANVAS_ONLY, canvas_background: true, sprite_sheets: false, int_snap: is ? true : false}, tfps: 30, background: bg, sprites: sp });
           }
         }
+        if (WebGLUtil.isSupported() && 0) {
+          addTest({viewport: vp, settings: {render_mode: GameFrame.WEBGL, webgl_blended_canvas: false, sprite_sheets: false, int_snap: false}, tfps: 30, background: bg, sprites: sp });
+          addTest({viewport: vp, settings: {render_mode: GameFrame.WEBGL, webgl_blended_canvas: false, sprite_sheets: true, int_snap: false}, tfps: 30, background: bg, sprites: sp });
+          addTest({viewport: vp, settings: {render_mode: GameFrame.WEBGL, webgl_blended_canvas: true, sprite_sheets: false, int_snap: false}, tfps: 30, background: bg, sprites: sp });
+          addTest({viewport: vp, settings: {render_mode: GameFrame.WEBGL, webgl_blended_canvas: true, sprite_sheets: true, int_snap: false}, tfps: 30, background: bg, sprites: sp });
+        }
       }
       tests.sort(function(a,b) {return Math.random()-0.5;});
     }

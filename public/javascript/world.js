@@ -160,7 +160,8 @@ var World = (function() {
                     y: 0,
                     zindex: sprite.zindex,
                     url: sprite.url,
-                    image: sprite.imageel};
+                    image: sprite.imageel,
+                    sprite: sprite};
       element.dirty = false;
       return retval;
     }

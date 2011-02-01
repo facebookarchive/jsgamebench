@@ -88,7 +88,8 @@ var Gob = (function() {
                     x: offset[0] * sprite.width,
                     y: offset[1] * sprite.height,
                     url: sprite.url, spriteid: gob.spriteid,
-                    image: sprite.imageel};
+                    image: sprite.imageel,
+                    sprite: sprite};
       gob.dirty = false;
       return retval;
     }
