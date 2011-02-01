@@ -202,7 +202,6 @@ var Game = (function() {
     dir[0] = -Math.sin(me.angle);
     dir[1] = -Math.cos(me.angle);
     dir = Vec.norm(dir);
-    JSGlobal.mouse.buttons[0] = 0;
     if (0) {
       Xhr.toServer({cmd: 'shoot', args: [me.extent[0], dir]});
     } else {
@@ -283,7 +282,7 @@ var Game = (function() {
     var angle = me.angle;
     var new_vel = [0,0];
 
-    if (window.DeviceMotionEvent != undefined || JSGlobal.key_state[16]) {
+    if ((window.DeviceMotionEvent && JSGlobal.mouse.buttons[0]) || JSGlobal.key_state[16]) {
       var dx = JSGlobal.mouse.x / JSGlobal.w - 0.5;
       var dy = JSGlobal.mouse.y / JSGlobal.h - 0.5;
       if (!(Math.abs(dx) < 0.1 && Math.abs(dy) < 0.1)) {
@@ -400,9 +399,9 @@ var Game = (function() {
       }
       GridClient.transform(client_user.ent_grid, horngirl_id, {angle:angle, extent: [Utils.clone(plr_pos), [TILE_X, TILE_Y]], vel: vel, state:me.state});
     }
-    if (JSGlobal.key_state[32] > 0 || JSGlobal.mouse.buttons[0]) {
+    if (JSGlobal.key_state[32] > 0 || JSGlobal.mouse.buttons[0]==1) {
       JSGlobal.key_state[32] = 0;
-      JSGlobal.mouse.buttons[0] = 0;
+      JSGlobal.mouse.buttons[0]++;
       shootForward(me);
     }
   }
