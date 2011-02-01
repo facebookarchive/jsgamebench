@@ -86,6 +86,7 @@ var Game = (function() {
 
     var thrust = ['ship_idle', 'ship_f1', 'ship_f2'];
 
+    var base_angle = 0;
     var scr_pos = [];
     var init_complete = 0;
     var blocks = [];
@@ -297,12 +298,14 @@ var Game = (function() {
         angle += 0.2;
       }
     } else {
-      var accel = UI.getGyro();
-      if (accel[2] > 5) {
-        forward = accel[2] / 40;
-      }
-      if (accel[1] > 5 || accel[1] < -5) {
-        angle -= accel[1] / 100;
+      var gesture = Input.getGesture();
+      if (gesture.active) {
+        var rot = gesture.rotation * 2 * Math.PI / 360.0;
+        angle = base_angle - rot;
+        Xhr.toServer({cmd: 'echo', args: ['' + rot]});
+        forward = 0;
+      } else {
+        base_angle = angle;
       }
     }
     if (angle < 0) {
