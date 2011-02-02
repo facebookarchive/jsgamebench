@@ -179,7 +179,11 @@ var Game = (function() {
             for(var j=0;j<list.length;j++) {
               var hit = list[j];
               if (hit.name == 'asteroid') {
-                Xhr.toServer({cmd: 'explode', args: [hit.uuid]});
+                if (stand_alone) {
+                  SvrGame.explode(client_user,hit.uuid);
+                } else {
+                  Xhr.toServer({cmd: 'explode', args: [hit.uuid]});
+                }
                 GridClient.remove(client_user.ent_grid, mob.uuid);
                 mobs.splice(i, 1);
                 break;
@@ -202,11 +206,7 @@ var Game = (function() {
     dir[0] = -Math.sin(me.angle);
     dir[1] = -Math.cos(me.angle);
     dir = Vec.norm(dir);
-    if (0) {
-      Xhr.toServer({cmd: 'shoot', args: [me.extent[0], dir]});
-    } else {
       makeMob(me.extent[0], dir, 'shot');
-    }
   }
 
   function checkStanding() {
@@ -214,7 +214,6 @@ var Game = (function() {
     if (obj) {
       var tx = parseInt((client_user.plr_pos[0] + TILE_X / 2) / TILE_X);
       var ty = parseInt((client_user.plr_pos[1] + TILE_Y / 2) / TILE_Y);
-      //Xhr.toServer({cmd: 'tagtile', args: [obj.uuid, [tx, ty]]});
       return 1;
       var name = obj.name;
       if (name == 'PlainBlock')
@@ -457,7 +456,9 @@ var Game = (function() {
     || (parseInt(old_pos[1] / TILE_Y) != parseInt(scr_pos[1] / TILE_Y))) {
       Xhr.toServer({cmd: 'setview', args: [scr_pos, [JSGlobal.w, JSGlobal.h]]});
     }
-
+    if (stand_alone) {
+      SvrGame.tick();
+    }
     GridClient.interpReceived(client_user.ent_grid);
     // GridClient.interpReceived(client_user.world_grid); // maybe not?
     // Draw entities
@@ -524,9 +525,15 @@ var Game = (function() {
       client_user.grids[1].removeCB = Gob.del;
     }
 
+    function initStandalone() {
+      Init.reset();
+      SvrGame.init(client_user.grids);
+    }
+  
     var Game = {};
     Game.tick = tick;
     Game.init = init;
+    Game.initStandalone = initStandalone;
     return Game;
   })();
 

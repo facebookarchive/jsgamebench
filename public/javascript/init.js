@@ -29,6 +29,9 @@ var Init = (function() {
       setInterval('Game.tick();', 33);
       setInterval('Init.tick();', 1);
       Xhr.toServer({cmd: '', args: []});
+      if (stand_alone) {
+        Game.initStandalone();
+      }
     }
 
     function tick() {
