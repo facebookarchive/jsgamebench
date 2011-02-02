@@ -53,11 +53,11 @@ var Render = (function() {
       else if (/os x/.test(user_agent)) {
         JSGlobal.os = 'OS X';
       }
-      else if (/linux/.test(user_agent)) {
-        JSGlobal.os = 'Linux';
-      }
       else if (/android/.test(user_agent)) {
         JSGlobal.os = 'Android';
+      }
+      else if (/linux/.test(user_agent)) {
+        JSGlobal.os = 'Linux';
       }
       else if (/windows phone/.test(user_agent)) {
         JSGlobal.os = 'Win Mobile';

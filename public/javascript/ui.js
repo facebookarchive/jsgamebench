@@ -233,18 +233,18 @@ var UI = (function() {
           ui.scrollrow++;
           if (ui.scrollrow >= ui.sy)
             ui.scrollrow -= ui.sy;
-          ui.scrollpos += ui.scroll[0][ui.scrollrow].height;
+          ui.scrollpos += ui.scroll[ui.scrollrow].height;
         }
-      } else if (ui.scrollpos > ui.scroll[0][ui.scrollrow].height) {
+      } else if (ui.scrollpos > ui.scroll[ui.scrollrow].height) {
         drow = true;
-        while (ui.scrollpos > ui.scroll[0][ui.scrollrow].height) {
-          ui.scrollpos -= ui.scroll[0][ui.scrollrow].height;
+        while (ui.scrollpos > ui.scroll[ui.scrollrow].height) {
+          ui.scrollpos -= ui.scroll[ui.scrollrow].height;
           ui.scrollrow--;
           if (ui.scrollrow < 0)
             ui.scrollrow += ui.sy;
         }
       }
-      var y = ui.scrollpos - ui.scroll[0][ui.scrollrow].height;
+      var y = ui.scrollpos - ui.scroll[ui.scrollrow].height;
 
       var j = ui.scrollrow;
 
@@ -269,28 +269,18 @@ var UI = (function() {
       if (drow) {
         y = 0;
         var child = 0;
-        if (ui.inner) {
-          var str = "";
-          while (y < ui.height + ui.scroll[0][j].height) {
-            str += '<li class="scroll" style="left:0px;top:0px;width:'+width+'px;top:'+y+'px;height:'+ ui.scroll[0][j].height+'px;background-image:url('+ui.scroll[0][j].img+')"><div class="title">'+ui.scroll[0][j].title+'</div><div class="text">'+ui.scroll[0][j].text+'</div></li>';
-            y += ui.scroll[0][j].height;
-            j = (++j % ui.sy);
+        while (y < ui.height + ui.scroll[j].height) {
+          var cel = el.childNodes[0].childNodes[child++];
+          cel.style.webkitTransform = "translate3d(0px, "+y+"px,0px)";
+          cel.style.height = ui.scroll[j].height+"px";
+          if (cel.style.backgroundImage != ui.scroll[j].img)
+            cel.style.backgroundImage = "url("+ui.scroll[j].img+")";
+          if (cel.childNodes[0].innerHTML != ui.scroll[j].title) {
+            cel.childNodes[0].innerHTML = ui.scroll[j].title;
+            cel.childNodes[1].innerHTML = ui.scroll[j].text;
           }
-          el.childNodes[0].innerHTML = str;
-        } else {
-          while (y < ui.height + ui.scroll[0][j].height) {
-            var cel = el.childNodes[0].childNodes[child++];
-            cel.style.webkitTransform = "translate3d(0px, "+y+"px,0px)";
-            cel.style.height = ui.scroll[0][j].height+"px";
-            if (cel.style.backgroundImage != ui.scroll[0][j].img)
-              cel.style.backgroundImage = "url("+ui.scroll[0][j].img+")";
-            if (cel.childNodes[0].innerHTML != ui.scroll[0][j].title) {
-              cel.childNodes[0].innerHTML = ui.scroll[0][j].title;
-              cel.childNodes[1].innerHTML = ui.scroll[0][j].text;
-            }
-            y += ui.scroll[0][j].height;
-            j = (++j % ui.sy);
-          }
+          y += ui.scroll[j].height;
+          j = (++j % ui.sy);
         }
       }
     }
@@ -358,25 +348,21 @@ var UI = (function() {
 
       standardProps(uis[id], properties);
       uis[id].scroll = [];
-      for (var i=0;i<properties.x;i++) {
-        uis[id].scroll[i] = [];
-        for (var j=0;j<properties.y;j++) {
-          var frame = parseInt(Math.random() * 60)
+      for (var j=0;j<properties.y;j++) {
+        var frame = j %60;
           var img = '/images/asteroid/Test_Asteroid_128_000'+(frame<10?'0'+frame:frame)+'.png';
-          switch(parseInt(Math.random()*3)) {
-              case 0:
-                uis[id].scroll[i][j] = {height:150, img:img,title:'Rock Frame '+frame,text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut tempor volutpat imperdiet. Aenean vel nisl non nisi venenatis convallis. Nulla facilisis pulvinar bibendum. Vivamus tristique orci id metus pellentesque imperdiet. Maecenas massa massa, ultricies ac malesuada ut, dictum quis dolor. Aenean sapien nulla, euismod eu malesuada non, pellentesque ac augue. Morbi nunc felis, scelerisque id consequat vitae, volutpat sed nunc. Vivamus at magna vel velit venenatis ornare et malesuada erat.'};
-                break;
-              case 1:
-                uis[id].scroll[i][j] = {height:200, img:img,title:'Rock Frame '+frame,text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut tempor volutpat imperdiet. Aenean vel nisl non nisi venenatis convallis. Nulla facilisis pulvinar bibendum. Vivamus tristique orci id metus pellentesque imperdiet. Maecenas massa massa, ultricies ac malesuada ut, dictum quis dolor. Aenean sapien nulla, euismod eu malesuada non, pellentesque ac augue. Morbi nunc felis, scelerisque id consequat vitae, volutpat sed nunc. Vivamus at magna vel velit venenatis ornare et malesuada erat. Vivamus nec odio ullamcorper elit fermentum convallis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Curabitur non turpis magna. Praesent auctor ligula nec eros commodo tempor. Fusce volutpat fringilla ultricies. Proin eget velit nibh. Sed molestie varius laoreet.'};
-                break;
-              case 2:
-                uis[id].scroll[i][j] = {height:250, img:img,title:'Rock Frame '+frame,text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut tempor volutpat imperdiet. Aenean vel nisl non nisi venenatis convallis. Nulla facilisis pulvinar bibendum. Vivamus tristique orci id metus pellentesque imperdiet. Maecenas massa massa, ultricies ac malesuada ut, dictum quis dolor. Aenean sapien nulla, euismod eu malesuada non, pellentesque ac augue. Morbi nunc felis, scelerisque id consequat vitae, volutpat sed nunc. Vivamus at magna vel velit venenatis ornare et malesuada erat. Vivamus nec odio ullamcorper elit fermentum convallis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Curabitur non turpis magna. Praesent auctor ligula nec eros commodo tempor. Fusce volutpat fringilla ultricies. Proin eget velit nibh. Sed molestie varius laoreet. Nullam ut velit neque, quis varius libero.</p><p>Sed hendrerit odio eget urna ullamcorper non porta leo hendrerit. Duis in nisl mi, sit amet pulvinar magna. Nullam rhoncus lorem sit amet neque consectetur adipiscing. Donec cursus ipsum sem. Aliquam sit amet sapien ut eros pulvinar egestas. Sed vitae nisl sapien. Curabitur bibendum viverra lectus, at varius ipsum vehicula a. Integer eu cursus leo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel ante lorem, et pharetra massa. Integer commodo, turpis non malesuada fermentum, eros urna sagittis lacus, in eleifend nisi nibh at dui. Donec vulputate, quam at dictum commodo, risus metus commodo est, non tempus dui ipsum eu sapien. Morbi tincidunt, ipsum eget imperdiet facilisis, leo ante gravida nibh, at suscipit sapien justo in mauris.'};
-                break;
-            }
+        switch(parseInt(Math.random()*3)) {
+          case 0:
+            uis[id].scroll[j] = {height:140, img:img,title:'Rock Frame '+frame,text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut tempor volutpat imperdiet. Aenean vel nisl non nisi venenatis convallis. Nulla facilisis pulvinar bibendum. Vivamus tristique orci id metus pellentesque imperdiet.'};
+            break;
+          case 1:
+            uis[id].scroll[j] = {height:175, img:img,title:'Rock Frame '+frame,text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut tempor volutpat imperdiet. Aenean vel nisl non nisi venenatis convallis. Nulla facilisis pulvinar bibendum. Vivamus tristique orci id metus pellentesque imperdiet. Maecenas massa massa, ultricies ac malesuada ut, dictum quis dolor.'};
+            break;
+          case 2:
+            uis[id].scroll[j] = {height:200, img:img,title:'Rock Frame '+frame,text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut tempor volutpat imperdiet. Aenean vel nisl non nisi venenatis convallis. Nulla facilisis pulvinar bibendum. Vivamus tristique orci id metus pellentesque imperdiet. Maecenas massa massa, ultricies ac malesuada ut, dictum quis dolor. Aenean sapien nulla, euismod eu malesuada non, pellentesque ac augue. Morbi nunc felis, scelerisque id consequat vitae, volutpat sed nunc. Vivamus at magna vel velit venenatis ornare et malesuada erat.'};
+            break;
         }
       }
-      uis[id].sx = properties.x;
       uis[id].sy = properties.y;
       uis[id].zoom = 1;
       uis[id].cx = 0;
@@ -404,7 +390,7 @@ var UI = (function() {
     }
 
     function hookUIEvents(eid) {
-      touch = ('createTouch' in document);
+      touch = ('ontouchstart' in window);
       var el = document.getElementById(eid);
       if (el) {
         el[touch ? 'ontouchstart' : 'onmousedown'] = function(event) {

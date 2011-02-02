@@ -189,11 +189,11 @@ var ClientCmd = (function() {
       UI.del('perf');
       UI.addCollection('', 'buttons', {pos: [0, 0]});
       UI.addButton('buttons', 'perftest', {pos: [5, 5], width: 95, height: 20, text: 'Start Test', command: {cmd: 'startperftest', args: []}});
-      UI.addButton('buttons', 'canvasdemo', {pos: [105, 5], width: 95, height: 20, text: 'Canvas Demo', command: {cmd: 'canvasdemo', args: []}});
-      UI.addButton('buttons', 'idemo', {pos: [210, 5], width: 95, height: 20, text: 'iPhone Demo', command: {cmd: 'idemo', args: []}});
-      UI.addButton('buttons', 'htmldemo', {pos: [315, 5], width: 95, height: 20, text: 'HTML Demo', command: {cmd: 'htmldemo', args: []}});
-      UI.addButton('buttons', 'rotdemo', {pos: [420, 5], width: 95, height: 20, text: 'Rotate Demo', command: {cmd: 'rotdemo', args: []}});
-      UI.addButton('buttons', 'scrollableddemo', {pos: [535, 5], width: 95, height: 20, text: 'Scroll Demo', command: {cmd: 'scrolldemo', args: []}});
+      UI.addButton('buttons', 'scrollableddemo', {pos: [105, 5], width: 95, height: 20, text: 'Scroll Demo', command: {cmd: 'scrolldemo', args: []}});
+      UI.addButton('buttons', 'htmldemo', {pos: [210, 5], width: 95, height: 20, text: 'HTML Demo', command: {cmd: 'htmldemo', args: []}});
+      UI.addButton('buttons', 'canvasdemo', {pos: [315, 5], width: 95, height: 20, text: 'Canvas Demo', command: {cmd: 'canvasdemo', args: []}});
+      UI.addButton('buttons', 'idemo', {pos: [420, 5], width: 95, height: 20, text: 'iPhone Demo', command: {cmd: 'idemo', args: []}});
+      UI.addButton('buttons', 'rotdemo', {pos: [525, 5], width: 95, height: 20, text: 'Rotate Demo', command: {cmd: 'rotdemo', args: []}});
       UI.addCollection(null, 'perf', {pos: [100, 50], width: 260});
       if (JSGlobal.myscore) {
         UI.addHTML('perf', 'myscore', {pos: [350, 10], width:1000,uiclass: 'perfscore', markup: "Your score is " + JSGlobal.myscore + " sprites!"});
@@ -246,7 +246,11 @@ var ClientCmd = (function() {
     function scrollDemo() {
       UI.del('buttons');
       UI.del('perf');
-      UI.addScroll('', 'scroll', {pos: [0,82], width: 640, height: 700, sheight: 110, x: 10, y: 200});
+      if (JSGlobal.os == "Android") {
+        UI.addScroll('', 'scroll', {pos: [0,82], width: 640, height: 350, sheight: 110, x: 10, y: 200});
+      } else {
+        UI.addScroll('', 'scroll', {pos: [0,82], width: 640, height: 700, sheight: 110, x: 10, y: 200});
+      }
     }
 
     function playGame() {
