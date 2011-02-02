@@ -16,6 +16,7 @@ var UI = (function() {
     var COLLECTION = 1;
     var BUTTON = 2;
     var HTML = 4;
+    var SCROLL = 5;
 
     var uis = {};
     var globals = {};
@@ -29,7 +30,9 @@ var UI = (function() {
       '',
       'ui_collection',
       'ui_button',
-      'ui_html'
+      '',
+      'ui_html',
+      'ui_scroll'
     ];
 
     function dirtyAll() {
@@ -219,6 +222,171 @@ var UI = (function() {
       setCollectionID(collectionid, id);
     }
 
+    function drawScroll(el, ui) {
+      var width = ui.width;
+      var height = ui.height;
+      var str = "";
+      var drow = false;
+      if (ui.scrollpos < 0) {
+        drow = true;
+        while (ui.scrollpos < 0) {
+          ui.scrollrow++;
+          if (ui.scrollrow >= ui.sy)
+            ui.scrollrow -= ui.sy;
+          ui.scrollpos += ui.scroll[0][ui.scrollrow].height;
+        }
+      } else if (ui.scrollpos > ui.scroll[0][ui.scrollrow].height) {
+        drow = true;
+        while (ui.scrollpos > ui.scroll[0][ui.scrollrow].height) {
+          ui.scrollpos -= ui.scroll[0][ui.scrollrow].height;
+          ui.scrollrow--;
+          if (ui.scrollrow < 0)
+            ui.scrollrow += ui.sy;
+        }
+      }
+      var y = ui.scrollpos - ui.scroll[0][ui.scrollrow].height;
+
+      var j = ui.scrollrow;
+
+      if (el) {
+        ui.el = el;
+      } else {
+        el = ui.el;
+      }
+
+      if (el.childNodes[0] == null) {
+        drow = true;
+        var src = '<ul style="position:absolute;width:100%;height:100%;">';
+        for (var i=0;i<20;i++) {
+          src += '<li class="scroll" style="left:0px;top:0px;width:'+width+'px;height:1px;"><div class="title"></div><div class="text"></div></li>';
+        }
+        src += "</ul>";
+        el.innerHTML = src;
+      }
+
+      el.childNodes[0].style.webkitTransform = "translate3d(0px, "+y+"px, 0px)";
+
+      if (drow) {
+        y = 0;
+        var child = 0;
+        if (ui.inner) {
+          var str = "";
+          while (y < ui.height + ui.scroll[0][j].height) {
+            str += '<li class="scroll" style="left:0px;top:0px;width:'+width+'px;top:'+y+'px;height:'+ ui.scroll[0][j].height+'px;background-image:url('+ui.scroll[0][j].img+')"><div class="title">'+ui.scroll[0][j].title+'</div><div class="text">'+ui.scroll[0][j].text+'</div></li>';
+            y += ui.scroll[0][j].height;
+            j = (++j % ui.sy);
+          }
+          el.childNodes[0].innerHTML = str;
+        } else {
+          while (y < ui.height + ui.scroll[0][j].height) {
+            var cel = el.childNodes[0].childNodes[child++];
+            cel.style.webkitTransform = "translate3d(0px, "+y+"px,0px)";
+            cel.style.height = ui.scroll[0][j].height+"px";
+            if (cel.style.backgroundImage != ui.scroll[0][j].img)
+              cel.style.backgroundImage = "url("+ui.scroll[0][j].img+")";
+            if (cel.childNodes[0].innerHTML != ui.scroll[0][j].title) {
+              cel.childNodes[0].innerHTML = ui.scroll[0][j].title;
+              cel.childNodes[1].innerHTML = ui.scroll[0][j].text;
+            }
+            y += ui.scroll[0][j].height;
+            j = (++j % ui.sy);
+          }
+        }
+      }
+    }
+
+    function handleScroll(event, id) {
+      var ui = uis[id];
+
+      if (ui.dragging) {
+        var pos = GameFrame.page2view([event.pageX, event.pageY]);
+        var py = pos[1];
+
+        if (event.touches && event.touches.length) {
+          py = event.touches[0].pageY;
+        }
+        ui.vel = (py - ui.oldy);
+        ui.scrollpos += (py - ui.oldy);
+
+        ui.oldy = py;
+        drawScroll(null, ui);
+      } else if (Math.abs(ui.vel) > 1.1) {
+        ui.scrollpos += (ui.vel*5);
+        drawScroll(null, ui);
+        ui.vel *= 0.92;
+      } else {
+        ui.vel = 0;
+        ui.velc = 0;
+        clearInterval(ui.tid);
+        ui.tid = 0;
+      }
+      return false;
+    }
+
+    function scrollStart(event, id) {
+      var ui = uis[id];
+      ui.el.childNodes[0].style.webkitTransition = "";
+      var pos = GameFrame.page2view([event.pageX, event.pageY]);
+      ui.oldy = pos[1];
+
+      if (event.touches && event.touches.length) {
+        ui.oldy = event.touches[0].pageY;
+      }
+
+      ui.vel = 0;
+      ui.velc = 0;
+      ui.scrollstart = JSGlobal.mouse.y;
+      if (ui.tid) {
+        clearInterval(ui.tid);
+      }
+      ui.dragging = true;
+      return false;
+    }
+
+    function scrollStop(event, id) {
+      var ui = uis[id];
+      ui.dragging = false;
+      ui.tid = setInterval('UI.handleScroll(null, \''+id+'\');', 1);
+      return false;
+    }
+
+    function addScroll(collectionid, id, properties) {
+      uis[id] = {id: id,
+                 type: SCROLL,
+                 changed: true,
+                 parent: null};
+
+      standardProps(uis[id], properties);
+      uis[id].scroll = [];
+      for (var i=0;i<properties.x;i++) {
+        uis[id].scroll[i] = [];
+        for (var j=0;j<properties.y;j++) {
+          var frame = parseInt(Math.random() * 60)
+          var img = '/images/asteroid/Test_Asteroid_128_000'+(frame<10?'0'+frame:frame)+'.png';
+          switch(parseInt(Math.random()*3)) {
+              case 0:
+                uis[id].scroll[i][j] = {height:150, img:img,title:'Rock Frame '+frame,text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut tempor volutpat imperdiet. Aenean vel nisl non nisi venenatis convallis. Nulla facilisis pulvinar bibendum. Vivamus tristique orci id metus pellentesque imperdiet. Maecenas massa massa, ultricies ac malesuada ut, dictum quis dolor. Aenean sapien nulla, euismod eu malesuada non, pellentesque ac augue. Morbi nunc felis, scelerisque id consequat vitae, volutpat sed nunc. Vivamus at magna vel velit venenatis ornare et malesuada erat.'};
+                break;
+              case 1:
+                uis[id].scroll[i][j] = {height:200, img:img,title:'Rock Frame '+frame,text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut tempor volutpat imperdiet. Aenean vel nisl non nisi venenatis convallis. Nulla facilisis pulvinar bibendum. Vivamus tristique orci id metus pellentesque imperdiet. Maecenas massa massa, ultricies ac malesuada ut, dictum quis dolor. Aenean sapien nulla, euismod eu malesuada non, pellentesque ac augue. Morbi nunc felis, scelerisque id consequat vitae, volutpat sed nunc. Vivamus at magna vel velit venenatis ornare et malesuada erat. Vivamus nec odio ullamcorper elit fermentum convallis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Curabitur non turpis magna. Praesent auctor ligula nec eros commodo tempor. Fusce volutpat fringilla ultricies. Proin eget velit nibh. Sed molestie varius laoreet.'};
+                break;
+              case 2:
+                uis[id].scroll[i][j] = {height:250, img:img,title:'Rock Frame '+frame,text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut tempor volutpat imperdiet. Aenean vel nisl non nisi venenatis convallis. Nulla facilisis pulvinar bibendum. Vivamus tristique orci id metus pellentesque imperdiet. Maecenas massa massa, ultricies ac malesuada ut, dictum quis dolor. Aenean sapien nulla, euismod eu malesuada non, pellentesque ac augue. Morbi nunc felis, scelerisque id consequat vitae, volutpat sed nunc. Vivamus at magna vel velit venenatis ornare et malesuada erat. Vivamus nec odio ullamcorper elit fermentum convallis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Curabitur non turpis magna. Praesent auctor ligula nec eros commodo tempor. Fusce volutpat fringilla ultricies. Proin eget velit nibh. Sed molestie varius laoreet. Nullam ut velit neque, quis varius libero.</p><p>Sed hendrerit odio eget urna ullamcorper non porta leo hendrerit. Duis in nisl mi, sit amet pulvinar magna. Nullam rhoncus lorem sit amet neque consectetur adipiscing. Donec cursus ipsum sem. Aliquam sit amet sapien ut eros pulvinar egestas. Sed vitae nisl sapien. Curabitur bibendum viverra lectus, at varius ipsum vehicula a. Integer eu cursus leo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel ante lorem, et pharetra massa. Integer commodo, turpis non malesuada fermentum, eros urna sagittis lacus, in eleifend nisi nibh at dui. Donec vulputate, quam at dictum commodo, risus metus commodo est, non tempus dui ipsum eu sapien. Morbi tincidunt, ipsum eget imperdiet facilisis, leo ante gravida nibh, at suscipit sapien justo in mauris.'};
+                break;
+            }
+        }
+      }
+      uis[id].sx = properties.x;
+      uis[id].sy = properties.y;
+      uis[id].zoom = 1;
+      uis[id].cx = 0;
+      uis[id].cy = 0;
+      uis[id].scrollpos = 0;
+      uis[id].scrollrow = 0;
+      uis[id].inner = properties.inner;
+      setCollectionID(collectionid, id);
+    }
+
     var alpha = 0, beta = 0, gamma = 0;
     var lalpha = 0, lbeta = 0, lgamma = 0;
 
@@ -287,6 +455,7 @@ var UI = (function() {
 
     function drawElement(parent, ui) {
       var click = touch ? 'ontouchstart' : 'onmousedown';
+      var move = touch ? 'ontouchmove' : 'onmousemove';
       var unclick = touch ? 'ontouchend' : 'onmouseup';
       var hover = touch ? 'ontouchstart' : 'onmousedown';
       var str = '';
@@ -331,6 +500,13 @@ var UI = (function() {
           str += ui.markup;
           str += '</div>';
           upel.innerHTML = str;
+        } else if (ui.type == SCROLL) {
+          str = '<div class="" id="' + ui.id + '" style="z-index:1000;' + posstring + '"'+ click + '="return UI.scrollStart(event,\'' + ui.id + '\');" ' + move + '="return UI.handleScroll(event,\'' + ui.id + '\');" ' + unclick + '="return UI.scrollStop(event,\'' + ui.id + '\');"  >';
+          str += '</div>';
+          str += '<div class="' + uiclass + '" id="' + ui.id + '" style="z-index:0;' + posstring + '" >';
+          str += '</div>';
+          upel.innerHTML = str;
+          drawScroll(upel.childNodes[1], ui);
         }
       }
     }
@@ -363,9 +539,13 @@ var UI = (function() {
     UI.init = init;
     UI.tick = tick;
     UI.call = call;
+    UI.scrollStart = scrollStart;
+    UI.scrollStop = scrollStop;
+    UI.handleScroll = handleScroll;
     UI.addCollection = addCollection;
     UI.addHTML = addHTML;
     UI.addButton = addButton;
+    UI.addScroll = addScroll;
     UI.setAllDirty = setAllDirty;
     UI.hookUIEvents = hookUIEvents;
     UI.getGyro = getGyro;

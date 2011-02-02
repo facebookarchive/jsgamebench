@@ -30,7 +30,6 @@ var Input = (function() {
       var px = pos[0];
       var py = pos[1];
 
-
       if (event.touches && event.touches.length) {
         button = 0;
         px = event.touches[0].pageX;

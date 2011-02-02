@@ -35,6 +35,8 @@ var Tick = (function() {
               name.render_mode + ':' + name.sprites + ':' + name.render_path + '<br />' +
               GameFrame.getViewport().dstyle.width + 'x' + GameFrame.getViewport().dstyle.height + '<br />' +
               Benchmark.count()});
+      } else {
+        UI.addHTML(null, 'fps', {uiclass: 'testype ui_html', pos: [5, 35], resetlast: true, markup: 'fps: ' + lastfps});
       }
     }
 

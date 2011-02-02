@@ -246,8 +246,7 @@ var ClientCmd = (function() {
     function scrollDemo() {
       UI.del('buttons');
       UI.del('perf');
-      PerfTest.addTest({viewport: 'fluid_width', settings: {render_mode: GameFrame.CANVAS_ONLY, canvas_background: false, canvas_bake_background: false}, tfps: 30, background: 'scroll', sprites: 'aa', demo: true });
-      PerfTest.doAll();
+      UI.addScroll('', 'scroll', {pos: [0,82], width: 640, height: 700, sheight: 110, x: 10, y: 200});
     }
 
     function playGame() {
@@ -263,7 +262,7 @@ var ClientCmd = (function() {
       UI.del('buttons');
       UI.del('perf');
 
-      Game.init({viewport: 'fluid_width', settings: {render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background:false, rotate_only: true, sprite_sheets:true}, tfps: 30, background: 'world', sprites: 'cute', demo: true, hack: true });
+      Game.init({viewport: 'fluid_width', settings: {render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: true, rotate_only: true, css_transitions: false, css_keyframe: false, sprite_sheets: true, int_snap: true, transform3d:true}, tfps: 30, background: 'world', sprites: 'cute', demo: true, hack: true });
 
       PerfTest.doAll();
     }
