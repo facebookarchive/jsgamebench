@@ -30,6 +30,10 @@ var Init = (function() {
       setInterval('Init.tick();', 1);
       Xhr.toServer({cmd: '', args: []});
       UI.hookUIEvents('gamebody');
+
+      if (stand_alone) {
+        Game.initStandalone();
+      }
     }
 
     function tick() {

@@ -408,13 +408,13 @@ var UI = (function() {
       var el = document.getElementById(eid);
       if (el) {
         el[touch ? 'ontouchstart' : 'onmousedown'] = function(event) {
-          Input.getMouseXY(event, 1);
+          return Input.getMouseXY(event, 1);
         };
         el[touch ? 'ontouchmove' : 'onmousemove'] = function(event) {
-          Input.getMouseXY(event, 0);
+          return Input.getMouseXY(event, 0);
         };
         el[touch ? 'ontouchend' : 'onmouseup'] = function(event) {
-          Input.getMouseXY(event, -1);
+          return Input.getMouseXY(event, -1);
         };
 
         if (touch) {

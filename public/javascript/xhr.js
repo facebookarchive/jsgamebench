@@ -42,6 +42,9 @@ var Xhr = (function() {
     }
 
     function toServer(cmd) {
+      if (stand_alone) {
+         return;
+      }
       var unique_id = client_user.unique_id;
       var script = document.createElement('script');
       var req_id = 'id' + unique_id + (new Date).getTime();

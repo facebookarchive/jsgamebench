@@ -21,7 +21,7 @@ Get the stable build of nodejs from http://nodejs.org/#download
 ## npm
 Install npm node package manager https://github.com/isaacs/npm
     curl http://npmjs.org/install.sh | sh
-    install node socket.io package
+## install node socket.io package
     npm install socket.io
 
 ## run it (runs on port 8081 by default)

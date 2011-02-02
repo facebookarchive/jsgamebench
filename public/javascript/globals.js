@@ -65,3 +65,5 @@ var Key = {
   LEFT: 37,
   RIGHT: 39
 };
+
+var stand_alone;

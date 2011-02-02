@@ -86,6 +86,7 @@ var Game = (function() {
 
     var thrust = ['ship_idle', 'ship_f1', 'ship_f2'];
 
+    var base_angle = 0;
     var scr_pos = [];
     var init_complete = 0;
     var blocks = [];
@@ -178,7 +179,11 @@ var Game = (function() {
             for(var j=0;j<list.length;j++) {
               var hit = list[j];
               if (hit.name == 'asteroid') {
-                Xhr.toServer({cmd: 'explode', args: [hit.uuid]});
+                if (stand_alone) {
+                  SvrGame.explode(client_user,hit.uuid);
+                } else {
+                  Xhr.toServer({cmd: 'explode', args: [hit.uuid]});
+                }
                 GridClient.remove(client_user.ent_grid, mob.uuid);
                 mobs.splice(i, 1);
                 break;
@@ -201,12 +206,7 @@ var Game = (function() {
     dir[0] = -Math.sin(me.angle);
     dir[1] = -Math.cos(me.angle);
     dir = Vec.norm(dir);
-    JSGlobal.mouse.buttons[0] = 0;
-    if (0) {
-      Xhr.toServer({cmd: 'shoot', args: [me.extent[0], dir]});
-    } else {
       makeMob(me.extent[0], dir, 'shot');
-    }
   }
 
   function checkStanding() {
@@ -214,7 +214,6 @@ var Game = (function() {
     if (obj) {
       var tx = parseInt((client_user.plr_pos[0] + TILE_X / 2) / TILE_X);
       var ty = parseInt((client_user.plr_pos[1] + TILE_Y / 2) / TILE_Y);
-      //Xhr.toServer({cmd: 'tagtile', args: [obj.uuid, [tx, ty]]});
       return 1;
       var name = obj.name;
       if (name == 'PlainBlock')
@@ -249,6 +248,7 @@ var Game = (function() {
       redirect_url += '/';
     }
     redirect_url += 'oauth_redirect';
+
     console.log('location: '+'https://graph.facebook.com/oauth/authorize?client_id=' + client_user.app_id + '&redirect_uri=' + redirect_url +
     '&scope=publish_stream,read_stream,user_about_me');
 
@@ -281,9 +281,19 @@ var Game = (function() {
 
   function updatePlayer(me) {
     var plr_pos = client_user.plr_pos;
-    var dx = 0, dy = 0, forward = 0;
+    var dx, dy, forward = 0;
     var angle = me.angle;
-    if (window.DeviceMotionEvent == undefined) {
+    var new_vel = [0,0];
+
+    if ((window.DeviceMotionEvent && JSGlobal.mouse.buttons[0]) || JSGlobal.key_state[16]) {
+      var dx = JSGlobal.mouse.x / JSGlobal.w - 0.5;
+      var dy = JSGlobal.mouse.y / JSGlobal.h - 0.5;
+      if (!(Math.abs(dx) < 0.1 && Math.abs(dy) < 0.1)) {
+        var a = Math.atan2(-dy,dx) - Math.PI/2;
+        angle = a;
+        var new_vel = [dx,dy];
+      }
+    } else {
       if (JSGlobal.key_state[Key.UP] > 0 || keyDown('W')) {
         forward = 1;
       }
@@ -296,14 +306,8 @@ var Game = (function() {
       if (JSGlobal.key_state[Key.LEFT] > 0 || keyDown('A')) {
         angle += 0.2;
       }
-    } else {
-      var accel = UI.getGyro();
-      if (accel[2] > 5) {
-        forward = accel[2] / 40;
-      }
-      if (accel[1] > 5 || accel[1] < -5) {
-        angle -= accel[1] / 100;
-      }
+      new_vel[0] += -forward * Math.sin(angle);
+      new_vel[1] += -forward * Math.cos(angle);
     }
     if (angle < 0) {
       angle += 2 * Math.PI;
@@ -314,10 +318,8 @@ var Game = (function() {
     var FRICTION = .98;
     var MINVEL = 0.1;
     vel = me.vel;
-    if (forward) {
-      vel[0] += -forward * Math.sin(angle);
-      vel[1] += -forward * Math.cos(angle);
-    }
+    vel[0] += new_vel[0];
+    vel[1] += new_vel[1];
     for(var i=0;i<2;i++) {
       vel[i] *= FRICTION;
       if (Math.abs(vel[i]) < MINVEL) {
@@ -400,9 +402,9 @@ var Game = (function() {
       }
       GridClient.transform(client_user.ent_grid, horngirl_id, {angle:angle, extent: [Utils.clone(plr_pos), [TILE_X, TILE_Y]], vel: vel, state:me.state});
     }
-    if (JSGlobal.key_state[32] > 0 || JSGlobal.mouse.buttons[0]) {
+    if (JSGlobal.key_state[32] > 0 || JSGlobal.mouse.buttons[0]==1) {
       JSGlobal.key_state[32] = 0;
-      JSGlobal.mouse.buttons[0] = 0;
+      JSGlobal.mouse.buttons[0]++;
       shootForward(me);
     }
   }
@@ -458,7 +460,9 @@ var Game = (function() {
     || (parseInt(old_pos[1] / TILE_Y) != parseInt(scr_pos[1] / TILE_Y))) {
       Xhr.toServer({cmd: 'setview', args: [scr_pos, [JSGlobal.w, JSGlobal.h]]});
     }
-
+    if (stand_alone) {
+      SvrGame.tick();
+    }
     GridClient.interpReceived(client_user.ent_grid);
     // GridClient.interpReceived(client_user.world_grid); // maybe not?
     // Draw entities
@@ -524,9 +528,15 @@ var Game = (function() {
       client_user.grids[1].removeCB = Gob.del;
     }
 
+    function initStandalone() {
+      Init.reset();
+      SvrGame.init(client_user.grids);
+    }
+
     var Game = {};
     Game.tick = tick;
     Game.init = init;
+    Game.initStandalone = initStandalone;
     return Game;
   })();
 

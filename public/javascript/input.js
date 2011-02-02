@@ -44,7 +44,9 @@ var Input = (function() {
           last_click_time = now;
           JSGlobal.mouse.double_click = false;
         }
-        JSGlobal.mouse.buttons[button] = 1;
+        if (!JSGlobal.mouse.buttons[button]) {
+          JSGlobal.mouse.buttons[button] = 1;
+        }
       }
 
       if (down < 0) {
@@ -53,9 +55,11 @@ var Input = (function() {
 
       JSGlobal.mouse.x = px;
       JSGlobal.mouse.y = py;
+      return false;
     }
 
     function getMouseWheel(event, delta) {
+      return false;
     }
 
     function clearFocusAndState() {
@@ -84,8 +88,6 @@ var Input = (function() {
       if (document.activeElement.tagName == 'INPUT' || document.activeElement.tagName == 'TEXTAREA')
         return true;
       else if (JSGlobal.key_state[16]) // shift
-        return true;
-      else if (JSGlobal.key_state[17]) // control
         return true;
       else if (JSGlobal.key_state[17]) // control
         return true;
@@ -122,6 +124,7 @@ var Input = (function() {
     function gestureStart(event) {
       event.preventDefault();
       gesture.active = true;
+      return false;
     }
 
     function gestureChange(event) {
@@ -130,11 +133,13 @@ var Input = (function() {
         gesture.rotation = event.rotation;
         gesture.scale = event.scale;
       }
+      return false;
     }
 
     function gestureEnd(event) {
       event.preventDefault();
       gesture.active = false;
+      return false;
     }
 
     function getGesture() {
