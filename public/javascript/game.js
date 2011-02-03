@@ -58,7 +58,7 @@ var Game = (function() {
             framepos: [[0, 0]],
             width: 128, height: 128});
 
-      Sprites.add('boom', {url: '/images/explosion.png', frames: 59, no_anim: true,
+      Sprites.add('boom', {url: '/images/explosion.png', frames: 59, no_anim: true, half_res: true,
 
             framepos: [[0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0], [7, 0],
                        [0, 1], [1, 1], [2, 1], [3, 1], [4, 1], [5, 1], [6, 1], [7, 1],
@@ -239,6 +239,12 @@ var Game = (function() {
 
   function keyDown(ascii) {
     return JSGlobal.key_state[ascii.charCodeAt(0)] > 0;
+  }
+
+  function keyDownReset(ascii) {
+    var ret = JSGlobal.key_state[ascii.charCodeAt(0)] > 0;
+    JSGlobal.key_state[ascii.charCodeAt(0)] = 0;
+    return ret;
   }
 
   function fbLogin() {
@@ -432,15 +438,52 @@ var Game = (function() {
     if (!Sprites.fullyLoaded() || !sprites_loaded) {
       return;
     }
+    
     if (keyDown('P')) {
       Xhr.toServer({cmd: 'ping', args: [(new Date).getTime()]});
     }
-    if (keyDown('L')) {
-      if (!client_user.is_logging_in) {
+  
+    if (keyDownReset('L')) {
         fbLogin();
-        client_user.is_logging_in = true;
-      }
     }
+    
+    if (keyDownReset('X')) {
+      FB.getLoginStatus(function(response) {
+        if (response.session) {
+          console.log('logged in')
+        } else {
+          console.log('not logged in')
+        }
+      });
+    }
+    
+    if (keyDownReset('S')) {
+      var params = {
+        method: 'stream.publish',
+        attachment: {
+          name: 'JSSDK',
+          caption: 'The Facebook JavaScript SDK',
+          description: (
+            'A small JavaScript library that allows you to harness ' +
+            'the power of Facebook, bringing the user\'s identity, ' +
+            'social graph and distribution power to your site.'
+          ),
+          href: 'http://fbrell.com/'
+        },
+        action_links: [
+        { text: 'fbrell', href: 'http://fbrell.com/' }
+        ]
+      };
+      console.log('stream publish')
+      FB.ui(params, function(response) {
+        if (response && response.post_id) {
+          alert('Post was published.');
+        } else {
+          alert('Post was not published.');
+        }
+      });
+    }
+
     if (!init_complete++) {
       completeInit();
       return;

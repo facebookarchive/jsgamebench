@@ -8,6 +8,28 @@
   <meta name="apple-touch-fullscreen" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   <link rel="stylesheet" type="text/css" href="/public/css/style.css" />
+  
+  <script src="http://static.ak.fbcdn.net/connect/en_US/core.debug.js"></script>
+  <div id="fb-root"></div>
+  <script>
+    FB.init({
+      appId  : '159268034120947',
+      status : true, // check login status
+      cookie : true, // enable cookies to allow the server to access the session
+      xfbml  : true  // parse XFBML
+    });
+    console.log('testing login')
+    FB.getLoginStatus(function(response) {
+      if (response.session) {
+        console.log('logged in')
+      } else {
+        console.log('not logged in')
+      }
+    });
+
+  </script>
+
+
   <script type="text/javascript">var stand_alone=true;</script>
   <script type="text/javascript" src="/socket.io/socket.io.js"></script>
   <script type="text/javascript" src="/public/javascript/json2.min.js"></script>
@@ -40,12 +62,11 @@
   <script type="text/javascript" src="/public/javascript/fbmark.js"> </script>
   
   
-  
 </head>
 
 <body id="gamebody"
       style="overflow:hidden;"
-
+ 
       onresize="Init.winresize()"
       onload="Init.winresize('standalone')"
       onorientationchange="Init.winresize();"
