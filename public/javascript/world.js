@@ -155,7 +155,7 @@ var World = (function() {
       var retval = {dirty: element.dirty,
                     pos: pos,
                     size: [sprite.width, sprite.height],
-                    vel: [0, 0],scale:1,
+                    vel: [1, 0],scale:1,
                     x: 0,
                     y: 0,
                     zindex: sprite.zindex,

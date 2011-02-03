@@ -19,20 +19,22 @@ var WebGLRender = (function() {
 
     var sprite_vs = '\
 uniform vec3 sprite_dims;\n\
-uniform vec3 sprite_matrix_x;\n\
-uniform vec3 sprite_matrix_y;\n\
+uniform vec4 sprite_velpos;\n\
 uniform vec4 screen_dims;\n\
 uniform vec4 sprite_tex_transform;\n\
 attribute vec2 vposition;\n\
 varying vec2 v_Texcoord;\n\
 void main() {\n\
-  vec3 pre_rot = vec3(vposition * sprite_dims.xy, 1);\n\
-  gl_Position = vec4(dot(sprite_matrix_x, pre_rot) *\n\
-                       screen_dims.x + screen_dims.z,\n\
-                     dot(sprite_matrix_y, pre_rot) *\n\
-                       screen_dims.y + screen_dims.w,\n\
-                     sprite_dims.z, 1);\n\
-  vec2 texcoord = vec2(vposition.x, 1.0 - vposition.y);\n\
+  vec2 pre_rot = vposition * sprite_dims.xy;\n\
+  vec2 dir = normalize(sprite_velpos.xy);\n\
+  vec2 tdir = vec2(-dir.y, dir.x);\n\
+  gl_Position.x = dot(dir, pre_rot);\n\
+  gl_Position.y = dot(tdir, pre_rot);\n\
+  gl_Position.xy = (gl_Position.xy + sprite_velpos.zw) *\n\
+                     screen_dims.xy + screen_dims.zw;\n\
+  gl_Position.z = sprite_dims.z;\n\
+  gl_Position.w = 1.0;\n\
+  vec2 texcoord = vec2(vposition.x, vposition.y);\n\
   v_Texcoord = texcoord * sprite_tex_transform.xy +\n\
                sprite_tex_transform.zw;\n\
 }\n';
@@ -52,8 +54,7 @@ void main() {\n\
     var sprite_attribs = ['vposition'];
 
     var sprite_uniforms = ['sprite_dims',
-                           'sprite_matrix_x',
-                           'sprite_matrix_y',
+                           'sprite_velpos',
                            'screen_dims',
                            'sprite_tex_transform',
                            'sprite_color',
@@ -156,7 +157,7 @@ void main() {\n\
       }
 
       gl.viewport(0, 0, viewport.width, viewport.height);
-      gl.clearColor(0, 1.0, 0, 0);
+      gl.clearColor(0, 0, 0, 0);
       gl.clear(gl.COLOR_BUFFER_BIT);
       gl.disable(gl.CULL_FACE);
       gl.enable(gl.BLEND);
@@ -174,9 +175,9 @@ void main() {\n\
                    1, 1, 1, 1);
       gl.uniform4f(sprite_program.uniform('screen_dims'),
                    2.0 / viewport.width,
-                   2.0 / viewport.height,
+                   -2.0 / viewport.height,
                    -1.0,
-                   -1.0);
+                   1.0);
 
       // set sprite texture sampler to use texture 0
       gl.uniform1i(sprite_program.uniform('sprite_texture'), 0);
@@ -194,18 +195,10 @@ void main() {\n\
       gl.uniform3f(sprite_program.uniform('sprite_dims'),
                    w, h, 0.1);
 
-      // setup matrix
-      var ct = 1, st = 0;
-      if (framedata.vel[1]) {
-        var theta = Math.atan2(framedata.vel[1], framedata.vel[0]);
-        ct = Math.cos(theta);
-        st = Math.sin(theta);
-      }
-
-      gl.uniform3f(sprite_program.uniform('sprite_matrix_x'),
-                   ct, st, framedata.pos[0]);
-      gl.uniform3f(sprite_program.uniform('sprite_matrix_y'),
-                   -st, ct, framedata.pos[1]);
+      // setup position and rotation
+      gl.uniform4f(sprite_program.uniform('sprite_velpos'),
+                   framedata.vel[0], -framedata.vel[1],
+                   framedata.pos[0], framedata.pos[1]);
 
       // setup texture
       var sprite = framedata.sprite;

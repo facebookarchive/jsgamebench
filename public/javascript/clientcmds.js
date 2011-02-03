@@ -274,7 +274,7 @@ var ClientCmd = (function() {
               sprite_sheets: false, int_snap: false,
               webgl_debug: false, webgl_blended_canvas: false
           },
-          tfps: 30, background: 'world', sprites: 'aa', demo: true
+          tfps: 30, background: 'world', sprites: 'rot', demo: true
         });
       PerfTest.doAll();
     }
