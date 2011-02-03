@@ -85,7 +85,18 @@ var ClientCmd = (function() {
       var stats = '';
       for (var rm in subscores) {
         for (var sp in subscores[rm]) {
-          stats += (rm == 'canvas' ? '&lt;canvas&gt;' : '&lt;div&gt;') + ' ' + (sp == 'aa' ? 'axis-aligned images' : 'rotated images') + '<br />';
+          switch(rm) {
+            case 'canvas':
+              stats += '&lt;canvas&gt;';
+              break;
+            case 'html':
+              stats += '&lt;div&gt;'
+              break;
+            case 'webgl':
+              stats += 'webgl';
+              break;
+          }
+          stats += ' ' + (sp == 'aa' ? 'axis-aligned images' : 'rotated images') + '<br />';
 
           var sorted = [];
           for (var s in  subscores[rm][sp]) {

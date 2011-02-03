@@ -13,10 +13,10 @@
 // under the License.
 
 var FBmark = (function() {
-    var scores = {canvas: {}, html: {}};
+    var scores = {canvas: {}, html: {}, webgl:{}};
 
     function reset() {
-      scores = {canvas: {}, html: {}};
+      scores = {canvas: {}, html: {}, webgl:{}};
     }
 
     function addScore(settings, score) {
@@ -33,10 +33,14 @@ var FBmark = (function() {
     function peak() {
       var total = 1;
       for (var sp in {aa: 0, rot: 0}) {
-        if (scores.canvas[sp] && (scores.canvas[sp][0].score >= scores.html[sp][0].score)) {
-          total *= scores.canvas[sp][0].score;
+        if (scores.canvas[sp] && scores.html[sp]) {
+          if (scores.canvas[sp][0].score >= scores.html[sp][0].score) {
+            total *= scores.canvas[sp][0].score;
+          } else {
+            total *= scores.html[sp][0].score;
+          }
         } else {
-          total *= scores.html[sp][0].score;
+          total *= scores.canvas[sp] ? scores.canvas[sp][0].score : scores.html[sp][0].score;
         }
       }
       scores.score = Math.pow(total, 0.5);

@@ -289,10 +289,15 @@ var PerfTest = (function() {
           sprites[test.sprites].sp();
           tid.sprites = test.sprites;
 
+          var num = sprites[test.sprites].num;
+          if (test.settings.render_mode == GameFrame.WEBGL && test.sprites == 'rot') {
+            num *= 5;
+          }
+
           Benchmark.setup({inc: sprites[test.sprites].inc,
                 dec: sprites[test.sprites].dec ? sprites[test.sprites].dec : dec,
                 tfps: test.tfps,
-                num: sprites[test.sprites].num,
+                num: num,
                 w: JSGlobal.w,
                 h: JSGlobal.h,
                 tid: tid,
@@ -358,7 +363,7 @@ var PerfTest = (function() {
             addTest({viewport: vp, settings: {render_mode: GameFrame.CANVAS_ONLY, canvas_background: true, sprite_sheets: false, int_snap: is ? true : false}, tfps: 30, background: bg, sprites: sp });
           }
         }
-        if (WebGLUtil.isSupported() && 0) {
+        if (WebGLUtil.isSupported()) {
           addTest({viewport: vp, settings: {render_mode: GameFrame.WEBGL, webgl_blended_canvas: false, sprite_sheets: false, int_snap: false}, tfps: 30, background: bg, sprites: sp });
           addTest({viewport: vp, settings: {render_mode: GameFrame.WEBGL, webgl_blended_canvas: false, sprite_sheets: true, int_snap: false}, tfps: 30, background: bg, sprites: sp });
           addTest({viewport: vp, settings: {render_mode: GameFrame.WEBGL, webgl_blended_canvas: true, sprite_sheets: false, int_snap: false}, tfps: 30, background: bg, sprites: sp });
