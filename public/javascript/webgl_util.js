@@ -338,13 +338,65 @@ var WebGLUtil = (function() {
       return shader_obj;
     }
 
-    function loadProgram(vshader, fshader, attribs, uniforms) {
-      var vertex_shader = this.loadShader(vshader, this.VERTEX_SHADER);
+    var bind_table = {};
+    bind_table['vec2'] = function(gl, loc) {
+      return function(x, y) {
+        gl.uniform2f(loc, x, y);
+      }
+    };
+
+    bind_table['vec3'] = function(gl, loc) {
+      return function(x, y, z) {
+        gl.uniform3f(loc, x, y, z);
+      }
+    };
+
+    bind_table['vec4'] = function(gl, loc) {
+      return function(x, y, z, w) {
+        gl.uniform4f(loc, x, y, z, w);
+      }
+    };
+
+    bind_table['sampler2D'] = function(gl, loc) {
+      return function(s) {
+        gl.uniform1i(loc, s);
+      }
+    };
+
+    function loadProgram(vshader, fshader) {
+      var uniforms = {};
+
+      function genDecls(obj, name, accum) {
+        var text = '';
+        var nobj = obj[name];
+        for (var o in nobj) {
+          text += name + ' ' + nobj[o] + ' ' + o + ';\n';
+          if (accum) {
+            accum[o] = nobj[o];
+          }
+        }
+        return text;
+      }
+
+      var vtext = genDecls(vshader, 'attribute');
+      vtext += genDecls(vshader, 'uniform', uniforms);
+      vtext += genDecls(vshader, 'varying');
+      vtext += vshader.text;
+
+      var vertex_shader = this.loadShader(vtext, this.VERTEX_SHADER);
       if (!vertex_shader) {
         return null;
       }
 
-      var fragment_shader = this.loadShader(fshader, this.FRAGMENT_SHADER);
+      var ftext =
+        '#ifdef GL_ES\n' +
+        '  precision ' + fshader.fprecision + ' float;\n' +
+        '#endif\n';
+      ftext += genDecls(fshader, 'uniform', uniforms);
+      ftext += genDecls(fshader, 'varying');
+      ftext += fshader.text;
+
+      var fragment_shader = this.loadShader(ftext, this.FRAGMENT_SHADER);
       if (!fragment_shader) {
         this.deleteShader(vertex_shader);
         return null;
@@ -361,8 +413,10 @@ var WebGLUtil = (function() {
       this.attachShader(program_obj, vertex_shader);
       this.attachShader(program_obj, fragment_shader);
 
-      for (var ii = 0; ii < attribs.length; ++ii) {
-        this.bindAttribLocation(program_obj, ii, attribs[ii]);
+      var ii = 0;
+      for (attrib in vshader.attribute) {
+        this.bindAttribLocation(program_obj, ii, attrib);
+        ii += 1;
       }
 
       this.linkProgram(program_obj);
@@ -377,21 +431,21 @@ var WebGLUtil = (function() {
         return null;
       }
 
-      var uniform_locations = {};
-      for (var ii = 0; ii < uniforms.length; ++ii) {
-        uniform_locations[uniforms[ii]] =
-          this.getUniformLocation(program_obj, uniforms[ii]);
-      }
-
       var program_wrapper = {};
       var gl = this;
 
+      for (var uniform in uniforms) {
+        var loc = gl.getUniformLocation(program_obj, uniform);
+        var type = uniforms[uniform];
+        if (bind_table[type]) {
+          program_wrapper[uniform] = bind_table[type](gl, loc);
+        } else {
+          throw 'BadTypeException';
+        }
+      }
+
       program_wrapper.bind = function() {
         gl.useProgram(program_obj);
-      };
-
-      program_wrapper.uniform = function(uniform_name) {
-        return uniform_locations[uniform_name];
       };
 
       program_wrapper.destroy = function() {

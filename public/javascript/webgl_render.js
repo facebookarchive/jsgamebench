@@ -17,13 +17,27 @@ var WebGLRender = (function() {
     var viewport, sprite_program, sprite_vbo, sprite_ibo;
     var cur_gltexture;
 
-    var sprite_vs = '\
-uniform vec3 sprite_dims;\n\
-uniform vec4 sprite_velpos;\n\
-uniform vec4 screen_dims;\n\
-uniform vec4 sprite_tex_transform;\n\
-attribute vec2 vposition;\n\
-varying vec2 v_Texcoord;\n\
+    var sprite_vs =
+      {
+        attribute:
+        {
+          vposition : 'vec2'
+        },
+
+        uniform:
+        {
+          sprite_dims : 'vec3',
+          sprite_velpos : 'vec4',
+          screen_dims : 'vec4',
+          sprite_tex_transform : 'vec4'
+        },
+
+        varying:
+        {
+          v_Texcoord: 'vec2'
+        },
+
+        text: '\
 void main() {\n\
   vec2 pre_rot = vposition * sprite_dims.xy;\n\
   vec2 dir = normalize(sprite_velpos.xy);\n\
@@ -34,32 +48,32 @@ void main() {\n\
                      screen_dims.xy + screen_dims.zw;\n\
   gl_Position.z = sprite_dims.z;\n\
   gl_Position.w = 1.0;\n\
-  vec2 texcoord = vec2(vposition.x, vposition.y);\n\
-  v_Texcoord = texcoord * sprite_tex_transform.xy +\n\
+  v_Texcoord = vposition.xy * sprite_tex_transform.xy +\n\
                sprite_tex_transform.zw;\n\
-}\n';
+}\n'
+      };
 
-    var sprite_fs = '\
-#ifdef GL_ES\n\
-  precision mediump float;\n\
-#endif\n\
-uniform vec4 sprite_color;\n\
-uniform sampler2D sprite_texture;\n\
-varying vec2 v_Texcoord;\n\
+    var sprite_fs =
+    {
+      fprecision: 'mediump',
+
+      uniform:
+      {
+        sprite_color : 'vec4',
+        sprite_texture : 'sampler2D'
+      },
+
+      varying:
+      {
+        v_Texcoord: 'vec2'
+      },
+
+      text: '\
 void main() {\n\
   vec4 tex_color = texture2D(sprite_texture, v_Texcoord);\n\
   gl_FragColor = sprite_color * tex_color;\n\
-}\n';
-
-    var sprite_attribs = ['vposition'];
-
-    var sprite_uniforms = ['sprite_dims',
-                           'sprite_velpos',
-                           'screen_dims',
-                           'sprite_tex_transform',
-                           'sprite_color',
-                           'sprite_texture'
-                          ];
+}\n'
+    };
 
     function createSpriteGeometry(gl_context) {
       var verts = new Float32Array([0,0, 0,1, 1,1, 1,0]);
@@ -128,10 +142,7 @@ void main() {\n\
         return false;
       }
 
-      sprite_program = gl_context.loadProgram(sprite_vs,
-                                              sprite_fs,
-                                              sprite_attribs,
-                                              sprite_uniforms);
+      sprite_program = gl_context.loadProgram(sprite_vs, sprite_fs);
 
       if (!sprite_program) {
         initializing = false;
@@ -171,16 +182,14 @@ void main() {\n\
       gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
       gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, sprite_ibo);
 
-      gl.uniform4f(sprite_program.uniform('sprite_color'),
-                   1, 1, 1, 1);
-      gl.uniform4f(sprite_program.uniform('screen_dims'),
-                   2.0 / viewport.width,
-                   -2.0 / viewport.height,
-                   -1.0,
-                   1.0);
+      sprite_program.sprite_color(1, 1, 1, 1);
+      sprite_program.screen_dims(2.0 / viewport.width,
+                                 -2.0 / viewport.height,
+                                 -1.0,
+                                 1.0);
 
       // set sprite texture sampler to use texture 0
-      gl.uniform1i(sprite_program.uniform('sprite_texture'), 0);
+      sprite_program.sprite_texture(0);
       gl.activeTexture(gl.TEXTURE0);
     }
 
@@ -192,21 +201,20 @@ void main() {\n\
       // setup size
       var w = framedata.size[0] * framedata.scale;
       var h = framedata.size[1] * framedata.scale;
-      gl.uniform3f(sprite_program.uniform('sprite_dims'),
-                   w, h, 0.1);
+      sprite_program.sprite_dims(w, h, 0.1);
 
       // setup position and rotation
-      gl.uniform4f(sprite_program.uniform('sprite_velpos'),
-                   framedata.vel[0], -framedata.vel[1],
-                   framedata.pos[0], framedata.pos[1]);
+      sprite_program.sprite_velpos(framedata.vel[0], -framedata.vel[1],
+                                   framedata.pos[0], framedata.pos[1]);
 
       // setup texture
       var sprite = framedata.sprite;
       var imgmulx = 1 / sprite.imageel.width;
       var imgmuly = 1 / sprite.imageel.height;
-      gl.uniform4f(sprite_program.uniform('sprite_tex_transform'),
-                   framedata.size[0] * imgmulx, framedata.size[1] * imgmuly,
-                   framedata.x * imgmulx, framedata.y * imgmuly);
+      sprite_program.sprite_tex_transform(framedata.size[0] * imgmulx,
+                                          framedata.size[1] * imgmuly,
+                                          framedata.x * imgmulx,
+                                          framedata.y * imgmuly);
 
       if (!sprite.gltexture) {
         sprite.gltexture = gl.createTexture();
