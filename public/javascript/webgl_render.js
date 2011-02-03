@@ -15,38 +15,39 @@
 var WebGLRender = (function() {
     var gl, initializing = false;
     var viewport, sprite_program, sprite_vbo, sprite_ibo;
+    var cur_gltexture;
 
-    var sprite_vs =
-      'uniform vec3 sprite_dims;\n' +
-      'uniform vec3 sprite_matrix_x;\n' +
-      'uniform vec3 sprite_matrix_y;\n' +
-      'uniform vec4 screen_dims;\n' +
-      'uniform vec4 sprite_tex_transform;\n' +
-      'attribute vec2 vposition;\n' +
-      'varying vec2 v_Texcoord;\n' +
-      'void main() {\n' +
-      '  vec3 pre_rot = vec3(vposition * sprite_dims.xy, 1);\n' +
-      '  gl_Position = vec4(dot(sprite_matrix_x, pre_rot) *\n' +
-      '                       screen_dims.x + screen_dims.z,\n' +
-      '                     dot(sprite_matrix_y, pre_rot) *' +
-      '                       screen_dims.y + screen_dims.w,\n' +
-      '                     sprite_dims.z, 1);\n' +
-      '  vec2 texcoord = vec2(vposition.x, 1.0 - vposition.y);\n' +
-      '  v_Texcoord = texcoord * sprite_tex_transform.xy +\n' +
-      '               sprite_tex_transform.zw;\n' +
-      '}\n';
+    var sprite_vs = '\
+uniform vec3 sprite_dims;\n\
+uniform vec3 sprite_matrix_x;\n\
+uniform vec3 sprite_matrix_y;\n\
+uniform vec4 screen_dims;\n\
+uniform vec4 sprite_tex_transform;\n\
+attribute vec2 vposition;\n\
+varying vec2 v_Texcoord;\n\
+void main() {\n\
+  vec3 pre_rot = vec3(vposition * sprite_dims.xy, 1);\n\
+  gl_Position = vec4(dot(sprite_matrix_x, pre_rot) *\n\
+                       screen_dims.x + screen_dims.z,\n\
+                     dot(sprite_matrix_y, pre_rot) *\n\
+                       screen_dims.y + screen_dims.w,\n\
+                     sprite_dims.z, 1);\n\
+  vec2 texcoord = vec2(vposition.x, 1.0 - vposition.y);\n\
+  v_Texcoord = texcoord * sprite_tex_transform.xy +\n\
+               sprite_tex_transform.zw;\n\
+}\n';
 
-    var sprite_fs =
-      '#ifdef GL_ES\n' +
-      '  precision mediump float;\n' +
-      '#endif\n' +
-      'uniform vec4 sprite_color;\n' +
-      'uniform sampler2D sprite_texture;\n' +
-      'varying vec2 v_Texcoord;\n' +
-      'void main() {\n' +
-      '  vec4 tex_color = texture2D(sprite_texture, v_Texcoord);\n' +
-      '  gl_FragColor = sprite_color * tex_color;\n' +
-      '}\n';
+    var sprite_fs = '\
+#ifdef GL_ES\n\
+  precision mediump float;\n\
+#endif\n\
+uniform vec4 sprite_color;\n\
+uniform sampler2D sprite_texture;\n\
+varying vec2 v_Texcoord;\n\
+void main() {\n\
+  vec4 tex_color = texture2D(sprite_texture, v_Texcoord);\n\
+  gl_FragColor = sprite_color * tex_color;\n\
+}\n';
 
     var sprite_attribs = ['vposition'];
 
@@ -55,7 +56,8 @@ var WebGLRender = (function() {
                            'sprite_matrix_y',
                            'screen_dims',
                            'sprite_tex_transform',
-                           'sprite_color'
+                           'sprite_color',
+                           'sprite_texture'
                           ];
 
     function createSpriteGeometry(gl_context) {
@@ -175,6 +177,10 @@ var WebGLRender = (function() {
                    2.0 / viewport.height,
                    -1.0,
                    -1.0);
+
+      // set sprite texture sampler to use texture 0
+      gl.uniform1i(sprite_program.uniform('sprite_texture'), 0);
+      gl.activeTexture(gl.TEXTURE0);
     }
 
     function draw(framedata) {
@@ -219,8 +225,10 @@ var WebGLRender = (function() {
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-      } else {
+        cur_gltexture = sprite.gltexture;
+      } else if (sprite.gltexture != cur_gltexture) {
         gl.bindTexture(gl.TEXTURE_2D, sprite.gltexture);
+        cur_gltexture = sprite.gltexture;
       }
 
       // draw
@@ -233,6 +241,7 @@ var WebGLRender = (function() {
       }
 
       gl.flush();
+      cur_gltexture = undefined;
     }
 
     var WebGLRender = {};
