@@ -81,6 +81,9 @@ var ClientCmd = (function() {
       UI.del('details');
       UI.del('glossary');
       UI.addCollection('perf', 'details', {uiclass: 'perfblock', pos: [265, 0], width: 1000, height: 4000, command: {cmd:'hidedetails', args:[]}});
+
+      var param_on_scores = {};
+      var param_off_scores = {};
       var subscores = data.details;
       var stats = '';
       for (var rm in subscores) {
@@ -104,10 +107,6 @@ var ClientCmd = (function() {
           }
 
           sorted.sort(function(a,b) {return b.score - a.score;});
-
-          var param_on_scores = {};
-          var param_off_scores = {};
-
 
           var max = sorted[0].score;
 
