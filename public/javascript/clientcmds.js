@@ -80,7 +80,7 @@ var ClientCmd = (function() {
     function showDetails(data) {
       UI.del('details');
       UI.del('glossary');
-      UI.addCollection('perf', 'details', {uiclass: 'perfblock', pos: [265, 0], width: 1000, height: 3000, command: {cmd:'hidedetails', args:[]}});
+      UI.addCollection('perf', 'details', {uiclass: 'perfblock', pos: [265, 0], width: 1000, height: 4000, command: {cmd:'hidedetails', args:[]}});
       var subscores = data.details;
       var stats = '';
       for (var rm in subscores) {
