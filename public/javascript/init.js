@@ -101,14 +101,31 @@ var Init = (function() {
       JSGlobal.winsize[0] = width;
       JSGlobal.winsize[1] = height;
 
-      if (!JSGlobal.TIMERS_LAUNCHED) {
-        timer_kick_off();
-      }
-
       GameFrame.setXbyY();
     }
 
+    function init() {
+      if (document.getElementById('fb-root')) {
+        FB.init({
+          appId  : '159268034120947',
+          status : true, // check login status
+          cookie : true, // enable cookies to allow the server to access the session
+          xfbml  : false  // parse XFBML
+        });
+        FB.getLoginStatus(function(response) {
+          if (response.session) {
+            console.log('logged in')
+          } else {
+            console.log('not logged in')
+          }
+        });
+      }
+      winresize();
+      timer_kick_off();
+    }
+
     var Init = {};
+    Init.init = init;
     Init.winresize = winresize;
     Init.quit = quit;
     Init.tick = tick;

@@ -461,29 +461,27 @@ var Game = (function() {
       var params = {
         method: 'stream.publish',
         attachment: {
-          name: 'JSSDK',
-          caption: 'The Facebook JavaScript SDK',
-          description: (
-            'A small JavaScript library that allows you to harness ' +
-            'the power of Facebook, bringing the user\'s identity, ' +
-            'social graph and distribution power to your site.'
-          ),
+          name: 'Rock Destroyer',
+          caption: "You've blown up 10 rocks!",
+          description: "Leveled up in rock destroyer!",
           href: 'http://fbrell.com/'
         },
-        action_links: [
-        { text: 'fbrell', href: 'http://fbrell.com/' }
-        ]
+        action_links: [ { text: 'fbrell', href: 'http://fbrell.com/' } ]
       };
-      console.log('stream publish')
       FB.ui(params, function(response) {
         if (response && response.post_id) {
-          alert('Post was published.');
+          console.log('Post was published.');
         } else {
-          alert('Post was not published.');
+          console.log('Post was not published.');
         }
       });
     }
 
+    if (keyDownReset('R')) {
+      FB.ui({ method: 'apprequests', 
+           message: 'Here is a new Requests dialog...'});
+    }
+    
     if (!init_complete++) {
       completeInit();
       return;
