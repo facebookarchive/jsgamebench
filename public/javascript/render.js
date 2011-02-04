@@ -19,6 +19,8 @@ var Render = (function() {
     function setupBrowserSpecific() {
       var user_agent = navigator.userAgent.toLowerCase();
 
+      JSGlobal.mobile = false;
+
       if (/chrome/.test(user_agent)) {
         JSGlobal.browser = JSGlobal.CHROME;
       }
@@ -42,18 +44,22 @@ var Render = (function() {
       }
 
       if (/iphone/.test(user_agent)) {
+        JSGlobal.mobile = true;
         JSGlobal.os = 'iPhone';
       }
       else if (/ipod/.test(user_agent)) {
+        JSGlobal.mobile = true;
         JSGlobal.os = 'iPod';
       }
       else if (/ipad/.test(user_agent)) {
+        JSGlobal.mobile = true;
         JSGlobal.os = 'iPad';
       }
       else if (/os x/.test(user_agent)) {
         JSGlobal.os = 'OS X';
       }
       else if (/android/.test(user_agent)) {
+        JSGlobal.mobile = true;
         JSGlobal.os = 'Android';
       }
       else if (/linux/.test(user_agent)) {

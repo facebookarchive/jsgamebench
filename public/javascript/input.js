@@ -21,10 +21,13 @@ var Input = (function() {
     function getMouseXY(event,down) {
       var prev = JSGlobal.mouse.buttons.slice(0);
       var button = 0;
-      if (event.button==2) {
+      if (!event)
+        event = window.event;
+      if (event.which) {
+        button = event.which - 1;
+      } else if (event.button==2) {
         button = 1;
       }
-      //var button = event.which - 1;
 
       var pos = GameFrame.page2view([event.pageX, event.pageY]);
       var px = pos[0];
