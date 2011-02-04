@@ -154,13 +154,6 @@ var ClientCmd = (function() {
                     stats += 'div masking img ';
                   }
                   break;
-                case 'rotate_only':
-                  if (sub[det + 1] == 'true') {
-                    stats += 'rotate ';
-                  } else {
-                    stats += 'matrix ';
-                  }
-                  break;
                 case 'css_transitions':
                   if (sub[det + 1] == 'true') {
                     stats += 'css transition ';
@@ -214,7 +207,8 @@ var ClientCmd = (function() {
 
       var deltas = [];
       for (var p in param_on_scores) {
-        deltas.push({param:p,delta:parseInt(param_off_scores[p].total/param_off_scores[p].count - param_on_scores[p].total/param_on_scores[p].count)});
+        if (param_off_scores[p])
+          deltas.push({param:p,delta:parseInt(param_off_scores[p].total/param_off_scores[p].count - param_on_scores[p].total/param_on_scores[p].count)});
       }
       deltas.sort(function(a,b) {return b.delta - a.delta;});
 
@@ -286,8 +280,8 @@ var ClientCmd = (function() {
           {
             render_mode: GameFrame.HTML_ONLY,
             sprite_sheets: false, int_snap: true,
-            update_existing: true, use_div_background: true, rotate_only: true,
-            css_transitions: true, css_keyframe: false, transform3d: true
+            update_existing: true, use_div_background: true,
+            css_transitions: false, css_keyframe: false, transform3d: false
           },
           tfps: 30, background: 'world', sprites: 'aa', demo: true
         });
@@ -339,7 +333,7 @@ var ClientCmd = (function() {
       UI.del('buttons');
       UI.del('perf');
 
-      Game.init({viewport: 'fluid', settings: {render_mode: GameFrame.CANVAS_ONLY, canvas_background: false, canvas_bake_background: false}, tfps: 30, background: 'world', sprites: 'cute', demo: true, hack: true });
+      Game.init({viewport: 'fluid', settings: {render_mode: GameFrame.CANVAS_ONLY, canvas_background: false}, tfps: 30, background: 'world', sprites: 'cute', demo: true, hack: true });
 
       PerfTest.doAll();
     }
@@ -348,7 +342,7 @@ var ClientCmd = (function() {
       UI.del('buttons');
       UI.del('perf');
 
-      Game.init({viewport: 'fluid_width', settings: {render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: true, rotate_only: true, css_transitions: false, css_keyframe: false, sprite_sheets: true, int_snap: true, transform3d:true}, tfps: 30, background: 'world', sprites: 'cute', demo: true, hack: true });
+      Game.init({viewport: 'fluid_width', settings: {render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: true, css_transitions: false, css_keyframe: false, sprite_sheets: true, int_snap: true, transform3d:true}, tfps: 30, background: 'world', sprites: 'cute', demo: true, hack: true });
 
       PerfTest.doAll();
     }
