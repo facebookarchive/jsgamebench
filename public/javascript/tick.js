@@ -15,6 +15,7 @@
 var Tick = (function() {
     var Tick = {};
     Tick.frames = 0;
+    Tick.slowframe = 0
     var lastfps = 1;
     var timeac = 0;
 
@@ -23,6 +24,10 @@ var Tick = (function() {
       Tick.last = Tick.current;
       Tick.current = (new Date).getTime();
       Tick.delta = Tick.current - Tick.last;
+      if (Tick.delta > 250)
+        Tick.slowframe = true;
+      else
+        Tick.slowframe = false;
       if (Tick.frames % 10 == 0) {
         lastfps = parseInt(10000 / timeac);
         timeac = 0;

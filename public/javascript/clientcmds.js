@@ -253,9 +253,9 @@ var ClientCmd = (function() {
           settings:
           {
             render_mode: GameFrame.HTML_ONLY,
-            sprite_sheets: true, int_snap: true,
+            sprite_sheets: false, int_snap: true,
             update_existing: true, use_div_background: true, rotate_only: true,
-            css_transitions: false, css_keyframe: false, transform3d: true
+            css_transitions: true, css_keyframe: false, transform3d: true
           },
           tfps: 30, background: 'world', sprites: 'aa', demo: true
         });
