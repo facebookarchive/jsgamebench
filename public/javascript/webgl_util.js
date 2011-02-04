@@ -37,26 +37,27 @@ var WebGLUtil = (function() {
 
     var bind_table = {};
     bind_table['vec2'] = function(gl, loc) {
-      return function(x, y) {
-        gl.uniform2f(loc, x, y);
+      return function(v) {
+        gl.uniform2f(loc, v[0], v[1]);
       }
     };
 
     bind_table['vec3'] = function(gl, loc) {
-      return function(x, y, z) {
-        gl.uniform3f(loc, x, y, z);
+      return function(v) {
+        gl.uniform3f(loc, v[0], v[1], v[2]);
       }
     };
 
     bind_table['vec4'] = function(gl, loc) {
-      return function(x, y, z, w) {
-        gl.uniform4f(loc, x, y, z, w);
+      return function(v) {
+        gl.uniform4f(loc, v[0], v[1], v[2], v[3]);
       }
     };
 
     bind_table['sampler2D'] = function(gl, loc) {
       return function(s) {
         gl.uniform1i(loc, s);
+        gl.activeTexture(gl.TEXTURE0 + s);
       }
     };
 
@@ -183,17 +184,33 @@ var WebGLUtil = (function() {
      * extends the gl context with useful util functions
      * none of these should affect performance!
      */
-    function extendContext(gl_context) {
-      gl_context.log = ('console' in window) ?
+    function extendContext(gl) {
+      gl.log = ('console' in window) ?
         function(text_param) { window.console.log(text_param) } :
         function(text_param) {};
 
-      gl_context.loadShader = function() {
-        return loadShader.apply(gl_context, arguments);
+      gl.loadShader = function() {
+        return loadShader.apply(gl, arguments);
       };
 
-      gl_context.loadProgram = function() {
-        return loadProgram.apply(gl_context, arguments);
+      gl.loadProgram = function() {
+        return loadProgram.apply(gl, arguments);
+      };
+
+      gl.loadTexture = function(image_element) {
+        var gltexture = gl.createTexture();
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, gltexture);
+
+        gl.texImage2D(gl.TEXTURE_2D, 0,
+                      gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE,
+                      image_element);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+        return gltexture;
       };
     }
 
