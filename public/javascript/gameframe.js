@@ -21,13 +21,11 @@ var GameFrame = (function() {
     var settings = {
       render_mode: HTML_ONLY,
       last_render_mode: -1,
-      rotate_only: false,
       update_existing: true,
       css_transitions: false,
       transition_time: 3000,
       use_div_background: true,
       canvas_background: true,
-      canvas_bake_background: true,
       sprite_sheets: true,
       css_keyframe: true,
       int_snap: true,
