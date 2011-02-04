@@ -125,7 +125,7 @@ var DomRender = (function() {
     function transformed(pos, size, vel) {
       if (vel[1] == 0) {
         switch (JSGlobal.browser) {
-          case JSGlobal.EI:
+          case JSGlobal.IE:
             return axisAligned(pos, size) + ";";
           default:
             return "width:"+size[0]+"px;height:"+size[1]+"px;"+transform + ":" + axisAlignedTranslate(pos)+";";
@@ -137,45 +137,22 @@ var DomRender = (function() {
       var st = Math.sin(theta);
       var nst = -st;
 
-      if (GameFrame.settings.rotate_only) {
-        switch (JSGlobal.browser) {
-          case JSGlobal.IE:
-            return 'width:' + size[0] + 'px;height:' + size[1] + 'px;left:' +
-              pos[0] + 'px;top:' + pos[1] +
-              'px;filter:progid:DXImageTransform.Microsoft.Matrix(M11=\'' +
-              ct + '\',M12=\'' + nst + '\',M21=\'' + st + '\',M22=\'' + ct +
-              '\',sizingMethod=\'auto expand\');';
-          default:
-            return "width:"+size[0]+"px;height:"+size[1]+"px;"+transformoriginstring + ':0 0;' + transform + ':rotate(' + theta + 'rad) ' + axisAlignedTranslate(pos, size) + ";";
-        }
-      } else {
-        switch (JSGlobal.browser) {
-          case JSGlobal.IE9:
-            return 'width:' + size[0] + 'px;height:' + size[1] +
-              'px;-ms-transform:matrix(' + ct + ',' + st + ',' +
-              nst + ',' + ct + ',' + pos[0] + ',' + pos[1] + ');' +
-              transformoriginstring + ':0 0;';
-          case JSGlobal.IE:
-            return 'width:' + size[0] + 'px;height:' + size[1] + 'px;left:' +
-              pos[0] + 'px;top:' + pos[1] +
-              'px;filter:progid:DXImageTransform.Microsoft.Matrix(M11=\'' +
-              ct + '\',M12=\'' + nst + '\',M21=\'' + st + '\',M22=\'' + ct +
-              '\',sizingMethod=\'auto expand\');';
-          case JSGlobal.FIREFOX:
-            return transform + ':matrix(' + ct + ',' + st + ',' + nst + ',' + ct + ',' + pos[0] +
-              'px,' + pos[1] + 'px);width:' + size[0] + 'px;height:' + size[1] + 'px;' +
-              transformoriginstring + ':0 0;';
-          default:
-            return transformoriginstring + ':0 0;' + transform + ':matrix(' + ct + ',' + st + ',' + nst + ',' + ct + ',' + pos[0] +
-              ',' + pos[1] + ');width:' + size[0] + 'px;height:' + size[1] + 'px;';
-        }
+      switch (JSGlobal.browser) {
+        case JSGlobal.IE:
+          return 'width:' + size[0] + 'px;height:' + size[1] + 'px;left:' +
+            pos[0] + 'px;top:' + pos[1] +
+            'px;filter:progid:DXImageTransform.Microsoft.Matrix(M11=\'' +
+            ct + '\',M12=\'' + nst + '\',M21=\'' + st + '\',M22=\'' + ct +
+            '\',sizingMethod=\'auto expand\');';
+        default:
+          return "width:"+size[0]+"px;height:"+size[1]+"px;"+transformoriginstring + ':0 0;' + transform + ':rotate(' + theta + 'rad) ' + axisAlignedTranslate(pos, size) + ";";
       }
     }
 
     function transformed3d(pos, size, vel) {
       if (vel[1] == 0) {
         switch (JSGlobal.browser) {
-          case JSGlobal.EI:
+          case JSGlobal.IE:
             return axisAligned3d(pos, size) + ";";
           default:
             return "width:"+size[0]+"px;height:"+size[1]+"px;"+transform + ":" + axisAlignedTranslate3d(pos)+";";
@@ -210,67 +187,35 @@ var DomRender = (function() {
       var st = Math.sin(theta);
       var nst = -st;
 
-      if (GameFrame.settings.rotate_only) {
-        switch (JSGlobal.browser) {
-          case JSGlobal.IE:
-            dstyle.left = pos[0] + 'px';
-            dstyle.top = pos[1] + 'px';
-            dstyle.filter = 'progid:DXImageTransform.Microsoft.Matrix(M11=\'' +
-              ct + '\',M12=\'' + nst + '\',M21=\'' + st + '\',M22=\'' + ct +
-              '\',sizingMethod=\'auto expand\')';
-            break;
-          default:
-            if (GameFrame.settings.css_transitions) {
-              if (!discon) {
-                var time = GameFrame.settings.transition_time;
-                dstyle[transition] = 'left ' + parseInt(time * 0.001) + 's linear, top ' + parseInt(time * 0.001) + 's linear';
-                dstyle.left = (pos[0] + vel[0] * time * 0.01) + 'px';
-                dstyle.top = (pos[1] + vel[1] * time * 0.01) + 'px';
-                dstyle[transformprop] = 'rotate(' + theta + 'rad)';
-              } else {
-                dstyle[transition] = '';
-                dstyle.left = pos[0] + 'px';
-                dstyle.top = pos[1] + 'px';
-                dstyle[transformprop] = 'rotate(' + theta + 'rad)';
-              }
+      switch (JSGlobal.browser) {
+        case JSGlobal.IE:
+          dstyle.left = pos[0] + 'px';
+          dstyle.top = pos[1] + 'px';
+          dstyle.filter = 'progid:DXImageTransform.Microsoft.Matrix(M11=\'' +
+            ct + '\',M12=\'' + nst + '\',M21=\'' + st + '\',M22=\'' + ct +
+            '\',sizingMethod=\'auto expand\')';
+          break;
+        default:
+          if (GameFrame.settings.css_transitions) {
+            if (!discon) {
+              var time = GameFrame.settings.transition_time;
+              dstyle[transition] = 'left ' + parseInt(time * 0.001) + 's linear, top ' + parseInt(time * 0.001) + 's linear';
+              dstyle.left = (pos[0] + vel[0] * time * 0.01) + 'px';
+              dstyle.top = (pos[1] + vel[1] * time * 0.01) + 'px';
+              dstyle[transformprop] = 'rotate(' + theta + 'rad)';
             } else {
               dstyle[transition] = '';
               dstyle.left = pos[0] + 'px';
               dstyle.top = pos[1] + 'px';
               dstyle[transformprop] = 'rotate(' + theta + 'rad)';
             }
-            break;
-        }
-      } else {
-        switch (JSGlobal.browser) {
-          case JSGlobal.IE:
+          } else {
+            dstyle[transition] = '';
             dstyle.left = pos[0] + 'px';
             dstyle.top = pos[1] + 'px';
-            dstyle.filter = 'progid:DXImageTransform.Microsoft.Matrix(M11=\'' +
-              ct + '\',M12=\'' + nst + '\',M21=\'' + st + '\',M22=\'' + ct +
-              '\',sizingMethod=\'auto expand\')';
-            break;
-          case JSGlobal.FIREFOX:
-            dstyle[transformprop] = 'matrix(' + ct + ',' + st + ',' + nst + ',' + ct + ',' + pos[0] + 'px,' + pos[1] + 'px)';
-            break;
-          default:
-            if (GameFrame.settings.css_transitions) {
-              if (!discon) {
-                var time = GameFrame.settings.transition_time;
-                dstyle[transition] = transform + ' ' + parseInt(time * 0.001) + 's linear';
-                pos[0] = (pos[0] + vel[0] * time * 0.01);
-                pos[1] = (pos[1] + vel[1] * time * 0.01);
-                dstyle[transformprop] = 'matrix(' + ct + ',' + st + ',' + nst + ',' + ct + ',' + pos[0] + ',' + pos[1] + ')';
-              } else {
-                dstyle[transition] = '';
-                dstyle[transformprop] = 'matrix(' + ct + ',' + st + ',' + nst + ',' + ct + ',' + pos[0] + ',' + pos[1] + ')';
-              }
-            } else {
-              dstyle[transition] = '';
-              dstyle[transformprop] = 'matrix(' + ct + ',' + st + ',' + nst + ',' + ct + ',' + pos[0] + ',' + pos[1] + ')';
-            }
-            break;
-        }
+            dstyle[transformprop] = 'rotate(' + theta + 'rad)';
+          }
+          break;
       }
     }
 

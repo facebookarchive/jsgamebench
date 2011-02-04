@@ -154,26 +154,6 @@ var Render = (function() {
                 CanvasRender.bgdraw(framedata);
               }
             }
-          } else if (GameFrame.settings.canvas_bake_background) {
-            if (all_dirty || World.dirty) {
-              for (var id in World.elements) {
-                framedata = World.framedata(id);
-                CanvasRender.draw(framedata);
-              }
-              backgroundel = document.getElementById('gamebackground');
-              var gobel = document.getElementById('cbgcomp');
-              if (!gobel) {
-                gobel = document.createElement('img');
-                gobel.id = 'cbgcomp';
-                gobel.style.cssText =
-                  'position:absolute;';
-              }
-              var gamecan = document.getElementById('gamecanvas');
-              if (gamecan) {
-                gobel.src = gamecan.toDataURL('image/jpeg');
-                backgroundel.appendChild(gobel);
-              }
-            }
           } else {
             if (all_dirty || World.dirty) {
               backgroundel = document.getElementById('gamebackground');
