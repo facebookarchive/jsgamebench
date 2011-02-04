@@ -18,6 +18,8 @@ var DomRender = (function() {
     function setupBrowserSpecific() {
       touch = ('createTouch' in document);
 
+      transition = null;
+
       switch (JSGlobal.browser) {
         case JSGlobal.CHROME:
           transform = '-webkit-transform';

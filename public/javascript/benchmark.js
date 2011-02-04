@@ -26,66 +26,60 @@ var Benchmark = (function() {
     var targetfps;
     var timenear;
     var testover;
+    var slowframes;
     var demo;
     var runtest = false;
 
     var Benchmark = {};
 
     function setup(criteria) {
-       inc = criteria.inc;
-       dec = criteria.dec;
-       num = criteria.num || num;
-       demo = criteria.demo || null;
-       tid = criteria.tid;
-       w = criteria.w || JSGlobal.winsize[0];
-       h = criteria.h || JSGlobal.winsize[1];
-       nodel = criteria.nodel;
-       count = 0;
-       frame = 0;
-       backoff = 0;
-       targetfps = criteria.tfps ? criteria.tfps : 30;
-       runtest = true;
-       Benchmark.name = tid;
+      inc = criteria.inc;
+      dec = criteria.dec;
+      num = criteria.num || num;
+      demo = criteria.demo || null;
+      tid = criteria.tid;
+      w = criteria.w || JSGlobal.winsize[0];
+      h = criteria.h || JSGlobal.winsize[1];
+      nodel = criteria.nodel;
+      count = 0;
+      frame = 0;
+      backoff = 0;
+      slowframes = 0;
+      targetfps = criteria.tfps ? criteria.tfps : 30;
+      runtest = true;
+      Benchmark.name = tid;
     }
 
     function tick() {
       if (runtest && inc && dec && (frame++ > 10)) {
         var fps = Tick.fps();
-        if (!count || (fps >= targetfps)) {
-          for (var i = 0; i < num; i++) {
-            inc(count++, w, h);
+        if (Tick.slowframe) {
+          slowframes++;
+          if (slowframes == 5) {
+            PerfTest.done(tid, 0);
           }
-        } else if (fps < 0) {
-          if (!demo && backoff > 5) {
-            runtest = false;
-            if (!demo) {
-              PerfTest.done(tid, count);
+        } else {
+          if (!count || (fps >= targetfps)) {
+            for (var i = 0; i < num; i++) {
+              inc(count++, w, h);
             }
-          } else {
-            while (count > 1) {
-              dec(--count);
-            }
-            if (num > 1)
-              num = 1;
-            else
-              backoff++;
-          }
-        } else if (fps < targetfps) {
-          if (!demo && backoff > 20) {
-            runtest = false;
-            if (!demo) {
-              PerfTest.done(tid, count);
-            }
-          } else {
-            if (!nodel) {
-              for (var i = 0; i < num; i++) {
-                if (count > 1)
-                  dec(--count);
+          } else if (fps < targetfps) {
+            if (!demo && backoff > 30) {
+              runtest = false;
+              if (!demo) {
+                PerfTest.done(tid, count);
               }
-              if (num > 1)
-                num--;
-              else
-                backoff++;
+            } else {
+              if (!nodel) {
+                for (var i = 0; i < num; i++) {
+                  if (count > 1)
+                    dec(--count);
+                }
+                if (num > 1)
+                  num--;
+                else
+                  backoff++;
+              }
             }
           }
         }
