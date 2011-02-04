@@ -77,6 +77,34 @@ var ClientCmd = (function() {
       UI.del('glossary');
     }
 
+
+    var param_on_scores = {};
+    var param_off_scores = {};
+
+    function computeImpact(data) {
+      var subscores = data.details;
+      for (var rm in subscores) {
+        for (var sp in subscores[rm]) {
+          var sorted = [];
+          for (var s in  subscores[rm][sp]) {
+            sorted.push({path:s, score:parseInt(subscores[rm][sp][s].total/subscores[rm][sp][s].count)});
+          }
+          sorted.sort(function(a,b) {return b.score - a.score;});
+          for (var i=0,len=sorted.length;i<len;i++) {
+            var s = sorted[i].path;
+            var sub = s.split(/[\: ]/);
+            for (var det = 0, dlen = sub.length-1; det < dlen; det += 2) {
+              if (sub[det + 1] == 'true') {
+                param_on_scores[sub[det]] = param_on_scores[sub[det]] ? param_on_scores[sub[det]] + i : i;
+              } else {
+                param_off_scores[sub[det]] = param_off_scores[sub[det]] ? param_off_scores[sub[det]] + i : i;
+              }
+            }
+          }
+        }
+      }
+    }
+
     function showDetails(data) {
       UI.del('details');
       UI.del('glossary');
@@ -105,6 +133,7 @@ var ClientCmd = (function() {
 
           sorted.sort(function(a,b) {return b.score - a.score;});
 
+
           var max = sorted[0].score;
 
           for (var i=0,len=sorted.length;i<len;i++) {
@@ -112,7 +141,7 @@ var ClientCmd = (function() {
             var sub = s.split(/[\: ]/);
             stats += (s == 0 ? '<b>' : '') + sorted[i].score + ' (-'+parseInt((max-sorted[i].score)/max*100)+'\%) ';
 
-            for (var det = 0, dlen = sub.length; det < dlen; det += 2) {
+            for (var det = 0, dlen = sub.length-1; det < dlen; det += 2) {
               switch (sub[det]) {
                 case 'canvas_background':
                   if (sub[det + 1] == 'true') {
@@ -130,7 +159,7 @@ var ClientCmd = (function() {
                   break;
                 case 'use_div_background':
                   if (sub[det + 1] == 'true') {
-                    stats += 'div with background  ';
+                     stats += 'div with background  ';
                   } else {
                     stats += 'div masking img ';
                   }
@@ -190,8 +219,21 @@ var ClientCmd = (function() {
       UI.addHTML('details', 'dperfavescore', {pos: [5, 70], uiclass: 'perfavescore', markup: 'Average reported score: ' + score + ' sprites'});
       stats += '<br />"dom update": update values in dom object when sprites move<br />"innerHTML": rebuild scene each frame when sprites move<br />"div with background": animating sprites are a div element with changing offsets on background image<br />';
       stats += '"div masking img": animating sprites are a div element masking img element<br />"rotate": use css transform property for rotation, left/top for position of sprites<br />"transform": use css transform property for rotation and position of sprites<br />';
-      stats += '"css transition": use css transition to rather than updating every frame<br />"sprite sheets": combine animating sprites into sprite sheets';
-      stats += '"int": snap sprite positions to integer values<br />"3d": use 3d transforms where possible<br />"css keyframe":use css animation to keyframe sprite animation';
+      stats += '"css transition": use css transition to rather than updating every frame<br />"sprite sheets": combine animating sprites into sprite sheets<br />';
+      stats += '"int": snap sprite positions to integer values<br />"3d": use 3d transforms where possible<br />"css keyframe":use css animation to keyframe sprite animation<br /><br />';
+
+      var deltas = [];
+      for (var p in param_on_scores) {
+        deltas.push({param:p,delta:param_off_scores[p] - param_on_scores[p]});
+      }
+      deltas.sort(function(a,b) {return b.delta - a.delta;});
+
+      stats += 'global impact of turning off <br />';
+
+      for (p=0;p<deltas.length;p++) {
+        stats += deltas[p].param + ':' + deltas[p].delta+'<br />';
+      }
+
       UI.addHTML('details', 'detailinfo', {pos: [5, 105], uiclass: 'renderdetails', markup: stats});
     }
 
@@ -211,7 +253,10 @@ var ClientCmd = (function() {
         UI.addHTML('perf', 'myscore', {pos: [350, 10], width:1000,uiclass: 'perfscore', markup: "Your score is " + JSGlobal.myscore + " sprites!"});
       }
       if (data) {
+        param_on_scores = {};
+        param_off_scores = {};
         for (var i = 0, len = data.length; i < len; i++) {
+          computeImpact(data[i]);
           UI.addCollection('perf', 'perfblock' + i, {uiclass: 'perfblock', pos: [0, 82 * i], height: 78, width: 260, command: {cmd:'showdetails', args:[data[i]]}});
           var b = data[i].browser;
           var browser = b.match(/(\w+) \d+/);
