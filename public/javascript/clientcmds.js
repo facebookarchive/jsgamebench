@@ -77,34 +77,6 @@ var ClientCmd = (function() {
       UI.del('glossary');
     }
 
-
-    var param_on_scores = {};
-    var param_off_scores = {};
-
-    function computeImpact(data) {
-      var subscores = data.details;
-      for (var rm in subscores) {
-        for (var sp in subscores[rm]) {
-          var sorted = [];
-          for (var s in  subscores[rm][sp]) {
-            sorted.push({path:s, score:parseInt(subscores[rm][sp][s].total/subscores[rm][sp][s].count)});
-          }
-          sorted.sort(function(a,b) {return b.score - a.score;});
-          for (var i=0,len=sorted.length;i<len;i++) {
-            var s = sorted[i].path;
-            var sub = s.split(/[\: ]/);
-            for (var det = 0, dlen = sub.length-1; det < dlen; det += 2) {
-              if (sub[det + 1] == 'true') {
-                param_on_scores[sub[det]] = param_on_scores[sub[det]] ? param_on_scores[sub[det]] + i : i;
-              } else {
-                param_off_scores[sub[det]] = param_off_scores[sub[det]] ? param_off_scores[sub[det]] + i : i;
-              }
-            }
-          }
-        }
-      }
-    }
-
     function showDetails(data) {
       UI.del('details');
       UI.del('glossary');
@@ -133,6 +105,9 @@ var ClientCmd = (function() {
 
           sorted.sort(function(a,b) {return b.score - a.score;});
 
+          var param_on_scores = {};
+          var param_off_scores = {};
+
 
           var max = sorted[0].score;
 
@@ -142,6 +117,11 @@ var ClientCmd = (function() {
             stats += (s == 0 ? '<b>' : '') + sorted[i].score + ' (-'+parseInt((max-sorted[i].score)/max*100)+'\%) ';
 
             for (var det = 0, dlen = sub.length-1; det < dlen; det += 2) {
+              if (sub[det + 1] == 'true') {
+                param_on_scores[sub[det]] = param_on_scores[sub[det]] ? param_on_scores[sub[det]] + i : i;
+              } else {
+                param_off_scores[sub[det]] = param_off_scores[sub[det]] ? param_off_scores[sub[det]] + i : i;
+              }
               switch (sub[det]) {
                 case 'canvas_background':
                   if (sub[det + 1] == 'true') {
@@ -228,7 +208,7 @@ var ClientCmd = (function() {
       }
       deltas.sort(function(a,b) {return b.delta - a.delta;});
 
-      stats += 'global impact of turning off <br />';
+      stats += 'impact of turning off <br />';
 
       for (p=0;p<deltas.length;p++) {
         stats += deltas[p].param + ':' + deltas[p].delta+'<br />';
@@ -253,10 +233,7 @@ var ClientCmd = (function() {
         UI.addHTML('perf', 'myscore', {pos: [350, 10], width:1000,uiclass: 'perfscore', markup: "Your score is " + JSGlobal.myscore + " sprites!"});
       }
       if (data) {
-        param_on_scores = {};
-        param_off_scores = {};
         for (var i = 0, len = data.length; i < len; i++) {
-          computeImpact(data[i]);
           UI.addCollection('perf', 'perfblock' + i, {uiclass: 'perfblock', pos: [0, 82 * i], height: 78, width: 260, command: {cmd:'showdetails', args:[data[i]]}});
           var b = data[i].browser;
           var browser = b.match(/(\w+) \d+/);
