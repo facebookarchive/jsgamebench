@@ -199,7 +199,6 @@ var WebGLUtil = (function() {
 
       gl.loadTexture = function(image_element) {
         var gltexture = gl.createTexture();
-        gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, gltexture);
 
         gl.texImage2D(gl.TEXTURE_2D, 0,
@@ -211,6 +210,22 @@ var WebGLUtil = (function() {
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 
         return gltexture;
+      };
+
+      var active_draw_context = undefined;
+
+      gl.setDrawContext = function(draw_context) {
+        if (active_draw_context == draw_context) {
+          return false;
+        }
+        active_draw_context = draw_context;
+        return true;
+      }
+
+      var gl_flush = gl.flush;
+      gl.flush = function() {
+        active_draw_context = undefined;
+        return gl_flush.apply(gl, arguments);
       };
     }
 

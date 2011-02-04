@@ -91,18 +91,37 @@ void main() {\n\
 
       var sprite_context = {};
       var cur_texture;
+      var viewport_width, viewport_height;
+
+      function setViewport(viewport) {
+        viewport_width = viewport.width;
+        viewport_height = viewport.height;
+        sprite_program.screen_dims([2.0 / viewport.width,
+                                   -2.0 / viewport.height,
+                                   -1.0,
+                                    1.0]);
+      }
 
       sprite_context.bind = function(viewport) {
+        if (!gl.setDrawContext(sprite_context)) {
+          // sprite context is already bound
+
+          // if the viewport has changed, reset it
+          if (viewport_width != viewport.width ||
+              viewport_height != viewport.height) {
+            setViewport(viewport);
+          }
+
+          return;
+        }
+
         gl.enableVertexAttribArray(0);
         gl.bindBuffer(gl.ARRAY_BUFFER, sprite_vbo);
         gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, sprite_ibo);
 
         sprite_program.bind();
-        sprite_program.screen_dims([2.0 / viewport.width,
-                                   -2.0 / viewport.height,
-                                   -1.0,
-                                    1.0]);
+        setViewport(viewport);
 
         gl.disable(gl.CULL_FACE);
         gl.enable(gl.BLEND);
