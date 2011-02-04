@@ -113,13 +113,24 @@ var ClientCmd = (function() {
           for (var i=0,len=sorted.length;i<len;i++) {
             var s = sorted[i].path;
             var sub = s.split(/[\: ]/);
-            stats += (s == 0 ? '<b>' : '') + sorted[i].score + ' (-'+parseInt((max-sorted[i].score)/max*100)+'\%) ';
+            var percent_penalty = parseInt((max-sorted[i].score)/max*100);
+            stats += (s == 0 ? '<b>' : '') + sorted[i].score + ' (-'+percent_penalty+'\%) ';
 
             for (var det = 0, dlen = sub.length-1; det < dlen; det += 2) {
               if (sub[det + 1] == 'true') {
-                param_on_scores[sub[det]] = param_on_scores[sub[det]] ? param_on_scores[sub[det]] + i : i;
+                if (param_on_scores[sub[det]]) {
+                  param_on_scores[sub[det]].total += percent_penalty;
+                  param_on_scores[sub[det]].count += 1;
+                } else {
+                  param_on_scores[sub[det]] = {total:percent_penalty,count:1};
+                }
               } else {
-                param_off_scores[sub[det]] = param_off_scores[sub[det]] ? param_off_scores[sub[det]] + i : i;
+                if (param_off_scores[sub[det]]) {
+                  param_off_scores[sub[det]].total += percent_penalty;
+                  param_off_scores[sub[det]].count += 1;
+                } else {
+                  param_off_scores[sub[det]] = {total:percent_penalty,count:1};
+                }
               }
               switch (sub[det]) {
                 case 'canvas_background':
@@ -203,14 +214,14 @@ var ClientCmd = (function() {
 
       var deltas = [];
       for (var p in param_on_scores) {
-        deltas.push({param:p,delta:param_off_scores[p] - param_on_scores[p]});
+        deltas.push({param:p,delta:parseInt(param_off_scores[p].total/param_off_scores[p].count - param_on_scores[p].total/param_on_scores[p].count)});
       }
       deltas.sort(function(a,b) {return b.delta - a.delta;});
 
       stats += 'impact of turning off <br />';
 
       for (p=0;p<deltas.length;p++) {
-        stats += deltas[p].param + ':' + deltas[p].delta+'<br />';
+        stats += deltas[p].param + ':' + deltas[p].delta+'\%<br />';
       }
 
       UI.addHTML('details', 'detailinfo', {pos: [5, 105], uiclass: 'renderdetails', markup: stats});
