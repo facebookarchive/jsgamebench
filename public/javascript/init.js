@@ -25,7 +25,6 @@ var Init = (function() {
     function timer_kick_off() {
       JSGlobal.TIMERS_LAUNCHED = true;
       Render.setupBrowserSpecific();
-      Xhr.init();
       setInterval('Game.tick();', 33);
       setInterval('Init.tick();', 1);
       Xhr.toServer({cmd: '', args: []});
@@ -114,13 +113,18 @@ var Init = (function() {
         });
         FB.getLoginStatus(function(response) {
           if (response.session) {
+            client_user.fb_logged_in = true;
             console.log('logged in')
           } else {
+            client_user.fb_logged_in = false;
             console.log('not logged in')
           }
         });
       }
       winresize();
+      if (!stand_alone) {
+        Xhr.init();
+      }
       timer_kick_off();
     }
 

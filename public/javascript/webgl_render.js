@@ -14,8 +14,8 @@
 
 var WebGLRender = (function() {
     var gl, initializing = false;
-    var viewport, cur_gltexture;
-    var sprite_context, cur_context;
+    var viewport;
+    var sprite_context;
 
     function init(parent_id, pwidth, pheight) {
 
@@ -94,8 +94,6 @@ var WebGLRender = (function() {
       gl.viewport(0, 0, viewport.width, viewport.height);
       gl.clearColor(0, 0, 0, 0);
       gl.clear(gl.COLOR_BUFFER_BIT);
-
-      cur_context = undefined;
     }
 
     function draw(framedata) {
@@ -103,11 +101,8 @@ var WebGLRender = (function() {
         return;
       }
 
-      if (cur_context != sprite_context) {
-        // set sprite geometry, shaders, and draw mode active
-        sprite_context.bind(viewport);
-        cur_context = sprite_context;
-      }
+      // set sprite geometry, shaders, and draw mode active
+      sprite_context.bind(viewport);
 
       var sprite = framedata.sprite;
       if (!sprite.gltexture) {

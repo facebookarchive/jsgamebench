@@ -247,7 +247,7 @@ var Game = (function() {
     return ret;
   }
 
-  function fbLogin() {
+  function fbLoginOAuth() {
     var client_id, redirect_url;
     redirect_url = location.href;
     if (redirect_url[redirect_url.length-1]!='/'){
@@ -415,6 +415,33 @@ var Game = (function() {
     }
   }
 
+  function fbLogin(func) {
+    if (client_user.fb_logged_in) {
+      func &&func();
+    } else {
+      ClientCmd.install('fbLoginUiCb',fbLoginUiCb);
+      UI.addCollection('', 'fblogin', {pos: [0, 0]});
+      UI.addHTML('fblogin', 'bkgrnd', {pos: [5, 24], uiclass: 'fblogin', markup: "Login to FB?"});
+      UI.addButton('fblogin', 'loginOk', {pos: [15, 55], width: 75, height: 20, text: 'Login', command: {cmd: 'fbLoginUiCb', args: [func]}});
+      UI.addButton('fblogin', 'loginCancel', {pos: [105, 55], width: 75, height: 20, text: 'Cancel', command: {cmd: 'fbLoginUiCb', args: [0]}});
+ 
+      function fbLoginUiCb(func) {
+        UI.del('fblogin');
+        if (!func) {
+          return;
+        }
+        FB.login(function(response) {
+          if (response.session) {
+            client_user.fb_logged_in = true;
+            func && func();
+          } else {
+            client_user.fb_logged_in = false;
+          }
+        }, {perms:'read_stream,publish_stream,user_about_me'} );
+      }
+    }
+  }
+  
   function completeInit() {
     var plr_pos = client_user.plr_pos = [0,0];
     client_user.id = getCookie('id');
@@ -444,7 +471,7 @@ var Game = (function() {
     }
   
     if (keyDownReset('L')) {
-        fbLogin();
+        fbLoginOAuth();
     }
     
     if (keyDownReset('X')) {
@@ -468,20 +495,32 @@ var Game = (function() {
         },
         action_links: [ { text: 'fbrell', href: 'http://fbrell.com/' } ]
       };
-      FB.ui(params, function(response) {
-        if (response && response.post_id) {
-          console.log('Post was published.');
-        } else {
-          console.log('Post was not published.');
-        }
+
+      fbLogin(function () {
+        FB.ui(params, function(response) {
+          if (response && response.post_id) {
+            console.log('Post was published.');
+          } else {
+            console.log('Post was not published.');
+          }
+        });
       });
     }
 
     if (keyDownReset('R')) {
-      FB.ui({ method: 'apprequests', 
-           message: 'Here is a new Requests dialog...'});
+      fbLogin(function () {
+        FB.ui({ method: 'apprequests', 
+             message: 'Here is a new Requests dialog...'});
+      })
     }
     
+    if (keyDownReset('O') && client_user.fb_logged_in) {
+      FB.logout(function(response) {
+        console.log('logged out!');
+        client_user.fb_logged_in = false;
+      });
+    }
+        
     if (!init_complete++) {
       completeInit();
       return;
@@ -575,6 +614,7 @@ var Game = (function() {
     }
 
     var Game = {};
+    Game.fbLogin = fbLogin;
     Game.tick = tick;
     Game.init = init;
     Game.initStandalone = initStandalone;
