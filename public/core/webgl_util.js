@@ -76,6 +76,20 @@ var WebGLUtil = (function() {
         return text;
       }
 
+      // safety check the varying params
+      for (var v in fshader.varying) {
+        if (vshader.varying[v] !== fshader.varying[v]) {
+          if (vshader.varying[v] === undefined) {
+            this.log('Warning: varying param "' + v +
+                     '" is used by the fragment shader but not output' +
+                     ' by the vertex shader');
+          } else {
+            this.log('Warning: varying param "' + v +
+                     '" is not the same type in vertex and fragment shader');
+          }
+        }
+      }
+
       var vtext = genDecls(vshader, 'attribute');
       vtext += genDecls(vshader, 'uniform', uniforms);
       vtext += genDecls(vshader, 'varying');
