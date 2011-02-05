@@ -292,8 +292,7 @@ var Render = (function() {
                   if (GameFrame.settings.use_div_background) {
                     if (!GameFrame.settings.sprite_sheets) {
                       gobel.style.backgroundImage = 'url(' + framedata.url + ')';
-                    }
-                    if (!GameFrame.settings.css_keyframes) {
+                    } else if (!GameFrame.settings.css_keyframes) {
                       gobel.style.backgroundPosition = '-' + framedata.x +
                         'px -' + framedata.y + 'px';
                     }

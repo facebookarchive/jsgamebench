@@ -102,7 +102,15 @@ var DomRender = (function() {
           dstyle[transformprop] = 'translate(' + pos[0] + 'px, ' + pos[1] + 'px)';
         }
       } else {
-        dstyle[transformprop] = 'translate(' + pos[0] + 'px, ' + pos[1] + 'px)';
+        switch (JSGlobal.browser) {
+          case JSGlobal.IE:
+            dstyle.left = pos[0]+'px';
+            dstyle.top = pos[1]+'px';
+            break;
+          default:
+            dstyle[transformprop] = 'translate(' + pos[0] + 'px, ' + pos[1] + 'px)';
+            break;
+        }
       }
     }
 
