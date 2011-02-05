@@ -267,8 +267,10 @@ var WebGLDebug = (function() {
     };
 
     function getArgumentString(function_name, arg_index, value) {
-      if (value == undefined) {
+      if (value === undefined) {
         return '(undefined)';
+      } else if (value === null) {
+        return '(null)';
       }
       var func_info = gl_function_info[function_name];
       if (func_info) {
@@ -303,7 +305,7 @@ var WebGLDebug = (function() {
                                   return_value) {
       var callstr = function_name + '(';
       for (var arg_idx = 0; arg_idx < call_arguments.length; ++arg_idx) {
-        callstr += arg_idx == 0 ? '' : ', ';
+        callstr += arg_idx === 0 ? '' : ', ';
         callstr += this.getArgumentString(function_name,
                                           arg_idx,
                                           call_arguments[arg_idx]);
@@ -350,7 +352,7 @@ var WebGLDebug = (function() {
 
       // create wrapper context
       for (var prop in gl_context) {
-        if (typeof gl_context[prop] == 'function') {
+        if (typeof gl_context[prop] === 'function') {
           // wrap function calls in our own function that records error
           // codes and handles call logging
           dbg_context[prop] = createErrorWrapper(prop);
@@ -363,7 +365,7 @@ var WebGLDebug = (function() {
       if (!enum_values_to_names) {
         enum_values_to_names = {};
         for (var prop in gl_context) {
-          if (typeof gl_context[prop] == 'number') {
+          if (typeof gl_context[prop] === 'number') {
             enum_values_to_names[gl_context[prop]] = prop;
           }
         }

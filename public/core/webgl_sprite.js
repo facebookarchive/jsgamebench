@@ -50,24 +50,24 @@ void main() {\n\
       };
 
     var sprite_fs =
-    {
-      fprecision: 'mediump',
-
-      uniform:
       {
-        sprite_texture : 'sampler2D'
-      },
+        fprecision: 'mediump',
 
-      varying:
-      {
-        v_Texcoord: 'vec2'
-      },
+        uniform:
+        {
+          sprite_texture : 'sampler2D'
+        },
 
-      text: '\
+        varying:
+        {
+          v_Texcoord: 'vec2'
+        },
+
+        text: '\
 void main() {\n\
   gl_FragColor = texture2D(sprite_texture, v_Texcoord);\n\
 }\n'
-    };
+      };
 
     function createContext(gl) {
 
