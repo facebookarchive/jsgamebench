@@ -229,12 +229,17 @@ var WebGLUtil = (function() {
       var active_draw_context = undefined;
 
       gl.setDrawContext = function(draw_context) {
-        if (active_draw_context == draw_context) {
+        if (active_draw_context === draw_context) {
           return false;
         }
+
         active_draw_context = draw_context;
         return true;
-      }
+      };
+
+      gl.isDrawContextActive = function(draw_context) {
+        return active_draw_context === draw_context;
+      };
 
       var gl_flush = gl.flush;
       gl.flush = function() {

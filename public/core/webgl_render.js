@@ -92,6 +92,7 @@ var WebGLRender = (function() {
       }
 
       gl.viewport(0, 0, viewport.width, viewport.height);
+      sprite_context.setViewport(viewport);
       gl.clearColor(0, 0, 0, 0);
       gl.clear(gl.COLOR_BUFFER_BIT);
     }
@@ -100,9 +101,6 @@ var WebGLRender = (function() {
       if (!gl) {
         return;
       }
-
-      // set sprite geometry, shaders, and draw mode active
-      sprite_context.bind(viewport);
 
       var sprite = framedata.sprite;
       if (!sprite.gltexture) {
