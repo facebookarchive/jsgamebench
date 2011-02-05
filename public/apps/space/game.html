@@ -8,6 +8,10 @@
   <meta name="apple-touch-fullscreen" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   <link rel="stylesheet" type="text/css" href="/public/css/style.css" />
+
+  <script src="http://static.ak.fbcdn.net/connect/en_US/core.debug.js"></script>
+
+  <script type="text/javascript">var stand_alone=true;</script>
   <script type="text/javascript" src="/socket.io/socket.io.js"></script>
   <script type="text/javascript" src="/public/core/json2.min.js"></script>
   <script type="text/javascript" src="/public/core/globals.js"> </script>
@@ -18,6 +22,7 @@
   <script type="text/javascript" src="/public/utils/vec.js"> </script>
   <script type="text/javascript" src="/public/shared/grid.js"> </script>
   <script type="text/javascript" src="/public/shared/gridclient.js"> </script>
+  <script type="text/javascript" src="/public/apps/space/svrgame.js"> </script>
   <script type="text/javascript" src="/public/core/gameframe.js"> </script>
   <script type="text/javascript" src="/public/core/ui.js"> </script>
   <script type="text/javascript" src="/public/core/gob.js"> </script>
@@ -27,9 +32,6 @@
   <script type="text/javascript" src="/public/core/render.js"> </script>
   <script type="text/javascript" src="/public/core/dom_render.js"> </script>
   <script type="text/javascript" src="/public/core/canvas_render.js"> </script>
-  <script type="text/javascript" src="/public/core/webgl_util.js"> </script>
-  <script type="text/javascript" src="/public/core/webgl_debug.js"> </script>
-  <script type="text/javascript" src="/public/core/webgl_sprite.js"> </script>
   <script type="text/javascript" src="/public/core/webgl_render.js"> </script>
   <script type="text/javascript" src="/public/core/input.js"> </script>
   <script type="text/javascript" src="/public/core/clientcmds.js"> </script>
@@ -41,12 +43,14 @@
   <script type="text/javascript" src="/public/core/fbmark.js"> </script>
 </head>
 
-<body id="gamebody"
-      style="overflow:hidden;"
+  <body id="body_id" style="overflow:hidden;"
+    onresize="Init.winresize()"
+    onload="Init.init()"
+    onorientationchange="Init.winresize();"
+    onunload="Init.quit()">
+    <div id="fb-root"></div>
+    <div id="gamebody"></div>
+     
+  </body>
 
-      onresize="Init.winresize()"
-      onload="Init.init()"
-      onorientationchange="Init.winresize();"
-      onunload="Init.quit()">
-</body>
 </html>
