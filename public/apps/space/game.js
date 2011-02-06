@@ -613,11 +613,25 @@ var Game = (function() {
       SvrGame.init(client_user.grids);
     }
 
+    function playGame() {
+      UI.del('buttons');
+      UI.del('perf');
+      
+      if (window.location.pathname.match(/html/)) {
+        Game.init({viewport: 'fluid_width', settings: {render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: true, css_transitions: false, css_keyframe: false, sprite_sheets: true, int_snap: true, transform3d:true}, tfps: 30, background: 'world', sprites: 'cute', demo: true, hack: true });
+      } else {
+        Game.init({viewport: 'fluid', settings: {render_mode: GameFrame.CANVAS_ONLY, canvas_background: false}, tfps: 30, background: 'world', sprites: 'cute', demo: true, hack: true });
+      } 
+      PerfTest.doAll();
+      setInterval('Game.tick();', 33);
+    }
+
     var Game = {};
     Game.fbLogin = fbLogin;
     Game.tick = tick;
     Game.init = init;
     Game.initStandalone = initStandalone;
+    Game.playGame = playGame;
     return Game;
   })();
 

@@ -37,8 +37,8 @@ GridSvr = require('../public/shared/gridsvr');
 Vec = require('../public/utils/vec');
 Mathx = require('../public/utils/math');
 Socket = require('../lib/socket');
+Cmds = SvrCmds = require('../lib/svrcmds');
 SvrGame = require('../public/apps/space/svrgame');
-SvrCmds = require('../lib/svrcmds');
 
 sys.puts("starting server");
 var production_mode = false;

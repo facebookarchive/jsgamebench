@@ -113,6 +113,9 @@ var SvrGame = (function() {
     }
   }
 
+  Cmds.install('shoot', shoot);
+  Cmds.install('explode', explode);
+
   var SvrGame = {};
   SvrGame.tick = tick;
   SvrGame.shoot = shoot;

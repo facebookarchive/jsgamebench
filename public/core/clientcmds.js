@@ -398,3 +398,5 @@ var ClientCmd = (function() {
     ClientCmd.install = install;
     return ClientCmd;
   })();
+
+var Cmds = ClientCmd;

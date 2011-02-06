@@ -14,7 +14,8 @@
 
 var Init = (function() {
     var routed = false;
-
+    var app_init_func = 0;
+    
     function quit() {
       Xhr.toServer({cmd: 'logout', args: []});
     }
@@ -25,7 +26,6 @@ var Init = (function() {
     function timer_kick_off() {
       JSGlobal.TIMERS_LAUNCHED = true;
       Render.setupBrowserSpecific();
-      setInterval('Game.tick();', 33);
       setInterval('Init.tick();', 1);
       Xhr.toServer({cmd: '', args: []});
       UI.hookUIEvents('gamebody');
@@ -71,12 +71,9 @@ var Init = (function() {
       GameFrame.layout();
       Render.setupBrowserSpecific();
       var path = window.location.pathname;
-      if (!routed && path.match(/gamehtml/)) {
+      if (app_init_func) {
+        !routed && app_init_func();
         routed = true;
-        ClientCmd.playgamehtml();
-      } else if (!routed && path.match(/game/)) {
-        routed = true;
-        ClientCmd.playgame();
       } else {
         Xhr.toServer({cmd: 'perfquery', args: [['browser']]});
       }
@@ -103,7 +100,8 @@ var Init = (function() {
       GameFrame.setXbyY();
     }
 
-    function init() {
+    function init(init_func) {
+      app_init_func = init_func;
       if (document.getElementById('fb-root')) {
         FB.init({
           appId  : '159268034120947',
