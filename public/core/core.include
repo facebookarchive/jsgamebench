@@ -1,4 +1,4 @@
-<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+<Script type="text/javascript" src="/socket.io/socket.io.js"></script>
 <script type="text/javascript" src="/public/core/json2.min.js"></script>
 <script type="text/javascript" src="/public/core/globals.js"> </script>
 <script type="text/javascript" src="/public/core/tick.js"> </script>
@@ -17,6 +17,8 @@
 <script type="text/javascript" src="/public/core/render.js"> </script>
 <script type="text/javascript" src="/public/core/dom_render.js"> </script>
 <script type="text/javascript" src="/public/core/canvas_render.js"> </script>
+<script type="text/javascript" src="/public/core/webgl_util.js"> </script>
+<script type="text/javascript" src="/public/core/webgl_sprite.js"> </script>
 <script type="text/javascript" src="/public/core/webgl_render.js"> </script>
 <script type="text/javascript" src="/public/core/input.js"> </script>
 <script type="text/javascript" src="/public/core/clientcmds.js"> </script>
