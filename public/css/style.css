@@ -96,10 +96,10 @@ div.animating {
 
 
 @-webkit-keyframes 'ship' {
-from { -webkit-transform: translate3d(0px,0px,0); }
-49.99% { -webkit-transform: translate3d(0px,0px,0); }
-50% { -webkit-transform: translate3d(-128px,0px,0); }
-to { -webkit-transform: translate3d(-128px,0px,0); }
+from { -webkit-transform: translate(0px,0px,0); }
+49.99% { -webkit-transform: translate(0px,0px,0); }
+50% { -webkit-transform: translate(-128px,0px,0); }
+to { -webkit-transform: translate(-128px,0px,0); }
 }
 
 @-webkit-keyframes 'shipbkg' {
