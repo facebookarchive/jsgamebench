@@ -1,0 +1,27 @@
+<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+<script type="text/javascript" src="/public/core/json2.min.js"></script>
+<script type="text/javascript" src="/public/core/globals.js"> </script>
+<script type="text/javascript" src="/public/core/tick.js"> </script>
+<script type="text/javascript" src="/public/core/clientutils.js"> </script>
+<script type="text/javascript" src="/public/utils/utils.js"> </script>
+<script type="text/javascript" src="/public/utils/math.js"> </script>
+<script type="text/javascript" src="/public/utils/vec.js"> </script>
+<script type="text/javascript" src="/public/shared/grid.js"> </script>
+<script type="text/javascript" src="/public/shared/gridclient.js"> </script>
+<script type="text/javascript" src="/public/core/gameframe.js"> </script>
+<script type="text/javascript" src="/public/core/ui.js"> </script>
+<script type="text/javascript" src="/public/core/gob.js"> </script>
+<script type="text/javascript" src="/public/core/igob.js"> </script>
+<script type="text/javascript" src="/public/core/world.js"> </script>
+<script type="text/javascript" src="/public/core/sprites.js"> </script>
+<script type="text/javascript" src="/public/core/render.js"> </script>
+<script type="text/javascript" src="/public/core/dom_render.js"> </script>
+<script type="text/javascript" src="/public/core/canvas_render.js"> </script>
+<script type="text/javascript" src="/public/core/webgl_render.js"> </script>
+<script type="text/javascript" src="/public/core/input.js"> </script>
+<script type="text/javascript" src="/public/core/clientcmds.js"> </script>
+<script type="text/javascript" src="/public/core/init.js"> </script>
+<script type="text/javascript" src="/public/core/xhr.js"> </script>
+<script type="text/javascript" src="/public/core/benchmark.js"> </script>
+<script type="text/javascript" src="/public/core/perftest.js"> </script>
+<script type="text/javascript" src="/public/core/fbmark.js"> </script>

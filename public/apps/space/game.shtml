@@ -1,0 +1,22 @@
+<html>
+
+  <head>
+    #include '/public/style.include'
+    <script src="http://static.ak.fbcdn.net/connect/en_US/core.debug.js"></script>
+
+    <script type="text/javascript">var stand_alone=true;</script>
+    #include '/public/core/core.include'
+    <script type="text/javascript" src="/public/apps/space/game.js"> </script>
+    <script type="text/javascript" src="/public/apps/space/svrgame.js"> </script>
+  </head>
+
+  <body id="body_id" style="overflow:hidden;"
+    onresize="Init.winresize()"
+    onload="Init.init(Game.playGame)"
+    onorientationchange="Init.winresize();"
+    onunload="Init.quit()">
+    <div id="fb-root"></div>
+    <div id="gamebody"></div>
+  </body>
+
+</html>
