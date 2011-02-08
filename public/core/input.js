@@ -58,7 +58,9 @@ var Input = (function() {
 
       JSGlobal.mouse.x = px;
       JSGlobal.mouse.y = py;
-      return false;
+      if (JSGlobal.mobile) {
+        return false;
+      }
     }
 
     function getMouseWheel(event, delta) {
