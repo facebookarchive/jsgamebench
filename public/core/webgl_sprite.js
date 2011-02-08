@@ -33,20 +33,22 @@ var WebGLSprite = (function() {
           v_Texcoord: 'vec2'
         },
 
-        text: '\
-void main() {\n\
-  vec2 pre_rot = vposition * sprite_sizerot.xy;\n\
-  vec2 dir = normalize(sprite_sizerot.zw);\n\
-  vec2 tdir = vec2(-dir.y, dir.x);\n\
-  gl_Position.x = dot(dir, pre_rot);\n\
-  gl_Position.y = dot(tdir, pre_rot);\n\
-  gl_Position.xy = (gl_Position.xy + sprite_pos.xy) *\n\
-                     screen_dims.xy + screen_dims.zw;\n\
-  gl_Position.z = sprite_pos.z;\n\
-  gl_Position.w = 1.0;\n\
-  v_Texcoord = vposition.xy * sprite_tex_transform.xy +\n\
-               sprite_tex_transform.zw;\n\
-}\n'
+        text:
+        [
+          'void main() {',
+          '  vec2 pre_rot = vposition * sprite_sizerot.xy;',
+          '  vec2 dir = normalize(sprite_sizerot.zw);',
+          '  vec2 tdir = vec2(-dir.y, dir.x);',
+          '  gl_Position.x = dot(dir, pre_rot);',
+          '  gl_Position.y = dot(tdir, pre_rot);',
+          '  gl_Position.xy = (gl_Position.xy + sprite_pos.xy) *',
+          '                     screen_dims.xy + screen_dims.zw;',
+          '  gl_Position.z = sprite_pos.z;',
+          '  gl_Position.w = 1.0;',
+          '  v_Texcoord = vposition.xy * sprite_tex_transform.xy +',
+          '               sprite_tex_transform.zw;',
+          '}'
+        ]
       };
 
     var sprite_fs =
@@ -63,13 +65,20 @@ void main() {\n\
           v_Texcoord: 'vec2'
         },
 
-        text: '\
-void main() {\n\
-  gl_FragColor = texture2D(sprite_texture, v_Texcoord);\n\
-}\n'
+        text:
+        [
+          'void main() {',
+          '  gl_FragColor = texture2D(sprite_texture, v_Texcoord);',
+          '}'
+        ]
       };
 
     function createContext(gl) {
+
+      // don't create more than one for each gl context
+      if (gl.webgl_sprite_context) {
+        return gl.webgl_sprite_context;
+      }
 
       var sprite_program = gl.loadProgram(sprite_vs, sprite_fs);
       if (!sprite_program) {
@@ -145,6 +154,7 @@ void main() {\n\
         gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_BYTE, 0);
       };
 
+      gl.webgl_sprite_context = sprite_context;
       return sprite_context;
     }
 

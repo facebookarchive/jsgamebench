@@ -65,10 +65,10 @@ var WebGLUtil = (function() {
       var uniforms = {};
 
       function genDecls(obj, name, accum) {
-        var text = '';
+        var text = [];
         var nobj = obj[name];
         for (var o in nobj) {
-          text += name + ' ' + nobj[o] + ' ' + o + ';\n';
+          text.push([name, ' ', nobj[o], ' ', o, ';'].join(''));
           if (accum) {
             accum[o] = nobj[o];
           }
@@ -91,24 +91,28 @@ var WebGLUtil = (function() {
       }
 
       var vtext = genDecls(vshader, 'attribute');
-      vtext += genDecls(vshader, 'uniform', uniforms);
-      vtext += genDecls(vshader, 'varying');
-      vtext += vshader.text;
+      vtext = vtext.concat(genDecls(vshader, 'uniform', uniforms),
+                           genDecls(vshader, 'varying'),
+                           vshader.text);
 
-      var vertex_shader = this.loadShader(vtext, this.VERTEX_SHADER);
+      var vertex_shader = this.loadShader(vtext.join('\n'),
+                                          this.VERTEX_SHADER);
       if (!vertex_shader) {
         return null;
       }
 
       var ftext =
-        '#ifdef GL_ES\n' +
-        '  precision ' + fshader.fprecision + ' float;\n' +
-        '#endif\n';
-      ftext += genDecls(fshader, 'uniform', uniforms);
-      ftext += genDecls(fshader, 'varying');
-      ftext += fshader.text;
+        [
+          '#ifdef GL_ES',
+          '  precision ' + fshader.fprecision + ' float;',
+          '#endif'
+        ];
+      ftext = ftext.concat(genDecls(fshader, 'uniform', uniforms),
+                           genDecls(fshader, 'varying'),
+                           fshader.text);
 
-      var fragment_shader = this.loadShader(ftext, this.FRAGMENT_SHADER);
+      var fragment_shader = this.loadShader(ftext.join('\n'),
+                                            this.FRAGMENT_SHADER);
       if (!fragment_shader) {
         this.deleteShader(vertex_shader);
         return null;
