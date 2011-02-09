@@ -19,6 +19,8 @@ var Input = (function() {
 
 
     function getMouseXY(event,down) {
+   //  document.getElementById('gamebody').focus();
+    event.currentTarget.focus();
       var prev = JSGlobal.mouse.buttons.slice(0);
       var button = 0;
       if (!event)
@@ -58,9 +60,7 @@ var Input = (function() {
 
       JSGlobal.mouse.x = px;
       JSGlobal.mouse.y = py;
-      if (JSGlobal.mobile) {
-        return false;
-      }
+      return false;
     }
 
     function getMouseWheel(event, delta) {
