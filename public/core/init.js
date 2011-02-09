@@ -15,7 +15,7 @@
 var Init = (function() {
     var routed = false;
     var app_init_func = 0;
-    
+
     function quit() {
       Xhr.toServer({cmd: 'logout', args: []});
     }
@@ -101,7 +101,7 @@ var Init = (function() {
     }
 
     function init(init_func) {
-      console.log('fb app id: ' + fb_app_id);
+//      console.log('fb app id: ' + fb_app_id);
       app_init_func = init_func;
       if (document.getElementById('fb-root')) {
         FB.init({
