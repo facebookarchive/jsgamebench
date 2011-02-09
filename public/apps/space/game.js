@@ -491,9 +491,9 @@ var Game = (function() {
           name: 'Rock Destroyer',
           caption: "You've blown up 10 rocks!",
           description: "Leveled up in rock destroyer!",
-          href: 'http://fbrell.com/'
+          href: 'http://apps.facebook.com/jsgamebench/'
         },
-        action_links: [ { text: 'fbrell', href: 'http://fbrell.com/' } ]
+        //action_links: [ { text: 'fbrell', href: 'http://fbrell.com/' } ]
       };
 
       fbLogin(function () {
