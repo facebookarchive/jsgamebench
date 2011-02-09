@@ -40,7 +40,6 @@ Socket = require('../lib/socket');
 Cmds = SvrCmds = require('../lib/svrcmds');
 SvrGame = require('../public/apps/space/svrgame');
 
-Comm.sendFile(0,'public/apps/space/game.shtml');
 sys.puts("starting server");
 var production_mode = false;
 SvrGame.init();

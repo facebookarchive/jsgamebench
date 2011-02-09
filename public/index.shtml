@@ -1,6 +1,7 @@
 <html>
 
   <head>
+    #metatags
     #include '/public/style.include'
     #include '/public/core/core.include'
     <script type="text/javascript" src="/public/apps/space/game.js"> </script>
