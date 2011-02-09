@@ -417,7 +417,7 @@ var Game = (function() {
 
   function fbLogin(func) {
     if (client_user.fb_logged_in) {
-      func &&func();
+      func && func();
     } else {
       ClientCmd.install('fbLoginUiCb',fbLoginUiCb);
       UI.addCollection('', 'fblogin', {pos: [0, 0]});

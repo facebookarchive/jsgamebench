@@ -538,3 +538,8 @@ var UI = (function() {
     UI.getAccel = getAccel;
     return UI;
   })();
+
+function ignoreInput(ev) {
+  console.log('ignore');
+  return false;
+}
