@@ -103,22 +103,24 @@ var Init = (function() {
     function init(init_func) {
 //      console.log('fb app id: ' + fb_app_id);
       app_init_func = init_func;
-      if (document.getElementById('fb-root')) {
-        FB.init({
-          appId  : fb_app_id,
-          status : true, // check login status
-          cookie : true, // enable cookies to allow the server to access the session
-          xfbml  : false  // parse XFBML
-        });
-        FB.getLoginStatus(function(response) {
-          if (response.session) {
-            client_user.fb_logged_in = true;
-            console.log('logged in')
-          } else {
-            client_user.fb_logged_in = false;
-            console.log('not logged in')
-          }
-        });
+      if (fb_app_id) {
+        if (document.getElementById('fb-root')) {
+          FB.init({
+              appId  : fb_app_id,
+                status : true, // check login status
+                cookie : true, // enable cookies to allow the server to access the session
+                xfbml  : false  // parse XFBML
+                });
+          FB.getLoginStatus(function(response) {
+              if (response.session) {
+                client_user.fb_logged_in = true;
+                console.log('logged in');
+              } else {
+                client_user.fb_logged_in = false;
+                console.log('not logged in');
+              }
+            });
+        }
       }
       winresize();
       if (!stand_alone) {

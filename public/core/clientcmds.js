@@ -342,7 +342,7 @@ var ClientCmd = (function() {
       UI.del('buttons');
       UI.del('perf');
 
-      Game.init({viewport: 'fluid_width', settings: {render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: true, css_transitions: false, css_keyframe: false, sprite_sheets: true, int_snap: true, transform3d:true}, tfps: 30, background: 'world', sprites: 'cute', demo: true, hack: true });
+      Game.init({viewport: 'fluid_width', settings: {render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: true, css_transitions: false, css_keyframe: false, sprite_sheets: false, int_snap: true, transform3d:false}, tfps: 30, background: 'world', sprites: 'cute', demo: true, hack: true });
 
       PerfTest.doAll();
     }

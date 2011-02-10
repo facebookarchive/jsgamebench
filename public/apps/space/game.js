@@ -17,66 +17,15 @@ var Game = (function() {
     var sprites_loaded;
 
     function loadTiles() {
-      Sprites.add('shot', {url: '/images/shot.png', frames: 8,
-        framepos: [[0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0], [7, 0]],
-        width: 64, height: 64});
+      SpriteLoad.ship(GameFrame.settings.sprite_sheets);
+      SpriteLoad.rock(GameFrame.settings.sprite_sheets, true);
+      SpriteLoad.boom(GameFrame.settings.sprite_sheets, true);
+      SpriteLoad.powerup(GameFrame.settings.sprite_sheets, true);
+      SpriteLoad.shot(GameFrame.settings.sprite_sheets);
 
-      Sprites.add('ship_idle', {url: '/images/ship_idle.png', frames: 24, no_anim: true,
-            framepos: [[0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0], [7, 0],
-                       [0, 1], [1, 1], [2, 1], [3, 1], [4, 1], [5, 1], [6, 1], [7, 1],
-                       [0, 2], [1, 2], [2, 2], [3, 2], [4, 2], [5, 2], [6, 2], [7, 2]],
-            width: 128, height: 128,
-            top: 0, left: 0});
-
-      Sprites.add('ship_f1', {url: '/images/ship_thrust_frame1.png', frames: 24, no_anim: true,
-            framepos: [[0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0], [7, 0],
-                       [0, 1], [1, 1], [2, 1], [3, 1], [4, 1], [5, 1], [6, 1], [7, 1],
-                       [0, 2], [1, 2], [2, 2], [3, 2], [4, 2], [5, 2], [6, 2], [7, 2]],
-            width: 128, height: 128,
-            top: 0, left: 0});
-
-      Sprites.add('ship_f2', {url: '/images/ship_thrust_frame2.png', frames: 24, no_anim: true,
-            framepos: [[0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0], [7, 0],
-                       [0, 1], [1, 1], [2, 1], [3, 1], [4, 1], [5, 1], [6, 1], [7, 1],
-                       [0, 2], [1, 2], [2, 2], [3, 2], [4, 2], [5, 2], [6, 2], [7, 2]],
-            width: 128, height: 128,
-            top: 0, left: 0});
-
-      Sprites.add('asteroid', {url: '/images/asteroid.png', frames: 60, no_anim: true,
-            framepos: [[0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0], [7, 0],
-                       [0, 1], [1, 1], [2, 1], [3, 1], [4, 1], [5, 1], [6, 1], [7, 1],
-                       [0, 2], [1, 2], [2, 2], [3, 2], [4, 2], [5, 2], [6, 2], [7, 2],
-                       [0, 3], [1, 3], [2, 3], [3, 3], [4, 3], [5, 3], [6, 3], [7, 3],
-                       [0, 4], [1, 4], [2, 4], [3, 4], [4, 4], [5, 4], [6, 4], [7, 4],
-                       [0, 5], [1, 5], [2, 5], [3, 5], [4, 5], [5, 5], [6, 5], [7, 5],
-                       [0, 6], [1, 6], [2, 6], [3, 6], [4, 6], [5, 6], [6, 6], [7, 6],
-                       [0, 7], [1, 7], [2, 7], [3, 7]],
-            width: 128, height: 128});
-
-
-      Sprites.add('Rock', {url: '/images/Rock.png', frames: 1, no_anim: true,
+      Sprites.add('wall', {url: '/images/asteroid/Test_Asteroid_128_00001.png', frames: 1,
             framepos: [[0, 0]],
             width: 128, height: 128});
-
-      Sprites.add('boom', {url: '/images/explosion.png', frames: 59, no_anim: true, half_res: true,
-
-            framepos: [[0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0], [7, 0],
-                       [0, 1], [1, 1], [2, 1], [3, 1], [4, 1], [5, 1], [6, 1], [7, 1],
-                       [0, 2], [1, 2], [2, 2], [3, 2], [4, 2], [5, 2], [6, 2], [7, 2],
-                       [0, 3], [1, 3], [2, 3], [3, 3], [4, 3], [5, 3], [6, 3], [7, 3],
-                       [0, 4], [1, 4], [2, 4], [3, 4], [4, 4], [5, 4], [6, 4], [7, 4],
-                       [0, 5], [1, 5], [2, 5], [3, 5], [4, 5], [5, 5], [6, 5], [7, 5],
-                       [0, 6], [1, 6], [2, 6], [3, 6], [4, 6], [5, 6], [6, 6], [7, 6],
-                       [0, 7], [1, 7], [2, 7]],
-            width: 256, height: 256});
-
-      Sprites.add('powerup', {url: '/images/powerup.png', frames: 40, no_anim: true,
-            framepos: [[0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0], [7, 0],
-                       [0, 1], [1, 1], [2, 1], [3, 1], [4, 1], [5, 1], [6, 1], [7, 1],
-                       [0, 2], [1, 2], [2, 2], [3, 2], [4, 2], [5, 2], [6, 2], [7, 2],
-                       [0, 3], [1, 3], [2, 3], [3, 3], [4, 3], [5, 3], [6, 3], [7, 3],
-                       [0, 4], [1, 4], [2, 4], [3, 4], [4, 4], [5, 4], [6, 4], [7, 4]],
-            width: 64, height: 64});
 
       Sprites.add('world', {url: '/images/stars.png', frames: 1,
             framepos: [[0, 0]],
@@ -101,7 +50,7 @@ var Game = (function() {
       var list = Grid.findByArea(client_user.world_grid, pos, size);
       for (var i in list) {
         var obj = list[i];
-        if (obj.name != 'Rock') {
+        if (obj.name != 'wall') {
           continue;
       }
         var ret = Mathx.overlap(pos, size, obj.extent[0], obj.extent[1]);
@@ -127,7 +76,7 @@ var Game = (function() {
       var list = Grid.findByArea(client_user.world_grid, me.extent[0], me.extent[1]);
       for (i in list) {
         var hit = list[i];
-        if (hit.name != 'Rock') {
+        if (hit.name != 'rock') {
           continue;
         }
         var center = Vec.add(hit.extent[0],Vec.scale(hit.extent[1],.5));
@@ -178,11 +127,11 @@ var Game = (function() {
             var list = Grid.findByArea(ent_grid,mob.extent[0],mob.extent[1]);
             for(var j=0;j<list.length;j++) {
               var hit = list[j];
-              if (hit.name == 'asteroid') {
+              if (hit.name == 'rock') {
                 if (stand_alone) {
                   SvrGame.explode(client_user,hit.uuid);
                 } else {
-                  Xhr.toServer({cmd: 'explode', args: [hit.uuid]});
+                  Xhr.toServer({cmd: 'boom', args: [hit.uuid]});
                 }
                 GridClient.remove(client_user.ent_grid, mob.uuid);
                 mobs.splice(i, 1);
@@ -255,8 +204,7 @@ var Game = (function() {
     }
     redirect_url += 'oauth_redirect';
 
-    console.log('location: '+'https://graph.facebook.com/oauth/authorize?client_id=' + client_user.app_id + '&redirect_uri=' + redirect_url +
-    '&scope=publish_stream,read_stream,user_about_me');
+//    console.log('location: '+'https://graph.facebook.com/oauth/authorize?client_id=' + client_user.app_id + '&redirect_uri=' + redirect_url + '&scope=publish_stream,read_stream,user_about_me');
 
     window.location = 'https://graph.facebook.com/oauth/authorize?client_id=' + client_user.app_id + '&redirect_uri=' + redirect_url +
     '&scope=publish_stream,read_stream,user_about_me';
@@ -353,9 +301,9 @@ var Game = (function() {
       plr_pos[1] += vel[1];
     } else {
       if (!hitWall(Vec.add(plr_pos, [vel[0], 0]), horngirl_id))
-      plr_pos[0] += vel[0];
+        plr_pos[0] += vel[0];
       if (!hitWall(Vec.add(plr_pos, [0, vel[1]]), horngirl_id))
-      plr_pos[1] += vel[1];
+        plr_pos[1] += vel[1];
     }
     if (vel[0] || vel[1] || angle != me.angle || forward) {
       if (forward) {
@@ -424,7 +372,7 @@ var Game = (function() {
       UI.addHTML('fblogin', 'bkgrnd', {pos: [5, 24], uiclass: 'fblogin', markup: "Login to FB?"});
       UI.addButton('fblogin', 'loginOk', {pos: [15, 55], width: 75, height: 20, text: 'Login', command: {cmd: 'fbLoginUiCb', args: [func]}});
       UI.addButton('fblogin', 'loginCancel', {pos: [105, 55], width: 75, height: 20, text: 'Cancel', command: {cmd: 'fbLoginUiCb', args: [0]}});
- 
+
       function fbLoginUiCb(func) {
         UI.del('fblogin');
         if (!func) {
@@ -441,7 +389,7 @@ var Game = (function() {
       }
     }
   }
-  
+
   function completeInit() {
     var plr_pos = client_user.plr_pos = [0,0];
     client_user.id = getCookie('id');
@@ -465,15 +413,15 @@ var Game = (function() {
     if (!Sprites.fullyLoaded() || !sprites_loaded) {
       return;
     }
-    
+
     if (keyDown('P')) {
       Xhr.toServer({cmd: 'ping', args: [(new Date).getTime()]});
     }
-  
+
     if (keyDownReset('L')) {
         fbLoginOAuth();
     }
-    
+
     if (keyDownReset('X')) {
       FB.getLoginStatus(function(response) {
         if (response.session) {
@@ -483,7 +431,7 @@ var Game = (function() {
         }
       });
     }
-    
+
     if (keyDownReset('S')) {
       var params = {
         method: 'stream.publish',
@@ -509,18 +457,18 @@ var Game = (function() {
 
     if (keyDownReset('R')) {
       fbLogin(function () {
-        FB.ui({ method: 'apprequests', 
+        FB.ui({ method: 'apprequests',
              message: 'Here is a new Requests dialog...'});
       })
     }
-    
+
     if (keyDownReset('O') && client_user.fb_logged_in) {
       FB.logout(function(response) {
         console.log('logged out!');
         client_user.fb_logged_in = false;
       });
     }
-        
+
     if (!init_complete++) {
       completeInit();
       return;
@@ -537,7 +485,7 @@ var Game = (function() {
     var half = Vec.scale(JSGlobal.winsize, 0.5);
     scr_pos = Vec.sub(plr_pos, half);
     if ((parseInt(old_pos[0] / TILE_X) != parseInt(scr_pos[0] / TILE_X))
-    || (parseInt(old_pos[1] / TILE_Y) != parseInt(scr_pos[1] / TILE_Y))) {
+        || (parseInt(old_pos[1] / TILE_Y) != parseInt(scr_pos[1] / TILE_Y))) {
       Xhr.toServer({cmd: 'setview', args: [scr_pos, [JSGlobal.w, JSGlobal.h]]});
     }
     if (stand_alone) {
@@ -616,12 +564,12 @@ var Game = (function() {
     function playGame() {
       UI.del('buttons');
       UI.del('perf');
-      
+
       if (window.location.pathname.match(/html/)) {
-        Game.init({viewport: 'fluid_width', settings: {render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: true, css_transitions: false, css_keyframe: false, sprite_sheets: true, int_snap: true, transform3d:true}, tfps: 30, background: 'world', sprites: 'cute', demo: true, hack: true });
+        Game.init({viewport: 'fluid_width', settings: {render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: true, css_transitions: false, css_keyframe: false, sprite_sheets: false, int_snap: true, transform3d:false}, tfps: 30, background: 'world', sprites: 'cute', demo: true, hack: true });
       } else {
         Game.init({viewport: 'fluid', settings: {render_mode: GameFrame.CANVAS_ONLY, canvas_background: false}, tfps: 30, background: 'world', sprites: 'cute', demo: true, hack: true });
-      } 
+      }
       PerfTest.doAll();
       setInterval('Game.tick();', 33);
     }
