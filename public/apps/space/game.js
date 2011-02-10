@@ -504,14 +504,9 @@ var Game = (function() {
         if (!obj.dir || Vec.mag(obj.vel) > 0.01) {
           obj.dir = Vec.norm(obj.vel);
         }
-        var frame = parseInt(24 * (Math.PI + Math.atan2(obj.dir[0], obj.dir[1]))
-        / Math.PI / 2);
-        frame = parseInt(obj.angle * 24 / (2 * Math.PI));
-        frame = Math.max(frame,0);
-        frame = Math.min(frame,23);
-
         var th = thrust[me ? me.state : 0];
-        Gob.addSimple(obj.uuid, th, pos, obj.z ? obj.z : -1000, frame);
+        Gob.addSimple(obj.uuid, th, pos, obj.z ? obj.z : -1000, 0);
+        Gob.gobs[obj.uuid].theta = Math.PI*1.5 - obj.angle;
       } else {
         Gob.addSimple(obj.uuid, obj.name, pos, obj.z ? obj.z : -1000, parseInt(obj.frame || 0));
         var num_frames = Gob.numFrames(obj.uuid);

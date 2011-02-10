@@ -25,7 +25,7 @@ var Gob = (function() {
       }
       if (frame >= sprite.frames)
         frame = 0;
-      gobs[id] = {id: id, spriteid: basesprite, frame: frame, pos: pos, vel: (vel ? vel : vel), scale: (scale ? scale : 1), z: (z ? z : Math.random() * 2000), dirty: true, time: Tick.current, atime: Tick.current, animate: false, discon: true};
+      gobs[id] = {id: id, spriteid: basesprite, frame: frame, pos: pos, vel: (vel ? vel : vel), theta: (vel ? Math.atan2(vel[1],vel[0]) : 0), scale: (scale ? scale : 1), z: (z ? z : Math.random() * 2000), dirty: true, time: Tick.current, atime: Tick.current, animate: false, discon: true};
       return gobs[id];
     }
 
@@ -84,7 +84,6 @@ var Gob = (function() {
         gob.frame++;
       }
       gob.frame = gob.frame % sprite.frames;
-
       var pos = [gob.pos[0] - sprite.width * 0.5, gob.pos[1] - sprite.height * 0.5];
       if (GameFrame.settings.int_snap) {
         pos = [pos[0]|0,pos[1]|0];
@@ -92,7 +91,7 @@ var Gob = (function() {
 
       var retval = {dirty: gob.dirty, animating: animating,
                     pos: pos,
-                    vel: gob.vel, discon: gob.discon,
+                    theta: gob.theta, discon: gob.discon,
                     scale: gob.scale,
                     size: [sprite.width, sprite.height],
                     x: offset[0] * sprite.width,
@@ -120,6 +119,10 @@ var Gob = (function() {
 
       gob.pos[0] += gob.vel[0] * (t - gob.time) * 0.01;
       gob.pos[1] += gob.vel[1] * (t - gob.time) * 0.01;
+
+      if (gob.vel) {
+        gob.theta = Math.atan2(gob.vel[1],gob.vel[0]);
+      }
 
       gob.dirty = true;
       gob.discon = false;

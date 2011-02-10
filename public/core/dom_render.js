@@ -90,10 +90,11 @@ var DomRender = (function() {
       return transform + ': translate3d(' + pos[0] + 'px, ' + pos[1] + 'px, 0px)';
     }
 
-    function axisAlignedProp(domel, pos, vel, discon) {
+    function axisAlignedProp(domel, pos, theta, discon) {
       var dstyle = domel.style;
       if (GameFrame.settings.css_transitions) {
         if (!discon) {
+          var vel = [Math.cos(theta), Math.sin(theta)];
           var time = GameFrame.settings.transition_time;
           dstyle[transition] = transform+' ' + parseInt(time * 0.001) + 's linear';
           dstyle[transformprop] = 'translate(' + (pos[0] + vel[0] * time * 0.01) + 'px, ' + (pos[1] + vel[1] * time * 0.01) + 'px)';
@@ -114,10 +115,11 @@ var DomRender = (function() {
       }
     }
 
-    function axisAlignedProp3d(domel, pos, vel, discon) {
+    function axisAlignedProp3d(domel, pos, theta, discon) {
       var dstyle = domel.style;
       if (GameFrame.settings.css_transitions) {
         if (!discon) {
+          var vel = [Math.cos(theta), Math.sin(theta)];
           var time = GameFrame.settings.transition_time;
           dstyle[transition] = transform+' ' + parseInt(time * 0.001) + 's linear';
           dstyle[transformprop] = 'translate3d(' + (pos[0] + vel[0] * time * 0.01) + 'px, ' + (pos[1] + vel[1] * time * 0.01) + 'px,0)';
@@ -130,8 +132,8 @@ var DomRender = (function() {
       }
     }
 
-    function transformed(pos, size, vel) {
-      if (vel[1] == 0) {
+    function transformed(pos, size, theta) {
+      if (theta == 0) {
         switch (JSGlobal.browser) {
           case JSGlobal.IE:
             return axisAligned(pos, size) + ";";
@@ -140,7 +142,6 @@ var DomRender = (function() {
         }
       }
 
-      var theta = Math.atan2(vel[1], vel[0]);
       var ct = Math.cos(theta);
       var st = Math.sin(theta);
       var nst = -st;
@@ -157,8 +158,8 @@ var DomRender = (function() {
       }
     }
 
-    function transformed3d(pos, size, vel) {
-      if (vel[1] == 0) {
+    function transformed3d(pos, size, theta) {
+      if (theta == 0) {
         switch (JSGlobal.browser) {
           case JSGlobal.IE:
             return axisAligned3d(pos, size) + ";";
@@ -167,7 +168,6 @@ var DomRender = (function() {
         }
       }
 
-      var theta = Math.atan2(vel[1], vel[0]);
       var ct = Math.cos(theta);
       var st = Math.sin(theta);
       var nst = -st;
@@ -184,13 +184,12 @@ var DomRender = (function() {
       }
     }
 
-    function transformedProp(domel, pos, vel, discon) {
+    function transformedProp(domel, pos, theta, discon) {
       var dstyle = domel.style;
-      if (vel[1] == 0) {
-        axisAlignedProp(domel, pos, vel, discon);
+      if (theta == 0) {
+        axisAlignedProp(domel, pos, theta, discon);
         return;
       }
-      var theta = Math.atan2(vel[1], vel[0]);
       var ct = Math.cos(theta);
       var st = Math.sin(theta);
       var nst = -st;
@@ -206,6 +205,7 @@ var DomRender = (function() {
         default:
           if (GameFrame.settings.css_transitions) {
             if (!discon) {
+              var vel = [Math.cos(theta), Math.sin(theta)];
               var time = GameFrame.settings.transition_time;
               dstyle[transition] = 'left ' + parseInt(time * 0.001) + 's linear, top ' + parseInt(time * 0.001) + 's linear';
               dstyle.left = (pos[0] + vel[0] * time * 0.01) + 'px';
@@ -227,13 +227,12 @@ var DomRender = (function() {
       }
     }
 
-    function transformedProp3d(domel, pos, vel, discon) {
+    function transformedProp3d(domel, pos, theta, discon) {
       var dstyle = domel.style;
-      if (vel[1] == 0) {
-        axisAlignedProp3d(domel, pos, vel, discon);
+      if (theta == 0) {
+        axisAlignedProp3d(domel, pos, theta, discon);
         return;
       }
-      var theta = Math.atan2(vel[1], vel[0]);
       var ct = Math.cos(theta);
       var st = Math.sin(theta);
       var nst = -st;

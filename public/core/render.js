@@ -281,11 +281,11 @@ var Render = (function() {
                   if (GameFrame.settings.transform3d) {
                     DomRender.transformedProp3d(gobel,
                                               [framedata.pos[0]|0,framedata.pos[1]|0],
-                                              framedata.vel, framedata.discon);
+                                              framedata.theta, framedata.discon);
                   } else {
                     DomRender.transformedProp(gobel,
                                               [framedata.pos[0]|0,framedata.pos[1]|0],
-                                              framedata.vel, framedata.discon);
+                                              framedata.theta, framedata.discon);
                   }
                 }
                 if (GameFrame.settings.use_div_background) {
@@ -311,7 +311,7 @@ var Render = (function() {
                                 'style="position:absolute;overflow:hidden;' +
                                 DomRender.transformed3d(framedata.pos,
                                                       [framedata.size[0]*framedata.scale,framedata.size[1]*framedata.scale],
-                                                      framedata.vel) +
+                                                      framedata.theta) +
                                 'background:url(\'' + framedata.url +
                                 '\');background-position: -' + framedata.x +
                                 'px -' + framedata.y + 'px;"></div>');
@@ -320,7 +320,7 @@ var Render = (function() {
                                 'style="position:absolute;overflow:hidden;' +
                                 DomRender.transformed(framedata.pos,
                                                       [framedata.size[0]*framedata.scale,framedata.size[1]*framedata.scale],
-                                                      framedata.vel) +
+                                                      framedata.theta) +
                                 'background:url(\'' + framedata.url +
                                 '\');background-position: -' + framedata.x +
                                 'px -' + framedata.y + 'px;"></div>');
@@ -331,7 +331,7 @@ var Render = (function() {
                                 'style="position:absolute;overflow:hidden;' +
                                 DomRender.transformed3d(framedata.pos,
                                                       [framedata.size[0]*framedata.scale,framedata.size[1]*framedata.scale],
-                                                      framedata.vel) +
+                                                      framedata.theta) +
                                 '"><img class="sprite" src="' + framedata.url +
                                 '" style="left:-' + framedata.x +
                                 'px;top:-' + framedata.y + 'px;"></img></div>');
@@ -340,7 +340,7 @@ var Render = (function() {
                                 'style="position:absolute;overflow:hidden;' +
                                 DomRender.transformed(framedata.pos,
                                                       [framedata.size[0]*framedata.scale,framedata.size[1]*framedata.scale],
-                                                      framedata.vel) +
+                                                      framedata.theta) +
                                 '"><img class="sprite" src="' + framedata.url +
                                 '" style="left:-' + framedata.x +
                                 'px;top:-' + framedata.y + 'px;"></img></div>');
