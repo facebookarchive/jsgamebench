@@ -9,11 +9,11 @@ function tick() {
     ClientCmd.install('playGame',FB.Demo.play);
 
     UI.addCollection('', 'gameOpts', {pos: [0, 0]});
-    UI.addHTML('gameOpts', 'bkgrnd', {pos: [5, 24], uiclass: 'fblogin', markup: "Game Options"});
-    UI.addButton('gameOpts', 'play', {pos: [10, 55], width: 75, height: 20, text: 'Play', command: {cmd: 'playGame', args: []}});
-    UI.addButton('gameOpts', 'rewind', {pos: [95, 55], width: 75, height: 20, text: 'Rewind', command: {cmd: 'fbLoginUiCb', args: [0]}});
-    UI.addButton('gameOpts', 'publish', {pos: [180, 55], width: 75, height: 20, text: 'Publish', command: {cmd: 'fbLoginUiCb', args: [0]}});
-    UI.addButton('gameOpts', 'gift', {pos: [265, 55], width: 75, height: 20, text: 'Gift', command: {cmd: 'fbLoginUiCb', args: [0]}});
+  //  UI.addHTML('gameOpts', 'bkgrnd', {pos: [5, 24], uiclass: 'fblogin', markup: "Game Options"});
+    UI.addButton('gameOpts', 'play', {pos: [10, 5], width: 75, height: 20, text: 'Play', command: {cmd: 'playGame', args: []}});
+    UI.addButton('gameOpts', 'rewind', {pos: [95, 5], width: 75, height: 20, text: 'Rewind', command: {cmd: 'fbLoginUiCb', args: [0]}});
+    UI.addButton('gameOpts', 'publish', {pos: [180, 5], width: 75, height: 20, text: 'Publish', command: {cmd: 'fbLoginUiCb', args: [0]}});
+    UI.addButton('gameOpts', 'gift', {pos: [265, 5], width: 75, height: 20, text: 'Gift', command: {cmd: 'fbLoginUiCb', args: [0]}});
   }
   UI.tick();
   Render.tick();
@@ -61,6 +61,9 @@ function init() {
     framepos: [[0, 0]], width: 0, height: 0});
 
   Sprites.add('board_vert', {url: '/public/apps/pvn/images/board_vert.png', frames: 1,
+    framepos: [[0, 0]], width: 0, height: 0});
+
+  Sprites.add('wall', {url: '/public/apps/pvn/images/wall.png', frames: 1,
     framepos: [[0, 0]], width: 0, height: 0});
 
   Sprites.add('board_horiz', {url: '/public/apps/pvn/images/board_horiz.png', frames: 1,

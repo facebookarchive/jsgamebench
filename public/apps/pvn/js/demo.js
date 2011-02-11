@@ -162,9 +162,11 @@ var cam_pos = [0,0];
       FB.Demo._clearJoint();
       FB.Demo._firing = true;
       if (FB.Demo.cameraTimer == 0) {
-        FB.Demo.cameraTimer = setInterval(FB.Demo.onCameraTimer, 200);
+        FB.Demo.cameraTimer = setInterval(FB.Demo.onCameraTimer, 10);
         FB.Demo.fireTime = (new Date()).getTime();
       }
+      var visual = FB.Demo.pirate.GetUserData();
+      display.setVisualImage(visual,'images/in_sling_pirate.png');
       console.log('Fire!');
     },
 
@@ -382,29 +384,39 @@ var cam_pos = [0,0];
         y: y - height * 0.3,
       };
 
-      display.addVisual({
+      var barrelChassis = display.addVisual({
+        x: x, 
+        y: y+1,
+        width: width,
+        height: height,
+        imgSrc: 'images/cannon_chassis.png',
+        motionCb: function(visual, x, y, angle) {
+          visual.x = x;
+        }
+      });
+
+      var barrelVisual = display.addVisual({
         x: x,
         y: y,
         width: width,
         height: height,
         imgSrc: 'images/cannon_barrel.png',
+        motionCb: function(visual, x, y, angle) {
+          visual.angle = angle;
+          visual.x = x;
+        }
       });
-
+      barrelChassis.cutJointCB = barrelVisual.cutJointCB = function(visual, x, y, angle) {
+        visual.x = x;
+      };
       FB.Demo.setupSlingAnchor(slingPoint);
-      FB.Demo.setupPirate(slingPoint);
-      display.addVisual({
-        x: x, 
-        y: y,
-        width: width,
-        height: height,
-        imgSrc: 'images/cannon_chassis.png',
-      });
+      FB.Demo.setupPirate(slingPoint, barrelChassis, barrelVisual);
     },
 
 
     setupWaitingPirates: function() {
       var w = uh * 12;
-      var h = w * 85 / 60; // The image size is 60 px x 85px
+      var h = w * 1.8; // The image size is 60 px x 85px
       for (var i=0; i < FB.Demo.remainingPirates; i++) {
         display.addVisual( {
           x: i * w + w/2,
@@ -417,7 +429,7 @@ var cam_pos = [0,0];
     },
 
 
-    setupPirate: function(point) {
+    setupPirate: function(point, cannon_chassis, cannon_barrel) {
       var pirateShapeInfo = {
         type: 'circle',
         radius: uh * 5,
@@ -429,22 +441,19 @@ var cam_pos = [0,0];
         friction: 0.2,
       };
 
-      var rubberVisual = display.addVisual({
-        cssClass: 'rubber',
-        height: uh * 2
-      });
-
       info.shape = pirateShapeInfo;
       var visual = display.addVisual({
         x: point.x, 
         y: point.y,
         angle: 0,
-        imgSrc: 'images/in_sling_pirate.png',
+        //imgSrc: 'images/in_sling_pirate.png',
+        z_index: -1000
       });
       FB.Demo.pirate = physics.addBody(visual, info);
       FB.Demo.pirate.isPirate = true;
 
-      FB.Demo._elastic = physics.addElastic(FB.Demo.slingAnchor, FB.Demo.pirate, rubberVisual);
+      FB.Demo._elastic = physics.addElastic(FB.Demo.slingAnchor, FB.Demo.pirate, cannon_barrel);
+      cannon_chassis.joint = cannon_barrel.joint;
     },
 
     setupNodes: function() {
@@ -570,19 +579,11 @@ var cam_pos = [0,0];
         friction: 0.8,
         restitution: 0.7
       };
-/*
-      physics.addBody(display.addVisual({
-        x: display.lW / 2,
-        y: 0,
-        cssClass: 'wall'
-      }), info);
-
-*/
 
       physics.addBody(display.addVisual({
         x: display.lW / 2,
-        y: display.lH,
-        cssClass: 'wall'
+        y: display.lH
+        //cssClass: 'wall'
       }), info);
 
       info.shape.width = 0.0001;
@@ -590,14 +591,15 @@ var cam_pos = [0,0];
       physics.addBody(display.addVisual({
         x: 0,
         y: display.lH / 2,
-        cssClass: 'wall'
+        imgSrc: 'images/wall.png'
       }), info);
 
       physics.addBody(display.addVisual({
         x: display.lW,
         y: display.lH / 2,
-        cssClass: 'wall'
+        imgSrc: 'images/wall.png'
       }), info);
+
     }
 
   });

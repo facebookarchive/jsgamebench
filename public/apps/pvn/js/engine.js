@@ -84,53 +84,38 @@ var g_scale;
 
     visualToGob: function(visual) {
       var gob = visual.gob;
-      var el = Sprites.spritedictionary[visual.name].imageel;
-      gob.pos[0] = visual.x * this.scale - cam_pos[0] - el.width/2;
-      gob.pos[1] = visual.y * this.scale - cam_pos[1] - el.height/2;
-      
-      gob.theta = visual.angle || 0;
-      gob.dirty = true;
+      if (gob) {
+        var el = Sprites.spritedictionary[visual.name].imageel;
+        gob.pos[0] = visual.x * this.scale - cam_pos[0] - el.width/2;
+        gob.pos[1] = visual.y * this.scale - cam_pos[1] - el.height/2;
+        gob.theta = visual.angle || 0;
+        gob.dirty = true;
+      }
     },
-  
-    addVisual: function (visual) {
-      this.vis_id_count = (this.vis_id_count || 0) + 1;
-      visual.id = this.vis_id_count;
-      var name = visual.imgSrc;
+
+    setVisualImage: function(visual, name) {
       if (!name) {
-        //console.log('cssClass = '+visual.cssClass);
-        name = '/images/explosion.png';
+        return visual;
       }
       var split = name.split('/');
       name = split[split.length-1];
       name = name.split('.')[0];
       visual.name = name;
       // this.scale
-      var pos = [visual.x * 16, visual.y * 16];
-      var g = Gob.addSimple(visual.id,name,pos,visual.id,0);
+      var pos = [visual.x * this.scale, visual.y * this.scale];
+      var g = Gob.addSimple(visual.id,name,pos,visual.z_index || visual.id,0);
       g.visual = visual;
       g.angle = visual.angle;
       visual.gob = g;
       this.visualToGob(visual);
+      return visual;
+    },
+    
+    addVisual: function (visual) {
       this.visuals[this.visuals.length] = visual;
-      return visual;
-
-
-      if (!visual.dom) {
-        visual.dom = document.createElement('div');
-      }
-
-      visual.dom.visual = visual;
-
-      if (visual.imgSrc && !this.useImageCache) {
-        // TODO: Need to support sprite of a bigger image in a real production
-        // setting
-        visual.dom.style.backgroundImage = 'url(' + visual.imgSrc + ')';
-      }
-      var css = visual.cssClass || "";
-      FB.Dom.addCss(visual.dom, css + ' visual');
-      this.dom.appendChild(visual.dom);
-
-      return visual;
+      this.vis_id_count = (this.vis_id_count || 0) + 1;
+      visual.id = this.vis_id_count;
+      return this.setVisualImage(visual,visual.imgSrc);
     },
 
     removeVisual: function(visual) {
@@ -174,9 +159,13 @@ var g_scale;
       var dw = Math.round(visual.width * this.scale);
       var dh =  Math.round(visual.height * this.scale);
       if (1) {
-        visual.x = x;
-        visual.y = y;
-        visual.angle = angle;
+        if (visual.motionCb) {
+          visual.motionCb(visual,x,y,angle);
+        } else {
+          visual.x = x;
+          visual.y = y;
+          visual.angle = angle;
+        }
         this.visualToGob(visual);
       } else {
         if (visual.imgSrc && this.useImageCache) {
@@ -203,11 +192,6 @@ var g_scale;
           }
         }
       }
-
-/*
-      visual.dom.style.webkitTransitionDuration = 1/20 + 's';
-      visual.dom.style.webkitTransitionTimingFunction = 'linear';
-*/
     },
 
     getEventPos: function(e) {
@@ -360,7 +344,11 @@ var g_scale;
 	    this.world.DestroyJoint(joint);
       var visual = joint.GetUserData();
       if (visual) {
-        this.display.removeVisual(visual);
+        if (visual.cutJointCB) {
+          visual.motionCb = visual.cutJointCB;
+        } else {
+          this.display.removeVisual(visual);
+        }
       }
     }
   });
