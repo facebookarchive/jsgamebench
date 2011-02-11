@@ -390,7 +390,7 @@ var UI = (function() {
     }
 
     function hookUIEvents(eid) {
-      touch = ('ontouchstart' in window);
+      touch = JSGlobal.mobile;
       var el = document.getElementById(eid);
       if (el) {
         el[touch ? 'ontouchstart' : 'onmousedown'] = function(event) {
