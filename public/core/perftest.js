@@ -31,7 +31,7 @@ var PerfTest = (function() {
 
     function incShip(count, x, y) {
       var sprite = ship_sprites[count % ship_sprites.length];
-      Gob.add(Utils.uuidv4(), sprite, parseInt(Math.random() * 8), [Math.random() * x, Math.random() * y], [Math.random() * 10 + 1, 0], Math.random()*2000, Math.random()+0.5);
+      Gob.add(Utils.uuidv4(), sprite, parseInt(Math.random() * 8), [Math.random() * x, Math.random() * y], [Math.random() * 10 + 1, 0], Math.random()*2000, 1);
     }
 
     function incIShip(count, x, y) {
@@ -42,7 +42,7 @@ var PerfTest = (function() {
 
     function incShipRot(count, x, y) {
       var sprite = ship_sprites[count % ship_sprites.length];
-      Gob.add(Utils.uuidv4(), sprite, parseInt(Math.random() * 8), [Math.random() * x, Math.random() * y], [Math.random() * 10 - 5, Math.random() * 10 - 5], Math.random()*2000,Math.random()+0.5);
+      Gob.add(Utils.uuidv4(), sprite, parseInt(Math.random() * 8), [Math.random() * x, Math.random() * y], [Math.random() * 10 - 5, Math.random() * 10 - 5], Math.random()*2000, 1);
     }
 
     function incNinja(count, x, y) {
