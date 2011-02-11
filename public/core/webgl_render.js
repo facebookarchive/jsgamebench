@@ -110,7 +110,7 @@ var WebGLRender = (function() {
       }
 
       var pos = [framedata.pos[0], framedata.pos[1], 0.1];
-      var orient = [framedata.vel[0], -framedata.vel[1]];
+      var orient = [Math.cos(framedata.theta), -Math.sin(framedata.theta)];
       var size = [framedata.size[0] * framedata.scale,
                   framedata.size[1] * framedata.scale];
       var texpos = [framedata.x * sprite.imgmulx,

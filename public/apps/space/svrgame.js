@@ -47,7 +47,7 @@ var SvrGame = (function() {
     }
     var grid = world_grid;
 
-    var total = 100;
+    var total = 50;
     for(var i=0;i<total;i++) {
       var x = Math.sin(i*2*Math.PI / total) * playfield_radius;
       var y = Math.cos(i*2*Math.PI / total) * playfield_radius;

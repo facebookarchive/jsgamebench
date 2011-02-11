@@ -154,7 +154,7 @@ var DomRender = (function() {
             ct + '\',M12=\'' + nst + '\',M21=\'' + st + '\',M22=\'' + ct +
             '\',sizingMethod=\'auto expand\');';
         default:
-          return "width:"+size[0]+"px;height:"+size[1]+"px;"+transformoriginstring + ':0 0;' + transform + ':rotate(' + theta + 'rad) ' + axisAlignedTranslate(pos, size) + ";";
+          return "width:"+size[0]+"px;height:"+size[1]+"px;" + transform + ':rotate(' + theta + 'rad) ' + axisAlignedTranslate(pos, size) + ";";
       }
     }
 
@@ -180,7 +180,7 @@ var DomRender = (function() {
             ct + '\',M12=\'' + nst + '\',M21=\'' + st + '\',M22=\'' + ct +
             '\',sizingMethod=\'auto expand\');';
         default:
-          return 'width:' + size[0] + 'px;height:' + size[1] + 'px;' + transformoriginstring + ':0 0;' + transform + ':' + axisAlignedTranslate3d(pos) + ' rotate3d(0,0,1,' + theta + 'rad);';
+          return 'width:' + size[0] + 'px;height:' + size[1] + 'px;' +  transform + ':' + axisAlignedTranslate3d(pos) + ' rotate3d(0,0,1,' + theta + 'rad);';
       }
     }
 
@@ -248,15 +248,12 @@ var DomRender = (function() {
         default:
           if (GameFrame.settings.css_transitions) {
             if (!discon) {
-              dstyle[transformorigin] = '0 0';
               dstyle[transformprop] = axisAlignedTranslate3d(pos) + ' rotate3d(0,0,1,' + theta + 'rad)';
             } else {
-              dstyle[transformorigin] = '0 0';
               dstyle[transition] = '';
               dstyle[transformprop] = axisAlignedTranslate3d(pos) + ' rotate3d(0,0,1,' + theta + 'rad)';
             }
           } else {
-            dstyle[transformorigin] = '0 0';
             dstyle[transition] = '';
             dstyle[transformprop] = axisAlignedTranslate3d(pos) + ' rotate3d(0,0,1,' + theta + 'rad)';
           }

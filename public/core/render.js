@@ -173,7 +173,7 @@ var Render = (function() {
                   }
                   DomRender.transformedProp(gobel,
                                             framedata.pos,
-                                            [0, 0], 0);
+                                            0, 0);
                 }
               }
             }
@@ -205,11 +205,11 @@ var Render = (function() {
                 if (GameFrame.settings.transform3d) {
                   DomRender.transformedProp3d(gobel,
                                           framedata.pos,
-                                          [0, 0]);
+                                          0);
                 } else {
                   DomRender.transformedProp(gobel,
                                               framedata.pos,
-                                              [0, 0]);
+                                              0);
                 }
               }
             }
