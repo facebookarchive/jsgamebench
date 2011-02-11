@@ -239,7 +239,7 @@ var Game = (function() {
     var angle = me.angle;
     var new_vel = [0,0];
 
-    if ((window.DeviceMotionEvent && JSGlobal.mouse.buttons[0]) || JSGlobal.key_state[16]) {
+    if ((JSGlobal.mouse.buttons[0]) || JSGlobal.key_state[16]) {
       var dx = JSGlobal.mouse.x / JSGlobal.w - 0.5;
       var dy = JSGlobal.mouse.y / JSGlobal.h - 0.5;
       if (!(Math.abs(dx) < 0.1 && Math.abs(dy) < 0.1)) {
