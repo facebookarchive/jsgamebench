@@ -13,7 +13,7 @@
 // under the License.
 
 var Game = (function() {
-    var viewports = {fluid_width: [null, 640], normal: [960, 640]};
+    var viewports = {fluid_width: [null, 640], normal: [960, 640], fluid: [null, null]};
     var sprites_loaded;
 
     function loadTiles() {
@@ -29,7 +29,7 @@ var Game = (function() {
 
       Sprites.add('world', {url: '/images/stars.png', frames: 1,
             framepos: [[0, 0]],
-            width: 512, height: 511});
+            width: 512, height: 510});
       sprites_loaded = 1;
     }
 
@@ -394,8 +394,7 @@ var Game = (function() {
     var plr_pos = client_user.plr_pos = [0,0];
     client_user.id = getCookie('id');
     Xhr.toServer({cmd: 'userid', args: [client_user.id]});
-
-    var wsize = 512;
+    var wsize = 510;
     for(var y=0;y<=Math.ceil(JSGlobal.h/wsize);y++) {
       for(var x=0;x<=Math.ceil(JSGlobal.w/wsize);x++) {
         World.add(Utils.uuidv4(), 'world', [x*wsize,y*wsize], 0);
@@ -564,6 +563,7 @@ var Game = (function() {
     function playGame() {
       UI.del('buttons');
       UI.del('perf');
+      GameFrame.settings.offset = 0;
 
       if (window.location.pathname.match(/html/)) {
         Game.init({viewport: 'fluid', settings: {render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: true, css_transitions: false, css_keyframe: false, sprite_sheets: false, int_snap: true, transform3d:true}, tfps: 30, background: 'world', sprites: 'cute', demo: true, hack: true });

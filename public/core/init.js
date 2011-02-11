@@ -53,6 +53,13 @@ var Init = (function() {
       var gbel = document.getElementById('gamebody');
       gbel.innerHTML = '';
 
+      var path = window.location.pathname;
+      if (app_init_func) {
+        !routed && app_init_func();
+        routed = true;
+      } else {
+        Xhr.toServer({cmd: 'perfquery', args: [['browser']]});
+      }
       GameFrame.setFrame('gamebody', 'gameframe', 'gameframe',
                          {left: JSGlobal.winpos[0],
                              top: JSGlobal.winpos[1],
@@ -63,27 +70,32 @@ var Init = (function() {
 
       GameFrame.setViewport('gameframe', 'gameviewport', 'gameviewport',
                          {left: JSGlobal.winpos[0],
-                             top: JSGlobal.winpos[1] + 30,
+                             top: JSGlobal.winpos[1] + GameFrame.settings.offset,
                              width: JSGlobal.winsize[0],
-                             height: JSGlobal.winsize[1] - 30},
+                             height: JSGlobal.winsize[1] - GameFrame.settings.offset},
                             '#fff');
 
       GameFrame.layout();
-      Render.setupBrowserSpecific();
-      var path = window.location.pathname;
-      if (app_init_func) {
-        !routed && app_init_func();
-        routed = true;
-      } else {
-        Xhr.toServer({cmd: 'perfquery', args: [['browser']]});
-      }
+      setTimeout("Init.hideBar();", 100);
     }
 
+
+    function hideBar() {
+      window.scrollTo(0,1);
+    }
+
+
     function winresize() {
+      Render.setupBrowserSpecific();
+
       var last_width = JSGlobal.winsize[0];
       var last_height = JSGlobal.winsize[1];
 
       Clientutils.getWindowSize();
+
+      if (JSGlobal.mobile) {
+        JSGlobal.winsize[1] += 176;
+      }
 
       var width = JSGlobal.winsize[0];
       var height = JSGlobal.winsize[1];
@@ -135,5 +147,6 @@ var Init = (function() {
     Init.quit = quit;
     Init.tick = tick;
     Init.reset = reset;
+    Init.hideBar = hideBar;
     return Init;
   })();

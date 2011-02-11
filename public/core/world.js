@@ -59,7 +59,7 @@ var World = (function() {
     function initScrollable(data) {
       scrolling = data.scrollx;
       var eachx = data.eachx - 2;
-      var eachy = data.eachy;
+      var eachy = data.eachy - 2;
 
       var startx = 0;
       var edgex = parseInt(GameFrame.getViewport().dstyle.width / eachx)+2;
@@ -85,7 +85,7 @@ var World = (function() {
       var offsety = 0;
 
       var eachx = sdata.eachx - 2;
-      var eachy = sdata.eachy;
+      var eachy = sdata.eachy - 2;
 
       var startx = parseInt(scroll_pos / eachx);
 
@@ -120,8 +120,8 @@ var World = (function() {
       var offsetx = 0;
       var offsety = 0;
 
-      var eachx = data.eachx;
-      var eachy = data.eachy;
+      var eachx = data.eachx - 2;
+      var eachy = data.eachy - 2;
 
       var tilelist = data.tilelist;
       var len = tilelist.length;
