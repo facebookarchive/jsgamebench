@@ -99,7 +99,7 @@ var cam_pos = [0,0];
          } else {
            FB.Demo._clearJoint();
            var pos = display.getLogicEventPos(e);
-           if (FB.Demo._checkApproximateTouch(FB.Demo.pirate, pos, uh * 13)) {
+           if (FB.Demo._checkApproximateTouch(FB.Demo.pirate, pos, uh * 20)) {
              FB.Demo.action = {type: 'aim'};
              console.log('Aim!');
              var piratePos = FB.Demo.pirate.GetPosition();
