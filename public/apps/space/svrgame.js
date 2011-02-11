@@ -32,7 +32,7 @@ var SvrGame = (function() {
     var obj = {};
     obj.uuid = Utils.uuidv4();
     obj.extent = [[x, y], [100, 120]];
-    obj.name = 'asteroid';
+    obj.name = 'rock';
     obj.spin = Math.random()*1.4+0.7;
     if (Math.random() < 0.5) {
       obj.spin = -obj.spin;
@@ -47,14 +47,14 @@ var SvrGame = (function() {
     }
     var grid = world_grid;
 
-    var total = 100;
+    var total = 50;
     for(var i=0;i<total;i++) {
       var x = Math.sin(i*2*Math.PI / total) * playfield_radius;
       var y = Math.cos(i*2*Math.PI / total) * playfield_radius;
       var obj = {};
       obj.uuid = Utils.uuidv4();
       obj.extent = [[x, y], [100, 120]];
-      obj.name = 'Rock';
+      obj.name = 'wall';
       Grid.add(world_grid, obj);
     }
     for(var i=0;i<50;i++) {
@@ -79,15 +79,20 @@ var SvrGame = (function() {
 
   function explode(user, uuid) {
     var hit = Grid.findById(ent_grid, uuid);
-    if (!hit || hit.name != 'asteroid') {
+    if (!hit || hit.name != 'rock') {
       return;
     }
-    Grid.transform(ent_grid, uuid, {name: 'boom', frame: 0, spin: 1});
-    hit.ttl = 59;
-    live_ents.push(hit);
     var pos = Utils.clone(hit.extent[0]);
-    var uuid = Utils.uuidv4();
-    var obj = { uuid:uuid, name:'powerup', ttl:400, extent:[pos, [100, 100]] };
+    Grid.remove(ent_grid, uuid);
+
+    var obj = { uuid:Utils.uuidv4(), name:'boom', ttl:59, extent:[pos, [100, 100]] };
+
+    obj = Grid.add(ent_grid, obj);
+    live_ents.push(obj);
+
+    pos = Utils.clone(hit.extent[0]);
+    obj = { uuid:Utils.uuidv4(), name:'powerup', ttl:400, extent:[pos, [100, 100]] };
+
     obj = Grid.add(ent_grid, obj);
     live_ents.push(obj);
     addAsteroid();

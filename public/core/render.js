@@ -173,7 +173,7 @@ var Render = (function() {
                   }
                   DomRender.transformedProp(gobel,
                                             framedata.pos,
-                                            [0, 0], 0);
+                                            0, 0);
                 }
               }
             }
@@ -205,11 +205,11 @@ var Render = (function() {
                 if (GameFrame.settings.transform3d) {
                   DomRender.transformedProp3d(gobel,
                                           framedata.pos,
-                                          [0, 0]);
+                                          0);
                 } else {
                   DomRender.transformedProp(gobel,
                                               framedata.pos,
-                                              [0, 0]);
+                                              0);
                 }
               }
             }
@@ -281,28 +281,26 @@ var Render = (function() {
                   if (GameFrame.settings.transform3d) {
                     DomRender.transformedProp3d(gobel,
                                               [framedata.pos[0]|0,framedata.pos[1]|0],
-                                              framedata.vel, framedata.discon);
+                                              framedata.theta, framedata.discon);
                   } else {
                     DomRender.transformedProp(gobel,
                                               [framedata.pos[0]|0,framedata.pos[1]|0],
-                                              framedata.vel, framedata.discon);
+                                              framedata.theta, framedata.discon);
                   }
                 }
-                if (framedata.animating) {
-                  if (GameFrame.settings.use_div_background) {
-                    if (!GameFrame.settings.sprite_sheets) {
-                      gobel.style.backgroundImage = 'url(' + framedata.url + ')';
-                    } else if (!GameFrame.settings.css_keyframes) {
-                      gobel.style.backgroundPosition = '-' + framedata.x +
-                        'px -' + framedata.y + 'px';
-                    }
-                  } else {
-                    if (!GameFrame.settings.css_keyframes) {
-                      if (GameFrame.settings.transform3d) {
-                        gobel.childNodes[0].style.cssText = DomRender.axisAlignedTranslate3dFull([-framedata.x, -framedata.y]);
-                      } else {
-                        gobel.childNodes[0].style.cssText = DomRender.axisAlignedTranslateFull([-framedata.x, -framedata.y]);
-                      }
+                if (GameFrame.settings.use_div_background) {
+                  if (!GameFrame.settings.sprite_sheets) {
+                    gobel.style.backgroundImage = 'url(' + framedata.url + ')';
+                  } else if (!GameFrame.settings.css_keyframes) {
+                    gobel.style.backgroundPosition = '-' + framedata.x +
+                      'px -' + framedata.y + 'px';
+                  }
+                } else {
+                  if (!GameFrame.settings.css_keyframes) {
+                    if (GameFrame.settings.transform3d) {
+                      gobel.childNodes[0].style.cssText = DomRender.axisAlignedTranslate3dFull([-framedata.x, -framedata.y]);
+                    } else {
+                      gobel.childNodes[0].style.cssText = DomRender.axisAlignedTranslateFull([-framedata.x, -framedata.y]);
                     }
                   }
                 }
@@ -313,7 +311,7 @@ var Render = (function() {
                                 'style="position:absolute;overflow:hidden;' +
                                 DomRender.transformed3d(framedata.pos,
                                                       [framedata.size[0]*framedata.scale,framedata.size[1]*framedata.scale],
-                                                      framedata.vel) +
+                                                      framedata.theta) +
                                 'background:url(\'' + framedata.url +
                                 '\');background-position: -' + framedata.x +
                                 'px -' + framedata.y + 'px;"></div>');
@@ -322,7 +320,7 @@ var Render = (function() {
                                 'style="position:absolute;overflow:hidden;' +
                                 DomRender.transformed(framedata.pos,
                                                       [framedata.size[0]*framedata.scale,framedata.size[1]*framedata.scale],
-                                                      framedata.vel) +
+                                                      framedata.theta) +
                                 'background:url(\'' + framedata.url +
                                 '\');background-position: -' + framedata.x +
                                 'px -' + framedata.y + 'px;"></div>');
@@ -333,7 +331,7 @@ var Render = (function() {
                                 'style="position:absolute;overflow:hidden;' +
                                 DomRender.transformed3d(framedata.pos,
                                                       [framedata.size[0]*framedata.scale,framedata.size[1]*framedata.scale],
-                                                      framedata.vel) +
+                                                      framedata.theta) +
                                 '"><img class="sprite" src="' + framedata.url +
                                 '" style="left:-' + framedata.x +
                                 'px;top:-' + framedata.y + 'px;"></img></div>');
@@ -342,7 +340,7 @@ var Render = (function() {
                                 'style="position:absolute;overflow:hidden;' +
                                 DomRender.transformed(framedata.pos,
                                                       [framedata.size[0]*framedata.scale,framedata.size[1]*framedata.scale],
-                                                      framedata.vel) +
+                                                      framedata.theta) +
                                 '"><img class="sprite" src="' + framedata.url +
                                 '" style="left:-' + framedata.x +
                                 'px;top:-' + framedata.y + 'px;"></img></div>');

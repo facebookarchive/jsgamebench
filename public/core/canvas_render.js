@@ -49,16 +49,15 @@ var CanvasRender = (function() {
     }
 
     function draw(framedata) {
-      if (first || framedata.vel[1]) {
+      if (first || framedata.theta) {
         first = false;
-        var theta = Math.atan2(framedata.vel[1], framedata.vel[0]);
-        var ct = Math.cos(theta);
-        var st = Math.sin(theta);
+        var ct = Math.cos(framedata.theta);
+        var st = Math.sin(framedata.theta);
         var nst = -st;
-        ctx.transform(ct + 0.000001, st, nst, ct + 0.000001, framedata.pos[0], framedata.pos[1]);
+        ctx.transform(ct + 0.000001, st, nst, ct + 0.000001, (framedata.pos[0]+framedata.size[0]*0.5)|0, (framedata.pos[1]+framedata.size[1]*0.5)|0);
 //        ctx.transform(ct, st, nst, ct, framedata.pos[0], framedata.pos[1]);
         ctx.drawImage(framedata.image, framedata.x | 0, framedata.y | 0, framedata.size[0],
-                      framedata.size[1], 0, 0, framedata.size[0]*framedata.scale, framedata.size[1]*framedata.scale);
+                      framedata.size[1], (-framedata.size[0]*0.5) | 0, (-framedata.size[1]*0.5) | 0, framedata.size[0]*framedata.scale, framedata.size[1]*framedata.scale);
         ctx.setTransform(1, 0, 0, 1, 0, 0);
       } else {
         ctx.drawImage(framedata.image, framedata.x, framedata.y, framedata.size[0],

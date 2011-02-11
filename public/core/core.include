@@ -14,6 +14,7 @@
 <script type="text/javascript" src="/public/core/igob.js"> </script>
 <script type="text/javascript" src="/public/core/world.js"> </script>
 <script type="text/javascript" src="/public/core/sprites.js"> </script>
+<script type="text/javascript" src="/public/core/spriteload.js"> </script>
 <script type="text/javascript" src="/public/core/render.js"> </script>
 <script type="text/javascript" src="/public/core/dom_render.js"> </script>
 <script type="text/javascript" src="/public/core/canvas_render.js"> </script>

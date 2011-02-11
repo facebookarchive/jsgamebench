@@ -48,6 +48,7 @@ var Sprites = (function() {
         }
         spritedictionary[id] = data;
         spritedictionary[id].id = spriteid++;
+        spritedictionary[id].no_anim = data.no_anim;
         spritedictionary[id].imageel = new Image();
         spritedictionary[id].imageel.id = id;
         spritedictionary[id].imageel.onload = function(event) {

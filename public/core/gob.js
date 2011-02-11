@@ -18,13 +18,14 @@ var Gob = (function() {
 
     function add(id, spriteid, frame, pos, vel, z, scale) {
       var basesprite = spriteid;
-      if (!GameFrame.settings.sprite_sheets) {
-        spriteid += "0";
-      }
       var sprite = Sprites.spritedictionary[spriteid];
+      if (!sprite) {
+        // go looking for non-sprite sheet version
+        sprite = Sprites.spritedictionary[spriteid+"0"];
+      }
       if (frame >= sprite.frames)
         frame = 0;
-      gobs[id] = {id: id, spriteid: basesprite, frame: frame, pos: pos, vel: (vel ? vel : vel), scale: (scale ? scale : 1), z: (z ? z : Math.random() * 2000), dirty: true, time: Tick.current, atime: Tick.current, animate: false, discon: true};
+      gobs[id] = {id: id, spriteid: basesprite, frame: frame, pos: pos, vel: (vel ? vel : vel), theta: (vel ? Math.atan2(vel[1],vel[0]) : 0), scale: (scale ? scale : 1), z: (z ? z : Math.random() * 2000), dirty: true, time: Tick.current, atime: Tick.current, animate: false, discon: true};
       return gobs[id];
     }
 
@@ -51,6 +52,10 @@ var Gob = (function() {
     function numFrames(id) {
       var gob = gobs[id];
       var sprite = Sprites.spritedictionary[gob.spriteid];
+      if (!sprite) {
+        // go looking for non-sprite sheet version
+        sprite = Sprites.spritedictionary[gob.spriteid+"0"];
+      }
       return sprite.frames;
     }
 
@@ -61,10 +66,15 @@ var Gob = (function() {
       var animating = true;
       var sprite;
       if (!GameFrame.settings.sprite_sheets) {
-        spid += gob.frame;
-        frame = 0;
-        animating = true;
         sprite = Sprites.spritedictionary[spid];
+        if (!sprite) {
+          spid += gob.frame;
+          frame = 0;
+          animating = true;
+          sprite = Sprites.spritedictionary[spid];
+        } else {
+          animating = sprite.frames > 1 ? true : false;
+        }
       } else {
         sprite = Sprites.spritedictionary[spid];
         animating = sprite.frames > 1 ? true : false;
@@ -74,7 +84,6 @@ var Gob = (function() {
         gob.frame++;
       }
       gob.frame = gob.frame % sprite.frames;
-
       var pos = [gob.pos[0] - sprite.width * 0.5, gob.pos[1] - sprite.height * 0.5];
       if (GameFrame.settings.int_snap) {
         pos = [pos[0]|0,pos[1]|0];
@@ -82,7 +91,7 @@ var Gob = (function() {
 
       var retval = {dirty: gob.dirty, animating: animating,
                     pos: pos,
-                    vel: gob.vel, discon: gob.discon,
+                    theta: gob.theta, discon: gob.discon,
                     scale: gob.scale,
                     size: [sprite.width, sprite.height],
                     x: offset[0] * sprite.width,
@@ -110,6 +119,10 @@ var Gob = (function() {
 
       gob.pos[0] += gob.vel[0] * (t - gob.time) * 0.01;
       gob.pos[1] += gob.vel[1] * (t - gob.time) * 0.01;
+
+      if (gob.vel) {
+        gob.theta = Math.atan2(gob.vel[1],gob.vel[0]);
+      }
 
       gob.dirty = true;
       gob.discon = false;
