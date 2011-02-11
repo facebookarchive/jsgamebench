@@ -504,12 +504,12 @@ var Game = (function() {
           obj.dir = Vec.norm(obj.vel);
         }
         var th = thrust[me ? me.state : 0];
-        Gob.addSimple(obj.uuid, th, pos, obj.z ? obj.z : -1000, 0, 2);
+        Gob.addSimple(obj.uuid, th, pos, obj.z ? obj.z : -1000, 0, JSGlobal.lowres ? 1 : 2);
         Gob.gobs[obj.uuid].theta = Math.PI*1.5 - obj.angle;
       } else {
-        var scale = 2;
+        var scale = JSGlobal.lowres ? 1 : 2;
         if (obj.name == 'boom')
-          scale = 4;
+          scale *= 2;
         else if (obj.name == "shot")
           scale = 1;
         Gob.addSimple(obj.uuid, obj.name, pos, obj.z ? obj.z : -1000, parseInt(obj.frame || 0), scale);

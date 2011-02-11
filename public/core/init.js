@@ -88,6 +88,15 @@ var Init = (function() {
     function winresize() {
       Render.setupBrowserSpecific();
 
+      var meta_viewport = document.querySelector("meta[name=viewport]");
+      if (meta_viewport && window.devicePixelRatio >= 2 ) {
+        JSGlobal.lowres = false;
+        meta_viewport.setAttribute('content', 'user-scalable=no, width=device-width, height=device-height, initial-scale=0.5, maximum-scale=0.5');
+      } else if (JSGlobal.mobile) {
+        JSGlobal.lowres = true;
+      }
+
+
       var last_width = JSGlobal.winsize[0];
       var last_height = JSGlobal.winsize[1];
 
