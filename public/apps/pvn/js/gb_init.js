@@ -26,6 +26,9 @@ function game_init(test) {
     GameFrame.updateSettings(test.settings, true);
     GameFrame.setXbyY(test.viewport);
     client_user.game_active = true;
+
+    World.add(Utils.uuidv4(), 'background', [0,0], 0);
+
   });
 
 }
@@ -61,6 +64,9 @@ function init() {
     framepos: [[0, 0]], width: 0, height: 0});
 
   Sprites.add('board_horiz', {url: '/public/apps/pvn/images/board_horiz.png', frames: 1,
+    framepos: [[0, 0]], width: 0, height: 0});
+    
+  Sprites.add('background', {url: '/public/apps/pvn/images/Background.jpg', frames: 1,
     framepos: [[0, 0]], width: 0, height: 0});
 
   setInterval('tick();', 33);
