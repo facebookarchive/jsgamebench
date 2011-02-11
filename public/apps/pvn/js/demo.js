@@ -31,6 +31,8 @@ var cam_pos = [0,0];
       physics.run();
       uw = display.lW / 100;
       uh = display.lH / 100;
+      console.log('JSGlobal.h : ' + JSGlobal.h);
+      World.add(Utils.uuidv4(), 'background', [0,JSGlobal.h - 768], 0);
       FB.Demo.setupWalls();
       FB.Demo.setupWaitingPirates();
       FB.Demo.setupSling();
@@ -198,7 +200,7 @@ var cam_pos = [0,0];
         var pirateDom = FB.Demo.pirate.GetUserData().dom;
         var piratePos = {x: pirateDom.offsetLeft, y: pirateDom.offsetTop};
       } else {
-        piratePos = {x: bv.x * g_scale, y: bv.y * g_scale };
+        piratePos = {x: bv.x * display.getScale(), y: bv.y * display.getScale() };
       }
       var w2 =  v.viewportWidth / 2,
       h2 = v.viewportHeight / 2;

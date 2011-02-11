@@ -1,5 +1,3 @@
-var g_scale;
-
 (function() {
 
   FB.Class('Game.Display', function(dom, dW, dH) {
@@ -13,7 +11,7 @@ var g_scale;
     this.dom.style.height = this.dH + 'px';
 
     this.lW = 50.0; // Use fixed logic width that is suited for physics engine
-    g_scale = this.scale = this.dW / this.lW; //FIXMEBRUCE
+    this.scale = this.dW / this.lW;
     this.lH = this.dH / this.scale;
     this.visuals = [];
     this.useImageCache = false; // Not using image cache code because it does not seem to improve perf yet
@@ -26,6 +24,10 @@ var g_scale;
 
     window.addEventListener('orientationchange', this._orientationchangeCb, false);
   }, {
+
+    getScale: function() {
+      return this.scale;
+    },
 
     destroy: function() {
       window.removeEventListener('orientationchange', this._orientationchangeCb);
@@ -90,6 +92,7 @@ var g_scale;
         gob.pos[1] = visual.y * this.scale - cam_pos[1] - el.height/2;
         gob.theta = visual.angle || 0;
         gob.dirty = true;
+        gob.scale = this.scale / this.lW;
       }
     },
 

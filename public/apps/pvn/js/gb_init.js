@@ -27,11 +27,7 @@ function game_init(test) {
     GameFrame.updateSettings(test.settings, true);
     GameFrame.setXbyY(test.viewport);
     client_user.game_active = true;
-
-    World.add(Utils.uuidv4(), 'background', [0,0], 0);
-
   });
-
 }
 
 function init() {
