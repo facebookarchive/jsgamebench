@@ -42,6 +42,9 @@ var GameFrame = (function() {
           newset.css_transitions = false;
         }
       }
+      if (newset.transform3d && !JSGlobal.threeD) {
+        newset.transform3d = false;
+      }
       if (newset.render_mode == CANVAS_ONLY) {
         newset.css_transitions = false;
       }

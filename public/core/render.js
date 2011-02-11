@@ -23,35 +23,45 @@ var Render = (function() {
 
       if (/chrome/.test(user_agent)) {
         JSGlobal.browser = JSGlobal.CHROME;
+        JSGlobal.threeD = true;
       }
       else if (/webkit/.test(user_agent)) {
         JSGlobal.browser = JSGlobal.WEBKIT;
+        JSGlobal.threeD = true;
       }
       else if (/gecko/.test(user_agent)) {
         JSGlobal.browser = JSGlobal.FIREFOX;
+        JSGlobal.threeD = false;
       }
       else if (/msie 9/.test(user_agent)) {
         JSGlobal.browser = JSGlobal.IE9;
+        JSGlobal.threeD = false;
       }
       else if (/msie/.test(user_agent)) {
         JSGlobal.browser = JSGlobal.IE;
+        JSGlobal.threeD = false;
       }
       else if (/opera/.test(user_agent)) {
         JSGlobal.browser = JSGlobal.OPERA;
+        JSGlobal.threeD = false;
       }
       else {
         JSGlobal.browser = JSGlobal.OTHER;
+        JSGlobal.threeD = false;
       }
 
       if (/iphone/.test(user_agent)) {
+        JSGlobal.threeD = true;
         JSGlobal.mobile = true;
         JSGlobal.os = 'iPhone';
       }
       else if (/ipod/.test(user_agent)) {
+        JSGlobal.threeD = true;
         JSGlobal.mobile = true;
         JSGlobal.os = 'iPod';
       }
       else if (/ipad/.test(user_agent)) {
+        JSGlobal.threeD = true;
         JSGlobal.mobile = true;
         JSGlobal.os = 'iPad';
       }
@@ -60,6 +70,7 @@ var Render = (function() {
       }
       else if (/android/.test(user_agent)) {
         JSGlobal.mobile = true;
+        JSGlobal.threeD = false;
         JSGlobal.os = 'Android';
       }
       else if (/linux/.test(user_agent)) {
