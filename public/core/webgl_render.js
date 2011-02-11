@@ -110,7 +110,6 @@ var WebGLRender = (function() {
       }
 
       var pos = [framedata.pos[0], framedata.pos[1], 0.1];
-      var orient = [Math.cos(framedata.theta), -Math.sin(framedata.theta)];
       var size = [framedata.size[0] * framedata.scale,
                   framedata.size[1] * framedata.scale];
       var texpos = [framedata.x * sprite.imgmulx,
@@ -118,7 +117,7 @@ var WebGLRender = (function() {
       var texsize = [framedata.size[0] * sprite.imgmulx,
                      framedata.size[1] * sprite.imgmuly];
 
-      sprite_context.drawSprite(pos, orient, size,
+      sprite_context.drawSprite(pos, framedata.theta, size,
                                 texpos, texsize, sprite.gltexture);
     }
 

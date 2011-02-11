@@ -23,7 +23,7 @@ var WebGLSprite = (function() {
         uniform:
         {
           sprite_pos : 'vec3',
-          sprite_sizerot : 'vec4',
+          sprite_sizerot : 'vec3',
           sprite_tex_transform : 'vec4',
           screen_dims : 'vec4'
         },
@@ -37,8 +37,8 @@ var WebGLSprite = (function() {
         [
           'void main() {',
           '  vec2 pre_rot = vposition * sprite_sizerot.xy;',
-          '  vec2 dir = normalize(sprite_sizerot.zw);',
-          '  vec2 tdir = vec2(-dir.y, dir.x);',
+          '  vec2 tdir = vec2(sin(sprite_sizerot.z), cos(sprite_sizerot.z));',
+          '  vec2 dir = vec2(tdir.y, -tdir.x);',
           '  gl_Position.x = dot(dir, pre_rot);',
           '  gl_Position.y = dot(tdir, pre_rot);',
           '  gl_Position.xy = (gl_Position.xy + sprite_pos.xy) *',
@@ -135,7 +135,7 @@ var WebGLSprite = (function() {
         }
       };
 
-      sprite_context.drawSprite = function(pos, orient, size,
+      sprite_context.drawSprite = function(pos, theta, size,
                                            texpos, texsize, tex) {
         if (gl.setDrawContext(sprite_context)) {
           // context changed, setup sprite context
@@ -143,7 +143,7 @@ var WebGLSprite = (function() {
         }
 
         sprite_program.sprite_pos(pos);
-        sprite_program.sprite_sizerot(size.concat(orient));
+        sprite_program.sprite_sizerot(size.concat([theta]));
         sprite_program.sprite_tex_transform(texsize.concat(texpos));
 
         if (tex != cur_texture) {
