@@ -31,7 +31,7 @@ var PerfTest = (function() {
 
     function incShip(count, x, y) {
       var sprite = ship_sprites[count % ship_sprites.length];
-      Gob.add(Utils.uuidv4(), sprite, parseInt(Math.random() * 8), [Math.random() * x, Math.random() * y], [Math.random() * 10 + 1, 0], Math.random()*2000);
+      Gob.add(Utils.uuidv4(), sprite, parseInt(Math.random() * 8), [Math.random() * x, Math.random() * y], [Math.random() * 10 + 1, 0], Math.random()*2000, Math.random()+0.5);
     }
 
     function incIShip(count, x, y) {
@@ -40,14 +40,9 @@ var PerfTest = (function() {
       IGob.add(Utils.uuidv4(), sprite, Math.random()*2000, 1, [[Math.random() * x, Math.random() * y]]);
     }
 
-    function incShipScaled(count, x, y) {
-      var sprite = ship_sprites[count % ship_sprites.length];
-      Gob.add(Utils.uuidv4(), sprite, parseInt(Math.random() * 8), [Math.random() * x, Math.random() * y], [Math.random() * 10 + 1, 0], Math.random()*2000, Math.random()*2+0.25);
-    }
-
     function incShipRot(count, x, y) {
       var sprite = ship_sprites[count % ship_sprites.length];
-      Gob.add(Utils.uuidv4(), sprite, parseInt(Math.random() * 8), [Math.random() * x, Math.random() * y], [Math.random() * 10 - 5, Math.random() * 10 - 5]);
+      Gob.add(Utils.uuidv4(), sprite, parseInt(Math.random() * 8), [Math.random() * x, Math.random() * y], [Math.random() * 10 - 5, Math.random() * 10 - 5], Math.random()*2000,Math.random()+0.5);
     }
 
     function incNinja(count, x, y) {
@@ -212,8 +207,7 @@ var PerfTest = (function() {
                    igob: {sp: iship, inc: incIShip, dec: idec, num: 10, nodel:true},
                    ninja: {sp: ninjas, inc: incNinja, num: 15},
                    ninjarot: {sp: ninjas, inc: incNinjaRot, num: 5},
-                   rot: {sp: ship, inc: incShipRot, num: 5},
-                   scale: {sp: ship, inc: incShipScaled, num: 5}};
+                   rot: {sp: ship, inc: incShipRot, num: 5}};
 
     function scrollBackground() {
       Sprites.add('world', {url: '/images/stars.png', frames: 1,

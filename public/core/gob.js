@@ -29,8 +29,8 @@ var Gob = (function() {
       return gobs[id];
     }
 
-    function addSimple(id, spriteid, pos, z, frame) {
-      return add(id, spriteid, frame, pos, [0,0], z, 1);
+    function addSimple(id, spriteid, pos, z, frame, scale) {
+      return add(id, spriteid, frame, pos, [0,0], z, scale ? scale : 1);
     }
 
     function del(id) {

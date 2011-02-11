@@ -173,7 +173,7 @@ var Render = (function() {
                   }
                   DomRender.transformedProp(gobel,
                                             framedata.pos,
-                                            0, 0);
+                                            0, framedata.scale);
                 }
               }
             }
@@ -205,11 +205,11 @@ var Render = (function() {
                 if (GameFrame.settings.transform3d) {
                   DomRender.transformedProp3d(gobel,
                                           framedata.pos,
-                                          0);
+                                              0, framedata.scale);
                 } else {
                   DomRender.transformedProp(gobel,
                                               framedata.pos,
-                                              0);
+                                            0, framedata.scale);
                 }
               }
             }
@@ -226,7 +226,7 @@ var Render = (function() {
                   if (framedata.animating) {
                     gobel = document.createElement('div');
                     gobel.id = id;
-                    gobel.style.cssText = 'position:absolute;overflow:hidden;left:0px;top:0px;width:'+framedata.size[0]*framedata.scale+'px;height:'+framedata.size[1]*framedata.scale+'px;';
+                    gobel.style.cssText = 'position:absolute;overflow:hidden;left:0px;top:0px;width:'+framedata.size[0]+'px;height:'+framedata.size[1]+'px;';
 
                     if (GameFrame.settings.use_div_background) {
                       if (GameFrame.settings.css_keyframe) {
@@ -281,11 +281,11 @@ var Render = (function() {
                   if (GameFrame.settings.transform3d) {
                     DomRender.transformedProp3d(gobel,
                                               [framedata.pos[0]|0,framedata.pos[1]|0],
-                                              framedata.theta, framedata.discon);
+                                                framedata.theta, framedata.scale, framedata.discon);
                   } else {
                     DomRender.transformedProp(gobel,
                                               [framedata.pos[0]|0,framedata.pos[1]|0],
-                                              framedata.theta, framedata.discon);
+                                              framedata.theta, framedata.scale, framedata.discon);
                   }
                 }
                 if (GameFrame.settings.use_div_background) {
@@ -310,8 +310,8 @@ var Render = (function() {
                     drawar.push('<div id="' + id + '" class="spriteholder" ' +
                                 'style="position:absolute;overflow:hidden;' +
                                 DomRender.transformed3d(framedata.pos,
-                                                      [framedata.size[0]*framedata.scale,framedata.size[1]*framedata.scale],
-                                                      framedata.theta) +
+                                                        [framedata.size[0],framedata.size[1]],
+                                                        framedata.theta, framedata.scale) +
                                 'background:url(\'' + framedata.url +
                                 '\');background-position: -' + framedata.x +
                                 'px -' + framedata.y + 'px;"></div>');
@@ -319,8 +319,8 @@ var Render = (function() {
                     drawar.push('<div id="' + id + '" class="spriteholder" ' +
                                 'style="position:absolute;overflow:hidden;' +
                                 DomRender.transformed(framedata.pos,
-                                                      [framedata.size[0]*framedata.scale,framedata.size[1]*framedata.scale],
-                                                      framedata.theta) +
+                                                      [framedata.size[0],framedata.size[1]],
+                                                      framedata.theta,framedata.scale) +
                                 'background:url(\'' + framedata.url +
                                 '\');background-position: -' + framedata.x +
                                 'px -' + framedata.y + 'px;"></div>');
@@ -330,8 +330,8 @@ var Render = (function() {
                     drawar.push('<div id="' + id + '" class="spriteholder" ' +
                                 'style="position:absolute;overflow:hidden;' +
                                 DomRender.transformed3d(framedata.pos,
-                                                      [framedata.size[0]*framedata.scale,framedata.size[1]*framedata.scale],
-                                                      framedata.theta) +
+                                                      [framedata.size[0],framedata.size[1]],
+                                                        framedata.theta, framedata.scale) +
                                 '"><img class="sprite" src="' + framedata.url +
                                 '" style="left:-' + framedata.x +
                                 'px;top:-' + framedata.y + 'px;"></img></div>');
@@ -339,8 +339,8 @@ var Render = (function() {
                     drawar.push('<div id="' + id + '" class="spriteholder" ' +
                                 'style="position:absolute;overflow:hidden;' +
                                 DomRender.transformed(framedata.pos,
-                                                      [framedata.size[0]*framedata.scale,framedata.size[1]*framedata.scale],
-                                                      framedata.theta) +
+                                                      [framedata.size[0],framedata.size[1]],
+                                                      framedata.theta, framedata.scale) +
                                 '"><img class="sprite" src="' + framedata.url +
                                 '" style="left:-' + framedata.x +
                                 'px;top:-' + framedata.y + 'px;"></img></div>');
