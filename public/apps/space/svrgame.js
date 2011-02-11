@@ -57,7 +57,7 @@ var SvrGame = (function() {
       obj.name = 'wall';
       Grid.add(world_grid, obj);
     }
-    for(var i=0;i<50;i++) {
+    for(var i=0;i<30;i++) {
       addAsteroid();
     }
   }
@@ -85,7 +85,7 @@ var SvrGame = (function() {
     var pos = Utils.clone(hit.extent[0]);
     Grid.remove(ent_grid, uuid);
 
-    var obj = { uuid:Utils.uuidv4(), name:'boom', ttl:59, extent:[pos, [100, 100]] };
+    var obj = { uuid:Utils.uuidv4(), name:'boom', ttl:24, extent:[pos, [100, 100]] };
 
     obj = Grid.add(ent_grid, obj);
     live_ents.push(obj);

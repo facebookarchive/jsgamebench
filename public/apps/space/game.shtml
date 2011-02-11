@@ -1,6 +1,6 @@
 <html>
-
   <head>
+    #metatags
     #include '/public/style.include'
     #include 'app_id'
     <script src="http://static.ak.fbcdn.net/connect/en_US/core.debug.js"></script>
