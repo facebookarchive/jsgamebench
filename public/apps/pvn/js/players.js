@@ -5,7 +5,7 @@ FB.provide('UI', {
     settings = settings || {};
     var fn = function() {
       var value =  src[srcPropName] !== undefined ? src[srcPropName] :
-        (settings['default'] !== undefined ? settings['default'] : '');
+        (settings['xdefault'] !== undefined ? settings['xdefault'] : '');
       target[targetPropName] =  value.toString();
     }
 
@@ -108,7 +108,7 @@ FB.provide('Game.Menu', {
       if (player) {
         FB.UI.bind(FB.$('player_name'), 'innerText',
                    player, 'name', {
-                   default: 'Guest'
+                   xdefault: 'Guest'
                    });
 
         FB.UI.bind(FB.$('player_picture'), 'src',
@@ -116,16 +116,16 @@ FB.provide('Game.Menu', {
 
         FB.UI.bind(FB.$('score'), 'innerText',
                    player, 'score', {
-                   default: 0
+                   xdefault: 0
                    });
 
         FB.UI.bind(FB.$('total_score'), 'innerText',
                    player, 'totalScore', {
-                   default: 0
+                   xdefault: 0
                    });
         FB.UI.bind(FB.$('badge_count'), 'innerText',
                    player, 'badgeCount', {
-                   default: 0
+                   xdefault: 0
                    });
         player.subscribe('apprequests', function (requests) {
           var markup = '<div>Requests:</div>';

@@ -24,7 +24,7 @@ var g_scale;
       FB.Game.Display.has3dsupport = this.detect3Dsupport();
     }
 
-    window.addEventListener('orientationchange', this._orientationchangeCb);
+    window.addEventListener('orientationchange', this._orientationchangeCb, false);
   }, {
 
     destroy: function() {

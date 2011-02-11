@@ -28,22 +28,22 @@
   </div>
 
     <script>
-      if (1) FB.init({
-      appId  : fb_app_id,
-      status : true, // check login status
-      cookie : true, // enable cookies to allow the server to access the session
+      FB.init({
+        appId  : fb_app_id,
+        status : true, // check login status
+        cookie : true, // enable cookies to allow the server to access the session
       });
 
       addEventListener("load", function() {
-      init();
-      if (1) setTimeout(function() {
-      window.scrollTo(0, 1);
-      FB.Game.Players.init();
-      FB.Demo.setup();
-      FB.Demo.play();
-      //FB.Game.Menu.init();
-     }, 0);
-      });
+        init();
+        setTimeout(function() {
+          window.scrollTo(0, 1);
+          FB.Game.Players.init();
+          FB.Demo.setup();
+          FB.Demo.play();
+          //FB.Game.Menu.init();
+        }, 0);
+      }, false);
 
     </script>
   </body>

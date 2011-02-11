@@ -21,6 +21,7 @@ function tick() {
 
 function game_init(test) {
   PerfTest.pushTest(function() {
+    GameFrame.settings.offset = 0;
     Init.winresize();
     Gob.delAll();
     GameFrame.updateSettings(test.settings, true);
@@ -35,7 +36,7 @@ function game_init(test) {
 
 function init() {
   Init.reset();
-  client_user.game_active = true;
+//  client_user.game_active = true;
   game_init({viewport: 'fluid', settings: {render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: true, css_transitions: false, css_keyframe: false, sprite_sheets: true, int_snap: true, transform3d:true}, tfps: 30, background: 'world', sprites: 'cute', demo: true, hack: true });
   PerfTest.doAll();
 
