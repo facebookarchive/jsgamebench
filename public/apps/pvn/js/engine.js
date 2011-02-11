@@ -88,7 +88,7 @@ var g_scale;
       gob.pos[0] = visual.x * this.scale - cam_pos[0] - el.width/2;
       gob.pos[1] = visual.y * this.scale - cam_pos[1] - el.height/2;
       
-      gob.angle = visual.angle;
+      gob.theta = visual.angle || 0;
       gob.dirty = true;
     },
   
