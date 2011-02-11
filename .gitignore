@@ -2,4 +2,5 @@
 *.swp
 a.out
 app_secret
+.DS_Store
 

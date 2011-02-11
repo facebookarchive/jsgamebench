@@ -1,0 +1,62 @@
+#viewport {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding:0;
+    margin:0;
+    border:0px solid white;
+    overflow: hidden;
+}
+
+#canvas {
+    padding:0;
+    margin:0;
+    border:0px solid white;
+    top:0px;
+    left:0px;
+    //width: 100%;
+    //height: 100%;
+    width: 200px;
+    height: 400px;
+    position: absolute;
+    //background-image:url('/public/apps/pvn/images/sky.png');
+    //background-size:100%;
+    //background-repeat: no-repeat;
+    overflow: hidden;
+}
+
+#frame_rate {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+
+body {
+//    width: 1000px;
+//    height: 1000px;
+    overflow: hidden;
+    padding:0;
+    margin:0;
+    -webkit-user-select: none;
+}
+
+
+#canvas .visual {
+    position: absolute;
+    background-size:100%;
+    -webkit-background-size: 100%;
+//    background-repeat: no-repeat;
+    overflow: hidden;
+}
+
+div.brick {
+//    background-color: red;
+}
+#canvas div.wall {
+    background-color: black;
+}
+
+div.rubber {
+
+    background-color: black;
+}

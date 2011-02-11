@@ -1,0 +1,34 @@
+#menu, #replay_other_menu {
+    position:absolute;
+    color: black;
+    font-size: large;
+    z-index:50;
+}
+
+#menu input, #replay_other_menu input {
+    font-size: large;
+    height: 20pt;
+    width: 100px;
+    min-width: 200px;
+    margin: 5px;
+
+}
+
+
+#canvas {
+ opacity:0.2;
+}
+
+#menu, #replay_other_menu{
+ display: none;
+}
+
+
+#viewport.play_mode #canvas {
+  opacity: 1.0;
+}
+
+#viewport.menu_mode #menu, #viewport.replay_other_mode #replay_other_menu {
+ display: block;
+}
+
