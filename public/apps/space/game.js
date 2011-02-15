@@ -583,3 +583,4 @@ var Game = (function() {
     return Game;
   })();
 
+Init.setFunctions({app: Game.tick, draw: Render.tick, ui: UI.tick});

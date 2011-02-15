@@ -622,3 +622,5 @@ var cam_pos = [0,0];
 
 
 })();
+
+Init.setFunctions({draw: Render.tick, ui: UI.tick});

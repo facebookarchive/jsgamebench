@@ -22,6 +22,6 @@
 <script type="text/javascript" src="/public/core/webgl_sprite.js"> </script>
 <script type="text/javascript" src="/public/core/webgl_render.js"> </script>
 <script type="text/javascript" src="/public/core/input.js"> </script>
-<script type="text/javascript" src="/public/core/clientcmds.js"> </script>
+<script type="text/javascript" src="/public/core/clientcmd.js"> </script>
 <script type="text/javascript" src="/public/core/init.js"> </script>
 <script type="text/javascript" src="/public/core/xhr.js"> </script>

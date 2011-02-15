@@ -55,6 +55,48 @@ var ClientCmd = (function() {
       last_clock = clock;
     }
 
+    function logPerf(browser, result) {
+      Xhr.toServer({cmd: 'logperf', args: [browser, result]});
+    }
+
+    function perfQuery(query) {
+      Xhr.toServer({cmd: 'perfquery', args: [query]});
+    }
+
+
+    function perfResponse(data) {
+      UI.del('fps');
+      UI.del('perf');
+      UI.addCollection('', 'buttons', {pos: [0, 0]});
+      UI.addButton('buttons', 'perftest', {pos: [5, 5], width: 95, height: 20, text: 'Start Test', command: {cmd: 'startperftest', args: []}});
+      UI.addButton('buttons', 'scrollableddemo', {pos: [110, 5], width: 95, height: 20, text: 'Scroll Demo', command: {cmd: 'scrolldemo', args: []}});
+      UI.addButton('buttons', 'htmldemo', {pos: [215, 5], width: 95, height: 20, text: 'HTML Demo', command: {cmd: 'htmldemo', args: []}});
+      UI.addButton('buttons', 'canvasdemo', {pos: [320, 5], width: 95, height: 20, text: 'Canvas Demo', command: {cmd: 'canvasdemo', args: []}});
+      UI.addButton('buttons', 'webgldemo', {pos: [425, 5], width: 95, height: 20, text: 'WebGL Demo', command: {cmd: 'webgldemo', args: []}});
+      UI.addButton('buttons', 'idemo', {pos: [530, 5], width: 95, height: 20, text: 'iPhone Demo', command: {cmd: 'idemo', args: []}});
+      UI.addButton('buttons', 'rotdemo', {pos: [635, 5], width: 95, height: 20, text: 'Rotate Demo', command: {cmd: 'rotdemo', args: []}});
+      UI.addCollection(null, 'perf', {pos: [100, 50], width: 260});
+      if (JSGlobal.myscore) {
+        UI.addHTML('perf', 'myscore', {pos: [350, 10], width:1000,uiclass: 'perfscore', markup: "Your score is " + JSGlobal.myscore + " sprites!"});
+      }
+      if (data) {
+        for (var i = 0, len = data.length; i < len; i++) {
+          UI.addCollection('perf', 'perfblock' + i, {uiclass: 'perfblock', pos: [0, 82 * i], height: 78, width: 260, command: {cmd:'showdetails', args:[data[i]]}});
+          var b = data[i].browser;
+          var browser = b.match(/(\w+) \d+/);
+          if (browser) {
+            browser = browser[1];
+          } else {
+            browser = b;
+          }
+          UI.addHTML('perfblock' + i, 'browserdet' + i, {pos: [5, 4], uiclass: 'browsername', markup: b});
+          var score = parseInt(data[i].peak);
+          UI.addHTML('perfblock' + i, 'perfscore' + i, {pos: [5, 24], uiclass: 'perfscore', markup: score});
+        }
+      }
+    }
+
+
     var client_cmds = {};
 
     var ClientCmd = {};
@@ -76,6 +118,9 @@ var ClientCmd = (function() {
     install('add', add);
     install('remove', remove);
     install('transform', transform);
+    install('logperf', logPerf);
+    install('perfresp', perfResponse);
+    install('perfquery', perfQuery);
     install('clock', clock);
 
     function exec(cmd) {

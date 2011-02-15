@@ -16,6 +16,42 @@ var Init = (function() {
     var routed = false;
     var app_init_func = 0;
 
+    var setupFunc = null;
+    var commsFunc = null;
+    var appFunc = null;
+    var uiFunc = null;
+    var drawFunc = null;
+    var teardownFunc = null;
+
+    function setFunctions(args) {
+      if (args.setup)
+        setupFunc = args.setup;
+      else
+        setupFunc = function() {};
+
+      if (args.comms)
+        commsFunc = args.comms;
+      else
+        commsFunc = function() {};
+
+      if (args.app)
+        appFunc = args.app;
+      else
+        appFunc = function() {};
+
+      if (args.ui)
+        uiFunc = args.ui;
+      else
+        uiFunc = function() {};
+
+      drawFunc = args.draw;
+
+      if (args.teardown)
+        teardownFunc = args.teardown;
+      else
+        teardownFunc = function() {};
+    }
+
     function quit() {
       Xhr.toServer({cmd: 'logout', args: []});
     }
@@ -38,15 +74,12 @@ var Init = (function() {
     function tick() {
       Tick.tick();
       if (Sprites.fullyLoaded()) {
-        if (!client_user.game_active) {
-          Gob.movegobs(Tick.delta);
-        }
-        Render.tick();
-        Benchmark.tick();
+        appFunc();
+        drawFunc();
       } else {
         Tick.reset();
       }
-      UI.tick();
+      uiFunc();
     }
 
     function reset() {
@@ -54,11 +87,12 @@ var Init = (function() {
       gbel.innerHTML = '';
 
       var path = window.location.pathname;
+
+      commsFunc();
+
       if (app_init_func) {
         !routed && app_init_func();
         routed = true;
-      } else {
-        Xhr.toServer({cmd: 'perfquery', args: [['browser']]});
       }
       GameFrame.setFrame('gamebody', 'gameframe', 'gameframe',
                          {left: JSGlobal.winpos[0],
@@ -122,7 +156,13 @@ var Init = (function() {
     }
 
     function init(init_func) {
-//      console.log('fb app id: ' + fb_app_id);
+      if (!drawFunc) {
+        alert("No draw function set. You need to call Init.setFunctions from your code prior to the page's onload event firing.");
+        return;
+      }
+
+      setupFunc();
+
       app_init_func = init_func;
       if (fb_app_id) {
         if (document.getElementById('fb-root')) {
@@ -144,9 +184,6 @@ var Init = (function() {
         }
       }
       winresize();
-      if (!stand_alone) {
-        Xhr.init();
-      }
       timer_kick_off();
     }
 
@@ -157,5 +194,6 @@ var Init = (function() {
     Init.tick = tick;
     Init.reset = reset;
     Init.hideBar = hideBar;
+    Init.setFunctions = setFunctions;
     return Init;
   })();
