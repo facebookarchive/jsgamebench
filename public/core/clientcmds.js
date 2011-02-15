@@ -13,16 +13,6 @@
 // under the License.
 
 var ClientCmd = (function() {
-    function resetSession() {
-      client_user.unique_id = 0;
-    }
-
-    function startSession(id, app_id) {
-      client_user.unique_id = id;
-      client_user.app_id = app_id;
-      Init.reset();
-    }
-
     function clientTest(a, b) {
 //      console.log('clienttest: ' + [a, b]);
     }
@@ -69,8 +59,6 @@ var ClientCmd = (function() {
       }
     }
 
-    install('resetsession', resetSession);
-    install('startsession', startSession);
     install('clienttest', clientTest);
     install('disconnected', disconnected);
     install('add', add);

@@ -13,6 +13,16 @@
 // under the License.
 
 var Perf = (function() {
+    function resetSession() {
+      client_user.unique_id = 0;
+    }
+
+    function startSession(id, app_id) {
+      client_user.unique_id = id;
+      client_user.app_id = app_id;
+      Init.reset();
+    }
+
     function startPerfTest() {
       PerfTest.init();
       PerfTest.doAll();
@@ -306,7 +316,12 @@ var Perf = (function() {
       }
     }
 
-    function setup() {
+    function init() {
+
+      GameFrame.settings.offset = 30;
+
+      ClientCmd.install('resetsession', resetSession);
+      ClientCmd.install('startsession', startSession);
       ClientCmd.install('startperftest', startPerfTest);
       ClientCmd.install('stopperftest', stopPerfTest);
       ClientCmd.install('canvasdemo', canvasDemo);
@@ -323,13 +338,23 @@ var Perf = (function() {
       ClientCmd.install('perfresp', perfResponse);
       ClientCmd.install('perfquery', perfQuery);
       Xhr.init();
+      Xhr.toServer({cmd: '', args: []});
+      UI.hookUIEvents('gamebody');
     }
 
-    function comms() {
+    function setup() {
       Xhr.toServer({cmd: 'perfquery', args: [['browser']]});
     }
 
     function teardown() {
+      UI.del('fps');
+      UI.del('perf');
+      UI.del('buttons');
+      UI.del('stoptest');
+    }
+
+    function quit() {
+      Xhr.toServer({cmd: 'logout', args: []});
     }
 
     function tick() {
@@ -340,10 +365,11 @@ var Perf = (function() {
     var Perf = {};
     Perf.tick = tick;
     Perf.setup = setup;
-    Perf.comms = comms;
-
+    Perf.init = init;
+    Perf.teardown = teardown;
+    Perf.quit = quit;
     return Perf;
   })();
 
-Init.setFunctions({app: Perf.tick, draw: Render.tick, ui: UI.tick, setup: Perf.setup, comms: Perf.comms, teardown: Perf.teardown});
+Init.setFunctions({app: Perf.tick, draw: Render.tick, ui: UI.tick, setup: Perf.setup, init: Perf.init, teardown: Perf.teardown, quit: Perf.quit});
 

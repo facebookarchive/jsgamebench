@@ -32,7 +32,7 @@ var GameFrame = (function() {
       transform3d: true,
       webgl_blended_canvas: false,
       webgl_debug: false,
-      offset: 30,
+      offset: 0,
       viewport: 'fluid'
     };
 

@@ -13,26 +13,24 @@
 // under the License.
 
 var Init = (function() {
-    var routed = false;
-    var app_init_func = 0;
-
+    var initFunc = null;
     var setupFunc = null;
-    var commsFunc = null;
     var appFunc = null;
     var uiFunc = null;
     var drawFunc = null;
     var teardownFunc = null;
+    var quitFunc = null;
 
     function setFunctions(args) {
+      if (args.init)
+        initFunc = args.init;
+      else
+        initFunc = function() {};
+
       if (args.setup)
         setupFunc = args.setup;
       else
         setupFunc = function() {};
-
-      if (args.comms)
-        commsFunc = args.comms;
-      else
-        commsFunc = function() {};
 
       if (args.app)
         appFunc = args.app;
@@ -50,10 +48,15 @@ var Init = (function() {
         teardownFunc = args.teardown;
       else
         teardownFunc = function() {};
+
+      if (args.quit)
+        quitFunc = args.quit;
+      else
+        quitFunc = function() {};
     }
 
     function quit() {
-      Xhr.toServer({cmd: 'logout', args: []});
+      quitFunc();
     }
 
     function delatedStart() {
@@ -63,12 +66,7 @@ var Init = (function() {
       JSGlobal.TIMERS_LAUNCHED = true;
       Render.setupBrowserSpecific();
       setInterval('Init.tick();', 1);
-      Xhr.toServer({cmd: '', args: []});
-      UI.hookUIEvents('gamebody');
-
-      if (stand_alone) {
-        Game.initStandalone();
-      }
+      initFunc();
     }
 
     function tick() {
@@ -83,17 +81,15 @@ var Init = (function() {
     }
 
     function reset() {
+      teardownFunc();
+
       var gbel = document.getElementById('gamebody');
       gbel.innerHTML = '';
 
       var path = window.location.pathname;
 
-      commsFunc();
+      setupFunc();
 
-      if (app_init_func) {
-        !routed && app_init_func();
-        routed = true;
-      }
       GameFrame.setFrame('gamebody', 'gameframe', 'gameframe',
                          {left: JSGlobal.winpos[0],
                              top: JSGlobal.winpos[1],
@@ -155,15 +151,12 @@ var Init = (function() {
       GameFrame.setXbyY();
     }
 
-    function init(init_func) {
+    function init() {
       if (!drawFunc) {
         alert("No draw function set. You need to call Init.setFunctions from your code prior to the page's onload event firing.");
         return;
       }
 
-      setupFunc();
-
-      app_init_func = init_func;
       if (fb_app_id) {
         if (document.getElementById('fb-root')) {
           FB.init({
