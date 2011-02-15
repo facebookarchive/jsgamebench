@@ -7,6 +7,8 @@
     <script src="http://static.ak.fbcdn.net/connect/en_US/core.debug.js"></script>
     <script type="text/javascript">var stand_alone=1; var fb_app_id=159268034120947;</script>
     #include '/public/core/core.include'
+    <script type="text/javascript" src="/public/apps/perf/benchmark.js"> </script>
+    <script type="text/javascript" src="/public/apps/perf/perftest.js"> </script>
 
     <script type="text/javascript" src="/public/apps/pvn/js/box2d.js"></script>
     <script type="text/javascript" src="/public/apps/pvn/js/framerate.js"></script>

@@ -20,7 +20,7 @@ var cam_pos = [0,0];
   var b2Vec2 = Box2D.Common.Math.b2Vec2;
 
   FB.provide('Demo', {
-    
+
     // Default pictures to use
     defaultPic: 'images/facebook-logo.gif',
     friends: null,
@@ -32,7 +32,7 @@ var cam_pos = [0,0];
     fireTime: 0,
     inReplay: false,
     setup: function() {
-      
+
 
       scrollTo(0,1);
     },
@@ -158,7 +158,7 @@ var cam_pos = [0,0];
             handled = true;
           } else if (FB.Demo.action.type == 'scroll') {
             FB.Demo.setCanvasViewPort({
-              x:  FB.Demo.action.direction <= 0 ? 0 : 
+              x:  FB.Demo.action.direction <= 0 ? 0 :
                 FB.$('canvas').offsetWidth - FB.$('gameviewport').offsetWidth,
               duration: Math.min(2, 6 / Math.abs(FB.Demo.action.direction))
             });
@@ -196,7 +196,7 @@ var cam_pos = [0,0];
           // Fake a random score
           FB.Game.Players.curPlayer.setProperty('score', Math.round(Math.random() * 100));
           FB.Game.Players.curPlayer.setProperty('replayData', {
-            mouseTarget: {x: FB.Demo.targetPosition.x, 
+            mouseTarget: {x: FB.Demo.targetPosition.x,
                           y: FB.Demo.targetPosition.y
                          }
           });
@@ -220,7 +220,7 @@ var cam_pos = [0,0];
       h2 = v.viewportHeight / 2;
       var cv = {x: v.x + w2,
                 y: v.y + h2};
-     
+
       var d = {x: piratePos.x - cv.x,
                y: piratePos.y - cv.y};
 
@@ -258,13 +258,13 @@ var cam_pos = [0,0];
       var viewport = FB.$('gameviewport');
       var c = FB.$('canvas');
       return {
-        x: -c.offsetLeft, 
+        x: -c.offsetLeft,
         y: -c.offsetTop,
         viewportWidth: viewport.offsetWidth,
         viewportHeight: viewport.offsetHeight,
         width: c.offsetWidth,
         height: c.offsetHeight,
-        
+
       };
     },
 
@@ -275,7 +275,7 @@ var cam_pos = [0,0];
       var changed = false;
       if (setting.x !== undefined) {
         var x = Math.max(Math.min(curViewPort.width - curViewPort.viewportWidth,
-                                  setting.x), 0); 
+                                  setting.x), 0);
        // x = setting.x;
         if (x != curViewPort.x) {
           canvas.style.left = -x + 'px';
@@ -285,7 +285,7 @@ var cam_pos = [0,0];
       }
 
       if (setting.y !== undefined) {
-        var y = Math.max(Math.min(curViewPort.height - curViewPort.viewportHeight, 
+        var y = Math.max(Math.min(curViewPort.height - curViewPort.viewportHeight,
                                     setting.y), 0);
       //  y = setting.y;
         if (y != curViewPort.y) {
@@ -312,7 +312,7 @@ var cam_pos = [0,0];
       var l = Math.abs(bodyPos.Length());
       var diff = l - hitDistance;
       return diff < 0;
-      
+
     },
 
     _preSolve: function(contact, oldManifold) {
@@ -324,7 +324,7 @@ var cam_pos = [0,0];
         // But let loose the pirate if it made the contact
         // and the user is firing
         if (bA.isPirate || bB.isPirate) {
-          // For some reason the preSolve fires it seems even when the pirate is being 
+          // For some reason the preSolve fires it seems even when the pirate is being
           // plled quite far from the anchor. Double check that the two bodies are
           // indeed close
           var vec = bA.GetPosition().Copy();
@@ -338,7 +338,7 @@ var cam_pos = [0,0];
 			      FB.Demo._elastic = null;
 		      }
         }
-      } 
+      }
     },
 
     _clearJoint: function() {
@@ -380,7 +380,7 @@ var cam_pos = [0,0];
 
       info.shape = anchorShapeInfo;
       var visual = display.addVisual({
-        x:  point.x, 
+        x:  point.x,
         y:  point.y,
         angle: 0,
       });
@@ -401,7 +401,7 @@ var cam_pos = [0,0];
       };
 
       var barrelChassis = display.addVisual({
-        x: x, 
+        x: x,
         y: y+1,
         width: width,
         height: height,
@@ -459,7 +459,7 @@ var cam_pos = [0,0];
 
       info.shape = pirateShapeInfo;
       var visual = display.addVisual({
-        x: point.x, 
+        x: point.x,
         y: point.y,
         angle: 0,
         //imgSrc: 'images/in_sling_pirate.png',
@@ -507,15 +507,15 @@ var cam_pos = [0,0];
       var horzInfo = FB.copy({shape: horzShapeInfo}, info);
       var shortHorzInfo = FB.copy({shape: shortHorzShapeInfo}, info);
       var pigInfo = FB.copy({shape: pigShapeInfo}, info);
-      
+
 
       vertPic = 'images/board_vert.png';
       horzPic = 'images/board_horiz.png';
-      
+
       var dx = display.lW - uh * 80;
       var lh = display.lH;
       physics.addBody(display.addVisual({
-        x:  dx, 
+        x:  dx,
         y:  lh - vertShapeInfo.height / 2,
         angle: 0,
         imgSrc: vertPic
@@ -523,15 +523,15 @@ var cam_pos = [0,0];
 
 
       physics.addBody(display.addVisual({
-        x:  dx + horzShapeInfo.width, 
+        x:  dx + horzShapeInfo.width,
         y:  lh - vertShapeInfo.height / 2,
         angle: 0,
         imgSrc: vertPic
       }), vertInfo);
 
-      
+
       var hz1 = {
-        x:  dx + horzShapeInfo.width / 2, 
+        x:  dx + horzShapeInfo.width / 2,
         y:  lh - (vertShapeInfo.height + horzShapeInfo.height / 2),
         angle: 0,
         imgSrc: horzPic
@@ -541,7 +541,7 @@ var cam_pos = [0,0];
       dx += uh * 5;
       var dy = vertShapeInfo.height + horzShapeInfo.height;
       physics.addBody(display.addVisual({
-        x:  dx, 
+        x:  dx,
         y:  lh - (vertShapeInfo.height / 2 + dy),
         angle: 0,
         imgSrc: vertPic
@@ -549,7 +549,7 @@ var cam_pos = [0,0];
 
 
       physics.addBody(display.addVisual({
-        x:  dx + shortHorzShapeInfo.width, 
+        x:  dx + shortHorzShapeInfo.width,
         y:  lh - (vertShapeInfo.height / 2 + dy),
         angle: 0,
         imgSrc: vertPic
@@ -558,28 +558,28 @@ var cam_pos = [0,0];
       pigPic = 'images/ninja1.png';
 
       physics.addBody(display.addVisual({
-        x:  dx + shortHorzShapeInfo.width / 2, 
+        x:  dx + shortHorzShapeInfo.width / 2,
         y:  lh - (pigShapeInfo.radius + dy),
         angle: 0,
         imgSrc: pigPic
       }), pigInfo);
 
-      
+
 
       physics.addBody(display.addVisual({
-        x:  dx + shortHorzShapeInfo.width / 2, 
+        x:  dx + shortHorzShapeInfo.width / 2,
         y:  lh - (shortHorzShapeInfo.height / 2 + dy + vertShapeInfo.height),
         angle: 0,
         imgSrc: horzPic
       }), shortHorzInfo);
 
       physics.addBody(display.addVisual({
-        x:  dx + shortHorzShapeInfo.width / 2, 
+        x:  dx + shortHorzShapeInfo.width / 2,
         y:  lh - (pigShapeInfo.radius + dy + vertShapeInfo.height + shortHorzShapeInfo.height),
         angle: 0,
         imgSrc: pigPic
       }), pigInfo);
-      
+
     },
 
     setupWalls: function() {
@@ -620,5 +620,5 @@ var cam_pos = [0,0];
 
   });
 
-  
+
 })();

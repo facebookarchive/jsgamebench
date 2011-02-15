@@ -25,6 +25,3 @@
 <script type="text/javascript" src="/public/core/clientcmds.js"> </script>
 <script type="text/javascript" src="/public/core/init.js"> </script>
 <script type="text/javascript" src="/public/core/xhr.js"> </script>
-<script type="text/javascript" src="/public/core/benchmark.js"> </script>
-<script type="text/javascript" src="/public/core/perftest.js"> </script>
-<script type="text/javascript" src="/public/core/fbmark.js"> </script>
