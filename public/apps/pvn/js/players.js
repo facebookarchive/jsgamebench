@@ -20,7 +20,9 @@ FB.provide('UI', {
     var fn = function() {
       var value =  src[srcPropName] !== undefined ? src[srcPropName] :
         (settings['xdefault'] !== undefined ? settings['xdefault'] : '');
-      target[targetPropName] =  value.toString();
+      if (target) {
+        target[targetPropName] =  value.toString();
+      }
     }
 
     if (FB.Type.isType(src, FB.Obj)) {
@@ -288,3 +290,27 @@ FB.provide('Game.Menu', {
     });
   }
 });
+
+function storageTest() {
+  var curr = localStorage['test'] = parseInt(localStorage['test'] || 0) + 1;
+  console.log('curr: ' + curr);
+};
+
+
+function checkUser() {
+  var curPlayer = 0;
+  var session = FB.getSession();
+  if (session) {
+    var uid = session.uid;
+    if (!uid) {
+      // Hack to parse session from access token
+      uid = /-(.*)\|/.exec(session.access_token)[1];
+    }
+
+    curPlayer = new FB.Game.Player(uid);
+  } else {
+    curPlayer = null;
+  }
+  console.log('currPlayer: ' + JSON.stringify(curPlayer));
+}
+

@@ -29,6 +29,7 @@ function tick() {
     UI.addButton('gameOpts', 'publish', {pos: [180, 5], width: 75, height: 20, text: 'Publish', command: {cmd: 'fbLoginUiCb', args: [0]}});
     UI.addButton('gameOpts', 'gift', {pos: [265, 5], width: 75, height: 20, text: 'Gift', command: {cmd: 'fbLoginUiCb', args: [0]}});
   }
+  FB.Demo.tick();
   UI.tick();
   Render.tick();
 }
@@ -41,6 +42,7 @@ function game_init(test) {
     GameFrame.updateSettings(test.settings, true);
     GameFrame.setXbyY(test.viewport);
     client_user.game_active = true;
+    UI.hookUIEvents('gamebody');
   });
 }
 
