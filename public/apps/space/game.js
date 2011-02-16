@@ -367,12 +367,6 @@ var Game = (function() {
     if (client_user.fb_logged_in) {
       func && func();
     } else {
-      ClientCmd.install('fbLoginUiCb',fbLoginUiCb);
-      UI.addCollection('', 'fblogin', {pos: [0, 0]});
-      UI.addHTML('fblogin', 'bkgrnd', {pos: [5, 24], uiclass: 'fblogin', markup: "Login to FB?"});
-      UI.addButton('fblogin', 'loginOk', {pos: [15, 55], width: 75, height: 20, text: 'Login', command: {cmd: 'fbLoginUiCb', args: [func]}});
-      UI.addButton('fblogin', 'loginCancel', {pos: [105, 55], width: 75, height: 20, text: 'Cancel', command: {cmd: 'fbLoginUiCb', args: [0]}});
-
       function fbLoginUiCb(func) {
         UI.del('fblogin');
         if (!func) {
@@ -387,6 +381,12 @@ var Game = (function() {
           }
         }, {perms:'read_stream,publish_stream,user_about_me'} );
       }
+      ClientCmd.install('fbLoginUiCb',fbLoginUiCb);
+      UI.addCollection('', 'fblogin', {pos: [0, 0]});
+      UI.addHTML('fblogin', 'bkgrnd', {pos: [5, 24], uiclass: 'fblogin', markup: "Login to FB?"});
+      UI.addButton('fblogin', 'loginOk', {pos: [15, 55], width: 75, height: 20, text: 'Login', command: {cmd: 'fbLoginUiCb', args: [func]}});
+      UI.addButton('fblogin', 'loginCancel', {pos: [105, 55], width: 75, height: 20, text: 'Cancel', command: {cmd: 'fbLoginUiCb', args: [0]}});
+
     }
   }
 
