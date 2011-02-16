@@ -355,8 +355,6 @@ var PerfTest = (function() {
     }
 
     PerfTest.stop = function() {
-      UI.del('perf');
-      UI.del('stoptest');
       Gob.delAll();
       IGob.delAll();
       World.reset();

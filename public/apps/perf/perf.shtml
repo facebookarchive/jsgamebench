@@ -1,0 +1,21 @@
+<html>
+  <head>
+    #metatags
+    #include 'app_id'
+    #include '/public/style.include'
+    #include '/public/core/core.include'
+    <script type="text/javascript" src="/public/apps/perf/benchmark.js"> </script>
+    <script type="text/javascript" src="/public/apps/perf/perftest.js"> </script>
+    <script type="text/javascript" src="/public/apps/perf/fbmark.js"> </script>
+    <script type="text/javascript" src="/public/apps/perf/perf.js"> </script>
+  </head>
+
+  <body id="gamebody"
+    style="overflow:hidden;"
+    onresize="Init.winresize()"
+    onload="Init.init()"
+    onorientationchange="Init.winresize();"
+    onunload="Init.quit()">
+  </body>
+
+</html>

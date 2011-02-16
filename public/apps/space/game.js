@@ -556,15 +556,14 @@ var Game = (function() {
     }
 
     function initStandalone() {
-      Init.reset();
+      UI.hookUIEvents('gamebody');
       SvrGame.init(client_user.grids);
+      Init.reset();
     }
 
     function playGame() {
       UI.del('buttons');
       UI.del('perf');
-      GameFrame.settings.offset = 0;
-
       if (window.location.pathname.match(/html/)) {
         Game.init({viewport: 'fluid', settings: {render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: true, css_transitions: false, css_keyframe: false, sprite_sheets: false, int_snap: true, transform3d:true}, tfps: 30, background: 'world', sprites: 'cute', demo: true, hack: true });
       } else {
@@ -583,3 +582,4 @@ var Game = (function() {
     return Game;
   })();
 
+Init.setFunctions({app: Game.tick, draw: Render.tick, ui: UI.tick, setup: Game.playGame, init: Game.initStandalone});

@@ -7,6 +7,8 @@
 
     <script type="text/javascript">var stand_alone=true;</script>
     #include '/public/core/core.include'
+    <script type="text/javascript" src="/public/apps/perf/benchmark.js"> </script>
+    <script type="text/javascript" src="/public/apps/perf/perftest.js"> </script>
     <script type="text/javascript" src="/public/apps/space/game.js"> </script>
     <script type="text/javascript" src="/public/apps/space/svrgame.js"> </script>
   </head>
