@@ -51,7 +51,7 @@ var Benchmark = (function() {
     }
 
     function tick() {
-      if (runtest && inc && dec && (frame++ > 10)) {
+      if (runtest && inc && dec && (frame++ > 5)) {
         frame = 0;
         var fps = Tick.fps();
         if (Tick.slowframe) {

@@ -327,7 +327,7 @@ var PerfTest = (function() {
       tests = [];
       current = 0;
       var spar = {'aa':1, 'rot':1};
-      var vp = 'normal';
+      var vp = 'fluid';
       var bg = 'world';
       var is = true;
 
@@ -339,7 +339,7 @@ var PerfTest = (function() {
             }
           }
           if (JSGlobal.browser == JSGlobal.CHROME || JSGlobal.browser == JSGlobal.WEBKIT) {
-            if (JSGlobal.mobile) {
+            if (0 && JSGlobal.ios) {
               addTest({viewport: vp, settings: {render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: true,  css_transitions: true, sprite_sheets: true, css_keyframe: true, int_snap: is ? true : false, transform3d: t3 ? true : false}, tfps: 30, background: bg, sprites: sp });
               addTest({viewport: vp, settings: {render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: false, css_transitions: true, sprite_sheets: true, css_keyframe: true, int_snap: is ? true : false, transform3d: t3 ? true : false}, tfps: 30, background: bg, sprites: sp });
             }
@@ -351,7 +351,7 @@ var PerfTest = (function() {
           addTest({viewport: vp, settings: {render_mode: GameFrame.CANVAS_ONLY, canvas_background: false, sprite_sheets: false, int_snap: is ? true : false}, tfps: 30, background: bg, sprites: sp });
           addTest({viewport: vp, settings: {render_mode: GameFrame.CANVAS_ONLY, canvas_background: true, sprite_sheets: false, int_snap: is ? true : false}, tfps: 30, background: bg, sprites: sp });
         }
-        if (WebGLUtil.isSupported()) {
+        if (!JSGlobal.mobile && WebGLUtil.isSupported()) {
           addTest({viewport: vp, settings: {render_mode: GameFrame.WEBGL, webgl_blended_canvas: false, sprite_sheets: false, int_snap: false}, tfps: 30, background: bg, sprites: sp });
           addTest({viewport: vp, settings: {render_mode: GameFrame.WEBGL, webgl_blended_canvas: false, sprite_sheets: true, int_snap: false}, tfps: 30, background: bg, sprites: sp });
           addTest({viewport: vp, settings: {render_mode: GameFrame.WEBGL, webgl_blended_canvas: true, sprite_sheets: false, int_snap: false}, tfps: 30, background: bg, sprites: sp });
@@ -388,6 +388,7 @@ var PerfTest = (function() {
       } else {
         var result = FBmark.peak();
         JSGlobal.myscore = parseInt(result.score);
+        alert("Your score was " + JSGlobal.myscore + " sprites!");
         ClientCmd.logperf(JSGlobal.browser_version, result);
         FBmark.reset();
         PerfTest.stop();

@@ -272,9 +272,9 @@ var Perf = (function() {
       UI.del('buttons');
       UI.del('perf');
       if (JSGlobal.os == "Android") {
-        UI.addScroll('', 'scroll', {pos: [0,82], width: 640, height: 350, sheight: 110, x: 10, y: 200});
+        UI.addScroll('', 'scroll', {pos: [0,82], width: 400, height: 600, sheight: 110, x: 10, y: 200});
       } else {
-        UI.addScroll('', 'scroll', {pos: [0,82], width: 640, height: 700, sheight: 110, x: 10, y: 200});
+        UI.addScroll('', 'scroll', {pos: [0,82], width: 400, height: 600, sheight: 110, x: 10, y: 200});
       }
     }
 
@@ -316,7 +316,7 @@ var Perf = (function() {
       UI.addButton('buttons', 'perftest', {pos: [5, 5], width: 95, height: 40, text: 'Start Test', command: {cmd: 'startperftest', args: []}});
       UI.addButton('buttons', 'htmldemo', {pos: [110, 5], width: 95, height: 40, text: 'HTML Demo', command: {cmd: 'htmldemo', args: []}});
       UI.addButton('buttons', 'canvasdemo', {pos: [215, 5], width: 95, height: 40, text: 'Canvas Demo', command: {cmd: 'canvasdemo', args: []}});
-      UI.addButton('buttons', 'scrollableddemo', {pos: [310, 5], width: 95, height: 40, text: 'Scroll Demo', command: {cmd: 'scrolldemo', args: []}});
+      UI.addButton('buttons', 'scrollableddemo', {pos: [320, 5], width: 95, height: 40, text: 'Scroll Demo', command: {cmd: 'scrolldemo', args: []}});
       UI.addButton('buttons', 'webgldemo', {pos: [425, 5], width: 95, height: 40, text: 'WebGL Demo', command: {cmd: 'webgldemo', args: []}});
       UI.addButton('buttons', 'idemo', {pos: [530, 5], width: 95, height: 40, text: 'iPhone Demo', command: {cmd: 'idemo', args: []}});
       UI.addButton('buttons', 'rotdemo', {pos: [635, 5], width: 95, height: 40, text: 'Rotate Demo', command: {cmd: 'rotdemo', args: []}});

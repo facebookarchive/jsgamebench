@@ -20,6 +20,7 @@ var Render = (function() {
       var user_agent = navigator.userAgent.toLowerCase();
 
       JSGlobal.mobile = false;
+      JSGlobal.ios = false;
 
       if (/chrome/.test(user_agent)) {
         JSGlobal.browser = JSGlobal.CHROME;
@@ -53,6 +54,7 @@ var Render = (function() {
       if (/iphone/.test(user_agent)) {
         JSGlobal.threeD = true;
         JSGlobal.mobile = true;
+        JSGlobal.ios = true;
         JSGlobal.os = 'iPhone';
       }
       else if (/ipod/.test(user_agent)) {
@@ -63,6 +65,7 @@ var Render = (function() {
       else if (/ipad/.test(user_agent)) {
         JSGlobal.threeD = true;
         JSGlobal.mobile = true;
+        JSGlobal.ios = true;
         JSGlobal.os = 'iPad';
       }
       else if (/os x/.test(user_agent)) {
