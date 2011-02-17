@@ -1,0 +1,9 @@
+.playerScore {
+  height: 20px;
+  width: 400px;
+  border-top: 1px solid #e2e2e2;
+  background: #000088;
+  color: #f22200;
+  font-size:16px;
+  overflow: hidden;
+}

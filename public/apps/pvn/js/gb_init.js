@@ -21,13 +21,18 @@ function tick() {
   if (!added) {
     added = 1;
     ClientCmd.install('playGame',FB.Demo.play);
+    ClientCmd.install('publishStory',Publish.publishStory);
+    ClientCmd.install('sendRequest',Publish.sendRequest);
+    ClientCmd.install('replay',FB.Demo.replay);
 
     UI.addCollection('', 'gameOpts', {pos: [0, 0]});
-  //  UI.addHTML('gameOpts', 'bkgrnd', {pos: [5, 24], uiclass: 'fblogin', markup: "Game Options"});
-    UI.addButton('gameOpts', 'play', {pos: [10, 5], width: 75, height: 20, text: 'Play', command: {cmd: 'playGame', args: []}});
-    UI.addButton('gameOpts', 'rewind', {pos: [95, 5], width: 75, height: 20, text: 'Rewind', command: {cmd: 'fbLoginUiCb', args: [0]}});
-    UI.addButton('gameOpts', 'publish', {pos: [180, 5], width: 75, height: 20, text: 'Publish', command: {cmd: 'fbLoginUiCb', args: [0]}});
-    UI.addButton('gameOpts', 'gift', {pos: [265, 5], width: 75, height: 20, text: 'Gift', command: {cmd: 'fbLoginUiCb', args: [0]}});
+    UI.addButton('gameOpts', 'play', {pos: [10, 5], width: 75, height: 20, text: 'Reset', command: {cmd: 'playGame'}});
+    UI.addButton('gameOpts', 'replay', {pos: [95, 5], width: 75, height: 20, text: 'Replay', command: {cmd: 'replay'}});
+    UI.addButton('gameOpts', 'publish', {pos: [180, 5], width: 75, height: 20, text: 'Publish', command: {cmd: 'publishStory'}});
+    UI.addButton('gameOpts', 'gift', {pos: [265, 5], width: 75, height: 20, text: 'Gift', command: {cmd: 'sendRequest'}});
+
+    FB.Demo.play();
+    Publish.checkReplayUrl();
   }
   FB.Demo.tick();
   UI.tick();
@@ -46,47 +51,24 @@ function game_init(test) {
   });
 }
 
+function loadImageList(path,list) {
+  for(var i=0;i<list.length;i++) {
+    var label = list[i].split('.')[0];
+    var url = path + list[i];
+    Sprites.add(label, {url: url, frames: 1, framepos: [[0, 0]], width: 0, height: 0});
+  }
+}
+
 function init() {
+  Publish.fbInit(fb_app_id);
   Init.reset();
-//  client_user.game_active = true;
   game_init({viewport: 'fluid', settings: {render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: true, css_transitions: false, css_keyframe: false, sprite_sheets: false, int_snap: true, transform3d:true}, tfps: 30, background: 'world', sprites: 'cute', demo: true, hack: true });
   PerfTest.doAll();
-
-  Sprites.add('bouncing_pirate', {url: '/public/apps/pvn/images/bouncing_pirate.png', frames: 1,
-    framepos: [[0, 0]], width: 0, height: 0});
-
-  Sprites.add('in_sling_pirate', {url: '/public/apps/pvn/images/in_sling_pirate.png', frames: 1,
-    framepos: [[0, 0]], width: 0, height: 0});
-
-  Sprites.add('flying_pirate', {url: '/public/apps/pvn/images/flying_pirate.png', frames: 1,
-    framepos: [[0, 0]], width: 0, height: 0});
-
-  Sprites.add('explosion', {url: '/public/apps/pvn/images/explosion.gif', frames: 1,
-    framepos: [[0, 0]], width: 0, height: 0});
-
-  Sprites.add('ninja1', {url: '/public/apps/pvn/images/ninja1.png', frames: 1,
-    framepos: [[0, 0]], width: 0, height: 0});
-
-  Sprites.add('cannon_chassis', {url: '/public/apps/pvn/images/cannon_chassis.png', frames: 1,
-    framepos: [[0, 0]], width: 0, height: 0});
-
-  Sprites.add('cannon_barrel', {url: '/public/apps/pvn/images/cannon_barrel.png', frames: 1,
-    framepos: [[0, 0]], width: 0, height: 0});
-
-  Sprites.add('board_vert', {url: '/public/apps/pvn/images/board_vert.png', frames: 1,
-    framepos: [[0, 0]], width: 0, height: 0});
-
-  Sprites.add('wall', {url: '/public/apps/pvn/images/wall.png', frames: 1,
-    framepos: [[0, 0]], width: 0, height: 0});
-
-  Sprites.add('board_horiz', {url: '/public/apps/pvn/images/board_horiz.png', frames: 1,
-    framepos: [[0, 0]], width: 0, height: 0});
-    
-  Sprites.add('background', {url: '/public/apps/pvn/images/Background.jpg', frames: 1,
-    framepos: [[0, 0]], width: 0, height: 0});
-
+  loadImageList('/public/apps/pvn/images/',[
+    'bouncing_pirate.png','in_sling_pirate.png','flying_pirate.png','explosion.gif',
+    'ninja1.png','cannon_chassis.png','cannon_barrel.png','board_vert.png','wall.png',
+    'board_horiz.png','background.jpg']);
   setInterval('tick();', 33);
-
   PerfTest.pushTest(function() {
     GameFrame.updateSettings(test.settings, true);
     GameFrame.setXbyY(test.viewport);

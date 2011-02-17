@@ -116,6 +116,7 @@
         visual.y = y;
         visual.angle = angle;
       }
+      visual.scoreCb && visual.scoreCb(visual);
       this.visualToGob(visual);
     },
 
@@ -179,7 +180,7 @@
       this.world.Step(1.0 / this.frameRate, this.velocityIterations,
                       this.positionIterations);
       //FB.FramerateMonitor.startFrame();
-      this.display.draw();
+      //this.display.draw();
       this.world.ClearForces();
       //FB.FramerateMonitor.endFrame();
     },
