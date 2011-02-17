@@ -311,7 +311,7 @@ var PerfTest = (function() {
                 nodel: sprites[test.sprites].nodel ? true : false,
                 demo: test.demo});
           if (!test.hack) {
-            UI.addButton('', 'stoptest', {pos: [5, 5], width: 100, height: 20, text: 'Stop Perf Test', command: {cmd: 'stopperftest', args: []}});
+            UI.addButton('', 'stoptest', {pos: [5, 5], width: 100, height: 40, text: 'Stop Perf Test', command: {cmd: 'stopperftest', args: []}});
           }
         });
     }

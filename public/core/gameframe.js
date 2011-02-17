@@ -215,7 +215,7 @@ var GameFrame = (function() {
                             {left: midx - (JSGlobal.w * 0.5),
                                 top: midy - (JSGlobal.h * 0.5),
                              width: JSGlobal.w,
-                             height: JSGlobal.h+1000},
+                             height: JSGlobal.h},
                             '#112');
       layout();
       updateSettings({},true);
