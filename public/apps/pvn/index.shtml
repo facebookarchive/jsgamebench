@@ -4,45 +4,30 @@
     <meta name="viewport"
           content="initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 
+    #include 'app_id'
     <script src="http://static.ak.fbcdn.net/connect/en_US/core.debug.js"></script>
-    <script type="text/javascript">var stand_alone=1; var fb_app_id=159268034120947;</script>
     #include '/public/core/core.include'
     <script type="text/javascript" src="/public/apps/perf/benchmark.js"> </script>
     <script type="text/javascript" src="/public/apps/perf/perftest.js"> </script>
 
     <script type="text/javascript" src="/public/apps/pvn/js/box2d.js"></script>
     <script type="text/javascript" src="/public/apps/pvn/js/engine.js"></script>
+    <script type="text/javascript" src="/public/apps/pvn/js/publish.js"></script>
     <script type="text/javascript" src="/public/apps/pvn/js/demo.js"></script>
-    <script type="text/javascript" src="/public/apps/pvn/js/players.js"></script>
     <script type="text/javascript" src="/public/apps/pvn/js/gb_init.js"></script>
 
     <link rel="stylesheet" type="text/css" href="/public/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/public/apps/pvn/pvn.css">
 
   </head>
-  <body >
+  <body
+    onresize="Init.winresize();"
+    onload="init();"
+    onorientationchange="Init.winresize();"
+    onunload="Init.quit()">
     <div id="fb-root"></div>
-     <div id="gamebody"></div>
-  </div>
+    <div id="gamebody"></div>
 
-    <script>
-      FB.init({
-        appId  : fb_app_id,
-        status : true, // check login status
-        cookie : true, // enable cookies to allow the server to access the session
-      });
 
-      addEventListener("load", function() {
-        init();
-        storageTest();
-        checkUser();
-        setTimeout(function() {
-          window.scrollTo(0, 1);
-         // FB.Game.Players.init();
-          FB.Demo.play();
-          //FB.Game.Menu.init();
-        }, 0);
-      }, false);
-
-    </script>
   </body>
 </html>
