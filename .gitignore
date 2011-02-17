@@ -1,3 +1,4 @@
+cert/*
 *.log
 *.swp
 a.out

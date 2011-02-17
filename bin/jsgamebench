@@ -52,4 +52,15 @@ for(var i=0;i<process.argv.length;i++) {
 sys.puts("reading log file");
 LogProc.start('logs/stats.log',null);
 
-Server.init(Server.serverCallback,production_mode ? 80 : 8081);
+if (production_mode) {
+  if (0) { // one glorious day nodejs will stop rewriting ssl 
+    var privateKey = '' + fs.readFileSync('cert/privatekey.pem');
+    var certificate = '' + fs.readFileSync('cert/certificate.pem');
+    var credentials = crypto.createCredentials({key: privateKey, cert: certificate});
+    Server.init(Server.serverCallback,443,credentials);
+  }
+  Server.init(Server.serverCallback,80,0);
+} else {
+  Server.init(Server.serverCallback,8081,0);
+}
+
