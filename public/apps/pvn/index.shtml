@@ -4,8 +4,8 @@
     <meta name="viewport"
           content="initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 
+    #include 'app_id'
     <script src="http://static.ak.fbcdn.net/connect/en_US/core.debug.js"></script>
-    <script type="text/javascript">var stand_alone=1; var fb_app_id=159268034120947;</script>
     #include '/public/core/core.include'
     <script type="text/javascript" src="/public/apps/perf/benchmark.js"> </script>
     <script type="text/javascript" src="/public/apps/perf/perftest.js"> </script>
