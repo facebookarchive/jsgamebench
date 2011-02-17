@@ -203,7 +203,20 @@ var PerfTest = (function() {
       }
     }
 
+    function ship_by2() {
+      SpriteLoad.rock();
+      SpriteLoad.boom();
+      SpriteLoad.powerup();
+      Sprites.add('ship0', {url: '/images/ship/Test_Ship_Thrust_Frame1_64_00018.png', frames: 2,
+            framepos: [[0, 0]],
+            width: 64, height: 64});
+      Sprites.add('ship1', {url: '/images/ship/Test_Ship_Thrust_Frame2_64_00018.png', frames: 2,
+            framepos: [[0, 0]],
+            width: 64, height: 64});
+    }
+
     var sprites = {aa: {sp: ship, inc: incShip, num: 20},
+                   aahalf: {sp: ship_by2, inc: incShip, num: 1},
                    igob: {sp: iship, inc: incIShip, dec: idec, num: 10, nodel:true},
                    ninja: {sp: ninjas, inc: incNinja, num: 15},
                    ninjarot: {sp: ninjas, inc: incNinjaRot, num: 5},
@@ -298,7 +311,7 @@ var PerfTest = (function() {
                 nodel: sprites[test.sprites].nodel ? true : false,
                 demo: test.demo});
           if (!test.hack) {
-            UI.addButton('', 'stoptest', {pos: [5, 5], width: 100, height: 20, text: 'Stop Perf Test', command: {cmd: 'stopperftest', args: []}});
+            UI.addButton('', 'stoptest', {pos: [5, 5], width: 100, height: 40, text: 'Stop Perf Test', command: {cmd: 'stopperftest', args: []}});
           }
         });
     }
@@ -358,6 +371,7 @@ var PerfTest = (function() {
       Gob.delAll();
       IGob.delAll();
       World.reset();
+      Sprites.deleteAll();
       Benchmark.reset();
       tests = [];
       current = 0;

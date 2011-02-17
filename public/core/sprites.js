@@ -90,6 +90,14 @@ var Sprites = (function() {
       }
     }
 
+    function deleteAll() {
+      spritedictionary = {};
+      spriteid = 1;
+      loading_hash = {};
+      spriteel = null;
+      Sprites.spritedictionary = spritedictionary;
+    }
+
     var Sprites = {};
     Sprites.add = add;
     Sprites.del = del;
@@ -97,5 +105,6 @@ var Sprites = (function() {
     Sprites.fullyLoaded = fullyLoaded;
     Sprites.forEach = forEach;
     Sprites.spritedictionary = spritedictionary;
+    Sprites.deleteAll = deleteAll;
     return Sprites;
   })();

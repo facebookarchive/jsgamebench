@@ -63,7 +63,7 @@ var World = (function() {
 
       var startx = 0;
       var edgex = parseInt(GameFrame.getViewport().dstyle.width / eachx)+2;
-      var edgey = parseInt(GameFrame.getViewport().dstyle.height / eachy)+1;
+      var edgey = parseInt(GameFrame.getViewport().dstyle.height / eachy)+2;
 
       var tilelist = data.tilelist;
       var len = tilelist.length;
@@ -90,7 +90,7 @@ var World = (function() {
       var startx = parseInt(scroll_pos / eachx);
 
       var edgex = parseInt(GameFrame.getViewport().dstyle.width / eachx) + startx + 2;
-      var edgey = parseInt(GameFrame.getViewport().dstyle.height / eachy) + 1;
+      var edgey = parseInt(GameFrame.getViewport().dstyle.height / eachy) + 2;
 
       if (startx != lastx) {
         for (var i = lastx; i < startx; i++) {
@@ -155,7 +155,7 @@ var World = (function() {
       var retval = {dirty: element.dirty,
                     pos: pos,
                     size: [sprite.width, sprite.height],
-                    vel: [1, 0],scale:1,
+                    theta: 0,scale:1,
                     x: 0,
                     y: 0,
                     zindex: sprite.zindex,

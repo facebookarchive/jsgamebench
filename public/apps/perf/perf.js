@@ -184,16 +184,19 @@ var Perf = (function() {
     function canvasDemo() {
       UI.del('buttons');
       UI.del('perf');
+      var sprite = JSGlobal.mobile ? 'aahalf' : 'aa';
+      var fps = JSGlobal.mobile ? 20 : 30;
+
       PerfTest.addTest(
         {
-          viewport: 'fluid_width',
+          viewport: 'fluid',
           settings:
           {
             render_mode: GameFrame.CANVAS_ONLY,
             sprite_sheets: false, int_snap: true,
             canvas_background: false
           },
-          tfps: 30, background: 'world', sprites: 'aa', demo: true
+          tfps: fps, background: 'world', sprites: sprite, demo: true
         });
       PerfTest.doAll();
     }
@@ -201,9 +204,12 @@ var Perf = (function() {
     function htmlDemo() {
       UI.del('buttons');
       UI.del('perf');
+      var sprite = JSGlobal.mobile ? 'aahalf' : 'aa';
+      var fps = JSGlobal.mobile ? 20 : 30;
+
       PerfTest.addTest(
         {
-          viewport: 'fluid_width',
+          viewport: 'fluid',
           settings:
           {
             render_mode: GameFrame.HTML_ONLY,
@@ -211,7 +217,7 @@ var Perf = (function() {
             update_existing: true, use_div_background: true,
             css_transitions: false, css_keyframe: false, transform3d: false
           },
-          tfps: 20, background: 'world', sprites: 'aa', demo: true
+          tfps: fps, background: 'world', sprites: sprite, demo: true
         });
       PerfTest.doAll();
     }
@@ -221,7 +227,7 @@ var Perf = (function() {
       UI.del('perf');
       PerfTest.addTest(
         {
-          viewport: 'fluid_width',
+          viewport: 'fluid',
           settings:
           {
               render_mode: GameFrame.WEBGL,
@@ -236,14 +242,29 @@ var Perf = (function() {
     function iDemo() {
       UI.del('buttons');
       UI.del('perf');
-      PerfTest.addTest({viewport: 'fluid_width', settings: {render_mode: GameFrame.HTML_ONLY, sprite_sheets: true, transform3d:true}, tfps: 20, background: 'world', sprites: 'igob', demo: true });
+      PerfTest.addTest({viewport: 'fluid', settings: {render_mode: GameFrame.HTML_ONLY, sprite_sheets: true, transform3d:true}, tfps: 20, background: 'world', sprites: 'igob', demo: true });
       PerfTest.doAll();
     }
 
     function rotDemo() {
       UI.del('buttons');
       UI.del('perf');
-      PerfTest.addTest({viewport: 'fluid_width', settings: {render_mode: GameFrame.HTML_ONLY, update_existing: false, use_div_background: false, rotate_only: false, css_transitions: false, sprite_sheets: true}, tfps: 30, background: 'world', sprites: 'rot', demo: true });
+      UI.del('buttons');
+      UI.del('perf');
+      var sprite = 'rot';
+
+      PerfTest.addTest(
+        {
+          viewport: 'fluid',
+          settings:
+          {
+            render_mode: GameFrame.HTML_ONLY,
+            sprite_sheets: false, int_snap: true,
+            update_existing: true, use_div_background: true,
+            css_transitions: false, css_keyframe: false, transform3d: false
+          },
+          tfps: 30, background: 'world', sprites: sprite, demo: true
+        });
       PerfTest.doAll();
     }
 
@@ -276,11 +297,15 @@ var Perf = (function() {
     }
 
     function logPerf(browser, result) {
-      Xhr.toServer({cmd: 'logperf', args: [browser, result]});
+      if (!JSGlobal.mobile) {
+        Xhr.toServer({cmd: 'logperf', args: [browser, result]});
+      }
     }
 
     function perfQuery(query) {
-      Xhr.toServer({cmd: 'perfquery', args: [query]});
+      if (!JSGlobal.mobile) {
+        Xhr.toServer({cmd: 'perfquery', args: [query]});
+      }
     }
 
 
@@ -288,16 +313,16 @@ var Perf = (function() {
       UI.del('fps');
       UI.del('perf');
       UI.addCollection('', 'buttons', {pos: [0, 0]});
-      UI.addButton('buttons', 'perftest', {pos: [5, 5], width: 95, height: 20, text: 'Start Test', command: {cmd: 'startperftest', args: []}});
-      UI.addButton('buttons', 'scrollableddemo', {pos: [110, 5], width: 95, height: 20, text: 'Scroll Demo', command: {cmd: 'scrolldemo', args: []}});
-      UI.addButton('buttons', 'htmldemo', {pos: [215, 5], width: 95, height: 20, text: 'HTML Demo', command: {cmd: 'htmldemo', args: []}});
-      UI.addButton('buttons', 'canvasdemo', {pos: [320, 5], width: 95, height: 20, text: 'Canvas Demo', command: {cmd: 'canvasdemo', args: []}});
-      UI.addButton('buttons', 'webgldemo', {pos: [425, 5], width: 95, height: 20, text: 'WebGL Demo', command: {cmd: 'webgldemo', args: []}});
-      UI.addButton('buttons', 'idemo', {pos: [530, 5], width: 95, height: 20, text: 'iPhone Demo', command: {cmd: 'idemo', args: []}});
-      UI.addButton('buttons', 'rotdemo', {pos: [635, 5], width: 95, height: 20, text: 'Rotate Demo', command: {cmd: 'rotdemo', args: []}});
-      UI.addCollection(null, 'perf', {pos: [100, 50], width: 260});
+      UI.addButton('buttons', 'perftest', {pos: [5, 5], width: 95, height: 40, text: 'Start Test', command: {cmd: 'startperftest', args: []}});
+      UI.addButton('buttons', 'htmldemo', {pos: [110, 5], width: 95, height: 40, text: 'HTML Demo', command: {cmd: 'htmldemo', args: []}});
+      UI.addButton('buttons', 'canvasdemo', {pos: [215, 5], width: 95, height: 40, text: 'Canvas Demo', command: {cmd: 'canvasdemo', args: []}});
+      UI.addButton('buttons', 'scrollableddemo', {pos: [310, 5], width: 95, height: 40, text: 'Scroll Demo', command: {cmd: 'scrolldemo', args: []}});
+      UI.addButton('buttons', 'webgldemo', {pos: [425, 5], width: 95, height: 40, text: 'WebGL Demo', command: {cmd: 'webgldemo', args: []}});
+      UI.addButton('buttons', 'idemo', {pos: [530, 5], width: 95, height: 40, text: 'iPhone Demo', command: {cmd: 'idemo', args: []}});
+      UI.addButton('buttons', 'rotdemo', {pos: [635, 5], width: 95, height: 40, text: 'Rotate Demo', command: {cmd: 'rotdemo', args: []}});
+      UI.addCollection(null, 'perf', {pos: [100, 60], width: 260});
       if (JSGlobal.myscore) {
-        UI.addHTML('perf', 'myscore', {pos: [350, 10], width:1000,uiclass: 'perfscore', markup: "Your score is " + JSGlobal.myscore + " sprites!"});
+        UI.addHTML('perf', 'myscore', {pos: [350, 50], width:1000,uiclass: 'perfscore', markup: "Your score is " + JSGlobal.myscore + " sprites!"});
       }
       if (data) {
         for (var i = 0, len = data.length; i < len; i++) {
@@ -317,8 +342,9 @@ var Perf = (function() {
     }
 
     function init() {
+      Render.setupBrowserSpecific();
 
-      GameFrame.settings.offset = 30;
+      GameFrame.settings.offset = 50;
 
       ClientCmd.install('resetsession', resetSession);
       ClientCmd.install('startsession', startSession);
@@ -337,13 +363,19 @@ var Perf = (function() {
       ClientCmd.install('logperf', logPerf);
       ClientCmd.install('perfresp', perfResponse);
       ClientCmd.install('perfquery', perfQuery);
-      Xhr.init();
-      Xhr.toServer({cmd: '', args: []});
       UI.hookUIEvents('gamebody');
+      if (!JSGlobal.mobile) {
+        Xhr.init();
+        Xhr.toServer({cmd: '', args: []});
+      }
     }
 
     function setup() {
-      Xhr.toServer({cmd: 'perfquery', args: [['browser']]});
+      if (!JSGlobal.mobile) {
+        Xhr.toServer({cmd: 'perfquery', args: [['browser']]});
+      } else {
+        ClientCmd.perfresp(null);
+      }
     }
 
     function teardown() {
@@ -354,7 +386,9 @@ var Perf = (function() {
     }
 
     function quit() {
-      Xhr.toServer({cmd: 'logout', args: []});
+      if (!JSGlobal.mobile) {
+        Xhr.toServer({cmd: 'logout', args: []});
+      }
     }
 
     function tick() {

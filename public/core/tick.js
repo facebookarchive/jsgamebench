@@ -36,12 +36,12 @@ var Tick = (function() {
       }
       var name = Benchmark.name;
       if (name) {
-        UI.addHTML(null, 'fps', {uiclass: 'testype ui_html', pos: [5, 35], resetlast: true, markup: 'fps: ' + lastfps + '<br />' +
+        UI.addHTML(null, 'fps', {uiclass: 'testype ui_html', pos: [5, 55], resetlast: true, markup: 'fps: ' + lastfps + '<br />' +
               name.render_mode + ':' + name.sprites + ':' + name.render_path + '<br />' +
               GameFrame.getViewport().dstyle.width + 'x' + GameFrame.getViewport().dstyle.height + '<br />' +
               Benchmark.count()});
       } else {
-        UI.addHTML(null, 'fps', {uiclass: 'testype ui_html', pos: [5, 35], resetlast: true, markup: 'fps: ' + lastfps});
+        UI.addHTML(null, 'fps', {uiclass: 'testype ui_html', pos: [5, 55], resetlast: true, markup: 'fps: ' + lastfps});
       }
     }
 

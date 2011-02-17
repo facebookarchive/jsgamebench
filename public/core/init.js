@@ -67,15 +67,14 @@ var Init = (function() {
       Render.setupBrowserSpecific();
       setInterval('Init.tick();', 1);
       initFunc();
+      reset();
     }
 
     function tick() {
-      Tick.tick();
       if (Sprites.fullyLoaded()) {
+        Tick.tick();
         appFunc();
         drawFunc();
-      } else {
-        Tick.reset();
       }
       uiFunc();
     }
@@ -90,28 +89,14 @@ var Init = (function() {
 
       setupFunc();
 
-      GameFrame.setFrame('gamebody', 'gameframe', 'gameframe',
-                         {left: JSGlobal.winpos[0],
-                             top: JSGlobal.winpos[1],
-                             width: JSGlobal.winsize[0],
-                             height: JSGlobal.winsize[1],
-                             overflow: 'overflow-x:hidden;overflow-y:auto;'},
-                         '#fff');
-
-      GameFrame.setViewport('gameframe', 'gameviewport', 'gameviewport',
-                         {left: JSGlobal.winpos[0],
-                             top: JSGlobal.winpos[1] + GameFrame.settings.offset,
-                             width: JSGlobal.winsize[0],
-                             height: JSGlobal.winsize[1] - GameFrame.settings.offset},
-                            '#fff');
-
-      GameFrame.layout();
-      setTimeout("Init.hideBar();", 100);
+      GameFrame.setXbyY();
     }
 
 
     function hideBar() {
-      window.scrollTo(0,1);
+      setTimeout(function(){scrollTo(0, 10);}, 100);
+      Clientutils.getWindowSize();
+      GameFrame.setXbyY();
     }
 
 
@@ -132,10 +117,6 @@ var Init = (function() {
 
       Clientutils.getWindowSize();
 
-      if (JSGlobal.mobile) {
-        JSGlobal.winsize[1] += 176;
-      }
-
       var width = JSGlobal.winsize[0];
       var height = JSGlobal.winsize[1];
 
@@ -145,10 +126,10 @@ var Init = (function() {
 
       JSGlobal.winpos[0] = 0;
       JSGlobal.winpos[1] = 0;
-      JSGlobal.winsize[0] = width;
-      JSGlobal.winsize[1] = height;
 
       GameFrame.setXbyY();
+      if (JSGlobal.mobile)
+        Init.hideBar();
     }
 
     function init() {
