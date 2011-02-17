@@ -94,7 +94,7 @@ var Init = (function() {
 
 
     function hideBar() {
-      window.scrollTo(0,1);
+      setTimeout(function(){scrollTo(0, 10);}, 100);
       Clientutils.getWindowSize();
       GameFrame.setXbyY();
     }
@@ -129,7 +129,7 @@ var Init = (function() {
 
       GameFrame.setXbyY();
       if (JSGlobal.mobile)
-        setTimeout("Init.hideBar();", 2000);
+        Init.hideBar();
     }
 
     function init() {
