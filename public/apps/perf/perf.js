@@ -186,14 +186,14 @@ var Perf = (function() {
       UI.del('perf');
       PerfTest.addTest(
         {
-          viewport: 'fluid_width',
+          viewport: 'fluid',
           settings:
           {
             render_mode: GameFrame.CANVAS_ONLY,
             sprite_sheets: false, int_snap: true,
             canvas_background: false
           },
-          tfps: 30, background: 'world', sprites: 'aa', demo: true
+          tfps: 30, background: 'world', sprites: 'aahalf', demo: true
         });
       PerfTest.doAll();
     }
@@ -203,7 +203,7 @@ var Perf = (function() {
       UI.del('perf');
       PerfTest.addTest(
         {
-          viewport: 'fluid_width',
+          viewport: 'fluid',
           settings:
           {
             render_mode: GameFrame.HTML_ONLY,
@@ -211,7 +211,7 @@ var Perf = (function() {
             update_existing: true, use_div_background: true,
             css_transitions: false, css_keyframe: false, transform3d: false
           },
-          tfps: 20, background: 'world', sprites: 'aa', demo: true
+          tfps: 30, background: 'world', sprites: 'aahalf', demo: true
         });
       PerfTest.doAll();
     }
@@ -221,7 +221,7 @@ var Perf = (function() {
       UI.del('perf');
       PerfTest.addTest(
         {
-          viewport: 'fluid_width',
+          viewport: 'fluid',
           settings:
           {
               render_mode: GameFrame.WEBGL,
@@ -276,11 +276,15 @@ var Perf = (function() {
     }
 
     function logPerf(browser, result) {
-      Xhr.toServer({cmd: 'logperf', args: [browser, result]});
+      if (!JSGlobal.mobile) {
+        Xhr.toServer({cmd: 'logperf', args: [browser, result]});
+      }
     }
 
     function perfQuery(query) {
-      Xhr.toServer({cmd: 'perfquery', args: [query]});
+      if (!JSGlobal.mobile) {
+        Xhr.toServer({cmd: 'perfquery', args: [query]});
+      }
     }
 
 
@@ -317,6 +321,7 @@ var Perf = (function() {
     }
 
     function init() {
+      Render.setupBrowserSpecific();
 
       GameFrame.settings.offset = 30;
 
@@ -337,13 +342,19 @@ var Perf = (function() {
       ClientCmd.install('logperf', logPerf);
       ClientCmd.install('perfresp', perfResponse);
       ClientCmd.install('perfquery', perfQuery);
-      Xhr.init();
-      Xhr.toServer({cmd: '', args: []});
       UI.hookUIEvents('gamebody');
+      if (!JSGlobal.mobile) {
+        Xhr.init();
+        Xhr.toServer({cmd: '', args: []});
+      }
     }
 
     function setup() {
-      Xhr.toServer({cmd: 'perfquery', args: [['browser']]});
+      if (!JSGlobal.mobile) {
+        Xhr.toServer({cmd: 'perfquery', args: [['browser']]});
+      } else {
+        ClientCmd.perfresp(null);
+      }
     }
 
     function teardown() {
@@ -354,7 +365,9 @@ var Perf = (function() {
     }
 
     function quit() {
-      Xhr.toServer({cmd: 'logout', args: []});
+      if (!JSGlobal.mobile) {
+        Xhr.toServer({cmd: 'logout', args: []});
+      }
     }
 
     function tick() {

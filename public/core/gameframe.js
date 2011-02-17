@@ -199,23 +199,23 @@ var GameFrame = (function() {
       }
       JSGlobal.w = viewports[viewport][0] || JSGlobal.winsize[0];
       JSGlobal.h = viewports[viewport][1] || JSGlobal.winsize[1];
-      JSGlobal.h -= 30;
+      JSGlobal.h -= settings.offset;
 
       setFrame('gamebody', 'gameframe', 'gameframe',
                          {left: JSGlobal.winpos[0],
                              top: JSGlobal.winpos[1],
                              width: JSGlobal.winsize[0],
-                             height: JSGlobal.winsize[1]},
+                             height: JSGlobal.winsize[1]+1000},
                          '#f2f2f2');
 
       var midx = 0.5 * (JSGlobal.winsize[0] - JSGlobal.winpos[0]);
-      var midy = 15 + 0.5 * (JSGlobal.winsize[1] - (JSGlobal.winpos[1]));
+      var midy = settings.offset*0.5 + 0.5 * (JSGlobal.winsize[1] - (JSGlobal.winpos[1]));
 
       setViewport('gameframe', 'gameviewport', 'gameviewport',
                             {left: midx - (JSGlobal.w * 0.5),
                                 top: midy - (JSGlobal.h * 0.5),
                              width: JSGlobal.w,
-                             height: JSGlobal.h},
+                             height: JSGlobal.h+1000},
                             '#112');
       layout();
       updateSettings({},true);

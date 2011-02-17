@@ -55,15 +55,6 @@ var ClientCmd = (function() {
       last_clock = clock;
     }
 
-    function logPerf(browser, result) {
-      Xhr.toServer({cmd: 'logperf', args: [browser, result]});
-    }
-
-    function perfQuery(query) {
-      Xhr.toServer({cmd: 'perfquery', args: [query]});
-    }
-
-
     function perfResponse(data) {
       UI.del('fps');
       UI.del('perf');
@@ -118,9 +109,6 @@ var ClientCmd = (function() {
     install('add', add);
     install('remove', remove);
     install('transform', transform);
-    install('logperf', logPerf);
-    install('perfresp', perfResponse);
-    install('perfquery', perfQuery);
     install('clock', clock);
 
     function exec(cmd) {
