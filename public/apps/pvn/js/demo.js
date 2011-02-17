@@ -130,7 +130,7 @@ var cam_pos = [0,0];
         FB.Demo.fireTime = (new Date()).getTime();
       }
       var visual = FB.Demo.pirate.GetUserData();
-      display.setVisualImage(visual,'images/bouncing_pirate.png'); // in_sling_pirate.png
+      display.setVisualImage(visual,'images/pirate_fire.png'); // in_sling_pirate.png
       console.log('Fire!');
     },
 

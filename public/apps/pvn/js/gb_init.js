@@ -65,7 +65,7 @@ function init() {
   game_init({viewport: 'fluid', settings: {render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: true, css_transitions: false, css_keyframe: false, sprite_sheets: false, int_snap: true, transform3d:true}, tfps: 30, background: 'world', sprites: 'cute', demo: true, hack: true });
   PerfTest.doAll();
   loadImageList('/public/apps/pvn/images/',[
-    'bouncing_pirate.png','in_sling_pirate.png','flying_pirate.png','explosion.gif',
+    'bouncing_pirate.gif','pirate_fire.gif','flying_pirate.png','explosion.gif',
     'ninja1.png','cannon_chassis.png','cannon_barrel.png','board_vert.png','wall.png',
     'board_horiz.png','background.jpg']);
   setInterval('tick();', 33);
