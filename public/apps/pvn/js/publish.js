@@ -181,7 +181,7 @@ var Publish = (function() {
       }
     }
     var str = 'Total: '+player.totalScore + ' Current: '+player.score + ' Badges: ' + player.badgeCount;
-    UI.addHTML('gameOpts', 'score', {pos: [5, 28], width:335, height: 20, uiclass: 'playerScore', markup: str});
+    UI.addHTML('gameOpts', 'score', {pos: [5, 48], width:335, height: 20, uiclass: 'playerScore', markup: str});
     var name = player.name;
     var id = player.id;
     if (FB.Demo.replayData && FB.Demo.replayData.player) {
@@ -193,9 +193,9 @@ var Publish = (function() {
     } else {
       name += ' (Playing)';
     }
-    UI.addHTML('gameOpts', 'name', {pos: [55, 48], width:284, height: 16,  uiclass: '', markup: name});
+    UI.addHTML('gameOpts', 'name', {pos: [55, 68], width:284, height: 16,  uiclass: '', markup: name});
     var markup = id ? '<img src="https://graph.facebook.com/'+id+'/picture"/>' : '';
-    UI.addHTML('gameOpts', 'headshot', {pos: [5, 48], width:50, height:50, uiclass: '', markup: markup });
+    UI.addHTML('gameOpts', 'headshot', {pos: [5, 68], width:50, height:50, uiclass: '', markup: markup });
   }
   
   function clearScore() {

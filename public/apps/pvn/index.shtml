@@ -1,10 +1,9 @@
 <html>
   <head>
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="viewport"
-          content="initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-
+    #metatags
+    #include '/public/style.include'
     #include 'app_id'
+    <link rel="stylesheet" type="text/css" href="/public/apps/pvn/pvn.css">
     <script src="http://static.ak.fbcdn.net/connect/en_US/core.debug.js"></script>
     #include '/public/core/core.include'
     <script type="text/javascript" src="/public/apps/perf/benchmark.js"> </script>
@@ -16,8 +15,6 @@
     <script type="text/javascript" src="/public/apps/pvn/js/demo.js"></script>
     <script type="text/javascript" src="/public/apps/pvn/js/gb_init.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="/public/css/style.css">
-    <link rel="stylesheet" type="text/css" href="/public/apps/pvn/pvn.css">
 
   </head>
   <body
@@ -27,7 +24,5 @@
     onunload="Init.quit()">
     <div id="fb-root"></div>
     <div id="gamebody"></div>
-
-
   </body>
 </html>
