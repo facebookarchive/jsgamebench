@@ -42,10 +42,16 @@ SvrGame = require('../public/apps/space/svrgame');
 
 sys.puts("starting server");
 var production_mode = false;
+var listenPort = 8081;
+
 SvrGame.init();
 for(var i=0;i<process.argv.length;i++) {
   if (process.argv[i] == '-80') {
     production_mode = true;
+    listenPort = 80;
+  } else if (process.argv[i] === '--port' && i+1 < process.argv.length) {
+    i++;
+    listenPort = process.argv[i];
   }
 }
 
@@ -53,14 +59,12 @@ sys.puts("reading log file");
 LogProc.start('logs/stats.log',null);
 
 if (production_mode) {
-  if (0) { // one glorious day nodejs will stop rewriting ssl 
+  if (0) { // one glorious day nodejs will stop rewriting ssl
     var privateKey = '' + fs.readFileSync('cert/privatekey.pem');
     var certificate = '' + fs.readFileSync('cert/certificate.pem');
     var credentials = crypto.createCredentials({key: privateKey, cert: certificate});
     Server.init(Server.serverCallback,443,credentials);
   }
-  Server.init(Server.serverCallback,80,0);
-} else {
-  Server.init(Server.serverCallback,8081,0);
 }
+Server.init(Server.serverCallback,listenPort,0);
 
