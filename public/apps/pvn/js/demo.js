@@ -36,12 +36,14 @@ var cam_pos = [0,0];
       FB.Demo.in_replay = false;
       cam_pos = [0,0];
       console.log('start play');
-      display = new FB.Game.Display(JSGlobal.w * 2, JSGlobal.h);
+      display = new FB.Game.Display(2000 * JSGlobal.h/650, JSGlobal.h);
+      console.log('h: ' + JSGlobal.h);
+//      display = new FB.Game.Display(JSGlobal.w*2,JSGlobal.h);
       physics = new FB.Game.Physics(display);
       physics.run();
       uw = display.lW / 100;
       uh = display.lH / 100;
-      World.add(Utils.uuidv4(), 'background', [0,JSGlobal.h - 768], 0);
+      World.add(Utils.uuidv4(), 'background', [0,win_size[1] - 768], 0);
       FB.Demo.setupWalls();
       FB.Demo.setupWaitingPirates();
       FB.Demo.setupSling();
@@ -100,7 +102,7 @@ var cam_pos = [0,0];
             FB.Demo._mouseJoint.SetTarget(pos);
           } else {
             if (this.last_x != undefined) {
-              var dx = JSGlobal.mouse.x - this.last_x;
+              var dx = this.last_x - JSGlobal.mouse.x;
               this.setCanvasViewPort(cam_pos[0] + dx,undefined);
             }
           }
