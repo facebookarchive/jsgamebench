@@ -43,7 +43,7 @@ var cam_pos = [0,0];
       physics.run();
       uw = display.lW / 100;
       uh = display.lH / 100;
-      World.add(Utils.uuidv4(), 'background', [0,win_size[1] - 768], 0);
+      World.add('bg_idx', 'background', [0,win_size[1] - 768], 0);
       FB.Demo.setupWalls();
       FB.Demo.setupWaitingPirates();
       FB.Demo.setupSling();
@@ -90,7 +90,9 @@ var cam_pos = [0,0];
           JSGlobal.mouse.buttons[0]++;
           FB.Demo.action = null;
           FB.Demo._clearJoint();
-          if (FB.Demo._checkApproximateTouch(FB.Demo.pirate, pos, uh * 20)) {
+          console.log('pos: ' + JSON.stringify(pos));
+          var adjust_pos = {x: pos.x, y:pos.y-2};
+          if (FB.Demo._checkApproximateTouch(FB.Demo.pirate, adjust_pos, uh * 20)) {
             FB.Demo.action = {type: 'aim'};
             console.log('Aim!');
             var piratePos = FB.Demo.pirate.GetPosition();
@@ -304,12 +306,12 @@ var cam_pos = [0,0];
       var vertShapeInfo = {
         type: 'box',
         width: uh * 5,
-        height: uh * 30,
+        height: uh * 24,
       };
 
       var horzShapeInfo = {
         type: 'box',
-        width: uh * 30,
+        width: uh * 25,
         height: uh * 5,
       };
 
@@ -369,7 +371,7 @@ var cam_pos = [0,0];
       dx += uh * 5;
       var dy = vertShapeInfo.height + horzShapeInfo.height;
       physics.addBody(display.addVisual({
-        x:  dx,
+        x:  dx - 0.3,
         y:  lh - (vertShapeInfo.height / 2 + dy),
         angle: 0,
         imgSrc: vertPic
@@ -377,7 +379,7 @@ var cam_pos = [0,0];
 
 
       physics.addBody(display.addVisual({
-        x:  dx + shortHorzShapeInfo.width,
+        x:  dx + shortHorzShapeInfo.width - 0.3,
         y:  lh - (vertShapeInfo.height / 2 + dy),
         angle: 0,
         imgSrc: vertPic
@@ -405,7 +407,7 @@ var cam_pos = [0,0];
       }), ninjaInfo);
 
       physics.addBody(display.addVisual({
-        x:  dx + shortHorzShapeInfo.width / 2,
+        x:  dx + shortHorzShapeInfo.width / 2 -0.2,
         y:  lh - (shortHorzShapeInfo.height / 2 + dy + vertShapeInfo.height),
         angle: 0,
         imgSrc: horzPic
@@ -450,7 +452,7 @@ var cam_pos = [0,0];
       }), info);
 
       physics.addBody(display.addVisual({
-        x: display.lW,
+        x: display.lW - 0.2,
         y: display.lH / 2,
         imgSrc: 'images/wall.png'
       }), info);

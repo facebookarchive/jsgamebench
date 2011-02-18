@@ -15,8 +15,8 @@
 var Publish = (function() {
 
   var fb_logged_in = false;
-  var player;
-  
+  var player  = {id: 0, score: 0, totalScore: 0, badgeCount: 0, savedRequests: {}, name: 'guest'};
+
   function fbLogin(func) {
     if (fb_logged_in) {
       func && func();
@@ -80,7 +80,7 @@ var Publish = (function() {
         'on this game and would like to send a gift of 5 points and a bonus pirate.',
       data: {
         gift: {
-          points: 5, 
+          points: 5,
           badge: 1,
         }
       }
@@ -131,9 +131,6 @@ var Publish = (function() {
         try {
           player = JSON.parse(text)
         } catch (e) {}
-      }
-      if (!player) {
-        player = {score: 0, totalScore: 0, badgeCount: 0, savedRequests: {}, name: 'guest'};
       }
       player.id = id;
       if (!id) {
