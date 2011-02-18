@@ -310,6 +310,7 @@ var Perf = (function() {
 
 
     function perfResponse(data) {
+      Init.winresize();
       UI.del('fps');
       UI.del('perf');
       UI.addCollection('', 'buttons', {pos: [0, 0]});
@@ -343,7 +344,6 @@ var Perf = (function() {
 
     function init() {
       Render.setupBrowserSpecific();
-
       GameFrame.settings.offset = 50;
 
       ClientCmd.install('resetsession', resetSession);
@@ -367,6 +367,8 @@ var Perf = (function() {
       if (!JSGlobal.mobile) {
         Xhr.init();
         Xhr.toServer({cmd: '', args: []});
+      } else {
+        Init.reset();
       }
     }
 

@@ -71,7 +71,7 @@ var cam_pos = [0,0];
     _elastic: null,
     _firing: false,
     last_x: undefined,
-  
+
     tick: function() {
       var timeElapsed = (new Date()).getTime() - FB.Demo.fireTime;
       if (timeElapsed < 3000) {
@@ -119,7 +119,7 @@ var cam_pos = [0,0];
       }
       display.draw();
     },
-    
+
     firePirate: function() {
       Publish.clearScore();
       FB.Demo.targetPosition = FB.Demo._mouseJoint.GetTarget();
@@ -392,7 +392,7 @@ var cam_pos = [0,0];
         visual.last_x = visual.x;
         visual.last_y = visual.y;
       }
-    
+
       physics.addBody(display.addVisual({
         x:  dx + shortHorzShapeInfo.width / 2,
         y:  lh - (ninjaShapeInfo.radius + dy),
@@ -459,4 +459,3 @@ var cam_pos = [0,0];
 
 })();
 
-Init.setFunctions({draw: Render.tick, ui: UI.tick});

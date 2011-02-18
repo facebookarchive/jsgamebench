@@ -22,7 +22,7 @@
   </head>
   <body
     onresize="Init.winresize();"
-    onload="init();"
+    onload="Init.init();"
     onorientationchange="Init.winresize();"
     onunload="Init.quit()">
     <div id="fb-root"></div>

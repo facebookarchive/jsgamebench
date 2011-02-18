@@ -67,7 +67,6 @@ var Init = (function() {
       Render.setupBrowserSpecific();
       setInterval('Init.tick();', 1);
       initFunc();
-      reset();
     }
 
     function tick() {
@@ -80,6 +79,7 @@ var Init = (function() {
     }
 
     function reset() {
+      console.log("reset");
       teardownFunc();
 
       var gbel = document.getElementById('gamebody');
@@ -94,6 +94,7 @@ var Init = (function() {
 
 
     function hideBar() {
+      console.log("hide bar");
       window.scrollTo(0,1);
       Clientutils.getWindowSize();
       GameFrame.setXbyY();
@@ -101,6 +102,7 @@ var Init = (function() {
 
 
     function winresize() {
+      console.log("resize");
       Render.setupBrowserSpecific();
 
       var meta_viewport = document.querySelector("meta[name=viewport]");
@@ -128,16 +130,17 @@ var Init = (function() {
       JSGlobal.winpos[1] = 0;
 
       GameFrame.setXbyY();
-      if (JSGlobal.mobile)
-        setTimeout("Init.hideBar();", 100);
+      if (JSGlobal.mobile) {
+        setTimeout("Init.hideBar();", 1);
+      }
     }
 
     function init() {
+      console.log("init");
       if (!drawFunc) {
         alert("No draw function set. You need to call Init.setFunctions from your code prior to the page's onload event firing.");
         return;
       }
-
       if (fb_app_id) {
         if (document.getElementById('fb-root')) {
           FB.init({
@@ -157,7 +160,6 @@ var Init = (function() {
             });
         }
       }
-      winresize();
       timer_kick_off();
     }
 

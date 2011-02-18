@@ -75,3 +75,4 @@ function init() {
   });
 }
 
+Init.setFunctions({init: init, draw: Render.tick, ui: UI.tick});
