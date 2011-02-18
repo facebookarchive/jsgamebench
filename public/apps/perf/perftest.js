@@ -265,7 +265,7 @@ var PerfTest = (function() {
       stops.push(stop);
     }
 
-    var viewports = {fluid: 1, fluid_width: 1, normal: 1};
+    var viewports = {fluid: 1, fluid_width: 1, normal: 1, tiny: 1};
 
 
     function addTest(test) {

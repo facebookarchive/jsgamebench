@@ -191,14 +191,14 @@ var GameFrame = (function() {
     }
 
     function setXbyY(viewport) {
-      var viewports = {fluid: [null, null], fluid_width: [null, 640], normal: [960, 640]};
+      var viewports = {fluid: [null, null], fluid_width: [null, 640], normal: [960, 640], tiny: [320,320]};
       if (viewport) {
         settings.viewport = viewport;
       } else {
         viewport = settings.viewport;
       }
       JSGlobal.w = viewports[viewport][0] || JSGlobal.winsize[0];
-      JSGlobal.h = viewports[viewport][1] || JSGlobal.winsize[1] + 1000;
+      JSGlobal.h = viewports[viewport][1] || JSGlobal.winsize[1];
       JSGlobal.h -= settings.offset;
 
       console.log("resizing to " + JSGlobal.winsize[0] + "x" + JSGlobal.winsize[1]);
@@ -207,7 +207,7 @@ var GameFrame = (function() {
                          {left: JSGlobal.winpos[0],
                              top: JSGlobal.winpos[1],
                              width: JSGlobal.winsize[0],
-                             height: JSGlobal.winsize[1] + 1000},
+                             height: JSGlobal.winsize[1] + 100},
                          '#f2f2f2');
 
       var midx = 0.5 * (JSGlobal.winsize[0] - JSGlobal.winpos[0]);

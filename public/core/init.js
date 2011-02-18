@@ -67,6 +67,8 @@ var Init = (function() {
       Render.setupBrowserSpecific();
       setInterval('Init.tick();', 1);
       initFunc();
+      winresize();
+      reset();
     }
 
     function tick() {
@@ -79,7 +81,6 @@ var Init = (function() {
     }
 
     function reset() {
-      console.log("reset");
       teardownFunc();
 
       var gbel = document.getElementById('gamebody');
@@ -94,15 +95,11 @@ var Init = (function() {
 
 
     function hideBar() {
-      console.log("hide bar");
       window.scrollTo(0,1);
-      Clientutils.getWindowSize();
-      GameFrame.setXbyY();
     }
 
 
     function winresize() {
-      console.log("resize");
       Render.setupBrowserSpecific();
 
       var meta_viewport = document.querySelector("meta[name=viewport]");
@@ -131,12 +128,11 @@ var Init = (function() {
 
       GameFrame.setXbyY();
       if (JSGlobal.mobile) {
-        setTimeout("Init.hideBar();", 1);
+        setTimeout("Init.hideBar();", 1000);
       }
     }
 
     function init() {
-      console.log("init");
       if (!drawFunc) {
         alert("No draw function set. You need to call Init.setFunctions from your code prior to the page's onload event firing.");
         return;
