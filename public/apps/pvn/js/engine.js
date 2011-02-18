@@ -12,15 +12,19 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
+var win_size = [];
 (function() {
 
   FB.Class('Game.Display', function(dW, dH) {
     this.dW = dW;
     this.dH = dH;
-    this.lW = 50.0; 
+    this.lW = 50.0;
     this.scale = dW / 50.0; // Use fixed logic width that is suited for physics engine
     this.lH = this.dH / this.scale;
+    console.log('scale: ' + this.scale);
     this.visuals = [];
+    win_size[0] = dW;
+    win_size[1] = dH;
   }, {
 
     getScale: function() {
@@ -37,8 +41,8 @@
       var gob = visual.gob;
       if (gob) {
         var el = Sprites.spritedictionary[visual.name].imageel;
-        gob.pos[0] = visual.x * this.scale - cam_pos[0] - el.width/2;
-        gob.pos[1] = visual.y * this.scale - cam_pos[1] - el.height/2;
+        gob.pos[0] = visual.x * this.scale - cam_pos[0] - el.width / 2;
+        gob.pos[1] = visual.y * this.scale - cam_pos[1] - el.height / 2;
         gob.theta = visual.angle || 0;
         gob.dirty = true;
         gob.scale = this.scale / this.lW;
@@ -154,13 +158,14 @@
     this.contactListener = new Box2D.Dynamics.b2ContactListener();
     this.world.SetContactListener(this.contactListener);
     this.display = display;
-    this.frameRate = 50;
+    this.frameRate = 30;
     this.velocityIterations = 6;
     this.positionIterations = 2;
     this.timer = 0;
   }, {
     run: function() {
-      this.timer = setInterval(FB.bind(this.onUpdate, this), 1000 / this.frameRate);
+    //  this.timer = setInterval(FB.bind(this.onUpdate, this), 1000 / this.frameRate);
+      console.log('interval: ' + 1000 / this.frameRate);
     },
 
     freeze: function() {
@@ -177,7 +182,7 @@
     },
 
     onUpdate: function() {
-      this.world.Step(1.0 / this.frameRate, this.velocityIterations,
+      this.world.Step(1.0 / this.frameRate * 1.5, this.velocityIterations,
                       this.positionIterations);
       //FB.FramerateMonitor.startFrame();
       //this.display.draw();
