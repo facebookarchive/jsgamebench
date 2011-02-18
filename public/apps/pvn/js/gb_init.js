@@ -61,7 +61,7 @@ function loadImageList(path,list) {
 
 function init() {
   Publish.fbInit(fb_app_id);
-  Init.reset();
+ // Init.reset();
   game_init({viewport: 'fluid', settings: {render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: true, css_transitions: false, css_keyframe: false, sprite_sheets: false, int_snap: true, transform3d:true}, tfps: 30, background: 'world', sprites: 'cute', demo: true, hack: true });
   PerfTest.doAll();
   loadImageList('/public/apps/pvn/images/',[
@@ -76,4 +76,9 @@ function init() {
   });
 }
 
-Init.setFunctions({init: init, draw: Render.tick, ui: UI.tick});
+function resizeMe() {
+  Init.winresize();
+  FB.Demo.play();
+}
+
+Init.setFunctions({init: init, draw: Render.tick, ui: UI.tick, setup: FB.Demo.play});
