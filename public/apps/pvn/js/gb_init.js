@@ -13,6 +13,7 @@
 // under the License.
 
 var added=0;
+var playing_state;
 
 function tick() {
   if (!Sprites.fullyLoaded()) {
@@ -26,14 +27,27 @@ function tick() {
     ClientCmd.install('replay',FB.Demo.replay);
 
     UI.addCollection('', 'gameOpts', {pos: [0, 0]});
-    UI.addButton('gameOpts', 'play', {pos: [10, 5], width: 150, height: 40, text: 'Reset', command: {cmd: 'playGame'}});
-    UI.addButton('gameOpts', 'replay', {pos: [170, 5], width: 150, height: 40, text: 'Replay', command: {cmd: 'replay'}});
-    UI.addButton('gameOpts', 'publish', {pos: [330, 5], width: 150, height: 40, text: 'Publish', command: {cmd: 'publishStory'}});
-    UI.addButton('gameOpts', 'gift', {pos: [490, 5], width: 150, height: 40, text: 'Gift', command: {cmd: 'sendRequest'}});
-
-    FB.Demo.play();
+    //FB.Demo.play(false);
+    FB.Demo.playing = false;
     Publish.checkReplayUrl();
+    World.add('bg_idx', 'background', [0,win_size[1] - 768], 0);
   }
+  if (playing_state != FB.Demo.playing)
+  {
+    playing_state = FB.Demo.playing;
+    if (FB.Demo.playing) {
+      UI.del('play');
+      UI.del('replay');
+      UI.del('publish');
+      UI.del('gift');
+    } else {
+      UI.addButton('gameOpts', 'play', {pos: [110, 100], width: 150, height: 60, fontsize: '300%', text: 'Play', command: {cmd: 'playGame', args: [true]}});
+      UI.addButton('gameOpts', 'replay', {pos: [300, 100], width: 150, height: 60, fontsize: '300%', text: 'Replay', command: {cmd: 'replay'}});
+      UI.addButton('gameOpts', 'publish', {pos: [110, 200], width: 150, height: 60, fontsize: '300%', text: 'Publish', command: {cmd: 'publishStory'}});
+      UI.addButton('gameOpts', 'gift', {pos: [300, 200], width: 150, height: 60, fontsize: '300%', text: 'Gift', command: {cmd: 'sendRequest'}});
+    }
+  }
+//  UI.addHTML('gameOpts', 'info', {pos: [490, 65], width: 150, height: 40, markup: 'Mode: '+FB.Demo.playing});
   FB.Demo.tick();
   UI.tick();
   Render.tick();
@@ -69,7 +83,7 @@ function init() {
     'ninja1.png','cannon_chassis.png','cannon_barrel.png','board_vert.png','wall.png',
     'board_horiz.png','background.jpg']);
     // 'pirate_fire.gif','flying_pirate.png','explosion.gif',
-  setInterval('tick();', 33);
+  setInterval('tick();', 20);
   PerfTest.pushTest(function() {
     GameFrame.updateSettings(test.settings, true);
     GameFrame.setXbyY(test.viewport);
@@ -78,7 +92,7 @@ function init() {
 
 function resizeMe() {
   Init.winresize();
-  FB.Demo.play();
+  FB.Demo.play(false);
 }
 
-Init.setFunctions({init: init, draw: Render.tick, ui: UI.tick, setup: FB.Demo.play});
+Init.setFunctions({init: init, draw: Render.tick, ui: UI.tick });

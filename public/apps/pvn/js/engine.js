@@ -158,10 +158,11 @@ var win_size = [];
     this.contactListener = new Box2D.Dynamics.b2ContactListener();
     this.world.SetContactListener(this.contactListener);
     this.display = display;
-    this.frameRate = 30;
+    this.frameRate = 50;
     this.velocityIterations = 6;
     this.positionIterations = 2;
     this.timer = 0;
+    this.speedScale = 1;
   }, {
     run: function() {
     //  this.timer = setInterval(FB.bind(this.onUpdate, this), 1000 / this.frameRate);
@@ -181,8 +182,12 @@ var win_size = [];
       this.contactListener = null;
     },
 
+    setSpeedScale: function(scale) {
+      this.speedScale = scale;
+    },
+    
     onUpdate: function() {
-      this.world.Step(1.0 / this.frameRate * 1.5, this.velocityIterations,
+      this.world.Step(1.0 / this.frameRate * this.speedScale, this.velocityIterations,
                       this.positionIterations);
       //FB.FramerateMonitor.startFrame();
       //this.display.draw();

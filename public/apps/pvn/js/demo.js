@@ -32,13 +32,14 @@ var cam_pos = [0,0];
     fireTime: 0,
     in_replay: true,
 
-    play: function() {
+    play: function(clicked) {
+      FB.Demo.inited = true;
+      FB.Demo.did_shoot = false;
+      FB.Demo.playing = true;
       FB.Demo.in_replay = false;
       cam_pos = [0,0];
       console.log('start play');
       display = new FB.Game.Display(2000 * JSGlobal.h/650, JSGlobal.h);
-      console.log('h: ' + JSGlobal.h);
-//      display = new FB.Game.Display(JSGlobal.w*2,JSGlobal.h);
       physics = new FB.Game.Physics(display);
       physics.run();
       uw = display.lW / 100;
@@ -56,7 +57,7 @@ var cam_pos = [0,0];
       if (!target) {
         return alert('launch a pirate first');
       }
-      FB.Demo.play();
+      FB.Demo.play(false);
       FB.Demo.in_replay = true;
       window.setTimeout(function() {
         var piratePos = FB.Demo.pirate.GetPosition();
@@ -73,24 +74,37 @@ var cam_pos = [0,0];
     _elastic: null,
     _firing: false,
     last_x: undefined,
-
+    last_pos: [],
+  
     tick: function() {
+      if (!FB.Demo.inited) {
+        return;
+      }
+      var pos = FB.Demo.pirate.GetPosition();
+      var x = pos.x * display.getScale() - JSGlobal.w/2;
+      var y = pos.y * display.getScale();
       physics && physics.onUpdate();
       var timeElapsed = (new Date()).getTime() - FB.Demo.fireTime;
       if (timeElapsed < 3000) {
-        var pos = FB.Demo.pirate.GetPosition();
-        x = pos.x * display.getScale() - JSGlobal.w/2;
-        y = pos.y * display.getScale();
         this.setCanvasViewPort(x,y);
       } else {
+        var xi = x|0;
+        var yi = y|0;
+        if (FB.Demo.did_shoot && this.last_pos[0] == xi && this.last_pos[1] == yi)
+          FB.Demo.playing = false;
+        this.last_pos[0] = xi;
+        this.last_pos[1] = yi;
+
         var pos = new Box2D.Common.Math.b2Vec2(display.device2logic(JSGlobal.mouse.x + cam_pos[0]),
                       display.device2logic(JSGlobal.mouse.y + cam_pos[1]));
 
         if (JSGlobal.mouse.buttons[0]==1) { // mouse down / start touch
+          if (FB.Demo.did_shoot) {
+            FB.Demo.playing = false;
+          }
           JSGlobal.mouse.buttons[0]++;
           FB.Demo.action = null;
           FB.Demo._clearJoint();
-          console.log('pos: ' + JSON.stringify(pos));
           var adjust_pos = {x: pos.x, y:pos.y-2};
           if (FB.Demo._checkApproximateTouch(FB.Demo.pirate, adjust_pos, uh * 20)) {
             FB.Demo.action = {type: 'aim'};
@@ -136,6 +150,8 @@ var cam_pos = [0,0];
       }
       var visual = FB.Demo.pirate.GetUserData();
       display.setVisualImage(visual,'images/bouncing_pirate.png'); // in_sling_pirate.png
+      physics.setSpeedScale(1.5);
+      FB.Demo.did_shoot = 1;
       console.log('Fire!');
     },
 
