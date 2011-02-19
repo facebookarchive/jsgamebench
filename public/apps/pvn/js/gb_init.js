@@ -78,7 +78,7 @@ function resizeMe() {
 
 function resize() {
   if (added) {
-   // FB.Demo.play(false);
+    FB.Demo.play(false);
   }
 }
 

@@ -13,6 +13,7 @@
 // under the License.ninja
 
 var cam_pos = [0,0];
+var run_physics_sync = true;
 
 (function() {
   var display, physics;
@@ -83,7 +84,7 @@ var cam_pos = [0,0];
       var pos = FB.Demo.pirate.GetPosition();
       var x = pos.x * display.getScale() - JSGlobal.w/2;
       var y = pos.y * display.getScale();
-      //physics && physics.onUpdate();
+      run_physics_sync && physics && physics.onUpdate();
       var timeElapsed = (new Date()).getTime() - FB.Demo.fireTime;
       if (timeElapsed < 3000) {
         this.setCanvasViewPort(x,y);

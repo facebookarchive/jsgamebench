@@ -165,8 +165,10 @@ var win_size = [];
     this.speedScale = 1;
   }, {
     run: function() {
-      this.timer = setInterval(FB.bind(this.onUpdate, this), 1000 / this.frameRate);
-      console.log('interval: ' + 1000 / this.frameRate);
+      if (!run_physics_sync) {
+        this.timer = setInterval(FB.bind(this.onUpdate, this), 1000 / this.frameRate);
+        console.log('interval: ' + 1000 / this.frameRate);
+      }
     },
 
     freeze: function() {
