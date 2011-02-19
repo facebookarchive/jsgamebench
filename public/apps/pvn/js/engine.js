@@ -41,8 +41,8 @@ var win_size = [];
       var gob = visual.gob;
       if (gob) {
         var el = Sprites.spritedictionary[visual.name].imageel;
-        gob.pos[0] = visual.x * this.scale - cam_pos[0] - el.width / 2;
-        gob.pos[1] = visual.y * this.scale - cam_pos[1] - el.height / 2;
+        gob.pos[0] = visual.x * this.scale - cam_pos[0];
+        gob.pos[1] = visual.y * this.scale - cam_pos[1];
         gob.theta = visual.angle || 0;
         gob.dirty = true;
         gob.scale = this.scale / this.lW;
@@ -64,7 +64,7 @@ var win_size = [];
       this.visualToGob(visual);
       return visual;
     },
-    
+
     addVisual: function (visual) {
       this.visuals[this.visuals.length] = visual;
       this.vis_id_count = (this.vis_id_count || 0) + 1;
@@ -154,7 +154,7 @@ var win_size = [];
   FB.Class('Game.Physics', function(display) {
     this.world = new Box2D.Dynamics.b2World(
       new Box2D.Common.Math.b2Vec2(0, 10), true
-    ); 
+    );
     this.contactListener = new Box2D.Dynamics.b2ContactListener();
     this.world.SetContactListener(this.contactListener);
     this.display = display;
@@ -165,7 +165,7 @@ var win_size = [];
     this.speedScale = 1;
   }, {
     run: function() {
-    //  this.timer = setInterval(FB.bind(this.onUpdate, this), 1000 / this.frameRate);
+      this.timer = setInterval(FB.bind(this.onUpdate, this), 1000 / this.frameRate);
       console.log('interval: ' + 1000 / this.frameRate);
     },
 
@@ -225,7 +225,7 @@ var win_size = [];
       if (info.friction) {
         fixDef.friction = info.friction;
       }
-      
+
       if (info.restitution) {
         fixDef.restitution = info.restitution;
       }

@@ -16,21 +16,11 @@ var added=0;
 var playing_state;
 
 function tick() {
-  if (!Sprites.fullyLoaded()) {
-    return;
-  }
   if (!added) {
     added = 1;
-    ClientCmd.install('playGame',FB.Demo.play);
-    ClientCmd.install('publishStory',Publish.publishStory);
-    ClientCmd.install('sendRequest',Publish.sendRequest);
-    ClientCmd.install('replay',FB.Demo.replay);
-
-    UI.addCollection('', 'gameOpts', {pos: [0, 0]});
-    //FB.Demo.play(false);
     FB.Demo.playing = false;
     Publish.checkReplayUrl();
-    World.add('bg_idx', 'background', [0,win_size[1] - 768], 0);
+    World.add('bg_idx', 'background', [JSGlobal.w*0.45,win_size[1] - 768], 0);
   }
   if (playing_state != FB.Demo.playing)
   {
@@ -49,20 +39,6 @@ function tick() {
   }
 //  UI.addHTML('gameOpts', 'info', {pos: [490, 65], width: 150, height: 40, markup: 'Mode: '+FB.Demo.playing});
   FB.Demo.tick();
-  UI.tick();
-  Render.tick();
-}
-
-function game_init(test) {
-  PerfTest.pushTest(function() {
-    GameFrame.settings.offset = 0;
-    Init.winresize();
-    Gob.delAll();
-    GameFrame.updateSettings(test.settings, true);
-    GameFrame.setXbyY(test.viewport);
-    client_user.game_active = true;
-    UI.hookUIEvents('gamebody');
-  });
 }
 
 function loadImageList(path,list) {
@@ -74,20 +50,25 @@ function loadImageList(path,list) {
 }
 
 function init() {
+  Init.reset();
   Publish.fbInit(fb_app_id);
- // Init.reset();
-  game_init({viewport: 'fluid', settings: {render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: true, css_transitions: false, css_keyframe: false, sprite_sheets: false, int_snap: true, transform3d:true}, tfps: 30, background: 'world', sprites: 'cute', demo: true, hack: true });
-  PerfTest.doAll();
+  ClientCmd.install('playGame',FB.Demo.play);
+  ClientCmd.install('publishStory',Publish.publishStory);
+  ClientCmd.install('sendRequest',Publish.sendRequest);
+  ClientCmd.install('replay',FB.Demo.replay);
+
+  UI.addCollection('', 'gameOpts', {pos: [0, 0]});
   loadImageList('/public/apps/pvn/images/',[
     'bouncing_pirate.png',
     'ninja1.png','cannon_chassis.png','cannon_barrel.png','board_vert.png','wall.png',
     'board_horiz.png','background.jpg']);
     // 'pirate_fire.gif','flying_pirate.png','explosion.gif',
-  setInterval('tick();', 20);
+  // setInterval('tick();', 33);
   PerfTest.pushTest(function() {
     GameFrame.updateSettings(test.settings, true);
     GameFrame.setXbyY(test.viewport);
   });
+  UI.hookUIEvents('gamebody');
 }
 
 function resizeMe() {
@@ -95,4 +76,10 @@ function resizeMe() {
   FB.Demo.play(false);
 }
 
-Init.setFunctions({init: init, draw: Render.tick, ui: UI.tick });
+function resize() {
+  if (added) {
+   // FB.Demo.play(false);
+  }
+}
+
+Init.setFunctions({app: tick, init: init, draw: Render.tick, ui: UI.tick, resize: resize });

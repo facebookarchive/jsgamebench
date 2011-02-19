@@ -20,6 +20,7 @@ var Init = (function() {
     var drawFunc = null;
     var teardownFunc = null;
     var quitFunc = null;
+    var resizeFunc = null;
 
     function setFunctions(args) {
       if (args.init)
@@ -48,6 +49,11 @@ var Init = (function() {
         teardownFunc = args.teardown;
       else
         teardownFunc = function() {};
+
+      if (args.resize)
+        resizeFunc = args.resize;
+      else
+        quitFunc = function() {};
 
       if (args.quit)
         quitFunc = args.quit;
@@ -96,6 +102,8 @@ var Init = (function() {
 
     function hideBar() {
       window.scrollTo(0,1);
+      GameFrame.setXbyY();
+      resizeFunc();
     }
 
 
@@ -127,8 +135,9 @@ var Init = (function() {
       JSGlobal.winpos[1] = 0;
 
       GameFrame.setXbyY();
+      resizeFunc();
       if (JSGlobal.mobile) {
-        setTimeout("Init.hideBar();", 1000);
+        setTimeout("Init.hideBar();", 1);
       }
     }
 

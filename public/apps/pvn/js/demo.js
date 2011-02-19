@@ -44,7 +44,7 @@ var cam_pos = [0,0];
       physics.run();
       uw = display.lW / 100;
       uh = display.lH / 100;
-      World.add('bg_idx', 'background', [0,win_size[1] - 768], 0);
+      World.add('bg_idx', 'background', [JSGlobal.w*0.45,JSGlobal.h - 768 + 768/2], 0);
       FB.Demo.setupWalls();
       FB.Demo.setupWaitingPirates();
       FB.Demo.setupSling();
@@ -83,7 +83,7 @@ var cam_pos = [0,0];
       var pos = FB.Demo.pirate.GetPosition();
       var x = pos.x * display.getScale() - JSGlobal.w/2;
       var y = pos.y * display.getScale();
-      physics && physics.onUpdate();
+      //physics && physics.onUpdate();
       var timeElapsed = (new Date()).getTime() - FB.Demo.fireTime;
       if (timeElapsed < 3000) {
         this.setCanvasViewPort(x,y);

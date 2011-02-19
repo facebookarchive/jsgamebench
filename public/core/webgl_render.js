@@ -52,7 +52,7 @@ var WebGLRender = (function() {
       var gl_attribs =
         {
           alpha : GameFrame.settings.webgl_blended_canvas,
-          depth : false,
+          depth : true,
           stencil : false,
           antialias : false // no need for geometry antialiasing
         };

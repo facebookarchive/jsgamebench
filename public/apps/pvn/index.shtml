@@ -18,9 +18,9 @@
 
   </head>
   <body
-    onresize="resizeMe();"
+    onresize="Init.winresize();"
     onload="Init.init();"
-    onorientationchange="resizeMe();"
+    onorientationchange="Init.winresize();"
     onunload="Init.quit()">
     <div id="fb-root"></div>
     <div id="gamebody"></div>
