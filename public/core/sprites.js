@@ -21,6 +21,10 @@ var Sprites = (function() {
     function loaded(event, id) {
       if (loading_hash[id] && loading_hash[id].height && loading_hash[id].width) {
         spriteel.appendChild(spritedictionary[id].imageel);
+        if (!spritedictionary[id].width)
+          spritedictionary[id].width = spritedictionary[id].imageel.width;
+        if (!spritedictionary[id].height)
+          spritedictionary[id].height = spritedictionary[id].imageel.height;
         loading_hash[id] = null;
         delete loading_hash[id];
       }

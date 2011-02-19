@@ -64,7 +64,7 @@ var win_size = [];
       this.visualToGob(visual);
       return visual;
     },
-    
+
     addVisual: function (visual) {
       this.visuals[this.visuals.length] = visual;
       this.vis_id_count = (this.vis_id_count || 0) + 1;
@@ -154,7 +154,7 @@ var win_size = [];
   FB.Class('Game.Physics', function(display) {
     this.world = new Box2D.Dynamics.b2World(
       new Box2D.Common.Math.b2Vec2(0, 10), true
-    ); 
+    );
     this.contactListener = new Box2D.Dynamics.b2ContactListener();
     this.world.SetContactListener(this.contactListener);
     this.display = display;
@@ -220,7 +220,7 @@ var win_size = [];
       if (info.friction) {
         fixDef.friction = info.friction;
       }
-      
+
       if (info.restitution) {
         fixDef.restitution = info.restitution;
       }
