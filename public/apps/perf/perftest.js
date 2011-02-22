@@ -327,7 +327,7 @@ var PerfTest = (function() {
       tests = [];
       current = 0;
       var spar = {'aa':1, 'rot':1};
-      var vp = 'fluid';
+      var vp = 'fluid_width';
       var bg = 'world';
       var is = true;
 
@@ -388,8 +388,8 @@ var PerfTest = (function() {
       } else {
         var result = FBmark.peak();
         JSGlobal.myscore = parseInt(result.score);
-        alert("Your score was " + JSGlobal.myscore + " sprites!");
         ClientCmd.logperf(JSGlobal.browser_version, result);
+        alert("Your score was " + JSGlobal.myscore + " sprites!");
         FBmark.reset();
         PerfTest.stop();
       }
