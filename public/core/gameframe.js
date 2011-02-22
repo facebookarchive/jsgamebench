@@ -201,8 +201,6 @@ var GameFrame = (function() {
       JSGlobal.h = viewports[viewport][1] || JSGlobal.winsize[1];
       JSGlobal.h -= settings.offset;
 
-      console.log("resizing to " + JSGlobal.winsize[0] + "x" + JSGlobal.winsize[1]);
-
       setFrame('gamebody', 'gameframe', 'gameframe',
                          {left: JSGlobal.winpos[0],
                              top: JSGlobal.winpos[1],

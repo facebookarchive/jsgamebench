@@ -53,7 +53,7 @@ var Init = (function() {
       if (args.resize)
         resizeFunc = args.resize;
       else
-        quitFunc = function() {};
+        resizeFunc = function() {};
 
       if (args.quit)
         quitFunc = args.quit;
