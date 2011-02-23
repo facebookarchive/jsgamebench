@@ -187,7 +187,7 @@ var win_size = [];
     setSpeedScale: function(scale) {
       this.speedScale = scale;
     },
-    
+
     onUpdate: function() {
       this.world.Step(1.0 / this.frameRate * this.speedScale, this.velocityIterations,
                       this.positionIterations);

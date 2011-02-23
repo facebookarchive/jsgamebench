@@ -21,6 +21,7 @@ var Init = (function() {
     var teardownFunc = null;
     var quitFunc = null;
     var resizeFunc = null;
+    var maxFPS = 1000;
 
     function setFunctions(args) {
       if (args.init)
@@ -59,6 +60,9 @@ var Init = (function() {
         quitFunc = args.quit;
       else
         quitFunc = function() {};
+
+      if (args.fps)
+        maxFPS = args.fps;
     }
 
     function quit() {
@@ -71,7 +75,7 @@ var Init = (function() {
     function timer_kick_off() {
       JSGlobal.TIMERS_LAUNCHED = true;
       Render.setupBrowserSpecific();
-      setInterval('Init.tick();', 1);
+      setInterval('Init.tick();', parseInt(1000/maxFPS));
       initFunc();
       winresize();
       reset();
