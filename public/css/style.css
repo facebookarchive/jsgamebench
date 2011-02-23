@@ -780,6 +780,7 @@ body {
   font-family:'Lucida Grande',Tahoma,Verdana,Arial,sans-serif;
   background:#FFFFFF;
   font-size: 11px;
+  overflow: auto;
 }
 
 #gamebody {

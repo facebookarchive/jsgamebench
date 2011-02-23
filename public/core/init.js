@@ -103,26 +103,16 @@ var Init = (function() {
       GameFrame.setXbyY();
     }
 
-
     function hideBar() {
       window.scrollTo(0,1);
+      Clientutils.getWindowSize();
       GameFrame.setXbyY();
       resizeFunc();
+      var hidediv = document.getElementById('hidebardiv');
+      document.body.removeChild(hidediv);
     }
 
-
     function winresize() {
-      Render.setupBrowserSpecific();
-
-      var meta_viewport = document.querySelector("meta[name=viewport]");
-      if (meta_viewport && window.devicePixelRatio >= 2 ) {
-        JSGlobal.lowres = false;
-        meta_viewport.setAttribute('content', 'user-scalable=no, width=device-width, height=device-height, initial-scale=0.5, maximum-scale=0.5');
-      } else if (JSGlobal.mobile) {
-        JSGlobal.lowres = true;
-      }
-
-
       var last_width = JSGlobal.winsize[0];
       var last_height = JSGlobal.winsize[1];
 
@@ -137,11 +127,15 @@ var Init = (function() {
 
       JSGlobal.winpos[0] = 0;
       JSGlobal.winpos[1] = 0;
-
-      GameFrame.setXbyY();
-      resizeFunc();
       if (JSGlobal.mobile) {
-        setTimeout("Init.hideBar();", 1);
+        var hidediv = document.createElement('div');
+        hidediv.id = 'hidebardiv';
+        hidediv.style.cssText = 'position:absolute;z-index:10000;left:0px;top:-1000px;width:5000px;height:5000px;background:#000';
+        document.body.appendChild(hidediv);
+        setTimeout("Init.hideBar();", 10);
+      } else {
+        GameFrame.setXbyY();
+        resizeFunc();
       }
     }
 
@@ -150,6 +144,17 @@ var Init = (function() {
         alert("No draw function set. You need to call Init.setFunctions from your code prior to the page's onload event firing.");
         return;
       }
+      Render.setupBrowserSpecific();
+
+      var meta_viewport = document.querySelector("meta[name=viewport]");
+      if (meta_viewport && window.devicePixelRatio >= 2 ) {
+        JSGlobal.lowres = false;
+        meta_viewport.setAttribute('content', 'user-scalable=no, width=device-width, height=device-height, initial-scale=0.5, maximum-scale=0.5');
+      } else if (JSGlobal.mobile) {
+        JSGlobal.lowres = true;
+      }
+
+
       if (fb_app_id) {
         if (document.getElementById('fb-root')) {
           FB.init({
@@ -168,6 +173,13 @@ var Init = (function() {
               }
             });
         }
+      }
+      if (JSGlobal.mobile) {
+        var hidediv = document.createElement('div');
+        hidediv.id = 'hidebardiv';
+        hidediv.style.cssText = 'position:absolute;z-index:10000;left:0px;top:-1000px;width:5000px;height:5000px;background:#000';
+        document.body.appendChild(hidediv);
+        setTimeout("Init.hideBar();", 10);
       }
       timer_kick_off();
     }

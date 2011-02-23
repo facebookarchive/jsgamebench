@@ -32,7 +32,7 @@ var Clientutils = (function() {
         height = document.body.clientHeight;
       }
 
-      JSGlobal.winsize[0] = width+1;
+      JSGlobal.winsize[0] = width;
       JSGlobal.winsize[1] = height+1;
     }
 
