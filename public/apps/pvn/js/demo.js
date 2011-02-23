@@ -39,14 +39,12 @@ var run_physics_sync = false;
       FB.Demo.playing = true;
       FB.Demo.in_replay = false;
       cam_pos = [0,0];
-      console.log('start play');
       display = new FB.Game.Display(2000 * JSGlobal.h/650, JSGlobal.h);
       physics = new FB.Game.Physics(display);
       physics.run();
       uw = display.lW / 100;
       uh = display.lH / 100;
       Gob.delAll();
-      console.log('wh: ' + [JSGlobal.w,JSGlobal.h]);
       FB.Demo.setupBackground();
       FB.Demo.setupWalls();
       FB.Demo.setupWaitingPirates();
@@ -115,7 +113,6 @@ var run_physics_sync = false;
           var adjust_pos = {x: pos.x, y:pos.y-2};
           if (FB.Demo._checkApproximateTouch(FB.Demo.pirate, adjust_pos, uh * 20)) {
             FB.Demo.action = {type: 'aim'};
-            console.log('Aim!');
             var piratePos = FB.Demo.pirate.GetPosition();
             FB.Demo._mouseJoint = physics.addMouseJoint(FB.Demo.pirate, piratePos.x, piratePos.y, 1000);
             FB.Demo._firing = false;
@@ -138,7 +135,6 @@ var run_physics_sync = false;
             var piratePos = FB.Demo.pirate.GetPosition();
             FB.Demo.firePirate();
             FB.Demo.replayData = {x:piratePos.x, y:piratePos.y};
-            console.log('launch pirate: '+JSON.stringify(FB.Demo.replayData));
             FB.Demo.action = null;
           }
         }
@@ -159,7 +155,6 @@ var run_physics_sync = false;
       display.setVisualImage(visual,'images/Flying_Pirate.png'); // in_sling_pirate.png
       physics.setSpeedScale(1.5);
       FB.Demo.did_shoot = 1;
-      console.log('Fire!');
     },
 
     setCanvasViewPort: function(x,y) {
@@ -197,7 +192,6 @@ var run_physics_sync = false;
           var dist = vec.Length();
           // TODO: change to uh unit !!!
 		      if (dist < 0.15 * 5 && FB.Demo._elastic && FB.Demo._firing) {
-		        console.log('Cut!', bA, bB);
 		        physics.breakJoint(FB.Demo._elastic);
             FB.Demo._firing = false;
 			      FB.Demo._elastic = null;

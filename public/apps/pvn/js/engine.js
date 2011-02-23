@@ -21,7 +21,6 @@ var win_size = [];
     this.lW = 50.0;
     this.scale = dW / 50.0; // Use fixed logic width that is suited for physics engine
     this.lH = this.dH / this.scale;
-    console.log('scale: ' + this.scale);
     this.visuals = [];
     win_size[0] = dW;
     win_size[1] = dH;
@@ -166,7 +165,6 @@ var win_size = [];
     run: function() {
       if (!run_physics_sync) {
         this.timer = setInterval(FB.bind(this.onUpdate, this), 1000 / this.frameRate);
-        console.log('interval: ' + 1000 / this.frameRate);
       }
     },
 

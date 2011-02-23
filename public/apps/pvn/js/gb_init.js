@@ -37,7 +37,7 @@ function tick() {
       UI.addButton('gameOpts', 'gift', {pos: [300, 200], width: 150, height: 60, fontsize: '300%', text: 'Gift', command: {cmd: 'sendRequest'}});
     }
   }
-  if (!Publish.isLoggedIn()) {
+  if (!FB.Demo.playing && !Publish.isLoggedIn()) {
     UI.addButton('gameOpts', 'optin', {pos: [200, 300], width: 150, height: 60, fontsize: '300%', text: 'Opt In', command: {cmd: 'fblogin', args: [0]}});
   } else {
     UI.del('optin');

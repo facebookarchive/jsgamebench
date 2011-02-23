@@ -108,18 +108,20 @@ var Publish = (function() {
       status : true, // check login status
       cookie : true, // enable cookies to allow the server to access the session
     });
-    
-    FB.getLoginStatus(function(response) {
-        if (response.session) {
-          fb_logged_in = true;
-          console.log('logged in');
-          loadPlayer(response.session.uid);
-        } else {
-          fb_logged_in = false;
-          console.log('not logged in');
-          loadPlayer(0);
-        }
-      });
+
+    if (fb_app_id) {
+      FB.getLoginStatus(function(response) {
+          if (response.session) {
+            fb_logged_in = true;
+            console.log('logged in');
+            loadPlayer(response.session.uid);
+          } else {
+            fb_logged_in = false;
+            console.log('not logged in');
+            loadPlayer(0);
+          }
+       });
+    }
       
     function loadPlayer(id) {
       var text = localStorage['player_' + id];
