@@ -20,7 +20,7 @@ function tick() {
     added = 1;
     FB.Demo.playing = false;
     Publish.checkReplayUrl();
-    World.add('bg_idx', 'background', [JSGlobal.w*0.45,win_size[1] - 768], 0);
+    FB.Demo.setupBackground();
   }
   if (playing_state != FB.Demo.playing)
   {
@@ -37,7 +37,11 @@ function tick() {
       UI.addButton('gameOpts', 'gift', {pos: [300, 200], width: 150, height: 60, fontsize: '300%', text: 'Gift', command: {cmd: 'sendRequest'}});
     }
   }
-//  UI.addHTML('gameOpts', 'info', {pos: [490, 65], width: 150, height: 40, markup: 'Mode: '+FB.Demo.playing});
+  if (!Publish.isLoggedIn()) {
+    UI.addButton('gameOpts', 'optin', {pos: [200, 300], width: 150, height: 60, fontsize: '300%', text: 'Opt In', command: {cmd: 'fblogin', args: [0]}});
+  } else {
+    UI.del('optin');
+  }
   FB.Demo.tick();
 }
 
@@ -56,14 +60,12 @@ function init() {
   ClientCmd.install('publishStory',Publish.publishStory);
   ClientCmd.install('sendRequest',Publish.sendRequest);
   ClientCmd.install('replay',FB.Demo.replay);
+  ClientCmd.install('fblogin',Publish.fbLogin);
+  ClientCmd.install('fblogout',Publish.fbLogout);
 
   UI.addCollection('', 'gameOpts', {pos: [0, 0]});
-  UI.addButton('gameOpts', 'play', {pos: [10, 5], width: 150, height: 40, text: 'Reset', command: {cmd: 'playGame'}});
-  UI.addButton('gameOpts', 'replay', {pos: [170, 5], width: 150, height: 40, text: 'Replay', command: {cmd: 'replay'}});
-  UI.addButton('gameOpts', 'publish', {pos: [330, 5], width: 150, height: 40, text: 'Publish', command: {cmd: 'publishStory'}});
-  UI.addButton('gameOpts', 'gift', {pos: [490, 5], width: 150, height: 40, text: 'Gift', command: {cmd: 'sendRequest'}});
   loadImageList('/public/apps/pvn/images/',[
-                  'bouncing_pirate.png',
+                  'bouncing_pirate.png','Mate_01.png','Pirate_Captain_Idle_00.png','Flying_Pirate.png',
                   'ninja1.png','cannon_chassis.png','cannon_barrel.png','board_vert.png','wall.png',
                   'board_horiz.png','background.jpg']);
 

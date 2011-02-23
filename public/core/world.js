@@ -16,6 +16,7 @@ var World = (function() {
     var elements = {};
 
     function add(id, spriteid, pos, zindex) {
+      console.log('add at pos: ' + pos);
       if (!elements[id] || elements[id].pos[0] != pos[0] || elements[id].pos[1] != pos[1] || elements[id].spriteid != spriteid) {
         World.dirty = true;
         elements[id] = {id: id, spriteid: spriteid, pos: pos,

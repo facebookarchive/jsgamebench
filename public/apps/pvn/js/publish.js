@@ -16,31 +16,29 @@ var Publish = (function() {
 
   var fb_logged_in = false;
   var player  = {id: 0, score: 0, totalScore: 0, badgeCount: 0, savedRequests: {}, name: 'guest'};
-
+  function isLoggedIn() {
+    return fb_logged_in;
+  }
+  
   function fbLogin(func) {
     if (fb_logged_in) {
       func && func();
     } else {
-      function fbLoginUiCb(func) {
-        UI.del('fblogin');
-        if (!func) {
-          return;
+      FB.login(function(response) {
+        if (response.session) {
+          fb_logged_in = true;
+          func && func();
+        } else {
+          fb_logged_in = false;
         }
-        FB.login(function(response) {
-          if (response.session) {
-            fb_logged_in = true;
-            func && func();
-          } else {
-            fb_logged_in = false;
-          }
-        }, {perms:'read_stream,publish_stream,user_about_me'} );
-      }
-      ClientCmd.install('fbLoginUiCb',fbLoginUiCb);
-      UI.addCollection('', 'fblogin', {pos: [0, 0]});
-      UI.addHTML('fblogin', 'bkgrnd', {pos: [5, 24], uiclass: 'fblogin', markup: "Login to FB?"});
-      UI.addButton('fblogin', 'loginOk', {pos: [15, 55], width: 75, height: 20, text: 'Login', command: {cmd: 'fbLoginUiCb', args: [func]}});
-      UI.addButton('fblogin', 'loginCancel', {pos: [105, 55], width: 75, height: 20, text: 'Cancel', command: {cmd: 'fbLoginUiCb', args: [0]}});
+      }, {perms:''} ); // read_stream,publish_stream
     }
+  }
+
+  function fbLogout() {
+    FB.logout(function(response) {
+      fb_logged_in = false;
+    });
   }
 
   function publishStory() {
@@ -160,7 +158,7 @@ var Publish = (function() {
           FB.String.escapeHTML(req.from.name),
           FB.String.escapeHTML(req.message));
           UI.addButton('gameOpts', 'req'+req.id,
-            {pos: [60, 70 + 65*i], width: 400, height: 60,
+            {pos: [60, 70 + 65*i], width: 400, height: 60, fontsize: '200%',
             text: markup, command: {cmd: 'onReqClick', args: [req] }});
         }
       });
@@ -175,20 +173,22 @@ var Publish = (function() {
         localStorage['player_' + player.id] = FB.JSON.stringify(player);
       }
     }
-     var str = 'Total: '+player.totalScore + ' Current: '+player.score + ' Badges: ' + player.badgeCount;
-    UI.addHTML('gameOpts', 'score', {pos: [70, 40], width:335, height: 32, uiclass: 'playerScore', markup: str});
+    var str = 'Tot '+player.totalScore + ' Curr '+player.score + ' Badges ' + player.badgeCount;
+    UI.addHTML('gameOpts', 'score', {pos: [70, 40], width:390, height: 32, uiclass: 'playerScore', markup: str});
     var name = player.name;
     var id = player.id;
     if (FB.Demo.replayData && FB.Demo.replayData.player) {
        var name = FB.Demo.replayData.player.name
        var id = FB.Demo.replayData.player.id;
     }
-    if (FB.Demo.in_replay) {
-      name += ' (Replay)';
-    } else {
-      name += ' (Playing)';
+    if (FB.Demo.playing) {
+      if (FB.Demo.in_replay) {
+        name += ' (Replay)';
+      } else {
+        name += ' (Playing)';
+      }
     }
-    UI.addHTML('gameOpts', 'name', {pos: [70, 0], width:335, height: 32,  uiclass: 'playerScore', markup: name});
+    UI.addHTML('gameOpts', 'name', {pos: [70, 0], width:390, height: 32,  uiclass: 'playerScore', markup: name});
     var markup = id ? '<img src="https://graph.facebook.com/'+id+'/picture"/>' : '';
     UI.addHTML('gameOpts', 'headshot', {pos: [5, 0], width:50, height:50, uiclass: '', markup: markup });
   }
@@ -215,11 +215,13 @@ var Publish = (function() {
   return {
     fbInit: fbInit,
     fbLogin: fbLogin,
+    fbLogout: fbLogout,
     publishStory: publishStory,
     sendRequest: sendRequest,
     setScore: setScore,
     clearScore: clearScore,
     checkReplayUrl: checkReplayUrl,
+    isLoggedIn: isLoggedIn,
   };
 })();
 

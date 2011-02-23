@@ -13,7 +13,7 @@
 // under the License.ninja
 
 var cam_pos = [0,0];
-var run_physics_sync = true;
+var run_physics_sync = false;
 
 (function() {
   var display, physics;
@@ -45,12 +45,17 @@ var run_physics_sync = true;
       physics.run();
       uw = display.lW / 100;
       uh = display.lH / 100;
-      World.add('bg_idx', 'background', [JSGlobal.w*0.45,JSGlobal.h - 768 + 768/2], 0);
+      Gob.delAll();
+      console.log('wh: ' + [JSGlobal.w,JSGlobal.h]);
+      FB.Demo.setupBackground();
       FB.Demo.setupWalls();
       FB.Demo.setupWaitingPirates();
+      FB.Demo.setupCaptain();
       FB.Demo.setupSling();
       FB.Demo.setupNodes();
+      
       physics.contactListener.PreSolve = FB.Demo._preSolve;
+      Publish.setScore(0);
     },
 
     replay: function() {
@@ -60,6 +65,7 @@ var run_physics_sync = true;
       }
       FB.Demo.play(false);
       FB.Demo.in_replay = true;
+      Publish.setScore(0);
       window.setTimeout(function() {
         var piratePos = FB.Demo.pirate.GetPosition();
         FB.Demo._mouseJoint = physics.addMouseJoint(FB.Demo.pirate, piratePos.x, piratePos.y, 1000);
@@ -150,7 +156,7 @@ var run_physics_sync = true;
         FB.Demo.fireTime = (new Date()).getTime();
       }
       var visual = FB.Demo.pirate.GetUserData();
-      display.setVisualImage(visual,'images/bouncing_pirate.png'); // in_sling_pirate.png
+      display.setVisualImage(visual,'images/Flying_Pirate.png'); // in_sling_pirate.png
       physics.setSpeedScale(1.5);
       FB.Demo.did_shoot = 1;
       console.log('Fire!');
@@ -286,9 +292,25 @@ var run_physics_sync = true;
           y: display.lH - h / 2,
           width: w,
           height: h,
-          imgSrc: 'images/bouncing_pirate.png'
+          imgSrc: 'images/Mate_01.png'
         });
       }
+    },
+
+    setupBackground: function() {
+      World.add('bg_idx', 'background', [JSGlobal.w*0.45,JSGlobal.h - 768 + 768/2], 0);
+    },
+    
+    setupCaptain: function() {
+      var w = uh * 16;
+      var h = w * 1.8; // The image size is 60 px x 85px
+      display.addVisual( {
+        x: w * 4.5,
+        y: display.lH - h / 2,
+        width: w,
+        height: h,
+        imgSrc: 'images/Pirate_Captain_Idle_00.png'
+      });
     },
 
 
