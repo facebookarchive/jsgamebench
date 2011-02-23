@@ -63,6 +63,7 @@ var Gob = (function() {
       var gob = gobs[id];
       var spid = gob.spriteid;
       var frame = gob.frame;
+      var oframe = gob.frame;
       var animating = true;
       var sprite;
       if (!GameFrame.settings.sprite_sheets) {
@@ -98,6 +99,8 @@ var Gob = (function() {
                     y: offset[1] * sprite.height,
                     url: sprite.url, spriteid: gob.spriteid,
                     image: sprite.imageel,
+                    frame: gob.frame,
+                    oframe: oframe,
                     sprite: sprite};
       gob.dirty = false;
       return retval;

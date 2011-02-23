@@ -24,6 +24,7 @@ var GameFrame = (function() {
       update_existing: true,
       css_transitions: false,
       transition_time: 3000,
+      multi_img: false,
       use_div_background: true,
       canvas_background: true,
       sprite_sheets: true,
