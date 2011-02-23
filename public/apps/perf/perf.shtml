@@ -3,6 +3,7 @@
     #metatags
     #include 'app_id'
     #include '/public/style.include'
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
     #include '/public/core/core.include'
     <script type="text/javascript" src="/public/apps/perf/benchmark.js"> </script>
     <script type="text/javascript" src="/public/apps/perf/perftest.js"> </script>

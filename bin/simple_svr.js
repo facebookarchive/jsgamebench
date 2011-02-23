@@ -34,7 +34,8 @@ function serverCallback(req, res) {
       Comm.sendFile(req, res, pathname, 1);
       break;
     case 'pvn':
-      Comm.sendFile(req, res, '/public/apps/pvn/index.shtml', { fb_app_info: fb_app_info });
+      //Comm.sendFile(req, res, '/public/apps/pvn/index.shtml', { fb_app_info: fb_app_info });
+      Comm.sendFile(req, res, '/public/apps/pvn/index.html');
       break;
     default:
       Comm.sendFileNotFound(res,pathname,404);

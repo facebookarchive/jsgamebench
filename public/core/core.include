@@ -1,4 +1,3 @@
-<script type="text/javascript" src="/socket.io/socket.io.js"></script>
 <script type="text/javascript" src="/public/core/json2.min.js"></script>
 <script type="text/javascript" src="/public/core/globals.js"> </script>
 <script type="text/javascript" src="/public/core/tick.js"> </script>
