@@ -28,17 +28,17 @@ io = require('socket.io');
 Log = require('../lib/log');
 LogProc = require('../lib/logproc');
 
-Utils = require('../public/utils/utils');
+Utils = require('../engine/utils/utils');
 Users = require('../lib/users');
 Server = require('../lib/server');
 Comm = require('../lib/comm');
-Grid = require('../public/shared/grid');
-GridSvr = require('../public/shared/gridsvr');
-Vec = require('../public/utils/vec');
-Mathx = require('../public/utils/math');
+Grid = require('../engine/shared/grid');
+GridSvr = require('../engine/shared/gridsvr');
+Vec = require('../engine/utils/vec');
+Mathx = require('../engine/utils/math');
 Socket = require('../lib/socket');
 Cmds = SvrCmds = require('../lib/svrcmds');
-SvrGame = require('../public/apps/space/svrgame');
+SvrGame = require('../space/svrgame');
 
 sys.puts("starting server");
 var production_mode = false;

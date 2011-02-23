@@ -23,7 +23,7 @@ Child = require('child_process');
 
 
 var fb_app_info={id:0,secret:0};
-if (process.argv.length < 4) {
+if (process.argv.length < 3) {
   console.log('Usage: tohtml <user agent>');
 } else {
 

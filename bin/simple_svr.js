@@ -26,14 +26,7 @@ function serverCallback(req, res) {
   var parse = url.parse(req.url);
   var pathname = parse.pathname;
   var split = pathname.split('/');
-  switch (split[1]) {
-    case 'public':
-    case 'images':
-      Comm.sendFile(req, res, pathname);
-      break;
-    default:
-      Comm.sendFileNotFound(res,pathname,404);
-  }
+  Comm.sendFile(req, res, pathname);
 };
 
 

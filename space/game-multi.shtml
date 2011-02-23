@@ -1,13 +1,13 @@
 <html>
 
   <head>
-    #include '/public/style.include'
+    #include '/engine/style.include'
     <script src="http://static.ak.fbcdn.net/connect/en_US/core.debug.js"></script>
     <script type="text/javascript">var stand_alone=false;</script>
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>
-    #include '/public/core/core.include'
-    <script type="text/javascript" src="/public/apps/space/game.js"> </script>
-    <script type="text/javascript" src="/public/apps/space/svrgame.js"> </script>
+    #include '/engine/core/core.include'
+    <script type="text/javascript" src="/space/game.js"> </script>
+    <script type="text/javascript" src="/space/svrgame.js"> </script>
   </head>
 
   <body id="body_id" style="overflow:hidden;"

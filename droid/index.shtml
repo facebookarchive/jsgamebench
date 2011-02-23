@@ -1,0 +1,23 @@
+<html>
+  <head>
+    #metatags
+    #include 'app_id'
+    #include '/engine/style.include'
+    #include '/engine/core/core.include'
+    <script type="text/javascript" src="/perf/benchmark.js"> </script>
+    <script type="text/javascript" src="/perf/perftest.js"> </script>
+    <script type="text/javascript" src="/perf/fbmark.js"> </script>
+    <script type="text/javascript" src="/droid/droid.js"> </script>
+  </head>
+
+  <body
+    style="overflow:hidden;"
+    onresize="Init.winresize()"
+    onload="Init.init()"
+    onorientationchange="Init.winresize();"
+    onunload="Init.quit()">
+    <div id="gamebody">
+    </div>
+  </body>
+
+</html>
