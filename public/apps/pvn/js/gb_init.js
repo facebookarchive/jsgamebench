@@ -70,7 +70,7 @@ function init() {
                   'board_horiz.png','background.jpg']);
 
   GameFrame.settings.offset = 0;
-  GameFrame.updateSettings({render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: true, css_transitions: false, css_keyframe: false, sprite_sheets: false, int_snap: true, transform3d:false});
+  GameFrame.updateSettings({render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: true, css_transitions: false, css_keyframe: false, sprite_sheets: false, int_snap: true, transform3d:true});
   client_user.game_active = true;
   UI.hookUIEvents('gamebody');
 }
@@ -86,4 +86,4 @@ function resize() {
   }
 }
 
-Init.setFunctions({app: tick, init: init, draw: Render.tick, ui: UI.tick, resize: resize });
+Init.setFunctions({app: tick, init: init, draw: Render.tick, ui: UI.tick, resize: resize, fps:1000 });

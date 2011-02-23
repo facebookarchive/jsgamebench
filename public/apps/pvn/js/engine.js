@@ -40,7 +40,6 @@ var win_size = [];
     visualToGob: function(visual) {
       var gob = visual.gob;
       if (gob) {
-        var el = Sprites.spritedictionary[visual.name].imageel;
         gob.pos[0] = visual.x * this.scale - cam_pos[0];
         gob.pos[1] = visual.y * this.scale - cam_pos[1];
         gob.theta = visual.angle || 0;
@@ -187,7 +186,7 @@ var win_size = [];
     setSpeedScale: function(scale) {
       this.speedScale = scale;
     },
-    
+
     onUpdate: function() {
       this.world.Step(1.0 / this.frameRate * this.speedScale, this.velocityIterations,
                       this.positionIterations);

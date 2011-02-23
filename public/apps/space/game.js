@@ -76,7 +76,7 @@ var Game = (function() {
       var list = Grid.findByArea(client_user.world_grid, me.extent[0], me.extent[1]);
       for (i in list) {
         var hit = list[i];
-        if (hit.name != 'rock') {
+        if (hit.name != 'wall') {
           continue;
         }
         var center = Vec.add(hit.extent[0],Vec.scale(hit.extent[1],.5));
@@ -288,23 +288,7 @@ var Game = (function() {
     if (!client_user.dir || Vec.mag(vel) > 0.01) {
       client_user.dir = Vec.norm(vel);
     }
-    if (1) {
-      var hit = getRock(me);
-      if (hit) {
-        var center = Vec.add(hit.extent[0],Vec.scale(hit.extent[1],.5));
-        var ship = Vec.add(me.extent[0],Vec.scale(me.extent[1],.5));
-        var normal = (Vec.sub(ship,center));
-        var r = reflect(vel,normal);
-        vel = r;
-      }
-      plr_pos[0] += vel[0];
-      plr_pos[1] += vel[1];
-    } else {
-      if (!hitWall(Vec.add(plr_pos, [vel[0], 0]), horngirl_id))
-        plr_pos[0] += vel[0];
-      if (!hitWall(Vec.add(plr_pos, [0, vel[1]]), horngirl_id))
-        plr_pos[1] += vel[1];
-    }
+
     if (vel[0] || vel[1] || angle != me.angle || forward) {
       if (forward) {
         if (me.state < 2) {
@@ -341,10 +325,11 @@ var Game = (function() {
       plr_pos[1] += vel[1];
     } else {
       if (!hitWall(Vec.add(plr_pos, [vel[0], 0]), horngirl_id))
-      plr_pos[0] += vel[0];
+        plr_pos[0] += vel[0];
       if (!hitWall(Vec.add(plr_pos, [0, vel[1]]), horngirl_id))
-      plr_pos[1] += vel[1];
+        plr_pos[1] += vel[1];
     }
+
     if (vel[0] || vel[1] || angle != me.angle || forward) {
       if (forward) {
         if (me.state < 2) {
@@ -582,4 +567,4 @@ var Game = (function() {
     return Game;
   })();
 
-Init.setFunctions({app: Game.tick, draw: Render.tick, ui: UI.tick, setup: Game.playGame, init: Game.initStandalone});
+Init.setFunctions({app: Game.tick, draw: Render.tick, ui: UI.tick, setup: Game.playGame, init: Game.initStandalone, fps:60});

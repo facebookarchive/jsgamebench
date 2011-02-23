@@ -33,7 +33,7 @@ var SvrGame = (function() {
     obj.uuid = Utils.uuidv4();
     obj.extent = [[x, y], [100, 120]];
     obj.name = 'rock';
-    obj.spin = Math.random()*1.4+0.7;
+    obj.spin = Math.random()*0.1+0.2;
     if (Math.random() < 0.5) {
       obj.spin = -obj.spin;
     }
