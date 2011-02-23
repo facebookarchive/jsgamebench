@@ -13,7 +13,7 @@
 // under the License.ninja
 
 var cam_pos = [0,0];
-var run_physics_sync = false;
+var run_physics_sync = true;
 
 (function() {
   var display, physics;
