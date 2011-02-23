@@ -152,7 +152,7 @@ var run_physics_sync = false;
         FB.Demo.fireTime = (new Date()).getTime();
       }
       var visual = FB.Demo.pirate.GetUserData();
-      display.setVisualImage(visual,'images/Flying_Pirate.png'); // in_sling_pirate.png
+      display.setVisualImage(visual,'images/flying_pirate.png'); // in_sling_pirate.png
       physics.setSpeedScale(1.5);
       FB.Demo.did_shoot = 1;
     },

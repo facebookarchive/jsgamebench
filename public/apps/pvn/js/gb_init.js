@@ -65,7 +65,7 @@ function init() {
 
   UI.addCollection('', 'gameOpts', {pos: [0, 0]});
   loadImageList('/public/apps/pvn/images/',[
-                  'bouncing_pirate.png','Mate_01.png','Pirate_Captain_Idle_00.png','Flying_Pirate.png',
+                  'bouncing_pirate.png','Mate_01.png','Pirate_Captain_Idle_00.png','flying_pirate.png',
                   'ninja1.png','cannon_chassis.png','cannon_barrel.png','board_vert.png','wall.png',
                   'board_horiz.png','background.jpg']);
 
