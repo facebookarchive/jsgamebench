@@ -5,6 +5,11 @@
     #include 'app_id'
     <link rel="stylesheet" type="text/css" href="/public/apps/pvn/pvn.css">
     <script src="http://static.ak.fbcdn.net/connect/en_US/core.debug.js"></script>
+    <script type="text/javascript">
+      if (window.fbrpc) {
+        window.fbrpc.call('setOrientation', '{"orientation": "landscape"}');
+      }
+    </script>
     #include '/public/core/core.include'
     <script type="text/javascript" src="/public/apps/perf/benchmark.js"> </script>
     <script type="text/javascript" src="/public/apps/perf/perftest.js"> </script>
