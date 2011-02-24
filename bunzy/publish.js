@@ -16,7 +16,8 @@ var Publish = (function() {
   var fb_logged_in;
 
   function fbInit() {
-    if (client_user.fb_logged_in) {
+    console.log('client_user.fb_logged_in ' + client_user.fb_logged_in);
+    if (!client_user.fb_logged_in) {
       FB.login(function(response) {
         if (response.session) {
           fb_logged_in = true;
@@ -30,7 +31,7 @@ var Publish = (function() {
   function sendRequest() {
     FB.ui({
       method: 'apprequests',
-      message: 'Just scored ' + player.score + ' points ' +
+      message: 'Just scored ' + 13 + ' points ' +
         'on this game and would like to send a gift of 5 points and a bonus pirate.',
       data: {
         gift: {
@@ -40,7 +41,32 @@ var Publish = (function() {
       }
     });
   }
+  
+  function publishStory() {
+    var loc = window.location;
+    var url = loc.protocol + '//' + loc.host + '/pvn/show/' + 
+      encodeURIComponent(FB.JSON.stringify({
+        player: {
+          id: 0,
+          name: 'name',
+        }
+      }));
+    FB.ui({
+      method: 'stream.publish',
+      attachment: {
+        name: 'Watch Replay',
+        caption: 'Score!',
+        description: (
+          'Check out my awesome game of pirate chess i played with a friend'
+        ),
+        href: url
+      }
+    });
+  }
+
+
   return {
+    publishStory: publishStory,
     sendRequest: sendRequest,
     fbInit: fbInit,
   };

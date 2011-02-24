@@ -34,6 +34,11 @@ function tick() {
     var dy = JSGlobal.mouse.y;
     console.log([dx.dy]);
   }
+  if (!client_user.fb_logged_in) {
+    UI.addButton('buttons', 'login', {pos: [200, 140], width: 150, height: 60, fontsize: '300%', text: 'Login', command: {cmd: 'login' }});
+  } else {
+    UI.del('login');
+  }
 }
 
 var size = 75;
@@ -50,7 +55,7 @@ function clickButton() {
 
 function init() {
   console.log('fb_app_id ' + fb_app_id);
-  Publish.fbInit(fb_app_id);
+ // Publish.fbInit(fb_app_id);
   GameFrame.updateSettings({
     render_mode: GameFrame.HTML_ONLY,
     update_existing: true,
@@ -66,13 +71,15 @@ function init() {
   loadImageList('/pvn/images/',['bouncing_pirate.png','background.jpg']);
   ClientCmd.install('clickButton',clickButton);
   ClientCmd.install('sendRequest',Publish.sendRequest);
+  ClientCmd.install('publishStory',Publish.publishStory);
+  ClientCmd.install('login',Publish.fbInit);
 }
 
 function resize() {
   UI.addCollection('', 'buttons', {pos: [0, 0]});
   UI.addButton('buttons', 'optin', {pos: [0, 0], width: 150, height: 60, fontsize: '300%', text: 'ClickMe!', command: {cmd: 'clickButton' }});
   UI.addButton('buttons', 'request', {pos: [200, 0], width: 150, height: 60, fontsize: '300%', text: 'Request', command: {cmd: 'sendRequest' }});
-  //console.log('resize');
+  UI.addButton('buttons', 'publish', {pos: [0, 140], width: 150, height: 60, fontsize: '300%', text: 'Stream', command: {cmd: 'publishStory' }});
 }
 
 Init.setFunctions({app: tick, init: init, draw: Render.tick, ui: UI.tick, resize: resize, postLoad: postImageLoad, fps:1000 });
