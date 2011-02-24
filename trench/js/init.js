@@ -32,11 +32,11 @@
 
       var worldmat = Math3D.mat4x4();
       worldmat[12] = -0.5;
-      worldmat[13] = -0.5;
-      worldmat[14] = -5.0;
+      worldmat[13] = 2;
+      worldmat[14] = -0.5;
       World3D.add(1, box_model, worldmat);
 
-      World3D.setPerspective(0.5,
+      World3D.setPerspective(0.35,
                              viewport.width / viewport.height,
                              0.75,
                              1000.0);

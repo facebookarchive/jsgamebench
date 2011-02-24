@@ -59,20 +59,78 @@ var Math3D = (function() {
       return [ v1[0] * v2[0], v1[1] * v2[1], v1[2] * v2[2] ];
     }
 
-    function perspective(l, r, b, t, n, f) {
+    // right handed, y forward, z up
+    function perspectiveYForward(l, r, b, t, n, f) {
       var res = [];
       var oorl = 1.0 / (r - l);
       var ootb = 1.0 / (t - b);
       var oofn = 1.0 / (f - n);
       var twon = 2.0 * n;
+
       res[0] = twon * oorl;
-      res[1] = res[2] = res[3] = res[4] = 0;
+      res[1] = res[2] = res[3] = 0;
+
+      res[4] = (r + l) * oorl;
+      res[5] = (t + b) * ootb;
+      res[6] = (f + n) * oofn;
+      res[7] = 1;
+
+      res[8] = 0;
+      res[9] = twon * ootb;
+      res[10] = res[11] = 0;
+
+      res[12] = res[13] = 0;
+      res[14] = -twon * f * oofn;
+      res[15] = 0;
+      return res;
+    }
+
+    // left handed, z forward; requires fewer camera code hacks
+    function perspectiveZForward(l, r, b, t, n, f) {
+      var res = [];
+      var oorl = 1.0 / (r - l);
+      var ootb = 1.0 / (t - b);
+      var oofn = 1.0 / (f - n);
+      var twon = 2.0 * n;
+
+      res[0] = twon * oorl;
+      res[1] = res[2] = res[3] = 0;
+
+      res[4] = 0;
       res[5] = twon * ootb;
       res[6] = res[7] = 0;
+
+      res[8] = (r + l) * oorl;
+      res[9] = (t + b) * ootb;
+      res[10] = (f + n) * oofn;
+      res[11] = 1;
+
+      res[12] = res[13] = 0;
+      res[14] = -twon * f * oofn;
+      res[15] = 0;
+      return res;
+    }
+
+    // this is the opengl default, right handed
+    function perspectiveZBackward(l, r, b, t, n, f) {
+      var res = [];
+      var oorl = 1.0 / (r - l);
+      var ootb = 1.0 / (t - b);
+      var oofn = 1.0 / (f - n);
+      var twon = 2.0 * n;
+
+      res[0] = twon * oorl;
+      res[1] = res[2] = res[3] = 0;
+
+      res[4] = 0;
+      res[5] = twon * ootb;
+      res[6] = res[7] = 0;
+
       res[8] = (r + l) * oorl;
       res[9] = (t + b) * ootb;
       res[10] = -(f + n) * oofn;
       res[11] = -1;
+
       res[12] = res[13] = 0;
       res[14] = -twon * f * oofn;
       res[15] = 0;
@@ -85,6 +143,6 @@ var Math3D = (function() {
     Math3D.mulMat4x4 = mulMat4x4;
     Math3D.fastInvertMat4x4 = fastInvertMat4x4;
     Math3D.dotVec3 = dotVec3;
-    Math3D.perspective = perspective;
+    Math3D.perspective = perspectiveYForward;
     return Math3D;
   })();

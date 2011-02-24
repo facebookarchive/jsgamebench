@@ -20,7 +20,10 @@ var WebGLModel = (function() {
       var cur_material;
 
       function setupContext() {
-        gl.disable(gl.CULL_FACE);
+        gl.enable(gl.CULL_FACE);
+        gl.cullFace(gl.BACK);
+        gl.frontFace(gl.CCW);
+
         cur_model = undefined;
         cur_material = undefined;
       }
