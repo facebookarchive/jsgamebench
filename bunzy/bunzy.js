@@ -53,9 +53,13 @@ function clickButton() {
   pirate_dir = -pirate_dir;
 }
 
+function sendMove() {
+  Publish.sendRequest('I made my move!',{board: { a1: 'king', a2: 'queen', a3: 'pawn'}});
+}
+
 function init() {
   console.log('fb_app_id ' + fb_app_id);
- // Publish.fbInit(fb_app_id);
+  Publish.fbInit(fb_app_id);
   GameFrame.updateSettings({
     render_mode: GameFrame.HTML_ONLY,
     update_existing: true,
@@ -70,7 +74,7 @@ function init() {
   UI.hookUIEvents('gamebody');
   loadImageList('/pvn/images/',['bouncing_pirate.png','background.jpg']);
   ClientCmd.install('clickButton',clickButton);
-  ClientCmd.install('sendRequest',Publish.sendRequest);
+  ClientCmd.install('sendRequest',sendMove);
   ClientCmd.install('publishStory',Publish.publishStory);
   ClientCmd.install('login',Publish.fbInit);
 }
