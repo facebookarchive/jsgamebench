@@ -14,12 +14,42 @@
 
 var Publish = (function() {
   var fb_logged_in;
-
+  var player = {savedRequests: {}};
+  
   function fbInit() {
+    if (!fb_app_id) {
+      return;
+    } else {
+      console.log('logging in to fb');
+      if (document.getElementById('fb-root')) {
+        FB.init({
+            appId  : fb_app_id,
+              status : true, // check login status
+              cookie : true, // enable cookies to allow the server to access the session
+              xfbml  : false  // parse XFBML
+              });
+        FB.getLoginStatus(function(response) {
+            if (response.session) {
+              client_user.fb_logged_in = true;
+              console.log('logged in');
+              getInfo();
+            } else {
+              client_user.fb_logged_in = false;
+              console.log('not logged in');
+            }
+          });
+      }
+    }
+  }
+  
+  function fbLogin() {
     if (client_user.fb_logged_in) {
+      return getInfo();
+    } else {
       FB.login(function(response) {
         if (response.session) {
           fb_logged_in = true;
+          getInfo();
         } else {
           fb_logged_in = false;
         }
@@ -27,21 +57,92 @@ var Publish = (function() {
     }
   }
 
-  function sendRequest() {
-    FB.ui({
-      method: 'apprequests',
-      message: 'Just scored ' + player.score + ' points ' +
-        'on this game and would like to send a gift of 5 points and a bonus pirate.',
-      data: {
-        gift: {
-          points: 5,
-          badge: 1,
-        }
+  function onReqClick(req) {
+    UI.del('req'+req.id);
+    if (player.savedRequests[req.id]) {
+      // Skip for processed ones
+      return;
+    }
+    var data = req.data && FB.JSON.parse(req.data);
+    if (data && data.board) {
+      console.log('board: ' + JSON.stringify(data.board));
+    }
+    player.savedRequests[req.id] = true;
+    FB.api(req.id, 'delete', function(response) {
+      if (!response || response.error) {
+        alert('Error occured');
       }
     });
   }
+
+  function getInfo() {
+    FB.api('me', {
+      fields: 'name, picture'
+    }, function (result) {
+      player.name = result.name;
+      player.picture = result.picture;
+    });
+    
+    FB.api('me/apprequests', function(result) {
+      var reqs = result.data;
+      if (!reqs) {
+        return;
+      }
+      ClientCmd.install('onReqClick',onReqClick);
+      player.savedRequests = player.savedRequests || {};
+      for(var i=0;i<reqs.length;i++) {
+        var req = reqs[i];
+        console.log('req: ' + i);
+        if (player.savedRequests[req.id]) {
+          continue;
+       }
+       markup = FB.String.format(
+        '<img src="http://graph.facebook.com/{0}/picture" />{1}: {2}</p>', 
+         req.from.id,
+        FB.String.escapeHTML(req.from.name),
+        FB.String.escapeHTML(req.message));
+        UI.addButton('gameOpts', 'req'+req.id,
+          {pos: [60, 70 + 65*i], width: 400, height: 60, fontsize: '200%',
+          text: markup, command: {cmd: 'onReqClick', args: [req] }});
+      }
+    });
+  }
+
+  function sendRequest(msg,payload) {
+    FB.ui({
+      method: 'apprequests',
+      message: 'I made my move in pirate chess.. now its your turn!',
+      data: payload
+    });
+  }
+  
+  function publishStory() {
+    var loc = window.location;
+    var url = loc.protocol + '//' + loc.host + '/chess/show/' + 
+      encodeURIComponent(FB.JSON.stringify({
+        player: {
+          id: 0,
+          name: 'name',
+        }
+      }));
+    FB.ui({
+      method: 'stream.publish',
+      attachment: {
+        name: 'Watch Replay',
+        caption: 'Score!',
+        description: (
+          'Check out my awesome game of pirate chess i played with a friend'
+        ),
+        href: url
+      }
+    });
+  }
+
+
   return {
+    publishStory: publishStory,
     sendRequest: sendRequest,
     fbInit: fbInit,
+    fbLogin: fbLogin,
   };
 })();

@@ -34,6 +34,11 @@ function tick() {
     var dy = JSGlobal.mouse.y;
     console.log([dx.dy]);
   }
+  if (!client_user.fb_logged_in) {
+    UI.addButton('buttons', 'login', {pos: [200, 140], width: 150, height: 60, fontsize: '300%', text: 'Login', command: {cmd: 'login' }});
+  } else {
+    UI.del('login');
+  }
 }
 
 var size = 75;
@@ -46,6 +51,10 @@ function postImageLoad() {
 
 function clickButton() {
   pirate_dir = -pirate_dir;
+}
+
+function sendMove() {
+  Publish.sendRequest('I made my move!',{board: { a1: 'king', a2: 'queen', a3: 'pawn'}});
 }
 
 function init() {
@@ -65,14 +74,16 @@ function init() {
   UI.hookUIEvents('gamebody');
   loadImageList('/pvn/images/',['bouncing_pirate.png','background.jpg']);
   ClientCmd.install('clickButton',clickButton);
-  ClientCmd.install('sendRequest',Publish.sendRequest);
+  ClientCmd.install('sendRequest',sendMove);
+  ClientCmd.install('publishStory',Publish.publishStory);
+  ClientCmd.install('login',Publish.fbInit);
 }
 
 function resize() {
   UI.addCollection('', 'buttons', {pos: [0, 0]});
   UI.addButton('buttons', 'optin', {pos: [0, 0], width: 150, height: 60, fontsize: '300%', text: 'ClickMe!', command: {cmd: 'clickButton' }});
   UI.addButton('buttons', 'request', {pos: [200, 0], width: 150, height: 60, fontsize: '300%', text: 'Request', command: {cmd: 'sendRequest' }});
-  //console.log('resize');
+  UI.addButton('buttons', 'publish', {pos: [0, 140], width: 150, height: 60, fontsize: '300%', text: 'Stream', command: {cmd: 'publishStory' }});
 }
 
 Init.setFunctions({app: tick, init: init, draw: Render.tick, ui: UI.tick, resize: resize, postLoad: postImageLoad, fps:1000 });
