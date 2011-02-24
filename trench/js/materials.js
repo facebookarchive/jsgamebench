@@ -1,0 +1,85 @@
+// Copyright 2004-present Facebook. All Rights Reserved.
+
+// Licensed under the Apache License, Version 2.0 (the "License"); you may
+// not use this file except in compliance with the License. You may obtain
+// a copy of the License at
+
+//     http://www.apache.org/licenses/LICENSE-2.0
+
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations
+// under the License.
+
+var TrenchMaterials = (function() {
+  var default_material_type_def = {
+    name : 'default',
+
+    vertex_shader : {
+      attribute: {
+        vposition : 'vec3',
+        vtexcoord : 'vec2',
+        vnormal : 'vec3'
+      },
+
+      varying: {
+        v_Texcoord : 'vec2'
+      },
+
+      uniform: {
+        modelviewproj : 'mat4'
+      },
+
+      text: [
+        'void main() {',
+        '  vec4 hpos = vec4(vposition, 1);',
+        '  gl_Position.x = dot(modelviewproj0, hpos);',
+        '  gl_Position.y = dot(modelviewproj1, hpos);',
+        '  gl_Position.z = dot(modelviewproj2, hpos);',
+        '  gl_Position.w = dot(modelviewproj3, hpos);',
+        '  v_Texcoord = vtexcoord;',
+        '}'
+      ]
+    },
+
+    fragment_shader : {
+      fprecision: 'mediump',
+
+      varying : {
+        v_Texcoord : 'vec2'
+      },
+
+      uniform : {
+        surfacetex : 'sampler2D'
+      },
+
+      text : [
+        'void main() {',
+//        '  gl_FragColor = texture2D(surfacetex, v_Texcoord);',
+        '  gl_FragColor = vec4(1,1,1,1);',
+        '}'
+      ]
+    }
+  };
+
+  var default_material_def = {
+    name : 'default',
+    type : 'default',
+    alphaBlend : false,
+    params : {},
+    textures : {
+      surfacetex : '/textures/default.png'
+    }
+  };
+
+  function registerMaterials(material_table) {
+    material_table.createMaterialType(default_material_type_def);
+    material_table.createMaterial(default_material_def);
+  }
+
+  return {
+    registerMaterials: registerMaterials,
+  };
+
+})();

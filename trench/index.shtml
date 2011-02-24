@@ -1,0 +1,23 @@
+<html>
+  <head>
+    #metatags
+
+    <!-- engine includes -->
+    #include '../engine/style.include'
+    #include 'app_id'
+    #include '../engine/core/core.include'
+
+    <!-- game stuff -->
+    <script type="text/javascript" src="/js/materials.js"></script>
+    <script type="text/javascript" src="/js/init.js"></script>
+
+  </head>
+  <body
+    onresize="Init.winresize();"
+    onload="Init.init();"
+    onorientationchange="Init.winresize();"
+    onunload="Init.quit()">
+    <div id="fb-root"></div>
+    <div id="gamebody"></div>
+  </body>
+</html>
