@@ -15,7 +15,10 @@
 var WebGLRender = (function() {
     var gl, initializing = false;
     var viewport;
+
     var sprite_context;
+
+    var texture_table;
     var material_table;
     var model_context;
 
@@ -32,6 +35,7 @@ var WebGLRender = (function() {
           sprite.gltexture = undefined;
         });
       sprite_context = null;
+      texture_table = null;
       material_table = null;
       model_context = null;
       gl = null;
@@ -79,26 +83,36 @@ var WebGLRender = (function() {
         return false;
       }
 
-      material_table = WebGLMaterial.createMaterialTable(gl_context);
-      if (!material_table) {
+      texture_table = WebGLTexture.createTextureTable(gl_context);
+      if (!texture_table) {
         sprite_context = null;
         initializing = false;
         return false;
       }
 
-      model_context = WebGLModel.createContext(gl_context, material_table);
+      material_table = WebGLMaterial.createMaterialTable(gl_context,
+                                                         texture_table);
+      if (!material_table) {
+        sprite_context = null;
+        texture_table = null;
+        initializing = false;
+        return false;
+      }
+
+      model_context = WebGLModel.createContext(gl_context,
+                                               material_table);
       if (!model_context) {
         sprite_context = null;
+        texture_table = null;
         material_table = null;
         initializing = false;
         return false;
       }
 
-      viewport =
-        {
+      viewport = {
           width : pwidth,
           height : pheight
-        };
+      };
 
       gl = gl_context;
       initializing = false;
@@ -141,6 +155,9 @@ var WebGLRender = (function() {
     }
 
     function drawModel(framedata) {
+      if (!gl) {
+        return;
+      }
     }
 
     function end() {
@@ -156,6 +173,9 @@ var WebGLRender = (function() {
     WebGLRender.begin = begin;
     WebGLRender.drawSprite = drawSprite;
     WebGLRender.drawModel = drawModel;
-    WebGLRender.end = end
+    WebGLRender.end = end;
+    WebGLRender.isInitialized = function() { return gl === undefined; };
+    WebGLRender.getMaterialTable = function() { return material_table; };
+    WebGLRender.getModelContext = function() { return model_context; };
     return WebGLRender;
   })();

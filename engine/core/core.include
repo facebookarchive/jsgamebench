@@ -19,6 +19,7 @@
 <script type="text/javascript" src="/engine/core/canvas_render.js"> </script>
 <script type="text/javascript" src="/engine/core/webgl_util.js"> </script>
 <script type="text/javascript" src="/engine/core/webgl_sprite.js"> </script>
+<script type="text/javascript" src="/engine/core/webgl_texture.js"> </script>
 <script type="text/javascript" src="/engine/core/webgl_material.js"> </script>
 <script type="text/javascript" src="/engine/core/webgl_model.js"> </script>
 <script type="text/javascript" src="/engine/core/webgl_render.js"> </script>

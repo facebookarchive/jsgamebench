@@ -25,7 +25,7 @@ var WebGLModel = (function() {
         cur_material = undefined;
       }
 
-      model_context.drawModel = function(model, subobj) {
+      model_context.drawModel = function(model, subobj, matrix_state) {
         if (gl.setDrawContext(model_context)) {
           // context changed, setup model context
           setupContext();
@@ -36,7 +36,7 @@ var WebGLModel = (function() {
           cur_model.bind();
         }
 
-        cur_model.draw(subobj);
+        cur_model.draw(subobj, matrix_state);
       };
 
       model_context.createModel = function(model_data) {
@@ -97,11 +97,20 @@ var WebGLModel = (function() {
                                  20); // 20 bytes in, after texcoords
         };
 
-        model_obj.draw = function(subobj) {
-          if (cur_material !== subobjects[subobj].material) {
-            cur_material = subobjects[subobj].material;
-            cur_material.bind();
+        model_obj.draw = function(subobj, matrix_state) {
+          var material = subobjects[subobj].material;
+          if (!material.bind) {
+            // not loaded yet
+            return;
           }
+
+          if (cur_material !== material) {
+            cur_material = material;
+            if (cur_material.bind) {
+              cur_material.bind();
+            }
+          }
+
           gl.drawElements(gl.TRIANGLES,
                           subobjects[subobj].count,
                           gl.UNSIGNED_SHORT,
