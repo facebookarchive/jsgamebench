@@ -23,6 +23,8 @@ var WebGLModel = (function() {
         gl.enable(gl.CULL_FACE);
         gl.cullFace(gl.BACK);
         gl.frontFace(gl.CCW);
+        gl.enable(gl.DEPTH_TEST);
+        gl.depthFunc(gl.LESS);
 
         cur_model = undefined;
         cur_material = undefined;

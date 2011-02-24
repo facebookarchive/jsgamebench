@@ -129,7 +129,8 @@ var WebGLRender = (function() {
       gl.viewport(0, 0, viewport.width, viewport.height);
       sprite_context.setViewport(viewport);
       gl.clearColor(0, 0, 0, 0);
-      gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.clearDepth(1);
+      gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     }
 
     function drawSprite(framedata) {
