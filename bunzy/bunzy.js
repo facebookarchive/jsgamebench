@@ -27,7 +27,16 @@ function tick() {
   p2.pos[0] = 200 + Math.sin(rot) * 100;
   p2.pos[1] = 200 + Math.cos(rot) * 100;
   p2.dirty = true;
+
+  if (JSGlobal.mouse.buttons[0]) {
+    JSGlobal.mouse.buttons[0] = 0;
+    var dx = JSGlobal.mouse.x;
+    var dy = JSGlobal.mouse.y;
+    console.log([dx.dy]);
+  }
 }
+
+var size = 75;
 
 function postImageLoad() {
   World.add('bg_idx', 'background', [JSGlobal.w*0.5,JSGlobal.h*0.5], 0);
@@ -58,7 +67,7 @@ function init() {
 
 function resize() {
   UI.addCollection('', 'buttons', {pos: [0, 0]});
-  UI.addButton('buttons', 'optin', {pos: [10, 100], width: 150, height: 60, fontsize: '300%', text: 'ClickMe!', command: {cmd: 'clickButton' }});
+  UI.addButton('buttons', 'optin', {pos: [0, 0], width: 150, height: 60, fontsize: '300%', text: 'ClickMe!', command: {cmd: 'clickButton' }});
   //console.log('resize');
 }
 
