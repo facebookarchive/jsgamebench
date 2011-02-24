@@ -65,11 +65,13 @@ function init() {
   UI.hookUIEvents('gamebody');
   loadImageList('/pvn/images/',['bouncing_pirate.png','background.jpg']);
   ClientCmd.install('clickButton',clickButton);
+  ClientCmd.install('sendRequest',Publish.sendRequest);
 }
 
 function resize() {
   UI.addCollection('', 'buttons', {pos: [0, 0]});
   UI.addButton('buttons', 'optin', {pos: [0, 0], width: 150, height: 60, fontsize: '300%', text: 'ClickMe!', command: {cmd: 'clickButton' }});
+  UI.addButton('buttons', 'request', {pos: [200, 0], width: 150, height: 60, fontsize: '300%', text: 'Request', command: {cmd: 'sendRequest' }});
   //console.log('resize');
 }
 
