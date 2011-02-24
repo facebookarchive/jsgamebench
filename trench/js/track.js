@@ -12,26 +12,22 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-var TrenchCamera = (function() {
+var TrenchTrack = (function() {
 
-    var camera_pos = [0,0,0];
-    var camera_dir = [0,1,0];
-    var camera_up = [0,0,1];
-
-    var camera_distance = 20;
-
-    function tick(dt) {
-      var player_pos = TrenchPlayer.getPosition();
-      camera_pos[1] = player_pos[1] - camera_distance;
-
-      var camera_matrix = Math3D.mat4x4();
-      Math3D.orientMat4x4(camera_matrix, camera_dir, camera_up);
-      Math3D.translateMat4x4(camera_matrix, camera_pos);
-      World3D.setCamera(camera_matrix);
+    function init(model) {
+      // TODO (obviously)
+      var worldmat = Math3D.mat4x4();
+      worldmat[12] = -0.5;
+      worldmat[13] = 2;
+      worldmat[14] = -0.5;
+      World3D.add(1, model, worldmat);
     }
 
-    var TrenchCamera = {};
-    TrenchCamera.tick = tick;
-    return TrenchCamera;
-  })();
+    function tick(dt) {
+    }
 
+    var TrenchTrack = {};
+    TrenchTrack.init = init;
+    TrenchTrack.tick = tick;
+    return TrenchTrack;
+  })();

@@ -86,6 +86,34 @@ var Math3D = (function() {
       }
     }
 
+    function addVec3(v1, v2) {
+      return [
+        v1[0] + v2[0],
+        v1[1] + v2[1],
+        v1[2] + v2[2]
+      ];
+    }
+
+    function addVec3Self(vout, vin) {
+      vout[0] += vin[0];
+      vout[1] += vin[1];
+      vout[2] += vin[2];
+    }
+
+    function scaleVec3(v, scale) {
+      return [
+        v[0] * scale,
+        v[1] * scale,
+        v[2] * scale
+      ];
+    }
+
+    function scaleVec3Self(vout, scale) {
+      vout[0] *= scale;
+      vout[1] *= scale;
+      vout[2] *= scale;
+    }
+
     function orientMat4x4(mout, vforward, vup) {
       var vright = crossVec3(vforward, vup);
       var vnewup = crossVec3(vright, vforward);
@@ -171,6 +199,10 @@ var Math3D = (function() {
     Math3D.lengthVec3Squared = lengthVec3Squared;
     Math3D.lengthVec3 = lengthVec3;
     Math3D.normalizeVec3 = normalizeVec3;
+    Math3D.addVec3 = addVec3;
+    Math3D.addVec3Self = addVec3Self;
+    Math3D.scaleVec3 = scaleVec3;
+    Math3D.scaleVec3Self = scaleVec3Self;
     Math3D.orientMat4x4 = orientMat4x4;
     Math3D.translateMat4x4 = translateMat4x4;
     Math3D.perspective = perspectiveYForward;

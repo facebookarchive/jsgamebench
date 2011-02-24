@@ -22,6 +22,12 @@ var World3D = (function() {
       elements[id] = {model: model, matrix: worldmat};
     }
 
+    function move(id, worldmat) {
+      if (elements[id]) {
+        elements[id].matrix = worldmat;
+      }
+    }
+
     function setPerspective(fovy, aspect, near, far) {
       var t = Math.tan(fovy) * near;
       var r = t * aspect;
@@ -50,6 +56,7 @@ var World3D = (function() {
 
     var World3D = {};
     World3D.add = add;
+    World3D.move = move;
     World3D.setPerspective = setPerspective;
     World3D.setCamera = setCamera;
     World3D.framedata = framedata;

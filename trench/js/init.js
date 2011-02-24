@@ -18,11 +18,6 @@
 
   var render_inited = false;
   var box_model = null;
-  var track_pos = [0,0,0];
-
-  function keyDown(ascii) {
-    return JSGlobal.key_state[ascii.charCodeAt(0)] > 0;
-  }
 
   function tick() {
     if (!render_inited && WebGLRender.isInitialized()) {
@@ -35,11 +30,8 @@
       TrenchMaterials.registerMaterials(WebGLRender.getMaterialTable());
       box_model = model_context.createModel(box_model_data);
 
-      var worldmat = Math3D.mat4x4();
-      worldmat[12] = -0.5;
-      worldmat[13] = 2;
-      worldmat[14] = -0.5;
-      World3D.add(1, box_model, worldmat);
+      TrenchPlayer.init(box_model);
+      TrenchTrack.init(box_model);
 
       World3D.setPerspective(0.35,
                              viewport.width / viewport.height,
@@ -47,32 +39,15 @@
                              1000.0);
     }
 
-    if (JSGlobal.key_state[Key.UP]) {
-      track_pos[2] += 0.01;
-    }
-    if (JSGlobal.key_state[Key.DOWN]) {
-      track_pos[2] -= 0.01;
-    }
-    if (JSGlobal.key_state[Key.RIGHT]) {
-      track_pos[0] += 0.01;
-    }
-    if (JSGlobal.key_state[Key.LEFT]) {
-      track_pos[0] -= 0.01;
-    }
-    if (keyDown('W')) {
-      track_pos[1] += 0.01;
-    }
-    if (keyDown('S')) {
-      track_pos[1] -= 0.01;
-    }
+    var delta_time = 0.0333; // TODO
 
-    TrenchCamera.setCameraPos(track_pos);
-    TrenchCamera.updateCamera();
+    TrenchPlayer.tick(delta_time);
+    TrenchCamera.tick(delta_time);
+    TrenchTrack.tick(delta_time);
   }
 
   function init() {
     Init.reset();
-    track_pos = [0,0,0];
 
     GameFrame.updateSettings({
       render_mode: GameFrame.WEBGL3D,
@@ -96,7 +71,7 @@
     ui: UI.tick,
     resize: resize,
     //postLoad: postImageLoad,
-    fps: 1000
+    fps: 30
   });
 
 })();
