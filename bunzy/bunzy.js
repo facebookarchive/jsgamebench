@@ -1,3 +1,5 @@
+(function() {
+
 function loadImageList(path,list) {
   for(var i=0;i<list.length;i++) {
     var label = list[i].split('.')[0];
@@ -6,8 +8,10 @@ function loadImageList(path,list) {
   }
 }
 
-var pirate;
+var pirate,p2;
 var pirate_dir = 1;
+var rot = 0;
+
 function tick() {
   pirate.pos[0] += pirate_dir;
   if (pirate.pos[0] < 0) {
@@ -16,12 +20,19 @@ function tick() {
     pirate_dir = -1;
   }
   pirate.dirty = 1;
+  rot += 0.02;
+  if (rot > 2*Math.PI) {
+    rot -= 2*Math.PI;
+  }
+  p2.pos[0] = 200 + Math.sin(rot) * 100;
+  p2.pos[1] = 200 + Math.cos(rot) * 100;
+  p2.dirty = true;
 }
 
 function postImageLoad() {
   World.add('bg_idx', 'background', [JSGlobal.w*0.5,JSGlobal.h*0.5], 0);
   pirate = Gob.add(Utils.uuidv4(), 'bouncing_pirate', 0, [100,150], [0,0], 10, 1);
-
+  p2 = Gob.add(Utils.uuidv4(), 'bouncing_pirate', 0, [100,150], [0,0], 10, 1);
 }
 
 function clickButton() {
@@ -52,3 +63,5 @@ function resize() {
 }
 
 Init.setFunctions({app: tick, init: init, draw: Render.tick, ui: UI.tick, resize: resize, postLoad: postImageLoad, fps:1000 });
+
+})();
