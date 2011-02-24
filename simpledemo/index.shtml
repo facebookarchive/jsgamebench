@@ -5,8 +5,8 @@
     <script src="http://static.ak.fbcdn.net/connect/en_US/core.debug.js"></script>
     #include 'app_id'
     #include '/engine/core/core.include'
-    <script type="text/javascript" src="/bunzy/publish.js"></script>
-    <script type="text/javascript" src="/bunzy/bunzy.js"></script>
+    <script type="text/javascript" src="/simpledemo/publish.js"></script>
+    <script type="text/javascript" src="/simpledemo/demo.js"></script>
 
   </head>
   <body
