@@ -32,7 +32,7 @@ var WebGLMaterial = (function() {
         return material;
       };
 
-      material_table.createMaterial('error', error_material);
+//      material_table.createMaterial('error', error_material);
 
       return material_table;
     }

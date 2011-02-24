@@ -87,10 +87,10 @@ var GameFrame = (function() {
                              gameviewport.dstyle.width,
                              gameviewport.dstyle.height);
             break;
-          case WEBGL:
-            WebGL3DRender.init(gameviewport.id,
-                               gameviewport.dstyle.width,
-                               gameviewport.dstyle.height);
+          case WEBGL3D:
+            WebGLRender.init(gameviewport.id,
+                             gameviewport.dstyle.width,
+                             gameviewport.dstyle.height);
             break;
           case CANVAS_ONLY:
             CanvasRender.init(gameviewport.id,
