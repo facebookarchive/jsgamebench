@@ -49,6 +49,8 @@ function clickButton() {
 }
 
 function init() {
+  console.log('fb_app_id ' + fb_app_id);
+  Publish.fbInit(fb_app_id);
   GameFrame.updateSettings({
     render_mode: GameFrame.HTML_ONLY,
     update_existing: true,
