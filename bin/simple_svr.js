@@ -26,20 +26,7 @@ function serverCallback(req, res) {
   var parse = url.parse(req.url);
   var pathname = parse.pathname;
   var split = pathname.split('/');
-  switch (split[1]) {
-    case 'public':
-      Comm.sendFile(req, res, pathname);
-      break;
-    case 'images':
-      Comm.sendFile(req, res, pathname, 1);
-      break;
-    case 'pvn':
-      //Comm.sendFile(req, res, '/public/apps/pvn/index.shtml', { fb_app_info: fb_app_info });
-      Comm.sendFile(req, res, '/public/apps/pvn/index.html');
-      break;
-    default:
-      Comm.sendFileNotFound(res,pathname,404);
-  }
+  Comm.sendFile(req, res, pathname);
 };
 
 

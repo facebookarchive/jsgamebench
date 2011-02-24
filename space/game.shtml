@@ -1,16 +1,16 @@
 <html>
   <head>
     #metatags
-    #include '/public/style.include'
+    #include '/engine/style.include'
     #include 'app_id'
     <script src="http://static.ak.fbcdn.net/connect/en_US/core.debug.js"></script>
 
     <script type="text/javascript">var stand_alone=true;</script>
-    #include '/public/core/core.include'
-    <script type="text/javascript" src="/public/apps/perf/benchmark.js"> </script>
-    <script type="text/javascript" src="/public/apps/perf/perftest.js"> </script>
-    <script type="text/javascript" src="/public/apps/space/game.js"> </script>
-    <script type="text/javascript" src="/public/apps/space/svrgame.js"> </script>
+    #include '/engine/core/core.include'
+    <script type="text/javascript" src="/perf/benchmark.js"> </script>
+    <script type="text/javascript" src="/perf/perftest.js"> </script>
+    <script type="text/javascript" src="/space/game.js"> </script>
+    <script type="text/javascript" src="/space/svrgame.js"> </script>
   </head>
 
 

@@ -1,0 +1,33 @@
+<html>
+  <head>
+    #metatags
+    #include '/engine/style.include'
+    #include 'app_id'
+    <link rel="stylesheet" type="text/css" href="/pvn/pvn.css">
+    <script src="http://static.ak.fbcdn.net/connect/en_US/core.debug.js"></script>
+    <script type="text/javascript">
+      if (window.fbrpc) {
+        window.fbrpc.call('setOrientation', '{"orientation": "landscape"}');
+      }
+    </script>
+    #include '/engine/core/core.include'
+    <script type="text/javascript" src="/perf/benchmark.js"> </script>
+    <script type="text/javascript" src="/perf/perftest.js"> </script>
+
+    <script type="text/javascript" src="/pvn/js/box2d.js"></script>
+    <script type="text/javascript" src="/pvn/js/engine.js"></script>
+    <script type="text/javascript" src="/pvn/js/publish.js"></script>
+    <script type="text/javascript" src="/pvn/js/demo.js"></script>
+    <script type="text/javascript" src="/pvn/js/gb_init.js"></script>
+
+
+  </head>
+  <body
+    onresize="Init.winresize();"
+    onload="Init.init();"
+    onorientationchange="Init.winresize();"
+    onunload="Init.quit()">
+    <div id="fb-root"></div>
+    <div id="gamebody"></div>
+  </body>
+</html>

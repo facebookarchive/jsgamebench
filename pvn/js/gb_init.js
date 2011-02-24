@@ -64,7 +64,7 @@ function init() {
   ClientCmd.install('fblogout',Publish.fbLogout);
 
   UI.addCollection('', 'gameOpts', {pos: [0, 0]});
-  loadImageList('/public/apps/pvn/images/',[
+  loadImageList('/pvn/images/',[
                   'bouncing_pirate.png','Mate_01.png','Pirate_Captain_Idle_00.png','flying_pirate.png',
                   'ninja1.png','cannon_chassis.png','cannon_barrel.png','board_vert.png','wall.png',
                   'board_horiz.png','background.jpg']);
@@ -75,14 +75,10 @@ function init() {
   UI.hookUIEvents('gamebody');
 }
 
-function resizeMe() {
-  Init.winresize();
-  FB.Demo.play(false);
-}
-
 function resize() {
   if (added) {
     FB.Demo.play(false);
+    FB.Demo.playing = false;
   }
 }
 
