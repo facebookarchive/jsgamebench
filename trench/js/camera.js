@@ -34,6 +34,15 @@ var TrenchCamera = (function() {
     function tick(dt) {
       var player_pos = TrenchPlayer.getPosition();
       camera_pos[1] = player_pos[1] - camera_distance;
+      player_pos[1] = 0;
+      var dist = Math3D.normalizeVec3(player_pos);
+      var cam_dist = dist * dist * 0.25;
+      if (cam_dist > dist * 0.75) {
+        cam_dist = dist * 0.75;
+      }
+      Math3D.scaleVec3Self(player_pos, cam_dist);
+      camera_pos[0] = player_pos[0];
+      camera_pos[2] = player_pos[2];
 
       var camera_matrix = Math3D.mat4x4();
       Math3D.orientMat4x4(camera_matrix, camera_dir, camera_up);

@@ -82,9 +82,13 @@ var TrenchPlayer = (function() {
       World3D.move('player', player_matrix);
     }
 
+    function getPosition() {
+      return Math3D.dupVec3(player_pos);
+    }
+
     var TrenchPlayer = {};
     TrenchPlayer.tick = tick;
     TrenchPlayer.init = init;
-    TrenchPlayer.getPosition = function () { return player_pos; };
+    TrenchPlayer.getPosition = getPosition;
     return TrenchPlayer;
   })();

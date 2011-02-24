@@ -20,7 +20,7 @@ var TrenchTrack = (function() {
     function placeBlock(vmin, vmax) {
       var worldmat = Math3D.mat4x4();
       worldmat[0]  = vmax[0] - vmin[0];
-      worldmat[5]  = vmax[1] - vmin[2];
+      worldmat[5]  = vmax[1] - vmin[1];
       worldmat[10] = vmax[2] - vmin[2];
       worldmat[12] = vmin[0];
       worldmat[13] = vmin[1];
@@ -33,9 +33,23 @@ var TrenchTrack = (function() {
       block_counter = 0;
       block_model = model;
 
-      placeBlock([-10,-50,-5], [10,200,-4]);
-      placeBlock([-10,-50,-4], [-8,200,10]);
-      placeBlock([8,-50,-4], [10,200,10]);
+      placeBlock([-10,-50,-5], [10,250,-4]);
+      placeBlock([-10,-50,-4], [-8,250,10]);
+      placeBlock([8,-50,-4], [10,250,10]);
+
+      for (var ii = 2; ii < 12; ++ii) {
+        var t = Math.floor(Math.random() * 3);
+        if (t === 0) {
+          var r = Math.random() * 10 - 5;
+          placeBlock([r-1,ii*20-1,-4], [r+1,ii*20+1,5]);
+        } else if (t === 1) {
+          var r = Math.random() * 5 - 2;
+          placeBlock([-8,ii*20-1,r-1], [5,ii*20+1,r+1]);
+        } else {
+          var r = Math.random() * 5 - 2;
+          placeBlock([-5,ii*20-1,r-1], [8,ii*20+1,r+1]);
+        }
+      }
     }
 
     function tick(dt) {

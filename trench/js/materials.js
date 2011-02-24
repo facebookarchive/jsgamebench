@@ -24,11 +24,13 @@ var TrenchMaterials = (function() {
       },
 
       varying: {
-        v_Texcoord : 'vec2'
+        v_Texcoord : 'vec2',
+        v_Normal : 'vec3'
       },
 
       uniform: {
-        modelviewproj : 'mat4'
+        modelviewproj : 'mat4',
+        model_matrix : 'mat4'
       },
 
       text: [
@@ -39,6 +41,9 @@ var TrenchMaterials = (function() {
         '  gl_Position.z = dot(modelviewproj2, hpos);',
         '  gl_Position.w = dot(modelviewproj3, hpos);',
         '  v_Texcoord = vtexcoord;',
+        '  v_Normal.x = dot(model_matrix0.xyz, vnormal);',
+        '  v_Normal.y = dot(model_matrix1.xyz, vnormal);',
+        '  v_Normal.z = dot(model_matrix2.xyz, vnormal);',
         '}'
       ]
     },
@@ -47,7 +52,8 @@ var TrenchMaterials = (function() {
       fprecision: 'mediump',
 
       varying : {
-        v_Texcoord : 'vec2'
+        v_Texcoord : 'vec2',
+        v_Normal : 'vec3'
       },
 
       uniform : {
@@ -56,7 +62,10 @@ var TrenchMaterials = (function() {
 
       text : [
         'void main() {',
+        '  float dp = dot(normalize(v_Normal), normalize(vec3(1,-2,3)));',
+        '  float lighting = 0.2 + 0.5 * clamp(dp, 0.0, 1.0);',
         '  gl_FragColor = texture2D(surfacetex, v_Texcoord);',
+        '  gl_FragColor.xyz *= lighting;',
         '}'
       ]
     }

@@ -55,6 +55,10 @@ var Math3D = (function() {
       return res;
     }
 
+    function dupVec3(v) {
+      return [v[0], v[1], v[2]];
+    }
+
     function dotVec3(v1, v2) {
       return v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2];
     }
@@ -84,6 +88,7 @@ var Math3D = (function() {
         v[1] *= ool;
         v[2] *= ool;
       }
+      return length;
     }
 
     function addVec3(v1, v2) {
@@ -194,6 +199,7 @@ var Math3D = (function() {
     Math3D.mat4x4 = function() { return [1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1]; };
     Math3D.mulMat4x4 = mulMat4x4;
     Math3D.fastInvertMat4x4 = fastInvertMat4x4;
+    Math3D.dupVec3 = dupVec3;
     Math3D.dotVec3 = dotVec3;
     Math3D.crossVec3 = crossVec3;
     Math3D.lengthVec3Squared = lengthVec3Squared;
