@@ -58,6 +58,8 @@ function sendMove() {
 }
 
 function init() {
+  Init.reset();
+
   console.log('fb_app_id ' + fb_app_id);
   Publish.fbInit(fb_app_id);
   GameFrame.updateSettings({
@@ -67,7 +69,7 @@ function init() {
     css_transitions: false,
     css_keyframe: false,
     sprite_sheets: false,
-    int_snap: true, 
+    int_snap: true,
     transform3d:true});
 
   GameFrame.setXbyY();
