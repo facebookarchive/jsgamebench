@@ -19,7 +19,7 @@ var WebGLMaterial = (function() {
     var ERROR_MAT_NAME = 'error';
 
     // error materials
-    var error_material_type = {
+    var error_material_type_def = {
       name : ERROR_MAT_NAME,
       vertex_shader : {
         attribute: {
@@ -35,10 +35,10 @@ var WebGLMaterial = (function() {
         text: [
           'void main() {',
           '  vec4 hpos = vec4(vposition, 1);',
-          '  gl_Position.x = dot(modelviewproj[0], hpos);',
-          '  gl_Position.y = dot(modelviewproj[1], hpos);',
-          '  gl_Position.z = dot(modelviewproj[2], hpos);',
-          '  gl_Position.w = dot(modelviewproj[3], hpos);',
+          '  gl_Position.x = dot(modelviewproj0, hpos);',
+          '  gl_Position.y = dot(modelviewproj1, hpos);',
+          '  gl_Position.z = dot(modelviewproj2, hpos);',
+          '  gl_Position.w = dot(modelviewproj3, hpos);',
           '}'
         ]
       },
@@ -54,7 +54,7 @@ var WebGLMaterial = (function() {
       }
     };
 
-    var error_material = {
+    var error_material_def = {
       name : ERROR_MAT_NAME,
       type : ERROR_MAT_NAME,
       params : {},
@@ -72,7 +72,7 @@ var WebGLMaterial = (function() {
         var material_program = gl.loadProgram(data.vertex_shader,
                                               data.fragment_shader);
         if (!material_program) {
-          console.log('Failed to load program for material type: ' + name);
+          console.log('Failed to load program for material type: ' + data.name);
           return;
         }
 
@@ -88,8 +88,25 @@ var WebGLMaterial = (function() {
           }
 
           for (var p in material_data.params) {
-            if (material_program[p]) {
+            if (typeof material_program[p] === 'function') {
               material_program[p](material_data.params[p]);
+            }
+          }
+
+          var tex_idx = 0;
+          for (var t in textures) {
+            if (typeof material_program[t] === 'function') {
+              material_program[t](tex_idx);
+              textures[t].bindTexture();
+              ++tex_idx;
+            }
+          }
+        };
+
+        material_type.bindMatrixState = function(matrix_state) {
+          for (var mstate in matrix_state) {
+            if (typeof material_program[mstate] === 'function') {
+              material_program[mstate](matrix_state[mstate]);
             }
           }
         };
@@ -120,6 +137,8 @@ var WebGLMaterial = (function() {
         material.bind = function() {
           material_type.bind(data, textures);
         };
+
+        material.bindMatrixState = material_type.bindMatrixState;
       };
 
       material_table.getMaterial = function(name) {
@@ -132,13 +151,14 @@ var WebGLMaterial = (function() {
           if (show_unloaded_materials) {
             var error_material = material_dictionary[ERROR_MAT_NAME];
             material.bind = error_material.bind;
+            material.bindMatrixState = error_material.bindMatrixState;
           }
         }
         return material;
       };
 
-      material_table.createMaterialType(error_material_type);
-      material_table.createMaterial(error_material);
+      material_table.createMaterialType(error_material_type_def);
+      material_table.createMaterial(error_material_def);
 
       return material_table;
     }

@@ -32,7 +32,7 @@ var WebGLTexture = (function() {
             image_data_ready = true;
           };
 
-          texture.bindGLTexture = function() {
+          texture.bindTexture = function() {
             gl.bindTexture(gl.TEXTURE_2D, gl_texture);
 
             if (image_data_ready) {
@@ -44,7 +44,11 @@ var WebGLTexture = (function() {
           // load it in the background
           texture_image.src = name;
         }
+
+        return texture;
       };
+
+      return texture_table;
     }
 
     var WebGLTexture = {};

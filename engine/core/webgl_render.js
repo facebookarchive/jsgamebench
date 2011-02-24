@@ -13,7 +13,9 @@
 // under the License.
 
 var WebGLRender = (function() {
-    var gl, initializing = false;
+    var gl = null;
+    var initializing = false;
+
     var viewport;
 
     var sprite_context;
@@ -62,7 +64,7 @@ var WebGLRender = (function() {
           alpha : GameFrame.settings.webgl_blended_canvas,
           depth : true,
           stencil : false,
-          antialias : false // no need for geometry antialiasing
+          antialias : true
         };
 
       var gl_context;
@@ -158,6 +160,8 @@ var WebGLRender = (function() {
       if (!gl) {
         return;
       }
+
+      model_context.drawModel(framedata.model, -1, framedata.matrix_state);
     }
 
     function end() {
@@ -174,8 +178,9 @@ var WebGLRender = (function() {
     WebGLRender.drawSprite = drawSprite;
     WebGLRender.drawModel = drawModel;
     WebGLRender.end = end;
-    WebGLRender.isInitialized = function() { return gl === undefined; };
+    WebGLRender.isInitialized = function() { return gl !== null; };
     WebGLRender.getMaterialTable = function() { return material_table; };
     WebGLRender.getModelContext = function() { return model_context; };
+    WebGLRender.getViewport = function() { return viewport; };
     return WebGLRender;
   })();

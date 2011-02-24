@@ -20,7 +20,7 @@ var WebGLModel = (function() {
       var cur_material;
 
       function setupContext() {
-        gl.enable(gl.CULL_FACE);
+        gl.disable(gl.CULL_FACE);
         cur_model = undefined;
         cur_material = undefined;
       }
@@ -36,7 +36,13 @@ var WebGLModel = (function() {
           cur_model.bind();
         }
 
-        cur_model.draw(subobj, matrix_state);
+        if (subobj < 0) {
+          for (var ii = 0; ii < model.subobj_count; ++ii) {
+            cur_model.draw(ii, matrix_state);
+          }
+        } else {
+          cur_model.draw(subobj, matrix_state);
+        }
       };
 
       model_context.createModel = function(model_data) {
@@ -106,10 +112,10 @@ var WebGLModel = (function() {
 
           if (cur_material !== material) {
             cur_material = material;
-            if (cur_material.bind) {
-              cur_material.bind();
-            }
+            cur_material.bind();
           }
+
+          cur_material.bindMatrixState(matrix_state);
 
           gl.drawElements(gl.TRIANGLES,
                           subobjects[subobj].count,

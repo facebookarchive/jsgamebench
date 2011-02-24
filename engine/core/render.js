@@ -161,8 +161,9 @@ var Render = (function() {
           break;
         case GameFrame.WEBGL3D:
           WebGLRender.begin();
-          // TODO draw models
-          //WebGLRender.drawModel(framedata);
+          for (var id in World3D.elements) {
+            WebGLRender.drawModel(World3D.framedata(id));
+          }
           WebGLRender.end();
           break;
         case GameFrame.CANVAS_ONLY:
