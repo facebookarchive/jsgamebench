@@ -44,7 +44,7 @@ function init() {
 
   GameFrame.setXbyY();
   UI.hookUIEvents('gamebody');
-  loadImageList('/pvn/images/',['bouncing_pirate.png']);
+  loadImageList('/chess/images/',['Pirate_King.png', 'Pirate_King_Gray.png', 'Pirate_Queen.png', 'Pirate_Queen_Gray.png', 'Pirate_Bishop.png', 'Pirate_Bishop_Gray.png', 'Pirate_Knight.png', 'Pirate_Knight_Gray.png', 'Pirate_Rook.png', 'Pirate_Rook_Gray.png', 'Pirate_Pawn.png', 'Pirate_Pawn_Gray.png']);
   ClientCmd.install('sendRequest',sendMove);
   ClientCmd.install('publishStory',Publish.publishStory);
   ClientCmd.install('login',Publish.fbInit);
@@ -68,6 +68,6 @@ function draw() {
   Render.tick();
 }
 
-Init.setFunctions({app: tick, init: init, draw: draw, ui: UI.tick, resize: resize, postLoad: postImageLoad, fps:1000 });
+Init.setFunctions({app: tick, init: init, draw: draw, ui: UI.tick, resize: resize, postLoad: postImageLoad, fps:60 });
 
 })();

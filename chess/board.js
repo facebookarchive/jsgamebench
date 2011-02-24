@@ -12,7 +12,7 @@ var Board = (function() {
       height = JSGlobal.winsize[1] - border;
 
       delta = width < height ? parseInt(width/8) : parseInt(height/8);
-      var black = true;
+      var black = false;
       for (var i=0;i<8;i++) {
         for (var j=0;j<8;j++) {
           var left = parseInt(width*0.5 - 4*delta + i*delta)+border*0.5;
