@@ -34,8 +34,8 @@ var Tick = (function() {
       } else {
         timeac += Tick.delta;
       }
-      var name = Benchmark.name;
-      if (name) {
+      if (typeof(Benchmark) !== 'undefined') {
+        var name = Benchmark.name;
         UI.addHTML(null, 'fps', {uiclass: 'testype ui_html', pos: [5, 55], resetlast: true, markup: 'fps: ' + lastfps + '<br />' +
               name.render_mode + ':' + name.sprites + ':' + name.render_path + '<br />' +
               JSGlobal.winsize[0] + 'x' + JSGlobal.winsize[1] + '<br />' +

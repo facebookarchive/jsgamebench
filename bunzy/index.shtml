@@ -1,0 +1,18 @@
+<html>
+  <head>
+    #metatags
+    #include '/engine/style.include'
+    #include 'app_id'
+    #include '/engine/core/core.include'
+    <script type="text/javascript" src="/bunzy/bunzy.js"></script>
+
+  </head>
+  <body
+    onresize="Init.winresize();"
+    onload="Init.init();"
+    onorientationchange="Init.winresize();"
+    onunload="Init.quit()">
+    <div id="fb-root"></div>
+    <div id="gamebody"></div>
+  </body>
+</html>
