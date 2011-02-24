@@ -25,7 +25,6 @@ function postImageLoad() {
 }
 
 function clickButton() {
-  console.log('clicked!');
   pirate_dir = -pirate_dir;
 }
 
@@ -44,10 +43,11 @@ function init() {
   UI.hookUIEvents('gamebody');
   loadImageList('/pvn/images/',['bouncing_pirate.png','background.jpg']);
   ClientCmd.install('clickButton',clickButton);
-  UI.addButton('gameOpts', 'optin', {pos: [10, 100], width: 150, height: 60, fontsize: '300%', text: 'ClickMe!', command: {cmd: 'clickButton' }});
 }
 
 function resize() {
+  UI.addCollection('', 'buttons', {pos: [0, 0]});
+  UI.addButton('buttons', 'optin', {pos: [10, 100], width: 150, height: 60, fontsize: '300%', text: 'ClickMe!', command: {cmd: 'clickButton' }});
   //console.log('resize');
 }
 
