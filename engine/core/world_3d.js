@@ -28,10 +28,10 @@ var World3D = (function() {
       }
     }
 
-    function setPerspective(fovy, aspect, near, far) {
+    function setPerspectiveZUp(fovy, aspect, near, far) {
       var t = Math.tan(fovy) * near;
       var r = t * aspect;
-      projection = Math3D.perspective(-r, r, -t, t, near, far);
+      projection = Math3D.perspectiveZUp(-r, r, -t, t, near, far);
       viewprojection = Math3D.mulMat4x4(projection, view);
     }
 
@@ -57,7 +57,7 @@ var World3D = (function() {
     var World3D = {};
     World3D.add = add;
     World3D.move = move;
-    World3D.setPerspective = setPerspective;
+    World3D.setPerspectiveZUp = setPerspectiveZUp;
     World3D.setCamera = setCamera;
     World3D.framedata = framedata;
     World3D.elements = elements;

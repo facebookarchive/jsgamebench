@@ -14,6 +14,41 @@
 
 var Math3D = (function() {
 
+    //
+    // 4x4 matrices are arrays of 16 numbers, arranged in column major order:
+    // matrix4x4[x * 4 + y]
+    //
+    // 4x3 matrices are arrays of 12 numbers, arranged in column major order:
+    // matrix4x4[x * 3 + y]
+    //
+    // vectors are arrays of 3 numbers
+    //
+
+    //************************ matrix functions ************************/
+
+    function orientMat4x4(mout, vforward, vup) {
+      var vright = crossVec3(vforward, vup);
+      var vnewup = crossVec3(vright, vforward);
+
+      mout[0] = vright[0];
+      mout[1] = vright[1];
+      mout[2] = vright[2];
+
+      mout[4] = vforward[0];
+      mout[5] = vforward[1];
+      mout[6] = vforward[2];
+
+      mout[8] = vnewup[0];
+      mout[9] = vnewup[1];
+      mout[10] = vnewup[2];
+    }
+
+    function translateMat4x4(mout, vtrans) {
+      mout[12] += vtrans[0];
+      mout[13] += vtrans[1];
+      mout[14] += vtrans[2];
+    }
+
     function mulMat4x4(m1, m2) {
       var res = [];
       for (var ii = 0; ii < 4; ++ii) {
@@ -54,6 +89,8 @@ var Math3D = (function() {
 
       return res;
     }
+
+    //************************ vector functions ************************/
 
     function dupVec3(v) {
       return [v[0], v[1], v[2]];
@@ -119,31 +156,10 @@ var Math3D = (function() {
       vout[2] *= scale;
     }
 
-    function orientMat4x4(mout, vforward, vup) {
-      var vright = crossVec3(vforward, vup);
-      var vnewup = crossVec3(vright, vforward);
+    //************************ projection matrices ************************/
 
-      mout[0] = vright[0];
-      mout[1] = vright[1];
-      mout[2] = vright[2];
-
-      mout[4] = vforward[0];
-      mout[5] = vforward[1];
-      mout[6] = vforward[2];
-
-      mout[8] = vnewup[0];
-      mout[9] = vnewup[1];
-      mout[10] = vnewup[2];
-    }
-
-    function translateMat4x4(mout, vtrans) {
-      mout[12] += vtrans[0];
-      mout[13] += vtrans[1];
-      mout[14] += vtrans[2];
-    }
-
-    // right handed, y forward, z up
-    function perspectiveYForward(l, r, b, t, n, f) {
+    // right handed, Z up, Y forward
+    function perspectiveZUp(l, r, b, t, n, f) {
       var res = [];
       var oorl = 1.0 / (r - l);
       var ootb = 1.0 / (t - b);
@@ -168,8 +184,8 @@ var Math3D = (function() {
       return res;
     }
 
-    // this is the opengl default, right handed
-    function perspectiveZBackward(l, r, b, t, n, f) {
+    // this is the opengl default, right handed, Y up, negative Z forward
+    function perspectiveYUp(l, r, b, t, n, f) {
       var res = [];
       var oorl = 1.0 / (r - l);
       var ootb = 1.0 / (t - b);
@@ -194,11 +210,17 @@ var Math3D = (function() {
       return res;
     }
 
+    //************************ exports ************************/
+
     var Math3D = {};
+
     Math3D.mat3x3 = function() { return [1,0,0, 0,1,0, 0,0,1]; };
     Math3D.mat4x4 = function() { return [1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1]; };
+    Math3D.orientMat4x4 = orientMat4x4;
+    Math3D.translateMat4x4 = translateMat4x4;
     Math3D.mulMat4x4 = mulMat4x4;
     Math3D.fastInvertMat4x4 = fastInvertMat4x4;
+
     Math3D.dupVec3 = dupVec3;
     Math3D.dotVec3 = dotVec3;
     Math3D.crossVec3 = crossVec3;
@@ -209,8 +231,9 @@ var Math3D = (function() {
     Math3D.addVec3Self = addVec3Self;
     Math3D.scaleVec3 = scaleVec3;
     Math3D.scaleVec3Self = scaleVec3Self;
-    Math3D.orientMat4x4 = orientMat4x4;
-    Math3D.translateMat4x4 = translateMat4x4;
-    Math3D.perspective = perspectiveYForward;
+
+    Math3D.perspectiveZUp = perspectiveZUp;
+    Math3D.perspectiveYUp = perspectiveYUp;
+
     return Math3D;
   })();

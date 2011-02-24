@@ -14,10 +14,10 @@
 
 var TrenchCamera = (function() {
 
+    var aspect_ratio;
     var fovy = 0.55;
     var nearplane = 0.75;
     var farplane = 1000.0;
-
     var camera_distance = 6;
 
     var camera_pos = [0,0,0];
@@ -25,10 +25,12 @@ var TrenchCamera = (function() {
     var camera_up = [0,0,1];
 
     function init(viewport) {
-      World3D.setPerspective(fovy,
-                             viewport.width / viewport.height,
-                             nearplane,
-                             farplane);
+      // set up projection matrix, and thus the coordinate system as well
+      aspect_ratio = viewport.width / viewport.height;
+      World3D.setPerspectiveZUp(fovy,
+                                aspect_ratio,
+                                nearplane,
+                                farplane);
     }
 
     function tick(dt) {

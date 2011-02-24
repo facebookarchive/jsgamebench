@@ -37,6 +37,7 @@ var TrenchTrack = (function() {
       placeBlock([-10,-50,-4], [-8,250,10]);
       placeBlock([8,-50,-4], [10,250,10]);
 
+      // obstacles
       for (var ii = 2; ii < 12; ++ii) {
         var t = Math.floor(Math.random() * 3);
         if (t === 0) {
