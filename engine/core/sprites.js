@@ -18,7 +18,7 @@ var Sprites = (function() {
     var loading_hash = {};
     var spriteel = null;
 
-    function loaded(event, id) {
+    function loaded(event, id, spriteel) {
       if (loading_hash[id] && loading_hash[id].height && loading_hash[id].width) {
         spriteel.appendChild(spritedictionary[id].imageel);
         if (!spritedictionary[id].width)
@@ -56,7 +56,7 @@ var Sprites = (function() {
         spritedictionary[id].imageel = new Image();
         spritedictionary[id].imageel.id = id;
         spritedictionary[id].imageel.onload = function(event) {
-          Sprites.loaded(event, id);
+          Sprites.loaded(event, id, spriteel);
         };
         spritedictionary[id].imageel.onabort = function(event) {
           console.log('abort');

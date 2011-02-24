@@ -22,50 +22,22 @@ var Init = (function() {
     var quitFunc = null;
     var resizeFunc = null;
     var maxFPS = 1000;
+    var spritesLoaded = false;
 
     function setFunctions(args) {
-      if (args.init)
-        initFunc = args.init;
-      else
-        initFunc = function() {};
-
-      if (args.setup)
-        setupFunc = args.setup;
-      else
-        setupFunc = function() {};
-
-      if (args.app)
-        appFunc = args.app;
-      else
-        appFunc = function() {};
-
-      if (args.ui)
-        uiFunc = args.ui;
-      else
-        uiFunc = function() {};
-
-      drawFunc = args.draw;
-
-      if (args.teardown)
-        teardownFunc = args.teardown;
-      else
-        teardownFunc = function() {};
-
-      if (args.resize)
-        resizeFunc = args.resize;
-      else
-        resizeFunc = function() {};
-
-      if (args.quit)
-        quitFunc = args.quit;
-      else
-        quitFunc = function() {};
-
-      if (args.fps)
-        maxFPS = args.fps;
+      initFunc = args.init || function() {};
+      setupFunc = args.setup || function() {};
+      appFunc = args.app || function() {};
+      uiFunc = args.ui || function() {};
+      drawFunc = args.draw || function() {};
+      teardownFunc = args.teardown || function() {};
+      resizeFunc = args.resize || function() {};
+      quitFunc = args.quit || function() {};
+      postLoad = args.postLoad || function() {};
+      maxFPS = args.fps || undefined;
     }
-
-    function quit() {
+    
+     function quit() {
       quitFunc();
     }
 
@@ -83,6 +55,10 @@ var Init = (function() {
 
     function tick() {
       if (Sprites.fullyLoaded()) {
+        if (!spritesLoaded) {
+          postLoad();
+          spritesLoaded = true;
+        }
         Tick.tick();
         appFunc();
         drawFunc();
