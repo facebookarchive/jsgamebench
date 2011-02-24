@@ -49,14 +49,64 @@ var Math3D = (function() {
 
       res[12] = -(m[0] * m[12] + m[1] * m[13] + m[2]  * m[14]);
       res[13] = -(m[4] * m[12] + m[5] * m[13] + m[7]  * m[14]);
-      res[14] = -(m[8] * m[12] + m[9] * m[13] + m[11] * m[14]);
+      res[14] = -(m[8] * m[12] + m[9] * m[13] + m[10] * m[14]);
       res[15] = 1;
 
       return res;
     }
 
     function dotVec3(v1, v2) {
-      return [ v1[0] * v2[0], v1[1] * v2[1], v1[2] * v2[2] ];
+      return v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2];
+    }
+
+    // right handed
+    function crossVec3(v1, v2) {
+      return [
+        v1[1] * v2[2] - v2[1] * v1[2],
+        v2[0] * v1[2] - v1[0] * v2[2],
+        v1[0] * v2[1] - v2[0] * v1[1]
+      ];
+    }
+
+    function lengthVec3Squared(v) {
+      return dotVec3(v, v);
+    }
+
+    function lengthVec3(v) {
+      return Math.sqrt(dotVec3(v, v));
+    }
+
+    function normalizeVec3(v) {
+      var length = lengthVec3(v);
+      if (length !== 0) {
+        var ool = 1.0 / length;
+        v[0] *= ool;
+        v[1] *= ool;
+        v[2] *= ool;
+      }
+    }
+
+    function orientMat4x4(mout, vforward, vup) {
+      var vright = crossVec3(vforward, vup);
+      var vnewup = crossVec3(vright, vforward);
+
+      mout[0] = vright[0];
+      mout[1] = vright[1];
+      mout[2] = vright[2];
+
+      mout[4] = vforward[0];
+      mout[5] = vforward[1];
+      mout[6] = vforward[2];
+
+      mout[8] = vnewup[0];
+      mout[9] = vnewup[1];
+      mout[10] = vnewup[2];
+    }
+
+    function translateMat4x4(mout, vtrans) {
+      mout[12] += vtrans[0];
+      mout[13] += vtrans[1];
+      mout[14] += vtrans[2];
     }
 
     // right handed, y forward, z up
@@ -78,32 +128,6 @@ var Math3D = (function() {
       res[8] = 0;
       res[9] = twon * ootb;
       res[10] = res[11] = 0;
-
-      res[12] = res[13] = 0;
-      res[14] = -twon * f * oofn;
-      res[15] = 0;
-      return res;
-    }
-
-    // left handed, z forward; requires fewer camera code hacks
-    function perspectiveZForward(l, r, b, t, n, f) {
-      var res = [];
-      var oorl = 1.0 / (r - l);
-      var ootb = 1.0 / (t - b);
-      var oofn = 1.0 / (f - n);
-      var twon = 2.0 * n;
-
-      res[0] = twon * oorl;
-      res[1] = res[2] = res[3] = 0;
-
-      res[4] = 0;
-      res[5] = twon * ootb;
-      res[6] = res[7] = 0;
-
-      res[8] = (r + l) * oorl;
-      res[9] = (t + b) * ootb;
-      res[10] = (f + n) * oofn;
-      res[11] = 1;
 
       res[12] = res[13] = 0;
       res[14] = -twon * f * oofn;
@@ -143,6 +167,12 @@ var Math3D = (function() {
     Math3D.mulMat4x4 = mulMat4x4;
     Math3D.fastInvertMat4x4 = fastInvertMat4x4;
     Math3D.dotVec3 = dotVec3;
+    Math3D.crossVec3 = crossVec3;
+    Math3D.lengthVec3Squared = lengthVec3Squared;
+    Math3D.lengthVec3 = lengthVec3;
+    Math3D.normalizeVec3 = normalizeVec3;
+    Math3D.orientMat4x4 = orientMat4x4;
+    Math3D.translateMat4x4 = translateMat4x4;
     Math3D.perspective = perspectiveYForward;
     return Math3D;
   })();

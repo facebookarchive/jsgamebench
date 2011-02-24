@@ -10,6 +10,7 @@
 
     <!-- game stuff -->
     <script type="text/javascript" src="/js/materials.js"></script>
+    <script type="text/javascript" src="/js/camera.js"></script>
     <script type="text/javascript" src="/js/init.js"></script>
 
   </head>

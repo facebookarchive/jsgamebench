@@ -18,6 +18,11 @@
 
   var render_inited = false;
   var box_model = null;
+  var track_pos = [0,0,0];
+
+  function keyDown(ascii) {
+    return JSGlobal.key_state[ascii.charCodeAt(0)] > 0;
+  }
 
   function tick() {
     if (!render_inited && WebGLRender.isInitialized()) {
@@ -41,10 +46,33 @@
                              0.75,
                              1000.0);
     }
+
+    if (JSGlobal.key_state[Key.UP]) {
+      track_pos[2] += 0.01;
+    }
+    if (JSGlobal.key_state[Key.DOWN]) {
+      track_pos[2] -= 0.01;
+    }
+    if (JSGlobal.key_state[Key.RIGHT]) {
+      track_pos[0] += 0.01;
+    }
+    if (JSGlobal.key_state[Key.LEFT]) {
+      track_pos[0] -= 0.01;
+    }
+    if (keyDown('W')) {
+      track_pos[1] += 0.01;
+    }
+    if (keyDown('S')) {
+      track_pos[1] -= 0.01;
+    }
+
+    TrenchCamera.setCameraPos(track_pos);
+    TrenchCamera.updateCamera();
   }
 
   function init() {
     Init.reset();
+    track_pos = [0,0,0];
 
     GameFrame.updateSettings({
       render_mode: GameFrame.WEBGL3D,
