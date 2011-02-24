@@ -543,7 +543,6 @@ var Game = (function() {
     function initStandalone() {
       UI.hookUIEvents('gamebody');
       SvrGame.init(client_user.grids);
-      Init.reset();
     }
 
     function playGame() {

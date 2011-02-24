@@ -367,8 +367,6 @@ var Perf = (function() {
       if (!JSGlobal.mobile) {
         Xhr.init();
         Xhr.toServer({cmd: '', args: []});
-      } else {
-        Init.reset();
       }
     }
 
