@@ -111,6 +111,8 @@ var WebGLSprite = (function() {
 
       function setupContext() {
         gl.enableVertexAttribArray(0);
+        gl.disableVertexAttribArray(1);
+        gl.disableVertexAttribArray(2);
         gl.bindBuffer(gl.ARRAY_BUFFER, sprite_vbo);
         gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, sprite_ibo);

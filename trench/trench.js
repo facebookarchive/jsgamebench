@@ -40,7 +40,6 @@ http.createServer(function(req, res) {
   var parse = url.parse(req.url);
   var pathname = parse.pathname;
   var split = pathname.split('/');
-  console.log('req: ' + pathname);
   if (req.method === 'GET' || req.method === 'POST') {
     switch (split[1]) {
       case 'engine':
