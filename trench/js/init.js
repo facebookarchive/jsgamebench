@@ -31,12 +31,8 @@
       box_model = model_context.createModel(box_model_data);
 
       TrenchPlayer.init(box_model);
+      TrenchCamera.init(viewport);
       TrenchTrack.init(box_model);
-
-      World3D.setPerspective(0.35,
-                             viewport.width / viewport.height,
-                             0.75,
-                             1000.0);
     }
 
     var delta_time = 0.0333; // TODO

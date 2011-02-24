@@ -18,11 +18,11 @@ var TrenchPlayer = (function() {
     var player_pos = [0,0,0];
     var player_velocity = [0,0,0];
 
-    var player_forward_speed = 1;
+    var player_forward_velocity = 5;
 
-    var thrust_drag = 0.95;
-    var thrust_accel = 1;
-    var thrust_max_speed = 15;
+    var thrust_drag = 0.9;
+    var thrust_accel = 6;
+    var thrust_max_speed = 50;
 
     function init(model) {
       player_matrix = Math3D.mat4x4();
@@ -31,9 +31,17 @@ var TrenchPlayer = (function() {
       World3D.add('player', model, player_matrix);
     }
 
+    function keyDown(ascii) {
+      return JSGlobal.key_state[ascii.charCodeAt(0)] > 0;
+    }
+
+    function keyDownReset(ascii) {
+      var ret = JSGlobal.key_state[ascii.charCodeAt(0)] > 0;
+      JSGlobal.key_state[ascii.charCodeAt(0)] = 0;
+      return ret;
+    }
+
     function tick(dt) {
-      // constantly move forward
-      player_pos[1] += player_forward_speed * dt;
 
       var player_thrust = [0,0,0];
       if (JSGlobal.key_state[Key.UP]) {
@@ -48,6 +56,9 @@ var TrenchPlayer = (function() {
       if (JSGlobal.key_state[Key.LEFT]) {
         player_thrust[0] -= 1;
       }
+      if (keyDown(' ')) {
+        player_thrust[1] += 1;
+      }
 
       // update thrust and apply
       Math3D.scaleVec3Self(player_velocity, thrust_drag);
@@ -59,11 +70,15 @@ var TrenchPlayer = (function() {
       if (speed > thrust_max_speed) {
         Math3D.scaleVec3Self(player_velocity, thrust_max_speed / speed);
       }
-      Math3D.addVec3Self(player_pos, Math3D.scaleVec3(player_velocity, dt));
 
-      player_matrix[12] = player_pos[0];
-      player_matrix[13] = player_pos[1];
-      player_matrix[14] = player_pos[2];
+      var velocity = Math3D.addVec3(player_velocity,
+                                    [0, player_forward_velocity, 0]);
+      Math3D.addVec3Self(player_pos, Math3D.scaleVec3(velocity, dt));
+
+      // the offset is to center the model
+      player_matrix[12] = player_pos[0] - 0.5;
+      player_matrix[13] = player_pos[1] - 0.5;
+      player_matrix[14] = player_pos[2] - 0.5;
       World3D.move('player', player_matrix);
     }
 

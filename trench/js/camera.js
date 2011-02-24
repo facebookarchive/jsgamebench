@@ -14,11 +14,22 @@
 
 var TrenchCamera = (function() {
 
+    var fovy = 0.55;
+    var nearplane = 0.75;
+    var farplane = 1000.0;
+
+    var camera_distance = 6;
+
     var camera_pos = [0,0,0];
     var camera_dir = [0,1,0];
     var camera_up = [0,0,1];
 
-    var camera_distance = 20;
+    function init(viewport) {
+      World3D.setPerspective(fovy,
+                             viewport.width / viewport.height,
+                             nearplane,
+                             farplane);
+    }
 
     function tick(dt) {
       var player_pos = TrenchPlayer.getPosition();
@@ -31,6 +42,7 @@ var TrenchCamera = (function() {
     }
 
     var TrenchCamera = {};
+    TrenchCamera.init = init;
     TrenchCamera.tick = tick;
     return TrenchCamera;
   })();

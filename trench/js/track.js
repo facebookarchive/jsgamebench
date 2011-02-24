@@ -14,13 +14,28 @@
 
 var TrenchTrack = (function() {
 
-    function init(model) {
-      // TODO (obviously)
+    var block_counter;
+    var block_model;
+
+    function placeBlock(vmin, vmax) {
       var worldmat = Math3D.mat4x4();
-      worldmat[12] = -0.5;
-      worldmat[13] = 2;
-      worldmat[14] = -0.5;
-      World3D.add(1, model, worldmat);
+      worldmat[0]  = vmax[0] - vmin[0];
+      worldmat[5]  = vmax[1] - vmin[2];
+      worldmat[10] = vmax[2] - vmin[2];
+      worldmat[12] = vmin[0];
+      worldmat[13] = vmin[1];
+      worldmat[14] = vmin[2];
+      World3D.add(block_counter, block_model, worldmat);
+      ++block_counter;
+    }
+
+    function init(model) {
+      block_counter = 0;
+      block_model = model;
+
+      placeBlock([-10,-50,-5], [10,200,-4]);
+      placeBlock([-10,-50,-4], [-8,200,10]);
+      placeBlock([8,-50,-4], [10,200,10]);
     }
 
     function tick(dt) {
