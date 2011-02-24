@@ -280,7 +280,14 @@ var Render = (function() {
                             break;
                         }
                       } else {
-                        gobel.innerHTML = '<img class="sprite" src="' + framedata.url +'"></img>';
+                        if (GameFrame.settings.multi_img) {
+                          for (var i=0,len=framedata.sprite.frames;i<len;i++) {
+//                            gobel.innerHTML += '<img style="position:absolute;visibility:hidden;" class="sprite" src="' + Sprites.spritedictionary[framedata.spriteid+i].url +'"></img>';
+                            gobel.innerHTML += '<div style="position:absolute;height:100%;width:100%;visibility:hidden;background-image:url(' + Sprites.spritedictionary[framedata.spriteid+i].url +');"></div>';
+                          }
+                        } else {
+                          gobel.innerHTML = '<img class="sprite" src="' + framedata.url +'"></img>';
+                        }
                       }
                     }
                   } else {
@@ -310,7 +317,10 @@ var Render = (function() {
                       'px -' + framedata.y + 'px';
                   }
                 } else {
-                  if (!GameFrame.settings.css_keyframes) {
+                  if (!GameFrame.settings.sprite_sheets) {
+                    gobel.childNodes[framedata.oframe].style.visibility = 'hidden';
+                    gobel.childNodes[framedata.frame].style.visibility = 'visible';
+                  } else if (!GameFrame.settings.css_keyframes) {
                     if (GameFrame.settings.transform3d) {
                       gobel.childNodes[0].style.cssText = DomRender.axisAlignedTranslate3dFull([-framedata.x, -framedata.y]);
                     } else {

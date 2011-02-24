@@ -214,7 +214,7 @@ var Perf = (function() {
           {
             render_mode: GameFrame.HTML_ONLY,
             sprite_sheets: false, int_snap: true,
-            update_existing: true, use_div_background: true,
+              update_existing: true, use_div_background: true, multi_img: false,
             css_transitions: false, css_keyframe: false, transform3d: false
           },
           tfps: fps, background: 'world', sprites: sprite, demo: true
@@ -232,7 +232,7 @@ var Perf = (function() {
           {
               render_mode: GameFrame.WEBGL,
               sprite_sheets: true, int_snap: false,
-              webgl_debug: false, webgl_blended_canvas: false
+              webgl_debug: false, webgl_blended_canvas: true
           },
           tfps: 30, background: 'world', sprites: 'rot', demo: true
         });
