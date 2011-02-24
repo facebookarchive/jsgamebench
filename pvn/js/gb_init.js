@@ -54,7 +54,6 @@ function loadImageList(path,list) {
 }
 
 function init() {
-  Init.reset();
   Publish.fbInit(fb_app_id);
   ClientCmd.install('playGame',FB.Demo.play);
   ClientCmd.install('publishStory',Publish.publishStory);
@@ -64,15 +63,19 @@ function init() {
   ClientCmd.install('fblogout',Publish.fbLogout);
 
   UI.addCollection('', 'gameOpts', {pos: [0, 0]});
+  GameFrame.settings.offset = 0;
+  GameFrame.updateSettings({render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: true, css_transitions: false, css_keyframe: false, sprite_sheets: false, int_snap: true, transform3d:true});
+  client_user.game_active = true;
+  UI.hookUIEvents('gamebody');
+}
+
+function setup() {
+  GameFrame.setXbyY();
   loadImageList('/pvn/images/',[
                   'bouncing_pirate.png','Mate_01.png','Pirate_Captain_Idle_00.png','flying_pirate.png',
                   'ninja1.png','cannon_chassis.png','cannon_barrel.png','board_vert.png','wall.png',
                   'board_horiz.png','background.jpg']);
 
-  GameFrame.settings.offset = 0;
-  GameFrame.updateSettings({render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: true, css_transitions: false, css_keyframe: false, sprite_sheets: false, int_snap: true, transform3d:true});
-  client_user.game_active = true;
-  UI.hookUIEvents('gamebody');
 }
 
 function resize() {
@@ -82,4 +85,4 @@ function resize() {
   }
 }
 
-Init.setFunctions({app: tick, init: init, draw: Render.tick, ui: UI.tick, resize: resize, fps:1000 });
+Init.setFunctions({app: tick, init: init, setup:setup,  draw: Render.tick, ui: UI.tick, resize: resize, fps:1000 });

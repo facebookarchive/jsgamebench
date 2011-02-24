@@ -36,7 +36,7 @@ var Init = (function() {
       postLoad = args.postLoad || function() {};
       maxFPS = args.fps || undefined;
     }
-    
+
      function quit() {
       quitFunc();
     }
