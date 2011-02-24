@@ -16,6 +16,8 @@ var WebGLRender = (function() {
     var gl, initializing = false;
     var viewport;
     var sprite_context;
+    var material_table;
+    var model_context;
 
     function init(parent_id, pwidth, pheight) {
 
@@ -30,6 +32,8 @@ var WebGLRender = (function() {
           sprite.gltexture = undefined;
         });
       sprite_context = null;
+      material_table = null;
+      model_context = null;
       gl = null;
 
       // check if webgl is supported
@@ -75,6 +79,21 @@ var WebGLRender = (function() {
         return false;
       }
 
+      material_table = WebGLMaterial.createMaterialTable(gl_context);
+      if (!material_table) {
+        sprite_context = null;
+        initializing = false;
+        return false;
+      }
+
+      model_context = WebGLModel.createContext(gl_context, material_table);
+      if (!model_context) {
+        sprite_context = null;
+        material_table = null;
+        initializing = false;
+        return false;
+      }
+
       viewport =
         {
           width : pwidth,
@@ -97,7 +116,7 @@ var WebGLRender = (function() {
       gl.clear(gl.COLOR_BUFFER_BIT);
     }
 
-    function draw(framedata) {
+    function drawSprite(framedata) {
       if (!gl) {
         return;
       }
@@ -121,6 +140,9 @@ var WebGLRender = (function() {
                                 texpos, texsize, sprite.gltexture);
     }
 
+    function drawModel(framedata) {
+    }
+
     function end() {
       if (!gl) {
         return;
@@ -132,7 +154,8 @@ var WebGLRender = (function() {
     var WebGLRender = {};
     WebGLRender.init = init;
     WebGLRender.begin = begin;
-    WebGLRender.draw = draw;
+    WebGLRender.drawSprite = drawSprite;
+    WebGLRender.drawModel = drawModel;
     WebGLRender.end = end
     return WebGLRender;
   })();
