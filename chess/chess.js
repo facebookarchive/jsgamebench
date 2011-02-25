@@ -8,7 +8,6 @@ function loadImageList(path,list) {
     var label = list[i].split('.')[0];
     var url = path + list[i];
     Sprites.add(label, {url: url, frames: 1, framepos: [[0, 0]], width: 0, height: 0 });
-    Pieces.setNameToIdx(label,i);
   }
 }
 
@@ -57,15 +56,7 @@ function init() {
 }
 
 function sendMove() {
-  var state = {};
-  for(var i in Board.board) {
-    var piece = Board.board[i].piece;
-    if (piece && piece.spriteid) {
-       state[i] = Pieces.nameToIdx[piece.spriteid];
-    }
-  }
-  console.log(JSON.stringify(state));
-
+  var state = Pieces.dumpBoard();
   Publish.sendRequest('I made my move!',{board: state});
 }
 
