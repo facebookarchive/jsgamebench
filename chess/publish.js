@@ -14,7 +14,7 @@
 
 var Publish = (function() {
   var fb_logged_in;
-  var player = {savedRequests: {}};
+  var player = {savedRequests: {}, opponent_id: 0};
   
   function fbInit() {
     if (!fb_app_id) {
@@ -63,12 +63,11 @@ var Publish = (function() {
       return;
     }
     var data = req.data && FB.JSON.parse(req.data);
-    if (data && data.board) {
-      console.log('board: ' + JSON.stringify(data.board));
-    }
     player.savedRequests[req.id] = true;
     Gob.delAll();
     Pieces.setNewPositions(data.board);
+    player.opponent_id = req.from.id;
+    console.log('playing against: ' + req.from.id);
     return; //FIXMEBRUCE 
     FB.api(req.id, 'delete', function(response) {
       if (!response || response.error) {
@@ -100,22 +99,26 @@ var Publish = (function() {
        }
        markup = FB.String.format(
         '<img src="http://graph.facebook.com/{0}/picture" />{1}: {2}</p>', 
-         req.from.id,
+        req.from.id,
         FB.String.escapeHTML(req.from.name),
         FB.String.escapeHTML(req.message));
         UI.addButton('gameOpts', 'req'+req.id,
           {pos: [60, 70 + 65*i], width: 400, height: 60, fontsize: '200%',
-          text: markup, command: {cmd: 'onReqClick', args: [req] }});
+          text: markup, command: {cmd: 'onReqClick', args: [req] }, req: req});
       }
     });
   }
 
   function sendRequest(msg,payload) {
-    FB.ui({
+    var cmd = {
       method: 'apprequests',
-      message: 'I made my move in pirate chess.. now its your turn!',
+      message: msg,
       data: payload
-    });
+    };
+    if (0 && player.opponent_id) {
+      cmd.to = player.opponent_id;
+    }
+    FB.ui(cmd);
   }
   
   function publishStory() {

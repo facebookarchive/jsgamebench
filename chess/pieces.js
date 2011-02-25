@@ -5,7 +5,7 @@ var Pieces = (function() {
     var pieces = [];
     var selected = false;
     var selsquare = null;
-
+    var piecescales = [0,100,128,96,96,80,96];
     var default_scale = 0.7;
     var sel_scale = 1;
     var Pawn = 1;
@@ -53,14 +53,16 @@ var Pieces = (function() {
       [King,Black,4,0],
     ];
 
-    function setNewPositions(positions) {
-      for(var i in positions) {
+    function setNewPositions(packed) {
+      var positions = [];
+      for(var i in packed) {
         var x = i % 8;
         var y = (i / 8)|0;
-        var name = idxToName[positions[i]];
-        square = Board.getSquare(x,y);
-        square.piece = Gob.add(Utils.uuidv4(), name, 0, [square.left+square.delta*0.5,square.top+square.delta*0.5], [0,0], 10, default_scale);
+        var color = packed[i] % 4;
+        var piece_id = ([packed[i]] / 4)|0;
+        positions.push([piece_id,color,x,y]);
       }
+      init(positions);
     }
 
     function addPieceGob(square, type, color) {
@@ -85,9 +87,9 @@ var Pieces = (function() {
           sprite = color == White ? "Pirate_King" : "Pirate_King_Gray";
           break;
       }
-      square.piece = Gob.add(Utils.uuidv4(), sprite, 0, [square.left+square.delta*0.5,square.top+square.delta*0.5], [0,0], 10, default_scale);
-      sqaure.piece.type = type;
-      sqaure.piece.color = color;
+      square.piece = Gob.add(Utils.uuidv4(), sprite, 0, [square.left+square.delta*0.5,square.top+square.delta*0.5], [0,0], 10, default_scale*square.delta/piecescales[type]);
+      square.piece.type = type;
+      square.piece.color = color;
     }
 
     function init() {
@@ -117,16 +119,18 @@ var Pieces = (function() {
       idxToName[idx] = name;
     }
 
+
     function dumpBoard() {
-      var square, pieces = [];
+      var square, pieces = {};
       for (var i=0;i<8;i++) {
         for (var j=0;j<8;j++) {
           square = Board.getSquare(i,j);
           if (square.piece) {
-            pieces.push([square.piece.type,square.piece.color,i,j]);
+            pieces[i+j*8] = square.piece.type*4 + square.piece.color;
           }
         }
       }
+      return pieces;
     }
 
     function tick() {
@@ -313,7 +317,7 @@ var Pieces = (function() {
         if (square.piece) {
           if (possibleMoves(square.i,square.j,square.piece)) {
             selected = square.piece;
-            square.piece.scale = sel_scale;
+            square.piece.scale = sel_scale*square.delta/piecescales[square.piece.type];
             square.piece.dirty = true;
             Board.setDirty();
             selsquare = square;
@@ -321,7 +325,7 @@ var Pieces = (function() {
         }
       } else {
         if (square == selsquare) {
-          selected.scale = default_scale;
+          selected.scale = default_scale*selsquare.delta/piecescales[selected.type];
           selected.dirty = true;
           selsquare.piece = false;
           Board.allDark();
@@ -332,7 +336,7 @@ var Pieces = (function() {
           if (square.piece) {
             Gob.del(square.piece.id);
           }
-          selected.scale = default_scale;
+          selected.scale = default_scale*selsquare.delta/piecescales[selected.type];
           selected.dirty = true;
           selsquare.piece = false;
           Board.allDark();
@@ -345,7 +349,7 @@ var Pieces = (function() {
 
     var Pieces = {};
     Pieces.setNewPositions = setNewPositions,
-    Pieces.setNameToIdx = setNameToIdx;
+    Pieces.dumpBoard = dumpBoard;
     Pieces.init = init;
     Pieces.tick = tick;
     Pieces.select = select;
