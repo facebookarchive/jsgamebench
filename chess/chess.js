@@ -50,7 +50,7 @@ function init() {
   loadImageList('/chess/images/',['Pirate_King.png', 'Pirate_King_Gray.png', 'Pirate_Queen.png', 'Pirate_Queen_Gray.png', 'Pirate_Bishop.png', 'Pirate_Bishop_Gray.png', 'Pirate_Knight.png', 'Pirate_Knight_Gray.png', 'Pirate_Rook.png', 'Pirate_Rook_Gray.png', 'Pirate_Pawn.png', 'Pirate_Pawn_Gray.png']);
   ClientCmd.install('sendRequest',sendMove);
   ClientCmd.install('publishStory',Publish.publishStory);
-  ClientCmd.install('login',Publish.fbInit);
+  ClientCmd.install('login',Publish.fbLogin);
 
   Publish.fbInit(fb_app_id);
 }
