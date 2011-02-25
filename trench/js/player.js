@@ -15,12 +15,11 @@
 var TrenchPlayer = (function() {
 
     var player_matrix;
-    var player_pos = [0,0,0];
-    var player_velocity = [0,0,0];
+    var player_pos;
+    var player_velocity;
 
     var player_forward_velocity = 5;
-
-    var thrust_drag = 0.9;
+    var thrust_drag = 0.6;
     var thrust_accel = 6;
     var thrust_max_speed = 50;
 
@@ -61,7 +60,7 @@ var TrenchPlayer = (function() {
       }
 
       // update thrust and apply
-      Math3D.scaleVec3Self(player_velocity, thrust_drag);
+      Math3D.scaleVec3Self(player_velocity, 1.0 - dt * thrust_drag);
       Math3D.normalizeVec3(player_thrust);
       Math3D.scaleVec3Self(player_thrust, dt * thrust_accel);
       Math3D.addVec3Self(player_velocity, player_thrust);

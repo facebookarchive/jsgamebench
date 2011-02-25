@@ -35,8 +35,8 @@
       TrenchTrack.init(box_model);
     }
 
-    var delta_time = 0.0333; // TODO
-
+    // tick subsystems
+    var delta_time = Tick.delta * 0.001;
     TrenchPlayer.tick(delta_time);
     TrenchCamera.tick(delta_time);
     TrenchTrack.tick(delta_time);
@@ -67,7 +67,7 @@
     ui: UI.tick,
     resize: resize,
     //postLoad: postImageLoad,
-    fps: 30
+    fps: 300
   });
 
 })();

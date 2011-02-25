@@ -76,9 +76,9 @@ var WebGLMaterial = (function() {
           return;
         }
 
-        material_type.bind = function(material_data, textures) {
-          material_program.bind();
+        material_type.bind = material_program.bind;
 
+        material_type.bindData = function(material_data, textures) {
           if (material_data.alphaBlend) {
             gl.enable(gl.BLEND);
             gl.blendEquation(gl.FUNC_ADD);
@@ -124,7 +124,7 @@ var WebGLMaterial = (function() {
       };
 
       material_table.createMaterial = function(data) {
-        // this will create an empty material if there isn't already one
+        // getMaterial will create an empty material if there isn't already one
         var material = material_table.getMaterial(data.name);
 
         var material_type = material_table.getMaterialType(data.type);
@@ -135,8 +135,12 @@ var WebGLMaterial = (function() {
         }
 
         material.bind = function() {
-          material_type.bind(data, textures);
+          material_type.bindData(data, textures);
         };
+
+        material.getMaterialType = function() {
+          return material_type;
+        }
 
         material.bindMatrixState = material_type.bindMatrixState;
       };
@@ -152,6 +156,7 @@ var WebGLMaterial = (function() {
             var error_material = material_dictionary[ERROR_MAT_NAME];
             material.bind = error_material.bind;
             material.bindMatrixState = error_material.bindMatrixState;
+            material.getMaterialType = error_material.getMaterialType;
           }
         }
         return material;

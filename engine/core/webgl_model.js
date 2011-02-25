@@ -17,6 +17,7 @@ var WebGLModel = (function() {
     function createContext(gl, material_table) {
       var model_context = {};
       var cur_model;
+      var cur_material_type;
       var cur_material;
 
       function setupContext() {
@@ -27,6 +28,7 @@ var WebGLModel = (function() {
         gl.depthFunc(gl.LESS);
 
         cur_model = undefined;
+        cur_material_type = undefined;
         cur_material = undefined;
       }
 
@@ -119,6 +121,13 @@ var WebGLModel = (function() {
           }
 
           if (cur_material !== material) {
+
+            var material_type = material.getMaterialType();
+            if (cur_material_type != material_type) {
+              cur_material_type = material_type;
+              material_type.bind();
+            }
+
             cur_material = material;
             cur_material.bind();
           }

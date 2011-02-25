@@ -14,9 +14,12 @@
 
 var World3D = (function() {
     var elements = {};
-    var view = Math3D.mat4x4();
-    var projection = Math3D.mat4x4();
-    var viewprojection = Math3D.mat4x4();
+
+    var matrix_state = {
+      view_matrix : Math3D.mat4x4(),
+      projection_matrix : Math3D.mat4x4(),
+      viewprojection : Math3D.mat4x4()
+    };
 
     function add(id, model, worldmat) {
       elements[id] = {model: model, matrix: worldmat};
@@ -31,27 +34,35 @@ var World3D = (function() {
     function setPerspectiveZUp(fovy, aspect, near, far) {
       var t = Math.tan(fovy) * near;
       var r = t * aspect;
-      projection = Math3D.perspectiveZUp(-r, r, -t, t, near, far);
-      viewprojection = Math3D.mulMat4x4(projection, view);
+      matrix_state.projection_matrix =
+        Math3D.perspectiveZUp(-r, r, -t, t, near, far);
+      matrix_state.viewprojection =
+        Math3D.mulMat4x4(matrix_state.projection_matrix,
+                         matrix_state.view_matrix);
     }
 
     function setCamera(camera_matrix) {
-      view = Math3D.fastInvertMat4x4(camera_matrix);
-      viewprojection = Math3D.mulMat4x4(projection, view);
+      matrix_state.view_matrix = Math3D.fastInvertMat4x4(camera_matrix);
+      matrix_state.viewprojection =
+        Math3D.mulMat4x4(matrix_state.projection_matrix,
+                         matrix_state.view_matrix);
     }
 
-    function framedata(id) {
-      var element = elements[id];
-      var matrix_state = {
-        modelviewproj : Math3D.mulMat4x4(viewprojection, element.matrix),
-        model_matrix : element.matrix,
-        view_matrix : view,
-        projection_matrix : projection,
-        modelview : Math3D.mulMat4x4(view, element.matrix),
-        viewprojection : viewprojection
-      };
+    function draw(model_context) {
+      if (!model_context) {
+        return;
+      }
 
-      return { model: element.model, matrix_state: matrix_state };
+      for (var id in elements) {
+        var element = elements[id];
+
+        // inject model matrix into matrix state
+        matrix_state.modelviewproj =
+          Math3D.mulMat4x4(matrix_state.viewprojection, element.matrix);
+        matrix_state.model_matrix = element.matrix;
+
+        model_context.drawModel(element.model, -1, matrix_state);
+      }
     }
 
     var World3D = {};
@@ -59,7 +70,6 @@ var World3D = (function() {
     World3D.move = move;
     World3D.setPerspectiveZUp = setPerspectiveZUp;
     World3D.setCamera = setCamera;
-    World3D.framedata = framedata;
-    World3D.elements = elements;
+    World3D.draw = draw;
     return World3D;
   })();

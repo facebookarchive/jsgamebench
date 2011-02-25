@@ -157,14 +157,6 @@ var WebGLRender = (function() {
                                 texpos, texsize, sprite.gltexture);
     }
 
-    function drawModel(framedata) {
-      if (!gl) {
-        return;
-      }
-
-      model_context.drawModel(framedata.model, -1, framedata.matrix_state);
-    }
-
     function end() {
       if (!gl) {
         return;
@@ -177,7 +169,6 @@ var WebGLRender = (function() {
     WebGLRender.init = init;
     WebGLRender.begin = begin;
     WebGLRender.drawSprite = drawSprite;
-    WebGLRender.drawModel = drawModel;
     WebGLRender.end = end;
     WebGLRender.isInitialized = function() { return gl !== null; };
     WebGLRender.getMaterialTable = function() { return material_table; };
