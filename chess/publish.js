@@ -15,7 +15,7 @@
 var Publish = (function() {
   var fb_logged_in;
   var player = {savedRequests: {}, opponent_id: 0};
-  
+
   function fbInit() {
     if (!fb_app_id) {
       return;
@@ -40,7 +40,7 @@ var Publish = (function() {
       }
     }
   }
-  
+
   function fbLogin() {
     if (client_user.fb_logged_in) {
       return getInfo();
@@ -69,7 +69,7 @@ var Publish = (function() {
     Pieces.setNewPositions(data.board);
     player.opponent_id = req.from.id;
     console.log('playing against: ' + req.from.id);
-  //  return; //FIXMEBRUCE 
+  //  return; //FIXMEBRUCE
     FB.api(req.id, 'delete', function(response) {
       if (!response || response.error) {
         alert('Error occured');
@@ -84,7 +84,7 @@ var Publish = (function() {
       player.name = result.name;
       player.picture = result.picture;
     });
-    
+
     FB.api('me/apprequests', function(result) {
       var reqs = result.data;
       if (!reqs) {
@@ -98,13 +98,13 @@ var Publish = (function() {
         if (player.savedRequests[req.id]) {
           continue;
        }
-       markup = FB.String.format(
-        '<img src="http://graph.facebook.com/{0}/picture" />{1}: {2}</p>', 
+       var markup = FB.String.format(
+        '<img src="http://graph.facebook.com/{0}/picture" />{1}: {2}</p>',
         req.from.id,
         FB.String.escapeHTML(req.from.name),
         FB.String.escapeHTML(req.message));
         UI.addButton('gameOpts', 'req'+req.id,
-          {pos: [60, 70 + 65*i], width: 400, height: 60, fontsize: '200%',
+          {pos: [60, 70 + 65*i], width: 400, height: 60, fontsize: '100%',
           text: markup, command: {cmd: 'onReqClick', args: [req] }, req: req});
       }
     });
@@ -122,10 +122,10 @@ var Publish = (function() {
     console.log('send: ' + JSON.stringify(cmd));
     FB.ui(cmd);
   }
-  
+
   function publishStory() {
     var loc = window.location;
-    var url = loc.protocol + '//' + loc.host + '/chess/show/' + 
+    var url = loc.protocol + '//' + loc.host + '/chess/show/' +
       encodeURIComponent(FB.JSON.stringify({
         player: {
           id: 0,
