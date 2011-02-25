@@ -25,7 +25,7 @@ var TrenchTrack = (function() {
       worldmat[12] = vmin[0];
       worldmat[13] = vmin[1];
       worldmat[14] = vmin[2];
-      World3D.add(block_counter, block_model, worldmat);
+      World3D.addStatic(block_counter, block_model, worldmat, vmin, vmax);
       ++block_counter;
     }
 

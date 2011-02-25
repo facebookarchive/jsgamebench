@@ -13,7 +13,8 @@
 // under the License.
 
 var World3D = (function() {
-    var elements = {};
+    var dynamic_elements = [];
+    var static_elements = [];
 
     var matrix_state = {
       view_matrix : Math3D.mat4x4(),
@@ -21,14 +22,77 @@ var World3D = (function() {
       viewprojection : Math3D.mat4x4()
     };
 
-    function add(id, model, worldmat) {
-      elements[id] = {model: model, matrix: worldmat};
+    function checkCollision(old_mid, new_mid, radius, callback) {
+
+      for (var id in static_elements) {
+        var element = static_elements[id];
+        if (Math3D.boxSphereCollision(new_mid, radius,
+                                      element.min, element.max,
+                                      element.mid, element.radius)) {
+          var result = Math3D.sweptSphereBoxIntersection(element.min,
+                                                         element.max,
+                                                         element.mid,
+                                                         element.radius,
+                                                         old_mid,
+                                                         new_mid,
+                                                         radius);
+          if (result.t >= 0 && callback(result)) {
+            return false;
+          }
+        }
+      }
+
+      return true;
     }
 
-    function move(id, worldmat) {
-      if (elements[id]) {
-        elements[id].matrix = worldmat;
+    function addStatic(id, model, world_matrix, bounds_min, bounds_max) {
+      var element = {
+        model: model,
+        matrix: world_matrix,
+        min : bounds_min,
+        max : bounds_max,
+        mid : Math3D.scaleVec3Self(Math3D.addVec3(bounds_min, bounds_max), 0.5),
+        radius : Math3D.distanceVec3(bounds_min, bounds_max) * 0.5
+      };
+
+      static_elements[id] = element;
+    }
+
+    function removeStatic(id) {
+      static_elements[id] = undefined;
+    }
+
+    function addDynamic(model, world_matrix, bounds_mid, bounds_radius) {
+      var element = {
+        model: model,
+        matrix: Math3D.dupMat4x4(world_matrix),
+        mid : Math3D.dupVec3(bounds_mid),
+        radius : bounds_radius
+      };
+
+      var id = dynamic_elements.length;
+      dynamic_elements[id] = element;
+      return id;
+    }
+
+    function moveDynamic(id, world_matrix, bounds_mid, collision_callback) {
+      var element = dynamic_elements[id];
+      if (element) {
+        var do_update = true;
+        if (collision_callback) {
+          do_update = checkCollision(element.mid, bounds_mid,
+                                     element.radius, collision_callback);
+        }
+
+        if (do_update) {
+          Math3D.copyMat4x4(element.matrix, world_matrix);
+          Math3D.copyVec3(element.mid, bounds_mid);
+        }
       }
+    }
+
+    function removeDynamic(id) {
+      dynamic_elements[id] = undefined;
     }
 
     function setPerspectiveZUp(fovy, aspect, near, far) {
@@ -53,8 +117,19 @@ var World3D = (function() {
         return;
       }
 
-      for (var id in elements) {
-        var element = elements[id];
+      for (var id in static_elements) {
+        var element = static_elements[id];
+
+        // inject model matrix into matrix state
+        matrix_state.modelviewproj =
+          Math3D.mulMat4x4(matrix_state.viewprojection, element.matrix);
+        matrix_state.model_matrix = element.matrix;
+
+        model_context.drawModel(element.model, -1, matrix_state);
+      }
+
+      for (var id = 0; id < dynamic_elements.length; ++id) {
+        var element = dynamic_elements[id];
 
         // inject model matrix into matrix state
         matrix_state.modelviewproj =
@@ -66,8 +141,13 @@ var World3D = (function() {
     }
 
     var World3D = {};
-    World3D.add = add;
-    World3D.move = move;
+    World3D.addStatic = addStatic;
+    World3D.removeStatic = removeStatic;
+
+    World3D.addDynamic = addDynamic;
+    World3D.moveDynamic = moveDynamic;
+    World3D.removeDynamic = removeDynamic;
+
     World3D.setPerspectiveZUp = setPerspectiveZUp;
     World3D.setCamera = setCamera;
     World3D.draw = draw;

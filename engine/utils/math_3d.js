@@ -26,6 +26,21 @@ var Math3D = (function() {
 
     //************************ matrix functions ************************/
 
+    function dupMat4x4(min) {
+      var mout = [];
+      for (var ii = 0; ii < min.length; ++ii) {
+        mout[ii] = min[ii];
+      }
+      return mout;
+    }
+
+    function copyMat4x4(mout, min) {
+      for (var ii = 0; ii < min.length; ++ii) {
+        mout[ii] = min[ii];
+      }
+      return mout;
+    }
+
     function orientMat4x4(mout, vforward, vup) {
       var vright = crossVec3(vforward, vup);
       var vnewup = crossVec3(vright, vforward);
@@ -96,6 +111,13 @@ var Math3D = (function() {
       return [v[0], v[1], v[2]];
     }
 
+    function copyVec3(vout, vin) {
+      vout[0] = vin[0];
+      vout[1] = vin[1];
+      vout[2] = vin[2];
+      return vout;
+    }
+
     function dotVec3(v1, v2) {
       return v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2];
     }
@@ -107,6 +129,51 @@ var Math3D = (function() {
         v2[0] * v1[2] - v1[0] * v2[2],
         v1[0] * v2[1] - v2[0] * v1[1]
       ];
+    }
+
+    function addVec3(v1, v2) {
+      return [
+        v1[0] + v2[0],
+        v1[1] + v2[1],
+        v1[2] + v2[2]
+      ];
+    }
+
+    function addVec3Self(vout, vin) {
+      vout[0] += vin[0];
+      vout[1] += vin[1];
+      vout[2] += vin[2];
+      return vout;
+    }
+
+    function subVec3(v1, v2) {
+      return [
+        v1[0] - v2[0],
+        v1[1] - v2[1],
+        v1[2] - v2[2]
+      ];
+    }
+
+    function subVec3Self(vout, vin) {
+      vout[0] -= vin[0];
+      vout[1] -= vin[1];
+      vout[2] -= vin[2];
+      return vout;
+    }
+
+    function scaleVec3(v, scale) {
+      return [
+        v[0] * scale,
+        v[1] * scale,
+        v[2] * scale
+      ];
+    }
+
+    function scaleVec3Self(vout, scale) {
+      vout[0] *= scale;
+      vout[1] *= scale;
+      vout[2] *= scale;
+      return vout;
     }
 
     function lengthVec3Squared(v) {
@@ -128,32 +195,12 @@ var Math3D = (function() {
       return length;
     }
 
-    function addVec3(v1, v2) {
-      return [
-        v1[0] + v2[0],
-        v1[1] + v2[1],
-        v1[2] + v2[2]
-      ];
+    function distanceVec3(v1, v2) {
+      return lengthVec3(subVec3(v1, v2));
     }
 
-    function addVec3Self(vout, vin) {
-      vout[0] += vin[0];
-      vout[1] += vin[1];
-      vout[2] += vin[2];
-    }
-
-    function scaleVec3(v, scale) {
-      return [
-        v[0] * scale,
-        v[1] * scale,
-        v[2] * scale
-      ];
-    }
-
-    function scaleVec3Self(vout, scale) {
-      vout[0] *= scale;
-      vout[1] *= scale;
-      vout[2] *= scale;
+    function distanceVec3Squared(v1, v2) {
+      return lengthVec3Squared(subVec3(v1, v2));
     }
 
     //************************ projection matrices ************************/
@@ -210,27 +257,187 @@ var Math3D = (function() {
       return res;
     }
 
+    //************************ intersection ************************/
+
+    function boxSphereCollision(sphere_mid, sphere_radius,
+                                box_min, box_max, box_mid, box_radius) {
+      // sphere-sphere check
+      var dist_sq = distanceVec3Squared(sphere_mid, box_mid);
+      var r = sphere_radius + box_radius;
+      if (dist_sq > r * r) {
+        // not colliding
+        return false;
+      }
+
+      var sphere_min = [
+        sphere_mid[0] - sphere_radius,
+        sphere_mid[1] - sphere_radius,
+        sphere_mid[2] - sphere_radius
+      ];
+      var sphere_max = [
+        sphere_mid[0] + sphere_radius,
+        sphere_mid[1] + sphere_radius,
+        sphere_mid[2] + sphere_radius
+      ];
+
+      // box-box check
+      if (box_min[0] > sphere_max[0] || sphere_min[0] > box_max[0] ||
+          box_min[1] > sphere_max[1] || sphere_min[1] > box_max[1] ||
+          box_min[2] > sphere_max[2] || sphere_min[2] > box_max[2]) {
+        return false;
+      }
+
+      return true;
+    }
+
+    function lineSphereIntersection(sphere_mid, sphere_radius,
+                                    line_start, line_vector) {
+      var result = { t: -1 };
+
+      var c = subVec3(sphere_mid, line_start);
+      var v2 = dotVec3(line_vector, line_vector);
+      var vc = dotVec3(c, line_vector);
+      var c2 = dotVec3(c, c);
+      var r2 = sphere_radius * sphere_radius;
+
+      var a = vc * vc - v2 * (c2 - r2);
+      if (a < 0) {
+        return result;
+      }
+      a = Math.sqrt(a);
+
+      var t1 = (vc + a) / v2;
+      var t2 = (vc - a) / v2;
+      if (t1 < 0 || t1 > 1) {
+        t1 = -1;
+      }
+      if (t2 < 0 || t2 > 1) {
+        t2 = -1;
+        result.t = t1;
+      } else if (t1 < 0) {
+        result.t = t2;
+      } else if (t1 < t2) {
+        result.t = t1;
+      } else {
+        result.t = t2;
+      }
+
+      if (result.t >= 0) {
+        result.p = addVec3(line_start, scaleVec3(line_vector, result.t));
+        result.n = subVec3(result.p, sphere_mid);
+        normalizeVec3(result.n);
+      }
+
+      return result;
+    }
+
+    function lineBoxIntersection(box_min, box_max,
+                                 line_start, line_vector) {
+      var result = { t: 100 };
+      var ti = -1;
+      var ts = 0;
+      for (var ii = 0; ii < 3; ++ii) {
+        if (line_vector[ii] != 0) {
+          var tmin = (box_min[ii] - line_start[ii]) / line_vector[ii];
+          var tmax = (box_max[ii] - line_start[ii]) / line_vector[ii];
+          if (tmin >= 0 && tmin <= 1 && tmin < result.t) {
+            result.t = tmin;
+            ti = ii;
+            ts = -1;
+          }
+          if (tmax >= 0 && tmax <= 1 && tmax < result.t) {
+            result.t = tmax;
+            ti = ii;
+            ts = 1;
+          }
+        }
+      }
+
+      if (ti < 0) {
+        result.t = -1;
+      }
+
+      if (result.t >= 0) {
+        result.p = addVec3(line_start, scaleVec3(line_vector, result.t));
+        result.n = [0,0,0];
+        result.n[ti] = ts;
+      }
+
+      return result;
+    }
+
+    function sweptSphereBoxIntersection(box_min, box_max,
+                                        box_mid, box_radius,
+                                        old_sphere_mid, new_sphere_mid,
+                                        sphere_radius) {
+      // transform the problem into line intersections
+
+      var sphere_vector = subVec3(new_sphere_mid, old_sphere_mid);
+
+      var mod_box_min = dupVec3(box_min);
+      mod_box_min[0] -= sphere_radius;
+      mod_box_min[1] -= sphere_radius;
+      mod_box_min[2] -= sphere_radius;
+
+      var mod_box_max = dupVec3(box_max);
+      mod_box_max[0] += sphere_radius;
+      mod_box_max[1] += sphere_radius;
+      mod_box_max[2] += sphere_radius;
+
+      // test line against expanded box
+      var result1 = lineBoxIntersection(mod_box_min, mod_box_max,
+                                        old_sphere_mid, sphere_vector);
+
+      if (result1.t < 0) {
+        return result1;
+      }
+
+      var mod_box_radius = box_radius + sphere_radius;
+
+      // test line against expanded box bounding sphere
+      var result2 = lineSphereIntersection(box_mid, mod_box_radius,
+                                           old_sphere_mid, sphere_vector);
+
+      // whichever intersection is farther is the correct result
+      if (result1.t > result2.t) {
+        return result1;
+      }
+      return result2;
+    }
+
     //************************ exports ************************/
 
     var Math3D = {};
 
     Math3D.mat3x3 = function() { return [1,0,0, 0,1,0, 0,0,1]; };
     Math3D.mat4x4 = function() { return [1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1]; };
+    Math3D.dupMat4x4 = dupMat4x4;
+    Math3D.copyMat4x4 = copyMat4x4;
     Math3D.orientMat4x4 = orientMat4x4;
     Math3D.translateMat4x4 = translateMat4x4;
     Math3D.mulMat4x4 = mulMat4x4;
     Math3D.fastInvertMat4x4 = fastInvertMat4x4;
 
     Math3D.dupVec3 = dupVec3;
+    Math3D.copyVec3 = copyVec3;
     Math3D.dotVec3 = dotVec3;
     Math3D.crossVec3 = crossVec3;
+    Math3D.addVec3 = addVec3;
+    Math3D.addVec3Self = addVec3Self;
+    Math3D.subVec3 = subVec3;
+    Math3D.subVec3Self = subVec3Self;
+    Math3D.scaleVec3 = scaleVec3;
+    Math3D.scaleVec3Self = scaleVec3Self;
     Math3D.lengthVec3Squared = lengthVec3Squared;
     Math3D.lengthVec3 = lengthVec3;
     Math3D.normalizeVec3 = normalizeVec3;
-    Math3D.addVec3 = addVec3;
-    Math3D.addVec3Self = addVec3Self;
-    Math3D.scaleVec3 = scaleVec3;
-    Math3D.scaleVec3Self = scaleVec3Self;
+    Math3D.distanceVec3 = distanceVec3;
+    Math3D.distanceVec3Squared = distanceVec3Squared;
+
+    Math3D.boxSphereCollision = boxSphereCollision;
+    Math3D.lineSphereIntersection = lineSphereIntersection;
+    Math3D.lineBoxIntersection = lineBoxIntersection;
+    Math3D.sweptSphereBoxIntersection = sweptSphereBoxIntersection;
 
     Math3D.perspectiveZUp = perspectiveZUp;
     Math3D.perspectiveYUp = perspectiveYUp;
