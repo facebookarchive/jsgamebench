@@ -1,10 +1,15 @@
 (function() {
 
+var nameToIdx = {};
+var idxToName = {};
+
 function loadImageList(path,list) {
   for(var i=0;i<list.length;i++) {
     var label = list[i].split('.')[0];
     var url = path + list[i];
-    Sprites.add(label, {url: url, frames: 1, framepos: [[0, 0]], width: 0, height: 0});
+    Sprites.add(label, {url: url, frames: 1, framepos: [[0, 0]], width: 0, height: 0 });
+    nameToIdx[label] = i;
+    idxToName[i] = label;
   }
 }
 
@@ -53,7 +58,16 @@ function init() {
 }
 
 function sendMove() {
-  Publish.sendRequest('I made my move!',{board: { a1: 'king', a2: 'queen', a3: 'pawn'}});
+  var state = {};
+  for(var i in Board.board) {
+    var piece = Board.board[i].piece;
+    if (piece && piece.spriteid) {
+       state[i] = nameToIdx[piece.spriteid];
+    }
+  }
+  console.log(JSON.stringify(state));
+
+  Publish.sendRequest('I made my move!',{board: state});
 }
 
 function resize() {

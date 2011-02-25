@@ -67,6 +67,7 @@ var Publish = (function() {
       console.log('board: ' + JSON.stringify(data.board));
     }
     player.savedRequests[req.id] = true;
+    return;
     FB.api(req.id, 'delete', function(response) {
       if (!response || response.error) {
         alert('Error occured');
