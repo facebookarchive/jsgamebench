@@ -65,10 +65,11 @@ var Publish = (function() {
     var data = req.data && FB.JSON.parse(req.data);
     player.savedRequests[req.id] = true;
     Gob.delAll();
+    Board.init();
     Pieces.setNewPositions(data.board);
     player.opponent_id = req.from.id;
     console.log('playing against: ' + req.from.id);
-    return; //FIXMEBRUCE 
+  //  return; //FIXMEBRUCE 
     FB.api(req.id, 'delete', function(response) {
       if (!response || response.error) {
         alert('Error occured');
@@ -115,9 +116,10 @@ var Publish = (function() {
       message: msg,
       data: payload
     };
-    if (0 && player.opponent_id) {
+    if (player.opponent_id) {
       cmd.to = player.opponent_id;
     }
+    console.log('send: ' + JSON.stringify(cmd));
     FB.ui(cmd);
   }
   
