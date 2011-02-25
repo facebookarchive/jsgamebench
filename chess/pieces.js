@@ -1,5 +1,7 @@
 var Pieces = (function() {
 
+    var nameToIdx = {};
+    var idxToName = {};
     var pieces = [];
     var selected = false;
     var selsquare = null;
@@ -51,6 +53,16 @@ var Pieces = (function() {
       [King,Black,4,0],
     ];
 
+    function setNewPositions(positions) {
+      for(var i in positions) {
+        var x = i % 8;
+        var y = (i / 8)|0;
+        var name = idxToName[positions[i]];
+        square = Board.getSquare(x,y);
+        square.piece = Gob.add(Utils.uuidv4(), name, 0, [square.left+square.delta*0.5,square.top+square.delta*0.5], [0,0], 10, default_scale);
+      }
+    }
+    
     function init() {
       var square, sprite;
       for (var i=0,len=setup.length;i<len;i++) {
@@ -81,6 +93,11 @@ var Pieces = (function() {
       }
     }
 
+    function setNameToIdx(name,idx) {
+      nameToIdx[name] = idx;
+      idxToName[idx] = name;
+    }
+  
     function dumpBoard() {
       var square, pieces = [];
       for (var i=0;i<8;i++) {
@@ -157,6 +174,8 @@ var Pieces = (function() {
     }
 
     var Pieces = {};
+    Pieces.setNewPositions = setNewPositions,
+    Pieces.setNameToIdx = setNameToIdx;
     Pieces.init = init;
     Pieces.tick = tick;
     Pieces.select = select;

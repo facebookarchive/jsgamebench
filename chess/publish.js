@@ -67,7 +67,9 @@ var Publish = (function() {
       console.log('board: ' + JSON.stringify(data.board));
     }
     player.savedRequests[req.id] = true;
-    return;
+    Gob.delAll();
+    Pieces.setNewPositions(data.board);
+    return; //FIXMEBRUCE 
     FB.api(req.id, 'delete', function(response) {
       if (!response || response.error) {
         alert('Error occured');
