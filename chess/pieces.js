@@ -5,7 +5,7 @@ var Pieces = (function() {
     var pieces = [];
     var selected = false;
     var selsquare = null;
-
+    var piecescales = [0,100,128,96,96,80,96];
     var default_scale = 0.7;
     var sel_scale = 1;
     var Pawn = 1;
@@ -64,39 +64,61 @@ var Pieces = (function() {
       }
       init(positions);
     }
-    
-    function init(positions) {
-      var square, sprite;
-      positions = positions || setup;
-      for (var i=0,len=positions.length;i<len;i++) {
-        var piece = positions[i];
 
-        switch(piece[0]) {
-          case Pawn:
-            sprite = piece[1] == White ? "Pirate_Pawn" : "Pirate_Pawn_Gray";
-            break;
-          case Rook:
-            sprite = piece[1] == White ? "Pirate_Rook" : "Pirate_Rook_Gray";
-            break;
-          case Knight:
-            sprite = piece[1] == White ? "Pirate_Knight" : "Pirate_Knight_Gray";
-            break;
-          case Bishop:
-            sprite = piece[1] == White ? "Pirate_Bishop" : "Pirate_Bishop_Gray";
-            break;
-          case Queen:
-            sprite = piece[1] == White ? "Pirate_Queen" : "Pirate_Queen_Gray";
-            break;
-          case King:
-            sprite = piece[1] == White ? "Pirate_King" : "Pirate_King_Gray";
-            break;
-        }
+    function addPieceGob(square, type, color) {
+      var sprite;
+      switch(type) {
+        case Pawn:
+          sprite = color == White ? "Pirate_Pawn" : "Pirate_Pawn_Gray";
+          break;
+        case Rook:
+          sprite = color == White ? "Pirate_Rook" : "Pirate_Rook_Gray";
+          break;
+        case Knight:
+          sprite = color == White ? "Pirate_Knight" : "Pirate_Knight_Gray";
+          break;
+        case Bishop:
+          sprite = color == White ? "Pirate_Bishop" : "Pirate_Bishop_Gray";
+          break;
+        case Queen:
+          sprite = color == White ? "Pirate_Queen" : "Pirate_Queen_Gray";
+          break;
+        case King:
+          sprite = color == White ? "Pirate_King" : "Pirate_King_Gray";
+          break;
+      }
+      square.piece = Gob.add(Utils.uuidv4(), sprite, 0, [square.left+square.delta*0.5,square.top+square.delta*0.5], [0,0], 10, default_scale*square.delta/piecescales[type]);
+      square.piece.type = type;
+      square.piece.color = color;
+    }
+
+    function init() {
+      Gob.delAll();
+      var square, sprite;
+      for (var i=0,len=setup.length;i<len;i++) {
+        var piece = setup[i];
         square = Board.getSquare(piece[2],piece[3]);
-        square.piece = Gob.add(Utils.uuidv4(), sprite, 0, [square.left+square.delta*0.5,square.top+square.delta*0.5], [0,0], 10, default_scale);
-        square.piece.type = piece[0];
-        square.piece.color = piece[1];
+        addPieceGob(square, piece[0], piece[1]);
       }
     }
+
+    function resetBoardGobs() {
+      Gob.delAll();
+      for (var i=0;i<8;i++) {
+        for (var j=0;j<8;j++) {
+          var square = Board.getSquare(i,j);
+          if (square && square.piece) {
+            addPieceGob(square, square.piece.type, square.piece.color);
+          }
+        }
+      }
+    }
+
+    function setNameToIdx(name,idx) {
+      nameToIdx[name] = idx;
+      idxToName[idx] = name;
+    }
+
 
     function dumpBoard() {
       var square, pieces = {};
@@ -295,7 +317,7 @@ var Pieces = (function() {
         if (square.piece) {
           if (possibleMoves(square.i,square.j,square.piece)) {
             selected = square.piece;
-            square.piece.scale = sel_scale;
+            square.piece.scale = sel_scale*square.delta/piecescales[square.piece.type];
             square.piece.dirty = true;
             Board.setDirty();
             selsquare = square;
@@ -303,7 +325,7 @@ var Pieces = (function() {
         }
       } else {
         if (square == selsquare) {
-          selected.scale = default_scale;
+          selected.scale = default_scale*selsquare.delta/piecescales[selected.type];
           selected.dirty = true;
           selsquare.piece = false;
           Board.allDark();
@@ -314,7 +336,7 @@ var Pieces = (function() {
           if (square.piece) {
             Gob.del(square.piece.id);
           }
-          selected.scale = default_scale;
+          selected.scale = default_scale*selsquare.delta/piecescales[selected.type];
           selected.dirty = true;
           selsquare.piece = false;
           Board.allDark();
@@ -331,5 +353,6 @@ var Pieces = (function() {
     Pieces.init = init;
     Pieces.tick = tick;
     Pieces.select = select;
+    Pieces.resetBoardGobs = resetBoardGobs;
     return Pieces;
   })();
