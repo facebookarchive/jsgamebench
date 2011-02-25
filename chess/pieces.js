@@ -92,11 +92,13 @@ var Pieces = (function() {
       square.piece.color = color;
     }
 
-    function init() {
+    function init(positions) {
       Gob.delAll();
+      if (!positions)
+        positions = setup;
       var square, sprite;
-      for (var i=0,len=setup.length;i<len;i++) {
-        var piece = setup[i];
+      for (var i=0,len=positions.length;i<len;i++) {
+        var piece = positions[i];
         square = Board.getSquare(piece[2],piece[3]);
         addPieceGob(square, piece[0], piece[1]);
       }
