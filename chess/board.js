@@ -17,9 +17,10 @@ var Board = (function() {
         for (var j=0;j<8;j++) {
           var left = parseInt(width*0.5 - 4*delta + i*delta)+border*0.5;
           var top = parseInt(height*0.5 - 4*delta + j*delta)+border*0.5;
-          var color = black ? "#000" : "#fff";
+          var color = black ? "#000" : "#aaa";
+          var highlight = black ? "#884" : "#cc8";
           black = !black;
-          board[i+j*8] = {top:top,left:left,color:color,piece:false,delta:delta};
+          board[i+j*8] = {top:top,left:left,color:color,highlight:highlight,bright:false, piece:false,delta:delta, i:i, j:j};
         }
         black = !black;
       }
@@ -34,7 +35,8 @@ var Board = (function() {
       for (var i=0;i<8;i++) {
         for (var j=0;j<8;j++) {
           var square = board[i+j*8];
-          worldel.innerHTML += '<div style="position:absolute;left:'+square.left+'px;top:'+square.top+'px;width:'+delta+'px;height:'+delta+'px;background:'+square.color+';"></div>'
+          var color = square.bright ? square.highlight : square.color;
+          worldel.innerHTML += '<div style="position:absolute;left:'+square.left+'px;top:'+square.top+'px;width:'+delta+'px;height:'+delta+'px;background:'+color+';"></div>'
         }
       }
       dirty = false;
@@ -69,6 +71,19 @@ var Board = (function() {
       board[x+8*y].piece = piece;
     }
 
+    function allDark() {
+      for (var i=0;i<8;i++) {
+        for (var j=0;j<8;j++) {
+          board[i+8*j].bright = false;
+        }
+      }
+      setDirty();
+    }
+
+    function setDirty() {
+      dirty = true;
+    }
+
     var Board = {};
     Board.init = init;
     Board.tick = tick;
@@ -76,5 +91,7 @@ var Board = (function() {
     Board.nearestSquare = nearestSquare;
     Board.setPiece = setPiece;
     Board.getSquare = getSquare;
+    Board.setDirty = setDirty;
+    Board.allDark = allDark;
     return Board;
   })();
