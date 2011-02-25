@@ -78,6 +78,8 @@ var Pieces = (function() {
         }
         square = Board.getSquare(piece[2],piece[3]);
         square.piece = Gob.add(Utils.uuidv4(), sprite, 0, [square.left+square.delta*0.5,square.top+square.delta*0.5], [0,0], 10, default_scale);
+        square.piece.type = piece[0];
+        square.piece.color = piece[1];
       }
     }
 
@@ -87,44 +89,7 @@ var Pieces = (function() {
         for (var j=0;j<8;j++) {
           square = Board.getSquare(i,j);
           if (square.piece) {
-            switch(square.piece.spriteid) {
-              case "Pirate_Pawn":
-                pieces.push([Pawn,White,i,j]);
-                break;
-              case "Pirate_Pawn_Gray":
-                pieces.push([Pawn,Black,i,j]);
-                break;
-              case "Pirate_Rook":
-                pieces.push([Rook,White,i,j]);
-                break;
-              case "Pirate_Rook_Gray":
-                pieces.push([Rook,Black,i,j]);
-                break;
-              case "Pirate_Knight":
-                pieces.push([Knight,White,i,j]);
-                break;
-              case "Pirate_Knight_Gray":
-                pieces.push([Knight,Black,i,j]);
-                break;
-              case "Pirate_Bishop":
-                pieces.push([Bishop,White,i,j]);
-                break;
-              case "Pirate_Bishop_Gray":
-                pieces.push([Bishop,Black,i,j]);
-                break;
-              case "Pirate_Queen":
-                pieces.push([Queen,White,i,j]);
-                break;
-              case "Pirate_Queen_Gray":
-                pieces.push([Queen,Black,i,j]);
-                break;
-              case "Pirate_King":
-                pieces.push([King,White,i,j]);
-                break;
-              case "Pirate_King_Gray":
-                pieces.push([King,Black,i,j]);
-                break;
-            }
+            pieces.push([square.piece.type,square.piece.color,i,j]);
           }
         }
       }
@@ -133,25 +98,213 @@ var Pieces = (function() {
     function tick() {
     }
 
+    var possible_move = false;
+
+    function tryMove(x,y,color,move,capture) {
+      if (x >= 0 && x < 8) {
+        if (y >= 0 && y < 8) {
+          var square = Board.getSquare(x,y);
+          if ((move && !square.piece) || (capture && square.piece && square.piece.color != color)) {
+            possible_move = true;
+            square.bright = true;
+            return true;
+          }
+        }
+      }
+      return false;
+    }
+
+    function possibleMoves(x,y,piece) {
+      var color = piece.color;
+      var dir = -1;
+      if (color == Black) {
+        dir = 1;
+      }
+      possible_move = false;
+      switch(piece.type) {
+        case Pawn:
+          if (tryMove(x,y+dir,color,true,false)) {
+            if ((color == White && y == 6) || (y == 1))
+              tryMove(x,y+2*dir,color,true,false);
+          }
+          tryMove(x-1,y+dir,color,false,true);
+          tryMove(x+1,y+dir,color,false,true);
+          break;
+        case Rook:
+          var open = true;
+          var step = 1;
+          while(open) {
+            tryMove(x+step*dir,y,color,true,true);
+            open = tryMove(x+step*dir,y,color,true,false);
+            step++;
+          }
+          open = true;
+          step = 1;
+          while(open) {
+            tryMove(x-step*dir,y,color,true,true);
+            open = tryMove(x-step*dir,y,color,true,false);
+            step++;
+          }
+          open = true;
+          step = 1;
+          while(open) {
+            tryMove(x,y+step*dir,color,true,true);
+            open = tryMove(x,y+step*dir,color,true,false);
+            step++;
+          }
+          open = true;
+          step = 1;
+          while(open) {
+            tryMove(x,y-step*dir,color,true,true);
+            open = tryMove(x,y-step*dir,color,true,false);
+            step++;
+          }
+          break;
+        case Bishop:
+          var open = true;
+          var step = 1;
+          while(open) {
+            tryMove(x+step*dir,y+step*dir,color,true,true);
+            open = tryMove(x+step*dir,y+step*dir,color,true,false);
+            step++;
+          }
+          open = true;
+          step = 1;
+          while(open) {
+            tryMove(x-step*dir,y-step*dir,color,true,true);
+            open = tryMove(x-step*dir,y-step*dir,color,true,false);
+            step++;
+          }
+          open = true;
+          step = 1;
+          while(open) {
+            tryMove(x+step*dir,y-step*dir,color,true,true);
+            open = tryMove(x+step*dir,y-step*dir,color,true,false);
+            step++;
+          }
+          open = true;
+          step = 1;
+          while(open) {
+            tryMove(x-step*dir,y+step*dir,color,true,true);
+            open = tryMove(x-step*dir,y+step*dir,color,true,false);
+            step++;
+          }
+          break;
+        case Queen:
+          var open = true;
+          var step = 1;
+          while(open) {
+            tryMove(x+step*dir,y+step*dir,color,true,true);
+            open = tryMove(x+step*dir,y+step*dir,color,true,false);
+            step++;
+          }
+          open = true;
+          step = 1;
+          while(open) {
+            tryMove(x-step*dir,y-step*dir,color,true,true);
+            open = tryMove(x-step*dir,y-step*dir,color,true,false);
+            step++;
+          }
+          open = true;
+          step = 1;
+          while(open) {
+            tryMove(x+step*dir,y-step*dir,color,true,true);
+            open = tryMove(x+step*dir,y-step*dir,color,true,false);
+            step++;
+          }
+          open = true;
+          step = 1;
+          while(open) {
+            tryMove(x-step*dir,y+step*dir,color,true,true);
+            open = tryMove(x-step*dir,y+step*dir,color,true,false);
+            step++;
+          }
+          open = true;
+          step = 1;
+          while(open) {
+            tryMove(x+step*dir,y,color,true,true);
+            open = tryMove(x+step*dir,y,color,true,false);
+            step++;
+          }
+          open = true;
+          step = 1;
+          while(open) {
+            tryMove(x-step*dir,y,color,true,true);
+            open = tryMove(x-step*dir,y,color,true,false);
+            step++;
+          }
+          open = true;
+          step = 1;
+          while(open) {
+            tryMove(x,y+step*dir,color,true,true);
+            open = tryMove(x,y+step*dir,color,true,false);
+            step++;
+          }
+          open = true;
+          step = 1;
+          while(open) {
+            tryMove(x,y-step*dir,color,true,true);
+            open = tryMove(x,y-step*dir,color,true,false);
+            step++;
+          }
+          break;
+        case King:
+          tryMove(x,y+1,color,true,true);
+          tryMove(x+1,y+1,color,true,true);
+          tryMove(x+1,y,color,true,true);
+          tryMove(x+1,y-1,color,true,true);
+          tryMove(x,y-1,color,true,true);
+          tryMove(x-1,y-1,color,true,true);
+          tryMove(x-1,y,color,true,true);
+          tryMove(x-1,y+1,color,true,true);
+          break;
+        case Knight:
+          tryMove(x+1,y+2,color,true,true);
+          tryMove(x+2,y+1,color,true,true);
+          tryMove(x+2,y-1,color,true,true);
+          tryMove(x+1,y-2,color,true,true);
+          tryMove(x-1,y+2,color,true,true);
+          tryMove(x-2,y+1,color,true,true);
+          tryMove(x-2,y-1,color,true,true);
+          tryMove(x-1,y-2,color,true,true);
+          break;
+      }
+      return possible_move;
+    }
+
     function select(x,y) {
       var pos = Board.nearestSquare(x,y);
       var square = Board.getSquare(pos[0],pos[1]);
       if (!selected) {
         if (square.piece) {
-          selected = square.piece;
-          square.piece.scale = sel_scale;
-          square.piece.dirty = true;
-          selsquare = square;
+          if (possibleMoves(square.i,square.j,square.piece)) {
+            selected = square.piece;
+            square.piece.scale = sel_scale;
+            square.piece.dirty = true;
+            Board.setDirty();
+            selsquare = square;
+          }
         }
       } else {
-        if (!square.piece) {
+        if (square == selsquare) {
           selected.scale = default_scale;
           selected.dirty = true;
           selsquare.piece = false;
+          Board.allDark();
+          square.piece = selected;
+          selected = false;
+        }
+        else if (square.bright) {
+          if (square.piece) {
+            Gob.del(square.piece.id);
+          }
+          selected.scale = default_scale;
+          selected.dirty = true;
+          selsquare.piece = false;
+          Board.allDark();
           selected.pos = [square.left+square.delta*0.5,square.top+square.delta*0.5];
           square.piece = selected;
           selected = false;
-          dumpBoard();
         }
       }
     }
