@@ -8,6 +8,7 @@ var Board = (function() {
     var height = 0;
 
     function init() {
+      dirty = true;
       width = JSGlobal.winsize[0] - border;
       height = JSGlobal.winsize[1] - border;
 
@@ -18,9 +19,10 @@ var Board = (function() {
           var left = parseInt(width*0.5 - 4*delta + i*delta)+border*0.5;
           var top = parseInt(height*0.5 - 4*delta + j*delta)+border*0.5;
           var color = black ? "#000" : "#aaa";
-          var highlight = black ? "#884" : "#cc8";
+          var highlight = black ? "454" : "#efe";
+          var piece = board[i+j*8] ? board[i+j*8].piece : null;
           black = !black;
-          board[i+j*8] = {top:top,left:left,color:color,highlight:highlight,bright:false, piece:false,delta:delta, i:i, j:j};
+          board[i+j*8] = {top:top,left:left,color:color,highlight:highlight,bright:false, piece:piece,delta:delta, i:i, j:j};
         }
         black = !black;
       }

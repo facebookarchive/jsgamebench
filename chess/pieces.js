@@ -62,36 +62,53 @@ var Pieces = (function() {
         square.piece = Gob.add(Utils.uuidv4(), name, 0, [square.left+square.delta*0.5,square.top+square.delta*0.5], [0,0], 10, default_scale);
       }
     }
-    
+
+    function addPieceGob(square, type, color) {
+      var sprite;
+      switch(type) {
+        case Pawn:
+          sprite = color == White ? "Pirate_Pawn" : "Pirate_Pawn_Gray";
+          break;
+        case Rook:
+          sprite = color == White ? "Pirate_Rook" : "Pirate_Rook_Gray";
+          break;
+        case Knight:
+          sprite = color == White ? "Pirate_Knight" : "Pirate_Knight_Gray";
+          break;
+        case Bishop:
+          sprite = color == White ? "Pirate_Bishop" : "Pirate_Bishop_Gray";
+          break;
+        case Queen:
+          sprite = color == White ? "Pirate_Queen" : "Pirate_Queen_Gray";
+          break;
+        case King:
+          sprite = color == White ? "Pirate_King" : "Pirate_King_Gray";
+          break;
+      }
+      square.piece = Gob.add(Utils.uuidv4(), sprite, 0, [square.left+square.delta*0.5,square.top+square.delta*0.5], [0,0], 10, default_scale);
+      sqaure.piece.type = type;
+      sqaure.piece.color = color;
+    }
+
     function init() {
+      Gob.delAll();
       var square, sprite;
       for (var i=0,len=setup.length;i<len;i++) {
         var piece = setup[i];
-
-        switch(piece[0]) {
-          case Pawn:
-            sprite = piece[1] == White ? "Pirate_Pawn" : "Pirate_Pawn_Gray";
-            break;
-          case Rook:
-            sprite = piece[1] == White ? "Pirate_Rook" : "Pirate_Rook_Gray";
-            break;
-          case Knight:
-            sprite = piece[1] == White ? "Pirate_Knight" : "Pirate_Knight_Gray";
-            break;
-          case Bishop:
-            sprite = piece[1] == White ? "Pirate_Bishop" : "Pirate_Bishop_Gray";
-            break;
-          case Queen:
-            sprite = piece[1] == White ? "Pirate_Queen" : "Pirate_Queen_Gray";
-            break;
-          case King:
-            sprite = piece[1] == White ? "Pirate_King" : "Pirate_King_Gray";
-            break;
-        }
         square = Board.getSquare(piece[2],piece[3]);
-        square.piece = Gob.add(Utils.uuidv4(), sprite, 0, [square.left+square.delta*0.5,square.top+square.delta*0.5], [0,0], 10, default_scale);
-        square.piece.type = piece[0];
-        square.piece.color = piece[1];
+        addPieceGob(square, piece[0], piece[1]);
+      }
+    }
+
+    function resetBoardGobs() {
+      Gob.delAll();
+      for (var i=0;i<8;i++) {
+        for (var j=0;j<8;j++) {
+          var square = Board.getSquare(i,j);
+          if (square && square.piece) {
+            addPieceGob(square, square.piece.type, square.piece.color);
+          }
+        }
       }
     }
 
@@ -99,7 +116,7 @@ var Pieces = (function() {
       nameToIdx[name] = idx;
       idxToName[idx] = name;
     }
-  
+
     function dumpBoard() {
       var square, pieces = [];
       for (var i=0;i<8;i++) {
@@ -332,5 +349,6 @@ var Pieces = (function() {
     Pieces.init = init;
     Pieces.tick = tick;
     Pieces.select = select;
+    Pieces.resetBoardGobs = resetBoardGobs;
     return Pieces;
   })();
