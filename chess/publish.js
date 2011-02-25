@@ -115,7 +115,7 @@ var Publish = (function() {
       message: msg,
       data: payload
     };
-    if (player.opponent_id) {
+    if (0 && player.opponent_id) {
       cmd.to = player.opponent_id;
     }
     FB.ui(cmd);
