@@ -14,7 +14,15 @@
 
 var Publish = (function() {
   var fb_logged_in;
-  var player = {savedRequests: {}, opponent_id: 0};
+  var player = {savedRequests: {}, active_req: 0};
+  
+  function clearOpponent() {
+    player.active_req = 0;
+  }
+  
+  function hasOpponent() {
+    return player.active_req;
+  }
   
   function fbInit() {
     if (!fb_app_id) {
@@ -59,22 +67,15 @@ var Publish = (function() {
   function onReqClick(req) {
     UI.del('req'+req.id);
     if (player.savedRequests[req.id]) {
-      // Skip for processed ones
       return;
     }
     var data = req.data && FB.JSON.parse(req.data);
-    player.savedRequests[req.id] = true;
     Gob.delAll();
     Board.init();
     Pieces.setNewPositions(data.board);
-    player.opponent_id = req.from.id;
+    player.active_req = req;
+    Chess.newGameState('playing');
     console.log('playing against: ' + req.from.id);
-  //  return; //FIXMEBRUCE 
-    FB.api(req.id, 'delete', function(response) {
-      if (!response || response.error) {
-        alert('Error occured');
-      }
-    });
   }
 
   function getInfo() {
@@ -84,7 +85,21 @@ var Publish = (function() {
       player.name = result.name;
       player.picture = result.picture;
     });
-    
+    getRequests();
+  }
+
+  function addRequestButton(req,x,y) {
+    markup = FB.String.format(
+      '<img src="http://graph.facebook.com/{0}/picture" />{1}: {2}</p>',
+      req.from.id,
+      FB.String.escapeHTML(req.from.name),
+      FB.String.escapeHTML(req.message));
+    UI.addButton('buttons', 'req'+req.id,
+    {pos: [x,y], width: 400, height: 60, fontsize: '200%',
+    text: markup, command: {cmd: 'onReqClick', args: [req] }, req: req});
+  }
+  
+  function getRequests() {
     FB.api('me/apprequests', function(result) {
       var reqs = result.data;
       if (!reqs) {
@@ -94,33 +109,37 @@ var Publish = (function() {
       player.savedRequests = player.savedRequests || {};
       for(var i=0;i<reqs.length;i++) {
         var req = reqs[i];
-        console.log('req: ' + i);
         if (player.savedRequests[req.id]) {
           continue;
-       }
-       markup = FB.String.format(
-        '<img src="http://graph.facebook.com/{0}/picture" />{1}: {2}</p>', 
-        req.from.id,
-        FB.String.escapeHTML(req.from.name),
-        FB.String.escapeHTML(req.message));
-        UI.addButton('gameOpts', 'req'+req.id,
-          {pos: [60, 70 + 65*i], width: 400, height: 60, fontsize: '200%',
-          text: markup, command: {cmd: 'onReqClick', args: [req] }, req: req});
+        }
+        addRequestButton(req,60, 70 + 65*i);
       }
     });
   }
 
-  function sendRequest(msg,payload) {
+  function sendRequest(msg,payload,cb) {
+    var req = player.active_req;
+    player.active_req = 0;
     var cmd = {
       method: 'apprequests',
       message: msg,
       data: payload
     };
-    if (player.opponent_id) {
-      cmd.to = player.opponent_id;
+
+    if (req) {
+      cmd.to = req.from.id;
+      console.log('send to: ['+cmd.to+']');
     }
-    console.log('send: ' + JSON.stringify(cmd));
-    FB.ui(cmd);
+    FB.ui(cmd, function(response) {
+      if (response && !response.error) {
+        cb && cb();
+        if (req) {
+          player.savedRequests[req.id] = true;
+          FB.api(req.id, 'delete', function(response) {
+          });
+        }
+      }
+    });
   }
   
   function publishStory() {
@@ -151,5 +170,9 @@ var Publish = (function() {
     sendRequest: sendRequest,
     fbInit: fbInit,
     fbLogin: fbLogin,
+    clearOpponent : clearOpponent,
+    getRequests : getRequests,
+    hasOpponent : hasOpponent,
+    addRequestButton: addRequestButton,
   };
 })();

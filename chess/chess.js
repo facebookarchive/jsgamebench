@@ -1,13 +1,25 @@
-(function() {
+var Chess = (function() {
 
-var nameToIdx = {};
-var idxToName = {};
+var game_state = 'login';
 
 function loadImageList(path,list) {
   for(var i=0;i<list.length;i++) {
     var label = list[i].split('.')[0];
     var url = path + list[i];
     Sprites.add(label, {url: url, frames: 1, framepos: [[0, 0]], width: 0, height: 0 });
+  }
+}
+
+function newGameState(state) {
+  UI.del('buttons');
+  UI.addCollection('', 'buttons', {pos: [0, 0]});
+  game_state = state;
+  if (state == 'menu') {
+    Publish.getRequests();
+  }
+  if (state == 'playing') {
+    var req = Publish.hasOpponent();
+    req && Publish.addRequestButton(req,300,0);
   }
 }
 
@@ -18,10 +30,23 @@ function tick() {
     var dy = JSGlobal.mouse.y;
     Pieces.select(dx,dy);
   }
-  if (!client_user.fb_logged_in) {
-    UI.addButton('buttons', 'login', {pos: [0, 140], width: 150, height: 60, fontsize: '300%', text: 'Login', command: {cmd: 'login' }});
-  } else {
-    UI.del('login');
+  if (game_state == 'login' && client_user.fb_logged_in) {
+    newGameState('menu');
+  }
+  switch (game_state) {
+    case 'login':
+      UI.addButton('buttons', 'login', {pos: [60, 0], width: 150, height: 60, fontsize: '300%', text: 'Login', command: {cmd: 'login' }});
+      break;
+    case 'menu':
+      UI.addButton('buttons', 'newgame', {pos: [60, 0], width: 150, height: 60, fontsize: '250%', text: 'New Game', command: {cmd: 'newGame' }});
+      break;
+    case 'playing':
+      UI.addButton('buttons', 'request', {pos: [60, 0], width: 150, height: 60, fontsize: '250%', text: 'Send Move', command: {cmd: 'sendRequest' }});
+      UI.addButton('buttons', 'games', {pos: [60, 80], width: 150, height: 60, fontsize: '250%', text: 'Games', command: {cmd: 'newGameState', args:['menu'] }});
+      if (Publish.hasOpponent()) {
+        UI.addButton('buttons', 'concede', {pos: [60, 160], width: 150, height: 60, fontsize: '250%', text: 'Concede', command: {cmd: 'concede' }});
+      }
+      break;
   }
 }
 
@@ -32,6 +57,14 @@ function postImageLoad() {
 
 function clickButton() {
 
+}
+
+function newGame() {
+  Gob.delAll();
+  Board.init();
+  Pieces.init();
+  Publish.clearOpponent();
+  newGameState('playing');
 }
 
 function init() {
@@ -51,20 +84,29 @@ function init() {
   ClientCmd.install('sendRequest',sendMove);
   ClientCmd.install('publishStory',Publish.publishStory);
   ClientCmd.install('login',Publish.fbLogin);
-
+  ClientCmd.install('newGame',newGame);
+  ClientCmd.install('newGameState',newGameState);
+  ClientCmd.install('concede',concede);
+  newGameState('login');
   Publish.fbInit(fb_app_id);
 }
 
 function sendMove() {
   var state = Pieces.dumpBoard();
-  Publish.sendRequest('I made my move!',{board: state});
+  Publish.sendRequest('I made my move!',{board: state}, function() {
+    newGameState('menu');
+  });
+}
+
+function concede() {
+  var state = Pieces.dumpBoard();
+  Publish.sendRequest('I concede defeat!',{board: state,concede:1}, function() {
+    newGameState('menu');
+  });
 }
 
 function resize() {
   loadImageList('/chess/images/',['Pirate_King.png', 'Pirate_King_Gray.png', 'Pirate_Queen.png', 'Pirate_Queen_Gray.png', 'Pirate_Bishop.png', 'Pirate_Bishop_Gray.png', 'Pirate_Knight.png', 'Pirate_Knight_Gray.png', 'Pirate_Rook.png', 'Pirate_Rook_Gray.png', 'Pirate_Pawn.png', 'Pirate_Pawn_Gray.png']);
-  UI.addCollection('', 'buttons', {pos: [0, 0]});
-  UI.addButton('buttons', 'request', {pos: [200, 0], width: 150, height: 60, fontsize: '300%', text: 'Request', command: {cmd: 'sendRequest' }});
-  UI.addButton('buttons', 'publish', {pos: [0, 0], width: 150, height: 60, fontsize: '300%', text: 'Stream', command: {cmd: 'publishStory' }});
   Board.init();
   Pieces.resetBoardGobs();
 }
@@ -77,4 +119,7 @@ function draw() {
 
 Init.setFunctions({app: tick, init: init, draw: draw, ui: UI.tick, resize: resize, postLoad: postImageLoad, fps:60 });
 
+  return {
+    newGameState: newGameState
+  }
 })();
