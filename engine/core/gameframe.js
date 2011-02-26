@@ -212,7 +212,7 @@ var GameFrame = (function() {
                          {left: JSGlobal.winpos[0],
                              top: JSGlobal.winpos[1],
                              width: JSGlobal.winsize[0],
-                             height: JSGlobal.winsize[1] + 100},
+                             height: JSGlobal.winsize[1]-1},
                          '#f2f2f2');
 
       var midx = 0.5 * (JSGlobal.winsize[0] - JSGlobal.winpos[0]);
