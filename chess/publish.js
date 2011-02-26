@@ -48,7 +48,7 @@ var Publish = (function() {
       }
     }
   }
-  
+
   function fbLogin() {
     if (client_user.fb_logged_in) {
       return getInfo();
@@ -72,11 +72,13 @@ var Publish = (function() {
     var data = req.data && FB.JSON.parse(req.data);
     Gob.delAll();
     Board.init();
-    Pieces.setNewPositions(data.board);
-    player.active_req = req;
     Chess.newGameState('playing');
+    player.active_req = req;
+    Board.loadState(data.board);
+    Chess.startPlayback();
+    player.opponent_id = req.from.id;
     console.log('playing against: ' + req.from.id);
-  }
+   }
 
   function getInfo() {
     FB.api('me', {
@@ -141,10 +143,10 @@ var Publish = (function() {
       }
     });
   }
-  
+
   function publishStory() {
     var loc = window.location;
-    var url = loc.protocol + '//' + loc.host + '/chess/show/' + 
+    var url = loc.protocol + '//' + loc.host + '/chess/show/' +
       encodeURIComponent(FB.JSON.stringify({
         player: {
           id: 0,

@@ -54,6 +54,23 @@ var WebGLUtil = (function() {
       }
     };
 
+    bind_table['mat3'] = function(gl, loc) {
+      return function(m) {
+        gl.uniform3f(loc[0], m[0], m[3], m[6]);
+        gl.uniform3f(loc[1], m[1], m[4], m[7]);
+        gl.uniform3f(loc[2], m[2], m[5], m[8]);
+      }
+    };
+
+    bind_table['mat4'] = function(gl, loc) {
+      return function(m) {
+        gl.uniform4f(loc[0], m[0], m[4], m[8],  m[12]);
+        gl.uniform4f(loc[1], m[1], m[5], m[9],  m[13]);
+        gl.uniform4f(loc[2], m[2], m[6], m[10], m[14]);
+        gl.uniform4f(loc[3], m[3], m[7], m[11], m[15]);
+      }
+    };
+
     bind_table['sampler2D'] = function(gl, loc) {
       return function(s) {
         gl.uniform1i(loc, s);
@@ -68,7 +85,19 @@ var WebGLUtil = (function() {
         var text = [];
         var nobj = obj[name];
         for (var o in nobj) {
-          text.push([name, ' ', nobj[o], ' ', o, ';'].join(''));
+          var type = nobj[o];
+          if (type === 'mat4') {
+            text.push([name, ' vec4 ', o, '0;'].join(''));
+            text.push([name, ' vec4 ', o, '1;'].join(''));
+            text.push([name, ' vec4 ', o, '2;'].join(''));
+            text.push([name, ' vec4 ', o, '3;'].join(''));
+          } else if (type === 'mat3') {
+            text.push([name, ' vec3 ', o, '0;'].join(''));
+            text.push([name, ' vec3 ', o, '1;'].join(''));
+            text.push([name, ' vec3 ', o, '2;'].join(''));
+          } else {
+            text.push([name, ' ', type, ' ', o, ';'].join(''));
+          }
           if (accum) {
             accum[o] = nobj[o];
           }
@@ -151,8 +180,24 @@ var WebGLUtil = (function() {
       var gl = this;
 
       for (var uniform in uniforms) {
-        var loc = gl.getUniformLocation(program_obj, uniform);
         var type = uniforms[uniform];
+        var loc;
+        if (type == 'mat4') {
+          loc = [
+            gl.getUniformLocation(program_obj, uniform + '0'),
+            gl.getUniformLocation(program_obj, uniform + '1'),
+            gl.getUniformLocation(program_obj, uniform + '2'),
+            gl.getUniformLocation(program_obj, uniform + '3')
+          ];
+        } else if (type == 'mat3') {
+          loc = [
+            gl.getUniformLocation(program_obj, uniform + '0'),
+            gl.getUniformLocation(program_obj, uniform + '1'),
+            gl.getUniformLocation(program_obj, uniform + '2')
+          ];
+        } else {
+          loc = gl.getUniformLocation(program_obj, uniform);
+        }
         if (bind_table[type]) {
           program_wrapper[uniform] = bind_table[type](gl, loc);
         } else {
@@ -215,10 +260,7 @@ var WebGLUtil = (function() {
         return loadProgram.apply(gl, arguments);
       };
 
-      gl.loadTexture = function(image_element) {
-        var gltexture = gl.createTexture();
-        gl.bindTexture(gl.TEXTURE_2D, gltexture);
-
+      gl.loadTextureData = function(image_element) {
         gl.texImage2D(gl.TEXTURE_2D, 0,
                       gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE,
                       image_element);
@@ -226,7 +268,12 @@ var WebGLUtil = (function() {
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      };
 
+      gl.loadTexture = function(image_element) {
+        var gltexture = gl.createTexture();
+        gl.bindTexture(gl.TEXTURE_2D, gltexture);
+        gl.loadTextureData(image_element);
         return gltexture;
       };
 

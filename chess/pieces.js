@@ -5,18 +5,8 @@ var Pieces = (function() {
     var pieces = [];
     var selected = false;
     var selsquare = null;
-    var piecescales = [0,100,128,96,96,80,96];
     var default_scale = 0.7;
     var sel_scale = 1;
-    var Pawn = 1;
-    var Rook = 2;
-    var Bishop = 3;
-    var Knight = 4;
-    var Queen = 5;
-    var King = 6;
-
-    var White = 1;
-    var Black = 2;
 
     var setup = [
       [Pawn,White,0,6],
@@ -65,7 +55,7 @@ var Pieces = (function() {
       init(positions);
     }
 
-    function addPieceGob(square, type, color) {
+    function addPieceGob(square, type, color, move) {
       var sprite;
       switch(type) {
         case Pawn:
@@ -90,6 +80,7 @@ var Pieces = (function() {
       square.piece = Gob.add(Utils.uuidv4(), sprite, 0, [square.left+square.delta*0.5,square.top+square.delta*0.5], [0,0], 10, default_scale*square.delta/piecescales[type]);
       square.piece.type = type;
       square.piece.color = color;
+      square.piece.move = move;
     }
 
     function init(positions) {
@@ -100,7 +91,7 @@ var Pieces = (function() {
       for (var i=0,len=positions.length;i<len;i++) {
         var piece = positions[i];
         square = Board.getSquare(piece[2],piece[3]);
-        addPieceGob(square, piece[0], piece[1]);
+        addPieceGob(square, piece[0], piece[1], 0);
       }
     }
 
@@ -110,7 +101,7 @@ var Pieces = (function() {
         for (var j=0;j<8;j++) {
           var square = Board.getSquare(i,j);
           if (square && square.piece) {
-            addPieceGob(square, square.piece.type, square.piece.color);
+            addPieceGob(square, square.piece.type, square.piece.color, square.piece.move);
           }
         }
       }
@@ -316,7 +307,7 @@ var Pieces = (function() {
       var pos = Board.nearestSquare(x,y);
       var square = Board.getSquare(pos[0],pos[1]);
       if (!selected) {
-        if (square.piece) {
+        if (square.piece && square.piece.color == Board.toMove()) {
           if (possibleMoves(square.i,square.j,square.piece)) {
             selected = square.piece;
             square.piece.scale = sel_scale*square.delta/piecescales[square.piece.type];
@@ -335,6 +326,7 @@ var Pieces = (function() {
           selected = false;
         }
         else if (square.bright) {
+          Board.makeMove(selsquare, square, selsquare.piece);
           if (square.piece) {
             Gob.del(square.piece.id);
           }

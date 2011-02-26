@@ -14,6 +14,7 @@
 
 var GameFrame = (function() {
     var WEBGL = 'webgl';
+    var WEBGL3D = 'webgl3d';
     var CANVAS_ONLY = 'canvas';
     var CANVAS_HTML_HYBRID = 'hybrid';
     var HTML_ONLY = 'html';
@@ -82,6 +83,11 @@ var GameFrame = (function() {
         backgroundel.innerHTML = '';
         switch (settings.render_mode) {
           case WEBGL:
+            WebGLRender.init(gameviewport.id,
+                             gameviewport.dstyle.width,
+                             gameviewport.dstyle.height);
+            break;
+          case WEBGL3D:
             WebGLRender.init(gameviewport.id,
                              gameviewport.dstyle.width,
                              gameviewport.dstyle.height);
@@ -206,7 +212,7 @@ var GameFrame = (function() {
                          {left: JSGlobal.winpos[0],
                              top: JSGlobal.winpos[1],
                              width: JSGlobal.winsize[0],
-                             height: JSGlobal.winsize[1] + 100},
+                             height: JSGlobal.winsize[1]},
                          '#f2f2f2');
 
       var midx = 0.5 * (JSGlobal.winsize[0] - JSGlobal.winpos[0]);
@@ -227,6 +233,7 @@ var GameFrame = (function() {
 
     var GameFrame = {};
     GameFrame.WEBGL = WEBGL;
+    GameFrame.WEBGL3D = WEBGL3D;
     GameFrame.CANVAS_ONLY = CANVAS_ONLY;
     GameFrame.CANVAS_HTML_HYBRID = CANVAS_HTML_HYBRID;
     GameFrame.HTML_ONLY = HTML_ONLY;

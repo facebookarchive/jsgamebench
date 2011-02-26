@@ -2,9 +2,11 @@
   <head>
     #metatags
     #include '/engine/style.include'
+    <link rel="stylesheet" type="text/css" href="/chess/style.css" />
     <script src="http://static.ak.fbcdn.net/connect/en_US/core.debug.js"></script>
     #include 'app_id'
     #include '/engine/core/core.include'
+    <script type="text/javascript" src="/chess/constants.js"></script>
     <script type="text/javascript" src="/chess/board.js"></script>
     <script type="text/javascript" src="/chess/pieces.js"></script>
     <script type="text/javascript" src="/chess/publish.js"></script>
