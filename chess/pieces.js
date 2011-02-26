@@ -337,6 +337,7 @@ var Pieces = (function() {
           selected.pos = [square.left+square.delta*0.5,square.top+square.delta*0.5];
           square.piece = selected;
           selected = false;
+          Chess.newGameState('moved');
         }
       }
     }
