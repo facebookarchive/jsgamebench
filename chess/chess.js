@@ -13,7 +13,6 @@ var Chess = (function() {
       Board.setState(0);
     }
 
-
     function loadImageList(path,list) {
       for(var i=0;i<list.length;i++) {
         var label = list[i].split('.')[0];
@@ -118,14 +117,14 @@ var Chess = (function() {
 
     function init() {
       GameFrame.updateSettings({
-          render_mode: GameFrame.HTML_ONLY,
-            update_existing: true,
-            use_div_background: true,
-            css_transitions: false,
-            css_keyframe: false,
-            sprite_sheets: false,
-            int_snap: true,
-            transform3d:true});
+        render_mode: GameFrame.HTML_ONLY,
+        update_existing: true,
+        use_div_background: true,
+        css_transitions: false,
+        css_keyframe: false,
+        sprite_sheets: false,
+        int_snap: true,
+        transform3d:true});
 
       GameFrame.setXbyY();
       UI.hookUIEvents('gamebody');
@@ -136,23 +135,21 @@ var Chess = (function() {
       ClientCmd.install('newGame',newGame);
       ClientCmd.install('newGameState',newGameState);
       ClientCmd.install('concede',concede);
+      ClientCmd.install('removeRequest',Publish.removeRequest);
+
       newGameState('login');
       Publish.fbInit(fb_app_id);
     }
 
     function sendMove() {
       var state = Board.getState();
-      Publish.sendRequest('I made my move!',{board: state}, function() {
-          newGameState('menu');
-        });
+      Publish.sendRequest('I made my move!',{board: state});
     }
 
-    function concede() {
+     function concede() {
       var state = Board.getState();
-      Publish.sendRequest('I concede defeat!',{board: state,concede:1}, function() {
-          newGameState('menu');
-        });
-    }
+      Publish.sendRequest('I concede defeat!',{board: state,concede:1});
+     }
 
     function resize() {
       loadImageList('/chess/images/',['Pirate_King.png', 'Pirate_King_Gray.png', 'Pirate_Queen.png', 'Pirate_Queen_Gray.png', 'Pirate_Bishop.png', 'Pirate_Bishop_Gray.png', 'Pirate_Knight.png', 'Pirate_Knight_Gray.png', 'Pirate_Rook.png', 'Pirate_Rook_Gray.png', 'Pirate_Pawn.png', 'Pirate_Pawn_Gray.png']);
@@ -169,8 +166,9 @@ var Chess = (function() {
     Init.setFunctions({app: tick, init: init, draw: draw, ui: UI.tick, resize: resize, postLoad: postImageLoad, fps:60 });
 
     return {
-        newGameState: newGameState,
-        startPlayback: startPlayback
-        };
-  })();
+      newGameState: newGameState,
+      startPlayback: startPlayback
+    }
+})();
+
 
