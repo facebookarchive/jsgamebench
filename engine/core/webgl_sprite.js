@@ -111,6 +111,8 @@ var WebGLSprite = (function() {
 
       function setupContext() {
         gl.enableVertexAttribArray(0);
+        gl.disableVertexAttribArray(1);
+        gl.disableVertexAttribArray(2);
         gl.bindBuffer(gl.ARRAY_BUFFER, sprite_vbo);
         gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, sprite_ibo);
@@ -122,6 +124,7 @@ var WebGLSprite = (function() {
         gl.enable(gl.BLEND);
         gl.blendEquation(gl.FUNC_ADD);
         gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+        gl.disable(gl.DEPTH_TEST);
 
         sprite_program.sprite_texture(0);
         cur_texture = undefined;

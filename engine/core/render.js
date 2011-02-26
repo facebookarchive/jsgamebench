@@ -151,12 +151,17 @@ var Render = (function() {
         case GameFrame.WEBGL:
           WebGLRender.begin();
           for (var id in World.elements) {
-            WebGLRender.draw(World.framedata(id));
+            WebGLRender.drawSprite(World.framedata(id));
           }
           for (var id in Gob.gobs) {
             framedata = Gob.framedata(id);
-            WebGLRender.draw(framedata);
+            WebGLRender.drawSprite(framedata);
           }
+          WebGLRender.end();
+          break;
+        case GameFrame.WEBGL3D:
+          WebGLRender.begin();
+          World3D.draw(WebGLRender.getModelContext());
           WebGLRender.end();
           break;
         case GameFrame.CANVAS_ONLY:
