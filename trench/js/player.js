@@ -21,6 +21,7 @@ var TrenchPlayer = (function() {
     var player_id;
 
     var actual_velocity;
+    var gun_cooldown;
 
     var player_radius = 0.7;
 
@@ -28,6 +29,11 @@ var TrenchPlayer = (function() {
     var thrust_drag = 0.6;
     var thrust_accel = 6;
     var thrust_max_speed = 50;
+
+    var bullet_velocity = [0, 15, 0];
+    var bullet_radius = 0.3;
+    var bullet_life = 3;
+    var bullet_fire_rate = 0.2;
 
     function init(model) {
       player_model = model;
@@ -40,6 +46,8 @@ var TrenchPlayer = (function() {
       player_matrix = Math3D.mat4x4();
       player_pos = [0,0,0];
       player_velocity = [0,0,0];
+      gun_cooldown = 0;
+
       if (typeof player_id !== 'undefined') {
         World3D.removeDynamic(player_id);
       }
@@ -116,6 +124,19 @@ var TrenchPlayer = (function() {
       player_matrix[14] = player_pos[2] - 0.5;
       World3D.moveDynamic(player_id, player_matrix,
                           player_pos, collision);
+
+      // guns!
+      gun_cooldown -= dt;
+      if (gun_cooldown < 0) {
+        gun_cooldown = 0;
+      }
+      if (gun_cooldown == 0 && keyDown('X')) {
+        var vel = Math3D.addVec3(actual_velocity, bullet_velocity);
+        TrenchProjectile.create(player_pos, vel, bullet_radius,
+                                bullet_life, collision);
+        gun_cooldown = bullet_fire_rate;
+      }
+
     }
 
     function getPosition() {

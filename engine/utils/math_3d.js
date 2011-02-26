@@ -56,12 +56,54 @@ var Math3D = (function() {
       mout[8] = vnewup[0];
       mout[9] = vnewup[1];
       mout[10] = vnewup[2];
+
+      return mout;
     }
 
     function translateMat4x4(mout, vtrans) {
       mout[12] += vtrans[0];
       mout[13] += vtrans[1];
       mout[14] += vtrans[2];
+      return mout;
+    }
+
+    function setTranslationMat4x4(mout, vtrans) {
+      mout[12] = vtrans[0];
+      mout[13] = vtrans[1];
+      mout[14] = vtrans[2];
+      return mout;
+    }
+
+    function scaleMat4x4(mout, scale) {
+      mout[0] *= scale;
+      mout[1] *= scale;
+      mout[2] *= scale;
+      mout[3] *= scale;
+      mout[4] *= scale;
+      mout[5] *= scale;
+      mout[6] *= scale;
+      mout[7] *= scale;
+      mout[8] *= scale;
+      mout[9] *= scale;
+      mout[10] *= scale;
+      mout[11] *= scale;
+      return mout;
+    }
+
+    function vscaleMat4x4(mout, vscale) {
+      mout[0] *= vscale[0];
+      mout[1] *= vscale[0];
+      mout[2] *= vscale[0];
+      mout[3] *= vscale[0];
+      mout[4] *= vscale[1];
+      mout[5] *= vscale[1];
+      mout[6] *= vscale[1];
+      mout[7] *= vscale[1];
+      mout[8] *= vscale[2];
+      mout[9] *= vscale[2];
+      mout[10] *= vscale[2];
+      mout[11] *= vscale[2];
+      return mout;
     }
 
     function mulMat4x4(m1, m2) {
@@ -415,6 +457,9 @@ var Math3D = (function() {
     Math3D.copyMat4x4 = copyMat4x4;
     Math3D.orientMat4x4 = orientMat4x4;
     Math3D.translateMat4x4 = translateMat4x4;
+    Math3D.setTranslationMat4x4 = setTranslationMat4x4;
+    Math3D.scaleMat4x4 = scaleMat4x4;
+    Math3D.vscaleMat4x4 = vscaleMat4x4;
     Math3D.mulMat4x4 = mulMat4x4;
     Math3D.fastInvertMat4x4 = fastInvertMat4x4;
 

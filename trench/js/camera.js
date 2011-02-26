@@ -49,7 +49,7 @@ var TrenchCamera = (function() {
       }
       Math3D.scaleVec3Self(player_pos, cam_dist);
       camera_pos[0] = player_pos[0];
-      camera_pos[2] = player_pos[2];
+      camera_pos[2] = player_pos[2] + 2.5;
 
       var camera_matrix = Math3D.mat4x4();
       Math3D.orientMat4x4(camera_matrix, camera_dir, camera_up);

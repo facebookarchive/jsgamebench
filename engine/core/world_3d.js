@@ -77,6 +77,11 @@ var World3D = (function() {
       };
 
       var id = dynamic_elements.length;
+      for (var ii = 0; ii < id; ++ii) {
+        if (typeof dynamic_elements[ii] === 'undefined') {
+          id = ii;
+        }
+      }
       dynamic_elements[id] = element;
       return id;
     }
