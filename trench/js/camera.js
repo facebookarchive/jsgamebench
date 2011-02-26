@@ -20,10 +20,6 @@ var TrenchCamera = (function() {
     var farplane = 1000.0;
     var camera_distance = 6;
 
-    var camera_pos = [0,0,0];
-    var camera_dir = [0,1,0];
-    var camera_up = [0,0,1];
-
     function init(viewport) {
       // set up projection matrix, and thus the coordinate system as well
       aspect_ratio = viewport.width / viewport.height;
@@ -33,7 +29,16 @@ var TrenchCamera = (function() {
                                 farplane);
     }
 
+    function reset() {
+      var camera_matrix = Math3D.mat4x4();
+      World3D.setCamera(camera_matrix);
+    }
+
     function tick(dt) {
+      var camera_pos = [0,0,0];
+      var camera_dir = [0,1,0];
+      var camera_up = [0,0,1];
+
       var player_pos = TrenchPlayer.getPosition();
       camera_pos[1] = player_pos[1] - camera_distance;
       player_pos[1] = 0;
@@ -54,6 +59,7 @@ var TrenchCamera = (function() {
 
     var TrenchCamera = {};
     TrenchCamera.init = init;
+    TrenchCamera.reset = reset;
     TrenchCamera.tick = tick;
     return TrenchCamera;
   })();

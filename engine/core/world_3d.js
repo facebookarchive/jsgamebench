@@ -58,6 +58,12 @@ var World3D = (function() {
       static_elements[id] = element;
     }
 
+    function updateStatic(id, model) {
+      if (typeof static_elements[id] !== 'undefined') {
+        static_elements[id].model = model;
+      }
+    }
+
     function removeStatic(id) {
       static_elements[id] = undefined;
     }
@@ -91,6 +97,12 @@ var World3D = (function() {
       }
     }
 
+    function updateDynamic(id, model) {
+      if (typeof dynamic_elements[id] !== 'undefined') {
+        dynamic_elements[id].model = model;
+      }
+    }
+
     function removeDynamic(id) {
       dynamic_elements[id] = undefined;
     }
@@ -112,40 +124,41 @@ var World3D = (function() {
                          matrix_state.view_matrix);
     }
 
+    function drawElement(model_context, element) {
+      if (typeof element === 'undefined') {
+        return;
+      }
+
+      // inject model matrix into matrix state
+      matrix_state.modelviewproj =
+        Math3D.mulMat4x4(matrix_state.viewprojection, element.matrix);
+      matrix_state.model_matrix = element.matrix;
+
+      model_context.drawModel(element.model, -1, matrix_state);
+    }
+
     function draw(model_context) {
       if (!model_context) {
         return;
       }
 
       for (var id in static_elements) {
-        var element = static_elements[id];
-
-        // inject model matrix into matrix state
-        matrix_state.modelviewproj =
-          Math3D.mulMat4x4(matrix_state.viewprojection, element.matrix);
-        matrix_state.model_matrix = element.matrix;
-
-        model_context.drawModel(element.model, -1, matrix_state);
+        drawElement(model_context, static_elements[id]);
       }
 
       for (var id = 0; id < dynamic_elements.length; ++id) {
-        var element = dynamic_elements[id];
-
-        // inject model matrix into matrix state
-        matrix_state.modelviewproj =
-          Math3D.mulMat4x4(matrix_state.viewprojection, element.matrix);
-        matrix_state.model_matrix = element.matrix;
-
-        model_context.drawModel(element.model, -1, matrix_state);
+        drawElement(model_context, dynamic_elements[id]);
       }
     }
 
     var World3D = {};
     World3D.addStatic = addStatic;
+    World3D.updateStatic = updateStatic;
     World3D.removeStatic = removeStatic;
 
     World3D.addDynamic = addDynamic;
     World3D.moveDynamic = moveDynamic;
+    World3D.updateDynamic = updateDynamic;
     World3D.removeDynamic = removeDynamic;
 
     World3D.setPerspectiveZUp = setPerspectiveZUp;

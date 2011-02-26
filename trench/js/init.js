@@ -16,8 +16,12 @@
 
   var box_model_data = {"verts":[0,0,0,0,0,0,0,-1,1,1,0,0,1,0,0,-1,1,0,0,1,1,0,0,-1,0,1,0,1,0,0,0,-1,0,0,0,0,0,-1,0,0,0,1,1,0,1,-1,0,0,0,1,0,1,1,-1,0,0,0,0,1,1,0,-1,0,0,0,1,0,0,0,0,1,0,1,1,1,0,1,0,1,0,1,1,0,1,1,0,1,0,0,1,1,1,0,0,1,0,1,0,0,0,0,1,0,0,1,1,0,0,1,1,0,0,1,1,1,1,1,1,0,0,1,0,1,1,0,1,0,0,0,0,0,0,0,0,-1,0,1,0,0,0,1,0,-1,0,1,0,1,1,1,0,-1,0,0,0,1,1,0,0,-1,0,0,0,1,0,0,0,0,1,1,0,1,0,1,0,0,1,1,1,1,1,1,0,0,1,0,1,1,1,0,0,0,1],"indices":[0,1,2,0,3,1,4,5,6,4,7,5,8,9,10,8,11,9,12,13,14,12,14,15,16,17,18,16,18,19,20,21,22,20,22,23],"materials":["default"],"counts":[36]};
 
+  var max_delta = 0.1; // max frame time delta, in seconds
+
   var render_inited = false;
   var box_model = null;
+  var play_game = false;
+  var needs_reset = true;
 
   function tick() {
     if (!render_inited && WebGLRender.isInitialized()) {
@@ -33,13 +37,38 @@
       TrenchPlayer.init(box_model);
       TrenchCamera.init(viewport);
       TrenchTrack.init(box_model);
+      TrenchProjectile.init(box_model);
+    }
+
+    if (render_inited && needs_reset) {
+      TrenchPlayer.reset();
+      TrenchCamera.reset();
+      TrenchTrack.reset();
+      TrenchProjectile.reset();
+      needs_reset = false;
     }
 
     // tick subsystems
     var delta_time = Tick.delta * 0.001;
-    TrenchPlayer.tick(delta_time);
-    TrenchCamera.tick(delta_time);
-    TrenchTrack.tick(delta_time);
+    if (delta_time > max_delta) {
+      delta_time = max_delta;
+    }
+
+    if (play_game) {
+      TrenchProjectile.tick(delta_time);
+      TrenchPlayer.tick(delta_time);
+      TrenchCamera.tick(delta_time);
+      TrenchTrack.tick(delta_time);
+    }
+  }
+
+  function startCmd() {
+    play_game = true;
+  }
+
+  function resetCmd() {
+    needs_reset = true;
+    play_game = false;
   }
 
   function init() {
@@ -53,12 +82,27 @@
 
     GameFrame.setXbyY();
     UI.hookUIEvents('gamebody');
+
+    ClientCmd.install('start', startCmd);
+    ClientCmd.install('reset', resetCmd);
   }
 
   function resize() {
     //console.log('resize');
     render_inited = false;
-  }
+
+    UI.addCollection('', 'buttons', {pos: [0, 0]});
+    UI.addButton('buttons', 'start', {
+        pos: [0, 0], width: 80, height: 40,
+          fontsize: '100%', text: 'Start!',
+          command: {cmd: 'start' }
+      });
+    UI.addButton('buttons', 'reset', {
+        pos: [100, 0], width: 80, height: 40,
+          fontsize: '100%', text: 'Reset',
+          command: {cmd: 'reset' }
+      });
+ }
 
   Init.setFunctions({
     app: tick,

@@ -14,6 +14,7 @@
 
 var TrenchPlayer = (function() {
 
+    var player_model;
     var player_matrix;
     var player_pos;
     var player_velocity;
@@ -21,7 +22,7 @@ var TrenchPlayer = (function() {
 
     var actual_velocity;
 
-    var player_radius = 2;
+    var player_radius = 0.7;
 
     var player_forward_velocity = 5;
     var thrust_drag = 0.6;
@@ -29,14 +30,20 @@ var TrenchPlayer = (function() {
     var thrust_max_speed = 50;
 
     function init(model) {
+      player_model = model;
       if (typeof player_id === 'undefined') {
-        World3D.removeDynamic(player_id);
+        World3D.updateDynamic(player_id, player_model);
       }
+    }
 
+    function reset() {
       player_matrix = Math3D.mat4x4();
       player_pos = [0,0,0];
       player_velocity = [0,0,0];
-      player_id = World3D.addDynamic(model, player_matrix,
+      if (typeof player_id !== 'undefined') {
+        World3D.removeDynamic(player_id);
+      }
+      player_id = World3D.addDynamic(player_model, player_matrix,
                                      player_pos, player_radius);
     }
 
@@ -52,7 +59,8 @@ var TrenchPlayer = (function() {
 
     function collision(result) {
       var dp = Math3D.dotVec3(result.n, actual_velocity);
-      Math3D.addVec3Self(player_velocity, Math3D.scaleVec3(result.n, -1.6 * dp));
+      Math3D.addVec3Self(player_velocity,
+                         Math3D.scaleVec3(result.n, -1.6 * dp));
 
       // update the position, no collision
       // the offset is to center the model
@@ -115,8 +123,9 @@ var TrenchPlayer = (function() {
     }
 
     var TrenchPlayer = {};
-    TrenchPlayer.tick = tick;
     TrenchPlayer.init = init;
+    TrenchPlayer.reset = reset;
+    TrenchPlayer.tick = tick;
     TrenchPlayer.getPosition = getPosition;
     return TrenchPlayer;
   })();

@@ -14,7 +14,7 @@
 
 var TrenchTrack = (function() {
 
-    var block_counter;
+    var block_counter = 0;
     var block_model;
 
     function placeBlock(vmin, vmax) {
@@ -30,8 +30,17 @@ var TrenchTrack = (function() {
     }
 
     function init(model) {
-      block_counter = 0;
       block_model = model;
+      for (var ii = 0; ii < block_counter; ++ii) {
+        World3D.updateStatic(ii, block_model);
+      }
+    }
+
+    function reset() {
+      for (var ii = 0; ii < block_counter; ++ii) {
+        World3D.removeStatic(ii);
+      }
+      block_counter = 0;
 
       placeBlock([-10,-50,-5], [10,250,-4]);
       placeBlock([-10,-50,-4], [-8,250,10]);
@@ -58,6 +67,7 @@ var TrenchTrack = (function() {
 
     var TrenchTrack = {};
     TrenchTrack.init = init;
+    TrenchTrack.reset = reset;
     TrenchTrack.tick = tick;
     return TrenchTrack;
   })();
