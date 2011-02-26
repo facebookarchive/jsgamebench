@@ -13,7 +13,6 @@ var Chess = (function() {
       Board.setState(0);
     }
 
-
     function loadImageList(path,list) {
       for(var i=0;i<list.length;i++) {
         var label = list[i].split('.')[0];
@@ -81,85 +80,87 @@ var Chess = (function() {
         case 'playing':
           UI.addButton('buttons', 'request', {pos: [60, 0], width: 150, height: 60, fontsize: '250%', text: 'Send Move', command: {cmd: 'sendRequest' }});
           UI.addButton('buttons', 'games', {pos: [60, 80], width: 150, height: 60, fontsize: '250%', text: 'Games', command: {cmd: 'newGameState', args:['menu'] }});
-          if (Publish.hasOpponent()) {
-            UI.addButton('buttons', 'concede', {pos: [60, 160], width: 150, height: 60, fontsize: '250%', text: 'Concede', command: {cmd: 'concede' }});
+          var req = Publish.hasOpponent();
+          if (req) {
+            if (req.concede) {
+              UI.addButton('buttons', 'removeReq', {pos: [60, 160], width: 150, height: 60, fontsize: '250%', text: 'Remove', command: {cmd: 'removeRequest', args: [req] }});
+            } else {
+              UI.addButton('buttons', 'concede', {pos: [60, 160], width: 150, height: 60, fontsize: '250%', text: 'Concede', command: {cmd: 'concede' }});
+            }
           }
           break;
       }
     }
 
-function postImageLoad() {
-  Board.init();
-  Pieces.init();
-}
+    function postImageLoad() {
+      Board.init();
+      Pieces.init();
+    }
 
-function clickButton() {
+    function clickButton() {
 
-}
+    }
 
-function newGame() {
-  Gob.delAll();
-  Board.init();
-  Pieces.init();
-  Publish.clearOpponent();
-  newGameState('playing');
-}
+    function newGame() {
+      Gob.delAll();
+      Board.init();
+      Pieces.init();
+      Publish.clearOpponent();
+      newGameState('playing');
+    }
 
-function init() {
-  GameFrame.updateSettings({
-    render_mode: GameFrame.HTML_ONLY,
-    update_existing: true,
-    use_div_background: true,
-    css_transitions: false,
-    css_keyframe: false,
-    sprite_sheets: false,
-    int_snap: true,
-    transform3d:true});
+    function init() {
+      GameFrame.updateSettings({
+        render_mode: GameFrame.HTML_ONLY,
+        update_existing: true,
+        use_div_background: true,
+        css_transitions: false,
+        css_keyframe: false,
+        sprite_sheets: false,
+        int_snap: true,
+        transform3d:true});
 
-  GameFrame.setXbyY();
-  UI.hookUIEvents('gamebody');
-  loadImageList('/chess/images/',['Pirate_King.png', 'Pirate_King_Gray.png', 'Pirate_Queen.png', 'Pirate_Queen_Gray.png', 'Pirate_Bishop.png', 'Pirate_Bishop_Gray.png', 'Pirate_Knight.png', 'Pirate_Knight_Gray.png', 'Pirate_Rook.png', 'Pirate_Rook_Gray.png', 'Pirate_Pawn.png', 'Pirate_Pawn_Gray.png']);
-  ClientCmd.install('sendRequest',sendMove);
-  ClientCmd.install('publishStory',Publish.publishStory);
-  ClientCmd.install('login',Publish.fbLogin);
-  ClientCmd.install('newGame',newGame);
-  ClientCmd.install('newGameState',newGameState);
-  ClientCmd.install('concede',concede);
-  newGameState('login');
-  Publish.fbInit(fb_app_id);
-}
+      GameFrame.setXbyY();
+      UI.hookUIEvents('gamebody');
+      loadImageList('/chess/images/',['Pirate_King.png', 'Pirate_King_Gray.png', 'Pirate_Queen.png', 'Pirate_Queen_Gray.png', 'Pirate_Bishop.png', 'Pirate_Bishop_Gray.png', 'Pirate_Knight.png', 'Pirate_Knight_Gray.png', 'Pirate_Rook.png', 'Pirate_Rook_Gray.png', 'Pirate_Pawn.png', 'Pirate_Pawn_Gray.png']);
+      ClientCmd.install('sendRequest',sendMove);
+      ClientCmd.install('publishStory',Publish.publishStory);
+      ClientCmd.install('login',Publish.fbLogin);
+      ClientCmd.install('newGame',newGame);
+      ClientCmd.install('newGameState',newGameState);
+      ClientCmd.install('concede',concede);
+      ClientCmd.install('removeRequest',Publish.removeRequest);
+      newGameState('login');
+      Publish.fbInit(fb_app_id);
+    }
 
-function sendMove() {
-  var state = Board.getState();
-  Publish.sendRequest('I made my move!',{board: state}, function() {
-    newGameState('menu');
-  });
-}
+    function sendMove() {
+      var state = Board.getState();
+      Publish.sendRequest('I made my move!',{board: state});
+    }
 
-function concede() {
-  var state = Board.getState();
-  Publish.sendRequest('I concede defeat!',{board: state,concede:1}, function() {
-    newGameState('menu');
-  });
-}
+     function concede() {
+      var state = Board.getState();
+      Publish.sendRequest('I concede defeat!',{board: state,concede:1});
+     }
 
-function resize() {
-  loadImageList('/chess/images/',['Pirate_King.png', 'Pirate_King_Gray.png', 'Pirate_Queen.png', 'Pirate_Queen_Gray.png', 'Pirate_Bishop.png', 'Pirate_Bishop_Gray.png', 'Pirate_Knight.png', 'Pirate_Knight_Gray.png', 'Pirate_Rook.png', 'Pirate_Rook_Gray.png', 'Pirate_Pawn.png', 'Pirate_Pawn_Gray.png']);
-  Board.init();
-  Pieces.resetBoardGobs();
-}
+    function resize() {
+      loadImageList('/chess/images/',['Pirate_King.png', 'Pirate_King_Gray.png', 'Pirate_Queen.png', 'Pirate_Queen_Gray.png', 'Pirate_Bishop.png', 'Pirate_Bishop_Gray.png', 'Pirate_Knight.png', 'Pirate_Knight_Gray.png', 'Pirate_Rook.png', 'Pirate_Rook_Gray.png', 'Pirate_Pawn.png', 'Pirate_Pawn_Gray.png']);
+      Board.init();
+      Pieces.resetBoardGobs();
+    }
 
-function draw() {
-  Pieces.tick();
-  Board.tick();
-  Render.tick();
-}
+    function draw() {
+      Pieces.tick();
+      Board.tick();
+      Render.tick();
+    }
 
-Init.setFunctions({app: tick, init: init, draw: draw, ui: UI.tick, resize: resize, postLoad: postImageLoad, fps:60 });
+    Init.setFunctions({app: tick, init: init, draw: draw, ui: UI.tick, resize: resize, postLoad: postImageLoad, fps:60 });
 
-  return {
-    newGameState: newGameState,
-    startPlayback: startPlayback
-  }
+    return {
+      newGameState: newGameState,
+      startPlayback: startPlayback
+    }
 })();
 

@@ -69,14 +69,14 @@ var Publish = (function() {
     if (player.savedRequests[req.id]) {
       return;
     }
+    player.active_req = req;
     var data = req.data && FB.JSON.parse(req.data);
+    req.concede = data.concede;
     Gob.delAll();
     Board.init();
     Chess.newGameState('playing');
-    player.active_req = req;
     Board.loadState(data.board);
     Chess.startPlayback();
-    player.opponent_id = req.from.id;
     console.log('playing against: ' + req.from.id);
    }
 
@@ -119,7 +119,16 @@ var Publish = (function() {
     });
   }
 
-  function sendRequest(msg,payload,cb) {
+  function removeRequest(req) {
+    if (req) {
+      player.savedRequests[req.id] = true;
+      FB.api(req.id, 'delete', function(response) {
+      });
+      Chess.newGameState('menu');
+    }
+  }
+
+  function sendRequest(msg,payload) {
     var req = player.active_req;
     player.active_req = 0;
     var cmd = {
@@ -134,12 +143,7 @@ var Publish = (function() {
     }
     FB.ui(cmd, function(response) {
       if (response && !response.error) {
-        cb && cb();
-        if (req) {
-          player.savedRequests[req.id] = true;
-          FB.api(req.id, 'delete', function(response) {
-          });
-        }
+        removeRequest(req);
       }
     });
   }
@@ -172,9 +176,10 @@ var Publish = (function() {
     sendRequest: sendRequest,
     fbInit: fbInit,
     fbLogin: fbLogin,
-    clearOpponent : clearOpponent,
-    getRequests : getRequests,
-    hasOpponent : hasOpponent,
+    clearOpponent: clearOpponent,
+    getRequests: getRequests,
+    hasOpponent: hasOpponent,
     addRequestButton: addRequestButton,
+    removeRequest: removeRequest,
   };
 })();
