@@ -66,7 +66,8 @@ var Publish = (function() {
     player.savedRequests[req.id] = true;
     Gob.delAll();
     Board.init();
-    Pieces.setNewPositions(data.board);
+    Board.loadState(data.board);
+    Chess.startPlayback();
     player.opponent_id = req.from.id;
     console.log('playing against: ' + req.from.id);
   //  return; //FIXMEBRUCE
@@ -148,8 +149,8 @@ var Publish = (function() {
 
   return {
     publishStory: publishStory,
-    sendRequest: sendRequest,
-    fbInit: fbInit,
-    fbLogin: fbLogin,
-  };
-})();
+      sendRequest: sendRequest,
+      fbInit: fbInit,
+      fbLogin: fbLogin,
+      };
+  })();

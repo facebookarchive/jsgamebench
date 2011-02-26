@@ -25,7 +25,7 @@ var Board = (function() {
     var tomove = 0;
     var move = false;
 
-    function init() {
+    function init(erase) {
       dirty = true;
       width = JSGlobal.winsize[0] - border;
       height = JSGlobal.winsize[1] - border;
@@ -38,7 +38,7 @@ var Board = (function() {
           var top = parseInt(height*0.5 - 4*delta + j*delta)+border*0.5;
           var color = black ? "#000" : "#aaa";
           var highlight = black ? "#006" : "#88f";
-          var piece = board[i+j*8] ? board[i+j*8].piece : null;
+          var piece = board[i+j*8] && !erase ? board[i+j*8].piece : null;
           black = !black;
           board[i+j*8] = {top:top,left:left,color:color,highlight:highlight,bright:false, piece:piece,delta:delta, i:i, j:j};
         }
@@ -131,6 +131,62 @@ var Board = (function() {
       return markup;
     }
 
+    function getState() {
+      var packed = [];
+      for (var i=0;i<state.length;i++) {
+        packed.push(state[i].from[0]+8*state[i].from[1]);
+        packed.push(state[i].to[0]+8*state[i].to[1]);
+      }
+      return packed;
+    }
+
+    function loadState(reqstate) {
+      move = 0;
+      tomove = false;
+      state = [];
+      Board.init(true);
+      Pieces.init();
+      for (var i=0;i<reqstate.length;i += 2) {
+        var s = reqstate[i];
+        var x = s % 8;
+        var y = (s / 8)|0;
+        var os = getSquare(x,y);
+        s = reqstate[i+1];
+        x = s % 8;
+        y = (s / 8)|0;
+        var ns = getSquare(x,y);
+        makeMove(os,ns,os.piece);
+        if (ns.piece) {
+          Gob.del(ns.piece.id);
+        }
+        ns.piece = os.piece;
+        os.piece = null;
+      }
+      Pieces.resetBoardGobs();
+    }
+
+    function setState(m) {
+      if (m <= move) {
+        Board.init(true);
+        Pieces.init();
+        for (var i=0;i<m;i++) {
+          var s = state[i];
+          var os = getSquare(s.from[0],s.from[1]);
+          var ns = getSquare(s.to[0],s.to[1]);
+          if (ns.piece) {
+            Gob.del(ns.piece.id);
+          }
+          ns.piece = os.piece;
+          os.piece = null;
+        }
+        Pieces.resetBoardGobs();
+      }
+    }
+
+    function getMove() {
+      return move;
+    }
+
     var Board = {};
     Board.init = init;
     Board.tick = tick;
@@ -141,7 +197,11 @@ var Board = (function() {
     Board.setDirty = setDirty;
     Board.allDark = allDark;
     Board.toMove = toMove;
+    Board.getMove = getMove;
     Board.makeMove = makeMove;
     Board.getStateHTML = getStateHTML;
+    Board.getState = getState;
+    Board.setState = setState;
+    Board.loadState = loadState;
     return Board;
   })();
