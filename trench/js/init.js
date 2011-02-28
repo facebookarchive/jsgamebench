@@ -14,12 +14,11 @@
 
 (function() {
 
-  var box_model_data = {"verts":[0,0,0,0,0,0,0,-1,1,1,0,0,1,0,0,-1,1,0,0,1,1,0,0,-1,0,1,0,1,0,0,0,-1,0,0,0,0,0,-1,0,0,0,1,1,0,1,-1,0,0,0,1,0,1,1,-1,0,0,0,0,1,1,0,-1,0,0,0,1,0,0,0,0,1,0,1,1,1,0,1,0,1,0,1,1,0,1,1,0,1,0,0,1,1,1,0,0,1,0,1,0,0,0,0,1,0,0,1,1,0,0,1,1,0,0,1,1,1,1,1,1,0,0,1,0,1,1,0,1,0,0,0,0,0,0,0,0,-1,0,1,0,0,0,1,0,-1,0,1,0,1,1,1,0,-1,0,0,0,1,1,0,0,-1,0,0,0,1,0,0,0,0,1,1,0,1,0,1,0,0,1,1,1,1,1,1,0,0,1,0,1,1,1,0,0,0,1],"indices":[0,1,2,0,3,1,4,5,6,4,7,5,8,9,10,8,11,9,12,13,14,12,14,15,16,17,18,16,18,19,20,21,22,20,22,23],"materials":["default"],"counts":[36]};
-
   var max_delta = 0.1; // max frame time delta, in seconds
 
   var render_inited = false;
   var box_model = null;
+  var ship_model = null;
   var play_game = false;
   var needs_reset = true;
 
@@ -32,9 +31,10 @@
       var viewport = WebGLRender.getViewport();
 
       TrenchMaterials.registerMaterials(WebGLRender.getMaterialTable());
-      box_model = model_context.createModel(box_model_data);
+      box_model = model_context.createModel(Box_Model);
+      ship_model = model_context.createModel(Ship_Junebug_01);
 
-      TrenchPlayer.init(box_model);
+      TrenchPlayer.init(ship_model);
       TrenchCamera.init(viewport);
       TrenchTrack.init(box_model);
       TrenchProjectile.init(box_model);

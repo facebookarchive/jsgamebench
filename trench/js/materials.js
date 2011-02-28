@@ -71,19 +71,33 @@ var TrenchMaterials = (function() {
     }
   };
 
-  var default_material_def = {
-    name : 'default',
-    type : 'default',
-    alphaBlend : false,
-    params : {},
-    textures : {
-      surfacetex : '/textures/default.png'
+  var all_material_defs = [
+    {
+      name : 'default',
+      type : 'default',
+      alphaBlend : false,
+      params : {},
+      textures : {
+        surfacetex : '/textures/default.png'
+      }
+    },
+
+    {
+      name : 'Checker_512_DIFF',
+      type : 'default',
+      alphaBlend : false,
+      params : {},
+      textures : {
+        surfacetex : '/textures/Checker_512_DIFF.png'
+      }
     }
-  };
+  ];
 
   function registerMaterials(material_table) {
     material_table.createMaterialType(default_material_type_def);
-    material_table.createMaterial(default_material_def);
+    for (var ii = 0; ii < all_material_defs.length; ++ii) {
+      material_table.createMaterial(all_material_defs[ii]);
+    }
   }
 
   return {
