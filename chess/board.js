@@ -16,7 +16,7 @@ var Board = (function() {
     var dirty = true;
 
     var board = [];
-    var border = 64;
+    var border = 160;
     var delta = 0;
     var width = 0;
     var height = 0;

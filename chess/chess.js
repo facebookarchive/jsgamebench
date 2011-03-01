@@ -6,6 +6,8 @@ var Chess = (function() {
     var playback = false;
     var pbframe = 0;
 
+    var explo;
+    
     function startPlayback() {
       playback = true;
       move = 0;
@@ -20,6 +22,20 @@ var Chess = (function() {
         Sprites.add(label, {url: url, frames: 1, framepos: [[0, 0]], width: 0, height: 0 });
       }
     }
+  
+    function loadAnimList(path,list) {
+      for(var i=0;i<list.length;i++) {
+        var anim = list[i]
+        var label = anim[0].split('.')[0];
+        var url = path + anim[0];
+        var frames = anim[1]|0;
+        var framepos = [];
+        for(var j=0;j<frames;j++) {
+          framepos[j] = [j, 0];
+        }
+        Sprites.add(label, {url: url, frames: frames, framepos: framepos, width: 0, height: 0, auto_anim: 1, no_anim: 1 });
+      }
+    }
 
     function newGameState(state) {
       UI.del('buttons');
@@ -28,13 +44,22 @@ var Chess = (function() {
       if (state == 'menu') {
         Publish.getRequests();
       }
-      if (state == 'playing') {
-        var req = Publish.hasOpponent();
-        req && Publish.addRequestButton(req,300,0);
-      }
     }
 
+    function makeExplosion(pos,scale) {
+      console.log('make explo: ' + pos + ': ' + scale);
+      explo = explo || Gob.add(Utils.uuidv4(), 'small_explo', 0, pos, [0,0], 10, scale / 7);
+    }
+    
     function tick() {
+      if (explo) {
+        explo.frame += 1;
+        explo.dirty = 1;
+        if (explo.frame >= Gob.numFrames(explo.id)) {
+          Gob.del(explo.id);
+          explo = 0;
+        }
+       }
       if (!playback) {
         if (game_state == 'playing') {
           if (JSGlobal.mouse.buttons[0]) {
@@ -60,7 +85,7 @@ var Chess = (function() {
         }
       } else {
         pbframe++;
-        if (pbframe == 60) {
+        if (pbframe == 20) {
           pbframe = 0;
           move++;
           Board.setState(move);
@@ -69,10 +94,11 @@ var Chess = (function() {
           }
         }
       }
-      if (game_state == 'login' && client_user.fb_logged_in) {
+      if (game_state == 'login' && Publish.isLoggedIn()) {
         newGameState('menu');
       }
       if (old_game_state != game_state) {
+        console.log('game state: ' + game_state);
         old_game_state = game_state;
         switch (game_state) {
           case 'login':
@@ -81,18 +107,16 @@ var Chess = (function() {
           case 'menu':
             UI.addButton('buttons', 'newgame', {pos: [60, 0], width: 150, height: 60, fontsize: '250%', text: 'New Game', command: {cmd: 'newGame' }});
             break;
-          case 'playing':
-            UI.addButton('buttons', 'games', {pos: [60, 80], width: 150, height: 60, fontsize: '250%', text: 'Games', command: {cmd: 'newGameState', args:['menu'] }});
-            if (Publish.hasOpponent()) {
-              UI.addButton('buttons', 'concede', {pos: [60, 160], width: 150, height: 60, fontsize: '250%', text: 'Concede', command: {cmd: 'concede' }});
-            }
-            break;
           case 'moved':
-            UI.addButton('buttons', 'request', {pos: [60, 0], width: 150, height: 60, fontsize: '250%', text: 'Send Move', command: {cmd: 'sendRequest' }});
-            UI.addButton('buttons', 'games', {pos: [60, 80], width: 150, height: 60, fontsize: '250%', text: 'Games', command: {cmd: 'newGameState', args:['menu'] }});
-            if (Publish.hasOpponent()) {
-              UI.addButton('buttons', 'concede', {pos: [60, 160], width: 150, height: 60, fontsize: '250%', text: 'Concede', command: {cmd: 'concede' }});
+            UI.addButton('buttons', 'request', {pos: [JSGlobal.w/2+200, JSGlobal.h-80], width: 150, height: 60, fontsize: '250%', text: 'Send Move', command: {cmd: 'sendRequest' }});
+          case 'playing':
+            UI.addButton('buttons', 'games', {pos: [60, 0], width: 150, height: 60, fontsize: '250%', text: 'Menu', command: {cmd: 'newGameState', args:['menu'] }});
+            if (Publish.hasOpponent() && game_state != 'moved') {
+              UI.addButton('buttons', 'concede', {pos: [JSGlobal.w/2+200,JSGlobal.h-80], width: 150, height: 60, fontsize: '250%', text: 'Concede', command: {cmd: 'concede' }});
             }
+            var req = Publish.hasOpponent();
+            req && Publish.addReqName(req,JSGlobal.w/2-150,0);
+            Publish.addMyName(JSGlobal.w/2-150,JSGlobal.h-80);
             break;
         }
       }
@@ -122,13 +146,12 @@ var Chess = (function() {
         use_div_background: true,
         css_transitions: false,
         css_keyframe: false,
-        sprite_sheets: false,
+        sprite_sheets: true,
         int_snap: true,
         transform3d:true});
 
       GameFrame.setXbyY();
       UI.hookUIEvents('gamebody');
-      loadImageList('/chess/images/',['Pirate_King.png', 'Pirate_King_Gray.png', 'Pirate_Queen.png', 'Pirate_Queen_Gray.png', 'Pirate_Bishop.png', 'Pirate_Bishop_Gray.png', 'Pirate_Knight.png', 'Pirate_Knight_Gray.png', 'Pirate_Rook.png', 'Pirate_Rook_Gray.png', 'Pirate_Pawn.png', 'Pirate_Pawn_Gray.png']);
       ClientCmd.install('sendRequest',sendMove);
       ClientCmd.install('publishStory',Publish.publishStory);
       ClientCmd.install('login',Publish.fbLogin);
@@ -139,6 +162,8 @@ var Chess = (function() {
 
       newGameState('login');
       Publish.fbInit(fb_app_id);
+      loadImageList('/chess/images/',['Pirate_King.png', 'Pirate_King_Gray.png', 'Pirate_Queen.png', 'Pirate_Queen_Gray.png', 'Pirate_Bishop.png', 'Pirate_Bishop_Gray.png', 'Pirate_Knight.png', 'Pirate_Knight_Gray.png', 'Pirate_Rook.png', 'Pirate_Rook_Gray.png', 'Pirate_Pawn.png', 'Pirate_Pawn_Gray.png']);
+      loadAnimList('/chess/images/',[['small_explo.png', 6]]);
     }
 
     function sendMove() {
@@ -152,9 +177,9 @@ var Chess = (function() {
      }
 
     function resize() {
-      loadImageList('/chess/images/',['Pirate_King.png', 'Pirate_King_Gray.png', 'Pirate_Queen.png', 'Pirate_Queen_Gray.png', 'Pirate_Bishop.png', 'Pirate_Bishop_Gray.png', 'Pirate_Knight.png', 'Pirate_Knight_Gray.png', 'Pirate_Rook.png', 'Pirate_Rook_Gray.png', 'Pirate_Pawn.png', 'Pirate_Pawn_Gray.png']);
       Board.init();
       Pieces.resetBoardGobs();
+      old_game_state = '';  // force recalc
     }
 
     function draw() {
@@ -167,7 +192,8 @@ var Chess = (function() {
 
     return {
       newGameState: newGameState,
-      startPlayback: startPlayback
+      startPlayback: startPlayback,
+      makeExplosion: makeExplosion
     }
 })();
 

@@ -43,18 +43,6 @@ var Pieces = (function() {
       [King,Black,4,0],
     ];
 
-    function setNewPositions(packed) {
-      var positions = [];
-      for(var i in packed) {
-        var x = i % 8;
-        var y = (i / 8)|0;
-        var color = packed[i] % 4;
-        var piece_id = ([packed[i]] / 4)|0;
-        positions.push([piece_id,color,x,y]);
-      }
-      init(positions);
-    }
-
     function addPieceGob(square, type, color, move) {
       var sprite;
       switch(type) {
@@ -105,25 +93,6 @@ var Pieces = (function() {
           }
         }
       }
-    }
-
-    function setNameToIdx(name,idx) {
-      nameToIdx[name] = idx;
-      idxToName[idx] = name;
-    }
-
-
-    function dumpBoard() {
-      var square, pieces = {};
-      for (var i=0;i<8;i++) {
-        for (var j=0;j<8;j++) {
-          square = Board.getSquare(i,j);
-          if (square.piece) {
-            pieces[i+j*8] = square.piece.type*4 + square.piece.color;
-          }
-        }
-      }
-      return pieces;
     }
 
     function tick() {
@@ -335,6 +304,7 @@ var Pieces = (function() {
           selsquare.piece = false;
           Board.allDark();
           selected.pos = [square.left+square.delta*0.5,square.top+square.delta*0.5];
+          Chess.makeExplosion(selected.pos,default_scale*selsquare.delta);
           square.piece = selected;
           selected = false;
           Chess.newGameState('moved');
@@ -343,8 +313,6 @@ var Pieces = (function() {
     }
 
     var Pieces = {};
-    Pieces.setNewPositions = setNewPositions,
-    Pieces.dumpBoard = dumpBoard;
     Pieces.init = init;
     Pieces.tick = tick;
     Pieces.select = select;

@@ -24,6 +24,10 @@ var Publish = (function() {
     return player.active_req;
   }
   
+  function isLoggedIn() {
+    return fb_logged_in;
+  }
+  
   function fbInit() {
     if (!fb_app_id) {
       return;
@@ -36,24 +40,25 @@ var Publish = (function() {
               xfbml  : false  // parse XFBML
               });
         FB.getLoginStatus(function(response) {
-            if (response.session) {
-              client_user.fb_logged_in = true;
-              console.log('logged in');
-              getInfo();
-            } else {
-              client_user.fb_logged_in = false;
-              console.log('not logged in');
-            }
-          });
+          fb_logged_in = response.session;
+          if (response.session) {
+            console.log('logged in');
+            getInfo();
+          } else {
+            console.log('not logged in');
+          }
+        });
       }
     }
   }
 
   function fbLogin() {
-    if (client_user.fb_logged_in) {
+    if (fb_logged_in) {
       return getInfo();
     } else {
       FB.login(function(response) {
+        fb_logged_in = response.session;
+
         if (response.session) {
           fb_logged_in = true;
           getInfo();
@@ -89,7 +94,29 @@ var Publish = (function() {
     });
     getRequests();
   }
+  
+  function addUserTag(name,user_id,x,y) {
+    markup = FB.String.format(
+      '<img src="http://graph.facebook.com/{0}/picture" />{1}</p>',
+      user_id,
+      FB.String.escapeHTML(name));
+    UI.addButton('buttons', 'name_'+name,
+      {pos: [x,y], width: 400, height: 60, fontsize: '200%', text: markup } );
+  }
 
+  function addName(name,uid,x,y) {
+    markup = '<img src="http://graph.facebook.com/'+uid+'/picture" /> '+FB.String.escapeHTML(name);
+    UI.addButton('buttons', 'name_'+uid, { pos: [x,y], width: 300, height: 60, fontsize: '200%',text: markup });
+  }
+
+  function addMyName(x,y) {
+    addName(player.name,fb_logged_in.uid,x,y);
+  }
+  
+  function addReqName(req,x,y) {
+    addName(req.from.name,req.from.id,x,y);
+  }
+  
   function addRequestButton(req,x,y) {
     markup = FB.String.format(
       '<img src="http://graph.facebook.com/{0}/picture" />{1}: {2}</p>',
@@ -170,16 +197,19 @@ var Publish = (function() {
     });
   }
 
-
   return {
     publishStory: publishStory,
     sendRequest: sendRequest,
     fbInit: fbInit,
     fbLogin: fbLogin,
+    isLoggedIn: isLoggedIn,
     clearOpponent: clearOpponent,
     getRequests: getRequests,
     hasOpponent: hasOpponent,
     addRequestButton: addRequestButton,
     removeRequest: removeRequest,
+    addUserTag : addUserTag,
+    addReqName : addReqName,
+    addMyName : addMyName
   };
 })();

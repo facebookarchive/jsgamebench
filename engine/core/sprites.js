@@ -22,7 +22,12 @@ var Sprites = (function() {
       if (loading_hash[id] && loading_hash[id].height && loading_hash[id].width) {
         spriteel.appendChild(spritedictionary[id].imageel);
         if (!spritedictionary[id].width)
+        {
           spritedictionary[id].width = spritedictionary[id].imageel.width;
+          if (spritedictionary[id].auto_anim) {
+            spritedictionary[id].width /= spritedictionary[id].frames;
+          }
+        }
         if (!spritedictionary[id].height)
           spritedictionary[id].height = spritedictionary[id].imageel.height;
         loading_hash[id] = null;
