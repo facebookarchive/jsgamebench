@@ -101,7 +101,7 @@ var TrenchMaterials = (function() {
   }
 
   return {
-    registerMaterials: registerMaterials,
+    registerMaterials: registerMaterials
   };
 
 })();

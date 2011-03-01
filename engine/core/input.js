@@ -19,12 +19,16 @@ var Input = (function() {
 
 
     function getMouseXY(event,down) {
-   //  document.getElementById('gamebody').focus();
-    event.currentTarget.focus();
+//    document.getElementById('gamebody').focus();
       var prev = JSGlobal.mouse.buttons.slice(0);
       var button = 0;
-      if (!event)
+      if (!event) {
         event = window.event;
+      }
+
+      var currentTarget = event.currentTarget ? event.currentTarget : event.srcElement;
+      currentTarget && currentTarget.focus();
+
       if (event.which) {
         button = event.which - 1;
       } else if (event.button==2) {
