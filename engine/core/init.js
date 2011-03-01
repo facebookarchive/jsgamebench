@@ -116,6 +116,13 @@ var Init = (function() {
     }
 
     function init() {
+      // in case we left in some debugging by accident
+      // we might want to add the ability to hook this and send it to a server for mobile
+      if (typeof(console) == 'undefined') {
+        console = {};
+      }
+      console.log = console.log || function() {};
+
       if (!drawFunc) {
         alert("No draw function set. You need to call Init.setFunctions from your code prior to the page's onload event firing.");
         return;
