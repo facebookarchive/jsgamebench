@@ -58,12 +58,8 @@ var Publish = (function() {
     } else {
       FB.login(function(response) {
         fb_logged_in = response.session;
-
-        if (response.session) {
-          fb_logged_in = true;
+        if (fb_logged_in) {
           getInfo();
-        } else {
-          fb_logged_in = false;
         }
       }, {perms:''} ); // read_stream,publish_stream
     }
