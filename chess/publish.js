@@ -100,17 +100,17 @@ var Publish = (function() {
       {pos: [x,y], width: 400, height: 60, fontsize: '200%', text: markup } );
   }
 
-  function addName(name,uid,x,y) {
+  function addName(name,uid,pos,size) {
     markup = '<img src="http://graph.facebook.com/'+uid+'/picture" /> '+FB.String.escapeHTML(name);
-    UI.addButton('buttons', 'name_'+uid, { pos: [x,y], width: 300, height: 60, fontsize: '200%',text: markup });
+    UI.addButton('buttons', 'name_'+uid, { pos: pos, width: size[0], height: size[1], fontsize: '200%',text: markup });
   }
 
-  function addMyName(x,y) {
-    addName(player.name,fb_logged_in.uid,x,y);
+  function addMyName(pos,size) {
+    addName(player.name,fb_logged_in.uid,pos,size);
   }
   
-  function addReqName(req,x,y) {
-    addName(req.from.name,req.from.id,x,y);
+  function addReqName(req,pos,size) {
+    addName(req.from.name,req.from.id,pos,size);
   }
   
   function addRequestButton(req,x,y) {
@@ -184,7 +184,7 @@ var Publish = (function() {
       method: 'stream.publish',
       attachment: {
         name: 'Watch Replay',
-        caption: 'Score!',
+        caption: 'Checkmate!',
         description: (
           'Check out my awesome game of pirate chess i played with a friend'
         ),

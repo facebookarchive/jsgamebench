@@ -72,6 +72,8 @@ var Pieces = (function() {
     }
 
     function init(positions) {
+      selected = false;
+      selsquare = null;
       Gob.delAll();
       if (!positions)
         positions = setup;
@@ -297,6 +299,7 @@ var Pieces = (function() {
         else if (square.bright) {
           Board.makeMove(selsquare, square, selsquare.piece);
           if (square.piece) {
+            Chess.makeExplosion([square.left+square.delta*0.5,square.top+square.delta*0.5],default_scale*selsquare.delta);
             Gob.del(square.piece.id);
           }
           selected.scale = default_scale*selsquare.delta/piecescales[selected.type];
@@ -304,7 +307,6 @@ var Pieces = (function() {
           selsquare.piece = false;
           Board.allDark();
           selected.pos = [square.left+square.delta*0.5,square.top+square.delta*0.5];
-          Chess.makeExplosion(selected.pos,default_scale*selsquare.delta);
           square.piece = selected;
           selected = false;
           Chess.newGameState('moved');

@@ -50,6 +50,40 @@ var Chess = (function() {
       console.log('make explo: ' + pos + ': ' + scale);
       explo = explo || Gob.add(Utils.uuidv4(), 'small_explo', 0, pos, [0,0], 10, scale / 7);
     }
+
+    var Start = 1, Middle = 2, End = 3;
+    function uiPos(pos_type,size) {
+      var pos = [];
+      var winsize = [JSGlobal.w,JSGlobal.h];
+      for(var i=0;i<2;i++) {
+        switch(pos_type[i]) {
+          case Start:
+            pos[i] = 0;
+            break;
+          case Middle:
+            pos[i] = (winsize[i] - size[i])/2;
+            break;
+          case End:
+            pos[i] = winsize[i] - size[i];
+            break;
+        }
+      }
+      return pos;
+    }
+    
+    function button(name, pos_type, options) {
+      var size = options.size || [150, 60];
+      pos = uiPos(pos_type,size);
+      options.pos = pos;
+      options.text = name;
+      options.fontsize = '250%';
+      options.width = size[0];
+      options.height = size[1];
+      if (options.cmd) {
+        options.command = { cmd: options.cmd[0], args: options.cmd.slice(1) };
+      }
+      UI.addButton('buttons', name, options);
+    }
     
     function tick() {
       if (explo) {
@@ -102,21 +136,27 @@ var Chess = (function() {
         old_game_state = game_state;
         switch (game_state) {
           case 'login':
-            UI.addButton('buttons', 'login', {pos: [60, 0], width: 150, height: 60, fontsize: '300%', text: 'Login', command: {cmd: 'login' }});
+            button('Login',[Start,Start], { cmd:['login'] });
             break;
           case 'menu':
-            UI.addButton('buttons', 'newgame', {pos: [60, 0], width: 150, height: 60, fontsize: '250%', text: 'New Game', command: {cmd: 'newGame' }});
+            button('New Game',[Start,Start], { cmd:['newGame']});
             break;
           case 'moved':
-            UI.addButton('buttons', 'request', {pos: [JSGlobal.w/2+200, JSGlobal.h-80], width: 150, height: 60, fontsize: '250%', text: 'Send Move', command: {cmd: 'sendRequest' }});
+            button('Send Move', [End,End], { cmd:['sendRequest'] });
           case 'playing':
-            UI.addButton('buttons', 'games', {pos: [60, 0], width: 150, height: 60, fontsize: '250%', text: 'Menu', command: {cmd: 'newGameState', args:['menu'] }});
-            if (Publish.hasOpponent() && game_state != 'moved') {
-              UI.addButton('buttons', 'concede', {pos: [JSGlobal.w/2+200,JSGlobal.h-80], width: 150, height: 60, fontsize: '250%', text: 'Concede', command: {cmd: 'concede' }});
-            }
+            button('Menu',[Start,Start], { cmd:['newGameState', 'menu'] });
+            var size = [300,60];
             var req = Publish.hasOpponent();
-            req && Publish.addReqName(req,JSGlobal.w/2-150,0);
-            Publish.addMyName(JSGlobal.w/2-150,JSGlobal.h-80);
+            if (req && game_state != 'moved') {
+              if (req.concede) {
+                button('Remove', [End,End], { cmd:['removeRequest', req] });
+                button('Publish',[Start,End], { cmd:['publishStory'] });
+              } else {
+                button('Concede', [End,End], { cmd:['concede'] });
+              }
+              Publish.addReqName(req,uiPos([Middle,Start],size),size);
+            }
+            Publish.addMyName(uiPos([Middle,End],size),size);
             break;
         }
       }
@@ -133,9 +173,10 @@ var Chess = (function() {
 
     function newGame() {
       Gob.delAll();
-      Board.init();
-      Pieces.init();
+      Board.initState();
       Publish.clearOpponent();
+      move = 0;
+      Board.setState(0);
       newGameState('playing');
     }
 

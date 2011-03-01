@@ -16,7 +16,8 @@ var Board = (function() {
     var dirty = true;
 
     var board = [];
-    var border = 160;
+    var x_border = 20;
+    var y_border = 160;
     var delta = 0;
     var width = 0;
     var height = 0;
@@ -27,15 +28,15 @@ var Board = (function() {
 
     function init(erase) {
       dirty = true;
-      width = JSGlobal.winsize[0] - border;
-      height = JSGlobal.winsize[1] - border;
+      width = JSGlobal.winsize[0] - x_border;
+      height = JSGlobal.winsize[1] - y_border;
 
       delta = width < height ? parseInt(width/8) : parseInt(height/8);
       var black = false;
       for (var i=0;i<8;i++) {
         for (var j=0;j<8;j++) {
-          var left = parseInt(width*0.5 - 4*delta + i*delta)+border*0.5;
-          var top = parseInt(height*0.5 - 4*delta + j*delta)+border*0.5;
+          var left = parseInt(width*0.5 - 4*delta + i*delta)+x_border*0.5;
+          var top = parseInt(height*0.5 - 4*delta + j*delta)+y_border*0.5;
           var color = black ? "#000" : "#aaa";
           var highlight = black ? "#006" : "#88f";
           var piece = board[i+j*8] && !erase ? board[i+j*8].piece : null;
@@ -64,7 +65,7 @@ var Board = (function() {
 
     function nearestSquare(x,y) {
       var offboard = false;
-      var bx = parseInt((x - width*0.5 + 4*delta - border*0.5)/delta);
+      var bx = parseInt((x - width*0.5 + 4*delta - x_border*0.5)/delta);
       if (bx < 0) {
         bx = 0;
         offboard = true;
@@ -72,7 +73,7 @@ var Board = (function() {
         bx = 7;
         offboard = true;
       }
-      var by = parseInt((y - height*0.5 + 4*delta - border*0.5)/delta);
+      var by = parseInt((y - height*0.5 + 4*delta - y_border*0.5)/delta);
       if (by < 0) {
         by = 0;
         offboard = true;
@@ -140,12 +141,16 @@ var Board = (function() {
       return packed;
     }
 
-    function loadState(reqstate) {
+    function initState() {
       move = 0;
       tomove = false;
       state = [];
       Board.init(true);
       Pieces.init();
+    }
+
+    function loadState(reqstate) {
+      initState();
       for (var i=0;i<reqstate.length;i += 2) {
         var s = reqstate[i];
         var x = s % 8;
@@ -203,5 +208,6 @@ var Board = (function() {
     Board.getState = getState;
     Board.setState = setState;
     Board.loadState = loadState;
+    Board.initState = initState;
     return Board;
   })();
