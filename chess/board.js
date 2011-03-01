@@ -85,7 +85,7 @@ var Board = (function() {
     }
 
     function getSquare(x,y) {
-      if (Board.top_color != White) {
+      if (Board.top_color == White) {
         return board[x+8*y];
       } else {
         return board[x+8*(7-y)];
