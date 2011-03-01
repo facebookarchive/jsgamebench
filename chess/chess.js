@@ -74,6 +74,10 @@ var Chess = (function() {
     function button(name, pos_type, options) {
       var size = options.size || [150, 60];
       pos = uiPos(pos_type,size);
+      if (options.offset) {
+        pos[0] += options.offset[0] * size[0];
+        pos[1] += options.offset[1] * size[1];
+      }
       options.pos = pos;
       options.text = name;
       options.fontsize = '250%';
@@ -145,6 +149,7 @@ var Chess = (function() {
             button('Send Move', [End,End], { cmd:['sendRequest'] });
           case 'playing':
             button('Menu',[Start,Start], { cmd:['newGameState', 'menu'] });
+            button('Flip',[Start,Start], { offset: [0,1], cmd:['flipBoard' ] });
             var size = [300,60];
             var req = Publish.hasOpponent();
             if (req && game_state != 'moved') {
@@ -200,6 +205,7 @@ var Chess = (function() {
       ClientCmd.install('newGameState',newGameState);
       ClientCmd.install('concede',concede);
       ClientCmd.install('removeRequest',Publish.removeRequest);
+      ClientCmd.install('flipBoard',Board.flipBoard);
 
       newGameState('login');
       Publish.fbInit(fb_app_id);
