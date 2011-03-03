@@ -19,7 +19,6 @@ fs = require('fs');
 path = require('path');
 events = require('events');
 http = require('http');
-https = require('https');
 crypto = require('crypto');
 url = require('url');
 querystring = require('querystring');
@@ -59,6 +58,10 @@ for(var i=0;i<process.argv.length;i++) {
     i++;
     sslPort = process.argv[i];
   }
+}
+
+if (sslPort) {
+https = require('https');
 }
 
 sys.puts("reading log file");
