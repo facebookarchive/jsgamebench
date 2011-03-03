@@ -74,6 +74,6 @@ if (sslPort) {
     key: fs.readFileSync('cert/privatekey.pem'),
     cert: fs.readFileSync('cert/certificate.pem')
   };
-  Server.listen(8082,options,Server.serverCallback);
+  Server.listen(sslPort,options,Server.serverCallback);
 }
 Server.listen(listenPort,0,Server.serverCallback);
