@@ -153,7 +153,6 @@ var Publish = (function() {
 
   function sendRequest(msg,payload) {
     var req = player.active_req;
-    player.active_req = 0;
     var cmd = {
       method: 'apprequests',
       message: msg,
@@ -166,21 +165,19 @@ var Publish = (function() {
     }
     FB.ui(cmd, function(response) {
       if (response && !response.error) {
+        player.active_req = 0;
         removeRequest(req);
+        Chess.newGameState('menu');
       }
     });
   }
 
   function publishStory() {
+    var payload = Board.getState();
     var loc = window.location;
-    var url = loc.protocol + '//' + loc.host + '/chess/show/' +
-      encodeURIComponent(FB.JSON.stringify({
-        player: {
-          id: 0,
-          name: 'name',
-        }
-      }));
-    FB.ui({
+    var url = loc.protocol + '//' + loc.host + '/chess#' + encodeURIComponent(FB.JSON.stringify(payload));
+    console.log('url: ' + url);
+    var cmd = {
       method: 'stream.publish',
       attachment: {
         name: 'Watch Replay',
@@ -189,6 +186,13 @@ var Publish = (function() {
           'Check out my awesome game of pirate chess i played with a friend'
         ),
         href: url
+      }
+    };
+    FB.ui(cmd, function(response) {
+      if (response && !response.error) {
+        player.active_req = 0;
+        removeRequest(req);
+        Chess.newGameState('menu');
       }
     });
   }

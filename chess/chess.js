@@ -2,7 +2,6 @@ var Chess = (function() {
     var game_state = 'login';
     var old_game_state = "";
     var move = 0;
-
     var playback = false;
     var pbframe = 0;
 
@@ -149,7 +148,6 @@ var Chess = (function() {
             button('Send Move', [End,End], { cmd:['sendRequest'] });
           case 'playing':
             button('Menu',[Start,Start], { cmd:['newGameState', 'menu'] });
-            button('Flip',[Start,Start], { offset: [0,1], cmd:['flipBoard' ] });
             var size = [300,60];
             var req = Publish.hasOpponent();
             if (req && game_state != 'moved') {
@@ -205,7 +203,6 @@ var Chess = (function() {
       ClientCmd.install('newGameState',newGameState);
       ClientCmd.install('concede',concede);
       ClientCmd.install('removeRequest',Publish.removeRequest);
-      ClientCmd.install('flipBoard',Board.flipBoard);
 
       newGameState('login');
       Publish.fbInit(fb_app_id);

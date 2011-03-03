@@ -85,11 +85,7 @@ var Board = (function() {
     }
 
     function getSquare(x,y) {
-      if (Board.top_color == White) {
-        return board[x+8*y];
-      } else {
-        return board[x+8*(7-y)];
-      }
+      return board[x+8*y];
     }
 
     function setPiece(x,y,piece) {
@@ -196,11 +192,6 @@ var Board = (function() {
       return move;
     }
 
-    function flipBoard() {
-      Board.top_color = !Board.top_color;
-      console.log('color: ' + Board.top_color);
-    }
-    
     var Board = {};
     Board.init = init;
     Board.tick = tick;
@@ -218,7 +209,5 @@ var Board = (function() {
     Board.setState = setState;
     Board.loadState = loadState;
     Board.initState = initState;
-    Board.flipBoard = flipBoard;
-    Board.top_color = White;
     return Board;
   })();
