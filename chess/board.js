@@ -35,11 +35,13 @@ var Board = (function() {
       var black = false;
       for (var i=0;i<8;i++) {
         for (var j=0;j<8;j++) {
-          var left = parseInt(width*0.5 - 3.5*delta + i*delta)+x_border*0.5;
-          var top = parseInt(height*0.5 - 3.5*delta + j*delta);
+          var left = parseInt(width*0.5 - 4*delta + i*delta);
+          var top = parseInt(height*0.5 - 4*delta + j*delta);
           if (tomove) {
-            top = height - top;
+            left = width - left - delta;
+            top = height - top - delta;
           }
+          left += x_border*0.5;
           top += y_border*0.5;
           var color = black ? "#000" : "#aaa";
           var highlight = black ? "#006" : "#88f";
@@ -69,7 +71,7 @@ var Board = (function() {
 
     function nearestSquare(x,y) {
       var offboard = false;
-      var bx = parseInt((x - width*0.5 + 3.5*delta - x_border*0.5)/delta);
+      var bx = parseInt((x - width*0.5 + 4*delta - x_border*0.5)/delta);
       if (bx < 0) {
         bx = 0;
         offboard = true;
@@ -77,7 +79,7 @@ var Board = (function() {
         bx = 7;
         offboard = true;
       }
-      var by = parseInt((y - height*0.5 + 3.5*delta - y_border*0.5)/delta);
+      var by = parseInt((y - height*0.5 + 4*delta - y_border*0.5)/delta);
       if (by < 0) {
         by = 0;
         offboard = true;
@@ -85,8 +87,10 @@ var Board = (function() {
         by = 7;
         offboard = true;
       }
-      if (tomove)
+      if (tomove) {
+        bx = 7 - bx;
         by = 7 - by;
+      }
       return [bx, by];
     }
 
