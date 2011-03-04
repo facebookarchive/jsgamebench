@@ -2,7 +2,7 @@
   <head>
     #metatags
     #include '/engine/style.include'
-    <script src="http://static.ak.fbcdn.net/connect/en_US/core.debug.js"></script>
+    #include '/engine/fb_jssdk.include'
     #include 'app_id'
     #include '/engine/core/core.include'
     <script type="text/javascript" src="/simpledemo/publish.js"></script>

@@ -3,8 +3,7 @@
     #metatags
     #include '/engine/style.include'
     #include 'app_id'
-    <script src="http://static.ak.fbcdn.net/connect/en_US/core.debug.js"></script>
-
+    #include '/engine/fb_jssdk.include'
     <script type="text/javascript">var stand_alone=true;</script>
     #include '/engine/core/core.include'
     <script type="text/javascript" src="/perf/benchmark.js"> </script>

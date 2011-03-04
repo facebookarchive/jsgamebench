@@ -1,0 +1,5 @@
+    <script src="http://static.ak.fbcdn.net/connect/en_US/core.debug.js"></script>
+    <script type="text/javascript">
+      if (window.fbrpc) {
+        window.fbrpc.call('setOrientation', '{"orientation": "landscape"}');
+      }
