@@ -152,6 +152,7 @@ var Publish = (function() {
   }
 
   function sendRequest(msg,payload) {
+    console.log('payload:\n'+JSON.stringify(payload));
     var req = player.active_req;
     var cmd = {
       method: 'apprequests',
@@ -170,6 +171,10 @@ var Publish = (function() {
         Chess.newGameState('menu');
       }
     });
+  }
+
+  function sendMove() {
+    Publish.sendRequest('I made my move!',{board: Board.getState()});
   }
 
   function publishStory() {
@@ -210,6 +215,7 @@ var Publish = (function() {
     removeRequest: removeRequest,
     addUserTag : addUserTag,
     addReqName : addReqName,
-    addMyName : addMyName
+    addMyName : addMyName,
+    sendMove : sendMove
   };
 })();

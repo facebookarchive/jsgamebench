@@ -196,7 +196,7 @@ var Chess = (function() {
 
       GameFrame.setXbyY();
       UI.hookUIEvents('gamebody');
-      ClientCmd.install('sendRequest',sendMove);
+      ClientCmd.install('sendRequest',Publish.sendMove);
       ClientCmd.install('publishStory',Publish.publishStory);
       ClientCmd.install('login',Publish.fbLogin);
       ClientCmd.install('newGame',newGame);
@@ -208,11 +208,6 @@ var Chess = (function() {
       Publish.fbInit(fb_app_id);
       loadImageList('/chess/images/',['Pirate_King.png', 'Pirate_King_Gray.png', 'Pirate_Queen.png', 'Pirate_Queen_Gray.png', 'Pirate_Bishop.png', 'Pirate_Bishop_Gray.png', 'Pirate_Knight.png', 'Pirate_Knight_Gray.png', 'Pirate_Rook.png', 'Pirate_Rook_Gray.png', 'Pirate_Pawn.png', 'Pirate_Pawn_Gray.png']);
       loadAnimList('/chess/images/',[['small_explo.png', 6]]);
-    }
-
-    function sendMove() {
-      var state = Board.getState();
-      Publish.sendRequest('I made my move!',{board: state});
     }
 
      function concede() {
@@ -237,7 +232,7 @@ var Chess = (function() {
     return {
       newGameState: newGameState,
       startPlayback: startPlayback,
-      makeExplosion: makeExplosion
+      makeExplosion: makeExplosion,
     }
 })();
 
