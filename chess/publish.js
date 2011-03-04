@@ -96,8 +96,8 @@ var Publish = (function() {
       '<img src="http://graph.facebook.com/{0}/picture" />{1}</p>',
       user_id,
       FB.String.escapeHTML(name));
-    UI.addButton('buttons', 'name_'+name,
-      {pos: [x,y], width: 400, height: 60, fontsize: '200%', text: markup } );
+    UI.addHTML('buttons', 'name_'+name,
+      {pos: [x,y], width: 400, height: 60, fontsize: '200%', markup: markup } );
   }
 
   function addName(name,uid,pos,size) {
