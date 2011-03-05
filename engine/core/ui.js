@@ -72,7 +72,7 @@ var UI = (function() {
       }
     }
 
-    function check(id) {
+    function exists(id) {
       return uis[id] !== undefined;
     }
 
@@ -536,6 +536,7 @@ var UI = (function() {
     UI.hookUIEvents = hookUIEvents;
     UI.getGyro = getGyro;
     UI.getAccel = getAccel;
+    UI.exists = exists;
     return UI;
   })();
 

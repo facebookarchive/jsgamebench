@@ -4,7 +4,7 @@ var Chess = (function() {
     var move = 0;
     var playback = false;
     var pbframe = 0;
-
+    var menu_time,request_time;
     var explo;
     
     function startPlayback() {
@@ -42,6 +42,8 @@ var Chess = (function() {
       game_state = state;
       if (state == 'menu') {
         Publish.getRequests();
+        request_time = 0;
+        menu_time = (new Date).getTime();
       }
     }
 
@@ -134,6 +136,13 @@ var Chess = (function() {
       if (game_state == 'login' && Publish.isLoggedIn()) {
         newGameState('menu');
       }
+      if (game_state == 'menu') {
+        var dt = parseInt(((new Date).getTime() - menu_time) / 1000);
+        if (dt > request_time) {
+          Publish.getRequests();
+          request_time += Math.sqrt(dt);
+        }
+      }
       if (old_game_state != game_state) {
         console.log('game state: ' + game_state);
         old_game_state = game_state;
@@ -148,7 +157,7 @@ var Chess = (function() {
             button('Send Move', [End,End], { cmd:['sendRequest'] });
           case 'playing':
             button('Menu',[Start,Start], { cmd:['newGameState', 'menu'] });
-            var size = [300,60];
+            var size = [300,55];
             var req = Publish.hasOpponent();
             if (req && game_state != 'moved') {
               if (req.concede) {
@@ -196,7 +205,7 @@ var Chess = (function() {
 
       GameFrame.setXbyY();
       UI.hookUIEvents('gamebody');
-      ClientCmd.install('sendRequest',sendMove);
+      ClientCmd.install('sendRequest',Publish.sendMove);
       ClientCmd.install('publishStory',Publish.publishStory);
       ClientCmd.install('login',Publish.fbLogin);
       ClientCmd.install('newGame',newGame);
@@ -208,11 +217,6 @@ var Chess = (function() {
       Publish.fbInit(fb_app_id);
       loadImageList('/chess/images/',['Pirate_King.png', 'Pirate_King_Gray.png', 'Pirate_Queen.png', 'Pirate_Queen_Gray.png', 'Pirate_Bishop.png', 'Pirate_Bishop_Gray.png', 'Pirate_Knight.png', 'Pirate_Knight_Gray.png', 'Pirate_Rook.png', 'Pirate_Rook_Gray.png', 'Pirate_Pawn.png', 'Pirate_Pawn_Gray.png']);
       loadAnimList('/chess/images/',[['small_explo.png', 6]]);
-    }
-
-    function sendMove() {
-      var state = Board.getState();
-      Publish.sendRequest('I made my move!',{board: state});
     }
 
      function concede() {
@@ -237,7 +241,7 @@ var Chess = (function() {
     return {
       newGameState: newGameState,
       startPlayback: startPlayback,
-      makeExplosion: makeExplosion
+      makeExplosion: makeExplosion,
     }
 })();
 

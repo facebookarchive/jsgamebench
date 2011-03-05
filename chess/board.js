@@ -35,8 +35,14 @@ var Board = (function() {
       var black = false;
       for (var i=0;i<8;i++) {
         for (var j=0;j<8;j++) {
-          var left = parseInt(width*0.5 - 4*delta + i*delta)+x_border*0.5;
-          var top = parseInt(height*0.5 - 4*delta + j*delta)+y_border*0.5;
+          var left = parseInt(width*0.5 - 4*delta + i*delta);
+          var top = parseInt(height*0.5 - 4*delta + j*delta);
+          if (tomove) {
+            left = width - left - delta;
+            top = height - top - delta;
+          }
+          left += x_border*0.5;
+          top += y_border*0.5;
           var color = black ? "#000" : "#aaa";
           var highlight = black ? "#006" : "#88f";
           var piece = board[i+j*8] && !erase ? board[i+j*8].piece : null;
@@ -80,6 +86,10 @@ var Board = (function() {
       } else if (by > 7) {
         by = 7;
         offboard = true;
+      }
+      if (tomove) {
+        bx = 7 - bx;
+        by = 7 - by;
       }
       return [bx, by];
     }

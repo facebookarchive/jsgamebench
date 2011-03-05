@@ -4,4 +4,3 @@
         window.fbrpc.call('setOrientation', '{"orientation": "landscape"}');
       }
     </script>
-    

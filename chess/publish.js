@@ -91,18 +91,10 @@ var Publish = (function() {
     getRequests();
   }
   
-  function addUserTag(name,user_id,x,y) {
-    markup = FB.String.format(
-      '<img src="http://graph.facebook.com/{0}/picture" />{1}</p>',
-      user_id,
-      FB.String.escapeHTML(name));
-    UI.addButton('buttons', 'name_'+name,
-      {pos: [x,y], width: 400, height: 60, fontsize: '200%', text: markup } );
-  }
-
   function addName(name,uid,pos,size) {
     markup = '<img src="http://graph.facebook.com/'+uid+'/picture" /> '+FB.String.escapeHTML(name);
-    UI.addButton('buttons', 'name_'+uid, { pos: pos, width: size[0], height: size[1], fontsize: '200%',text: markup });
+   // UI.addButton('buttons', 'name_'+uid, { pos: pos, width: size[0], height: size[1], fontsize: '200%',text: markup });
+    UI.addHTML('buttons', 'name_'+uid, { pos: pos, width: size[0], height: size[1], uiclass: 'chess',markup: markup });
   }
 
   function addMyName(pos,size) {
@@ -114,16 +106,20 @@ var Publish = (function() {
   }
   
   function addRequestButton(req,x,y) {
+    var req_label = 'req'+req.id;
+    if (UI.exists(req_label)) {
+      return;
+    }
     markup = FB.String.format(
       '<img src="http://graph.facebook.com/{0}/picture" />{1}: {2}</p>',
       req.from.id,
       FB.String.escapeHTML(req.from.name),
       FB.String.escapeHTML(req.message));
-    UI.addButton('buttons', 'req'+req.id,
+    UI.addButton('buttons', req_label,
     {pos: [x,y], width: 400, height: 60, fontsize: '200%',
     text: markup, command: {cmd: 'onReqClick', args: [req] }, req: req});
   }
-  
+
   function getRequests() {
     FB.api('me/apprequests', function(result) {
       var reqs = result.data;
@@ -152,6 +148,7 @@ var Publish = (function() {
   }
 
   function sendRequest(msg,payload) {
+    console.log('payload:\n'+JSON.stringify(payload));
     var req = player.active_req;
     var cmd = {
       method: 'apprequests',
@@ -170,6 +167,10 @@ var Publish = (function() {
         Chess.newGameState('menu');
       }
     });
+  }
+
+  function sendMove() {
+    Publish.sendRequest('I made my move!',{board: Board.getState()});
   }
 
   function publishStory() {
@@ -208,8 +209,8 @@ var Publish = (function() {
     hasOpponent: hasOpponent,
     addRequestButton: addRequestButton,
     removeRequest: removeRequest,
-    addUserTag : addUserTag,
     addReqName : addReqName,
-    addMyName : addMyName
+    addMyName : addMyName,
+    sendMove : sendMove
   };
 })();
