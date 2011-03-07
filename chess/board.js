@@ -143,10 +143,19 @@ var Board = (function() {
     }
 
     function getState() {
-      var packed = [];
+      var packed = "";
+      var c;
       for (var i=0;i<state.length;i++) {
-        packed.push(state[i].from[0]+8*state[i].from[1]);
-        packed.push(state[i].to[0]+8*state[i].to[1]);
+        c = state[i].from[0]+8*state[i].from[1];
+        c = c.toString(16);
+        if (c.length == 1)
+          c = "0" + c;
+        packed += c;
+        c = state[i].to[0]+8*state[i].to[1];
+        c = c.toString(16);
+        if (c.length == 1)
+          c = "0" + c;
+        packed += c;
       }
       return packed;
     }
@@ -161,12 +170,12 @@ var Board = (function() {
 
     function loadState(reqstate) {
       initState();
-      for (var i=0;i<reqstate.length;i += 2) {
-        var s = reqstate[i];
+      for (var i=0;i<reqstate.length;i += 4) {
+        var s = parseInt(reqstate.substring(i,i+2),16);
         var x = s % 8;
         var y = (s / 8)|0;
         var os = getSquare(x,y);
-        s = reqstate[i+1];
+        s = parseInt(reqstate.substring(i+2,i+4),16);
         x = s % 8;
         y = (s / 8)|0;
         var ns = getSquare(x,y);

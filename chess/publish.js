@@ -15,19 +15,19 @@
 var Publish = (function() {
   var fb_logged_in;
   var player = {savedRequests: {}, active_req: 0};
-  
+
   function clearOpponent() {
     player.active_req = 0;
   }
-  
+
   function hasOpponent() {
     return player.active_req;
   }
-  
+
   function isLoggedIn() {
     return fb_logged_in;
   }
-  
+
   function fbInit() {
     if (!fb_app_id) {
       return;
@@ -90,7 +90,7 @@ var Publish = (function() {
     });
     getRequests();
   }
-  
+
   function addName(name,uid,pos,size) {
     markup = '<img src="http://graph.facebook.com/'+uid+'/picture" /> '+FB.String.escapeHTML(name);
    // UI.addButton('buttons', 'name_'+uid, { pos: pos, width: size[0], height: size[1], fontsize: '200%',text: markup });
@@ -100,23 +100,23 @@ var Publish = (function() {
   function addMyName(pos,size) {
     addName(player.name,fb_logged_in.uid,pos,size);
   }
-  
+
   function addReqName(req,pos,size) {
     addName(req.from.name,req.from.id,pos,size);
   }
-  
+
   function addRequestButton(req,x,y) {
     var req_label = 'req'+req.id;
     if (UI.exists(req_label)) {
       return;
     }
     markup = FB.String.format(
-      '<img src="http://graph.facebook.com/{0}/picture" />{1}: {2}</p>',
+      '<img src="http://graph.facebook.com/{0}/picture" />{1}: {2}',
       req.from.id,
-      FB.String.escapeHTML(req.from.name),
+      FB.String.escapeHTML(req.from.name) + '<br />',
       FB.String.escapeHTML(req.message));
     UI.addButton('buttons', req_label,
-    {pos: [x,y], width: 400, height: 60, fontsize: '200%',
+    {pos: [x,y], width: 400, height: 60, fontsize: '150%',
     text: markup, command: {cmd: 'onReqClick', args: [req] }, req: req});
   }
 
