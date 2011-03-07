@@ -35,6 +35,7 @@ var GameFrame = (function() {
       webgl_blended_canvas: false,
       webgl_debug: false,
       offset: 0,
+      hidefps: false,
       viewport: 'fluid'
     };
 

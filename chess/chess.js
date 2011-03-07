@@ -6,7 +6,7 @@ var Chess = (function() {
     var pbframe = 0;
     var menu_time,request_time;
     var explo;
-    
+
     function startPlayback() {
       playback = true;
       move = 0;
@@ -21,7 +21,7 @@ var Chess = (function() {
         Sprites.add(label, {url: url, frames: 1, framepos: [[0, 0]], width: 0, height: 0 });
       }
     }
-  
+
     function loadAnimList(path,list) {
       for(var i=0;i<list.length;i++) {
         var anim = list[i]
@@ -71,7 +71,7 @@ var Chess = (function() {
       }
       return pos;
     }
-    
+
     function button(name, pos_type, options) {
       var size = options.size || [150, 60];
       pos = uiPos(pos_type,size);
@@ -89,7 +89,7 @@ var Chess = (function() {
       }
       UI.addButton('buttons', name, options);
     }
-    
+
     function tick() {
       if (explo) {
         explo.frame += 1;
@@ -201,6 +201,7 @@ var Chess = (function() {
         css_keyframe: false,
         sprite_sheets: true,
         int_snap: true,
+        hidefps: true,
         transform3d:true});
 
       GameFrame.setXbyY();
@@ -215,7 +216,7 @@ var Chess = (function() {
 
       newGameState('login');
       Publish.fbInit(fb_app_id);
-      loadImageList('/chess/images/',['Pirate_King.png', 'Pirate_King_Gray.png', 'Pirate_Queen.png', 'Pirate_Queen_Gray.png', 'Pirate_Bishop.png', 'Pirate_Bishop_Gray.png', 'Pirate_Knight.png', 'Pirate_Knight_Gray.png', 'Pirate_Rook.png', 'Pirate_Rook_Gray.png', 'Pirate_Pawn.png', 'Pirate_Pawn_Gray.png']);
+      loadImageList('/chess/images/',['Pirate_King.png', 'Ninja_King.png', 'Pirate_Queen.png', 'Ninja_Queen.png', 'Pirate_Bishop.png', 'Ninja_Bishop.png', 'Pirate_Knight.png', 'Ninja_Knight.png', 'Pirate_Rook.png', 'Ninja_Rook.png', 'Pirate_Pawn.png', 'Ninja_Pawn.png']);
       loadAnimList('/chess/images/',[['small_explo.png', 6]]);
     }
 

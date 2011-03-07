@@ -47,22 +47,22 @@ var Pieces = (function() {
       var sprite;
       switch(type) {
         case Pawn:
-          sprite = color == White ? "Pirate_Pawn" : "Pirate_Pawn_Gray";
+          sprite = color == White ? "Pirate_Pawn" : "Ninja_Pawn";
           break;
         case Rook:
-          sprite = color == White ? "Pirate_Rook" : "Pirate_Rook_Gray";
+          sprite = color == White ? "Pirate_Rook" : "Ninja_Rook";
           break;
         case Knight:
-          sprite = color == White ? "Pirate_Knight" : "Pirate_Knight_Gray";
+          sprite = color == White ? "Pirate_Knight" : "Ninja_Knight";
           break;
         case Bishop:
-          sprite = color == White ? "Pirate_Bishop" : "Pirate_Bishop_Gray";
+          sprite = color == White ? "Pirate_Bishop" : "Ninja_Bishop";
           break;
         case Queen:
-          sprite = color == White ? "Pirate_Queen" : "Pirate_Queen_Gray";
+          sprite = color == White ? "Pirate_Queen" : "Ninja_Queen";
           break;
         case King:
-          sprite = color == White ? "Pirate_King" : "Pirate_King_Gray";
+          sprite = color == White ? "Pirate_King" : "Ninja_King";
           break;
       }
       square.piece = Gob.add(Utils.uuidv4(), sprite, 0, [square.left+square.delta*0.5,square.top+square.delta*0.5], [0,0], 10, default_scale*square.delta/piecescales[type]);
