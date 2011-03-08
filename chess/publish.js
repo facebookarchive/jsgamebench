@@ -13,6 +13,7 @@
 // under the License.
 
 var Publish = (function() {
+  var BoardVersion = 2;
   var fb_logged_in;
   var player = {savedRequests: {}, active_req: 0};
 
@@ -71,7 +72,7 @@ var Publish = (function() {
       return;
     }
     player.active_req = req;
-    var data = req.data && FB.JSON.parse(req.data);
+    var data = req.data;
     req.concede = data.concede;
     Gob.delAll();
     Board.init();
@@ -130,6 +131,14 @@ var Publish = (function() {
       }
       ClientCmd.install('onReqClick',onReqClick);
       player.savedRequests = player.savedRequests || {};
+      for(var i=reqs.length-1;i>=0;i--) {
+        var req = reqs[i];
+        req.data = req.data && FB.JSON.parse(req.data);
+        if (!req.data.v || req.data.v != BoardVersion) {
+          removeRequest(req);
+          reqs.splice(i,1);
+        }
+      }
       for(var i=0;i<reqs.length;i++) {
         var req = reqs[i];
         if (player.savedRequests[req.id]) {
@@ -170,10 +179,11 @@ var Publish = (function() {
   }
 
   function sendMove() {
+    var payload = {v: BoardVersion, board: Board.getState()};
     if (player.active_req) {
-      Publish.sendRequest(player.active_req.message,{board: Board.getState()});
+      Publish.sendRequest(player.active_req.message,payload);
     } else {
-      Publish.sendRequest('I made my move! (game: '+(new Date).getTime()+')',{board: Board.getState()});
+      Publish.sendRequest('I made my move! (game: '+(new Date).getTime()+')',payload);
     }
   }
 
