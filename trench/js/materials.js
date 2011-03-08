@@ -78,17 +78,17 @@ var TrenchMaterials = (function() {
       alphaBlend : false,
       params : {},
       textures : {
-        surfacetex : '/textures/default.png'
+        surfacetex : '/textures/Checker_512_DIFF.png'
       }
     },
 
     {
-      name : 'Checker_512_DIFF',
+      name : 'Ship_01_DIFF',
       type : 'default',
       alphaBlend : false,
       params : {},
       textures : {
-        surfacetex : '/textures/Checker_512_DIFF.png'
+        surfacetex : '/textures/Ship_01_DIFF.png'
       }
     }
   ];
