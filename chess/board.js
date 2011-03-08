@@ -207,8 +207,9 @@ var Board = (function() {
           }
           ns.piece = os.piece;
           os.piece = null;
+          ns.piece.dirty = true;
+          ns.piece.pos = [ns.left+ns.delta*0.5,ns.top+ns.delta*0.5];
         }
-        Pieces.resetBoardGobs();
       }
     }
 
