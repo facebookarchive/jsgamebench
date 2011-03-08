@@ -119,9 +119,24 @@ var Board = (function() {
       return tomove;
     }
 
+    function dumpBoard() {
+      var pieces = [];
+      for (var i=0;i<8;i++) {
+        for (var j=0;j<8;j++) {
+          var square = board[i+8*j];
+          if (square.piece) {
+            pieces.push(i*8+j);
+            pieces.push(square.piece.type);
+            pieces.push(square.piece.color);
+          }
+        }
+      }
+      return pieces;
+    }
+
     function makeMove(os,ns,piece) {
       piece.move = ++move;
-      state.push({piece:piece.type, from: [os.i,os.j], to: [ns.i,ns.j], capture: ns.piece ? true : false});
+      state.push({board: dumpBoard(), piece:piece.type, from: [os.i,os.j], to: [ns.i,ns.j], capture: ns.piece ? true : false});
       tomove = !tomove;
     }
 

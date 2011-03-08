@@ -108,7 +108,7 @@ var Init = (function() {
         hidediv.id = 'hidebardiv';
         hidediv.style.cssText = 'position:absolute;z-index:10000;left:0px;top:-1000px;width:5000px;height:5000px;background:#000';
         document.body.appendChild(hidediv);
-        setTimeout("Init.hideBar();", 10);
+        setTimeout("Init.hideBar();", 100);
       } else {
         GameFrame.setXbyY();
         resizeFunc();

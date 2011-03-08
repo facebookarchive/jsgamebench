@@ -116,7 +116,7 @@ var GameFrame = (function() {
         stylestr += dstyle && dstyle.height ? 'height:' + dstyle.height + 'px;' : 'height:100%;';
         stylestr += dstyle && dstyle.zindex ? 'z-index:' + dstyle.zindex + ';' : 'z-index:2;';
         stylestr += color ? 'background:' + color + ';' : '';
-        var overflow = (dstyle && dstyle.overflow) || 'overflow:hidden;';
+        var overflow = (dstyle && dstyle.overflow) || '';
         if (add) {
           pel.innerHTML += '<div id="' + id + '" class="' + dclass + '"' +
             (hidden ?
