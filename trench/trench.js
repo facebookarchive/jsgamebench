@@ -14,7 +14,9 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
-var fb_app_info={id:0,secret:0};
+var options = {
+      fb_app_info : {id:0,secret:0}
+    };
 
 fs = require('fs');
 http = require('http');
@@ -30,9 +32,10 @@ fs.readFile('app_secret', 'binary', function(err, data) {
     var temp = JSON.parse(data);
     // inner copy so exports points to the right object
     for(var i in temp) {
-      fb_app_info[i] = temp[i];
+      options.fb_app_info[i] = temp[i];
     }
-    console.log('app id: '+fb_app_info.id + ' app secret: ' +fb_app_info.secret)
+    console.log('app id: ' + options.fb_app_info.id +
+                ' app secret: ' + options.fb_app_info.secret)
   }
 });
 
@@ -46,13 +49,16 @@ http.createServer(function(req, res) {
       case 'perf':
         Comm.sendFile(req, res, '..' + pathname);
         break;
-      case 'js':
       case 'models':
+      case 'js':
       case 'textures':
         Comm.sendFile(req, res, pathname);
         break;
+      case 'channel.html':
+        Comm.sendFile(req, res, pathname);
+        break;
       default:
-        Comm.sendFile(req, res, '/index.shtml');
+        Comm.sendFile(req, res, '/index.shtml', options);
         break;
     }
   }

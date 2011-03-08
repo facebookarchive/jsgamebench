@@ -22,23 +22,33 @@ var World3D = (function() {
       viewprojection : Math3D.mat4x4()
     };
 
-    function checkCollision(old_mid, new_mid, radius, callback) {
+    function checkCollision(old_mid, new_mid, radius, source, callback) {
+
+      var result = null;
 
       for (var id in static_elements) {
         var element = static_elements[id];
         if (Math3D.boxSphereCollision(new_mid, radius,
                                       element.min, element.max,
                                       element.mid, element.radius)) {
-          var result = Math3D.sweptSphereBoxIntersection(element.min,
-                                                         element.max,
-                                                         element.mid,
-                                                         element.radius,
-                                                         old_mid,
-                                                         new_mid,
-                                                         radius);
-          if (result.t >= 0 && callback(result)) {
-            return false;
+          var result2 = Math3D.sweptSphereBoxIntersection(element.min,
+                                                          element.max,
+                                                          element.mid,
+                                                          element.radius,
+                                                          old_mid,
+                                                          new_mid,
+                                                          radius);
+
+          if (result2.t >= 0 && (!result || result2.t < result.t)) {
+            result = result2;
           }
+        }
+      }
+
+      if (result) {
+        result.source = source;
+        if (callback(result)) {
+          return false;
         }
       }
 
@@ -68,12 +78,13 @@ var World3D = (function() {
       static_elements[id] = undefined;
     }
 
-    function addDynamic(model, world_matrix, bounds_mid, bounds_radius) {
+    function addDynamic(model, world_matrix, bounds_mid, bounds_radius, owner) {
       var element = {
         model: model,
         matrix: Math3D.dupMat4x4(world_matrix),
         mid : Math3D.dupVec3(bounds_mid),
-        radius : bounds_radius
+        radius : bounds_radius,
+        owner : owner
       };
 
       var id = dynamic_elements.length;
@@ -91,8 +102,8 @@ var World3D = (function() {
       if (element) {
         var do_update = true;
         if (collision_callback) {
-          do_update = checkCollision(element.mid, bounds_mid,
-                                     element.radius, collision_callback);
+          do_update = checkCollision(element.mid, bounds_mid, element.radius,
+                                     element.owner, collision_callback);
         }
 
         if (do_update) {

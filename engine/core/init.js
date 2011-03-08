@@ -129,7 +129,8 @@ var Init = (function() {
       }
       Render.setupBrowserSpecific();
 
-      var meta_viewport = document.querySelector("meta[name=viewport]");
+      var meta_viewport = document.querySelector &&
+        document.querySelector("meta[name=viewport]");
       if (meta_viewport && window.devicePixelRatio >= 2 ) {
         JSGlobal.lowres = false;
         meta_viewport.setAttribute('content', 'user-scalable=no, width=device-width, height=device-height, initial-scale=0.5, maximum-scale=0.5');

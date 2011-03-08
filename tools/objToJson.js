@@ -42,6 +42,7 @@ Array.prototype.setSize = function(size, val) {
   for (var ii = size; ii < this.length; ++ii) {
     this[ii] = undefined;
   }
+  this.length = size;
   return this;
 };
 
@@ -110,9 +111,9 @@ function parseObj(filedata) {
   }
 
   function addFace(val) {
-    val.setSize(3, '0');
+    var vrs = [];
 
-    for (var ii = 0; ii < 3; ++ii) {
+    for (var ii = 0; ii < val.length; ++ii) {
       // parse to int and decrement to get 0-based indices
       var vidxs = val[ii].split('/').remap(toIntIndex);
       var vhash = vidxs.setSize(3, 0).join('/');
@@ -122,10 +123,17 @@ function parseObj(filedata) {
         inv_vert_refs.push(vhash);
       }
 
-      if (!faces[cur_material]) {
-        faces[cur_material] = [];
-      }
-      faces[cur_material].push(vert_refs[vhash]);
+      vrs.push(vert_refs[vhash]);
+    }
+
+    if (!faces[cur_material]) {
+      faces[cur_material] = [];
+    }
+
+    for (var ii = 2; ii < vrs.length; ++ii) {
+      faces[cur_material].push(vrs[0]);
+      faces[cur_material].push(vrs[ii-1]);
+      faces[cur_material].push(vrs[ii]);
     }
   }
 
@@ -224,8 +232,11 @@ files.each(function(filename) {
     }
 
     if (modelobj) {
-      var newFilename = filename.slice(0, -4) + '.json';
-      fs.writeFile(newFilename, JSON.stringify(modelobj), function(err) {
+      var filenameBase = filename.slice(0, -4);
+      var newFilename = filenameBase + '.js';
+      var fileData = 'var ' + filenameBase + ' = ' +
+                     JSON.stringify(modelobj) + ';';
+      fs.writeFile(newFilename, fileData, function(err) {
           if (err) {
             util.print(err + '\n');
           } else {

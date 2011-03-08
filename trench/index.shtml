@@ -3,17 +3,22 @@
     <title>Trench Runner</title>
     #metatags
 
+    <script type="text/javascript" src="http://static.ak.fbcdn.net/connect/en_US/core.debug.js"></script>
+
     <!-- engine includes -->
     #include '../engine/style.include'
     #include 'app_id'
     #include '../engine/core/core.include'
 
     <!-- game stuff -->
+    <script type="text/javascript" src="/models/Box_Model.js"></script>
+    <script type="text/javascript" src="/models/Ship_Junebug_01.js"></script>
     <script type="text/javascript" src="/js/materials.js"></script>
     <script type="text/javascript" src="/js/track.js"></script>
     <script type="text/javascript" src="/js/camera.js"></script>
     <script type="text/javascript" src="/js/player.js"></script>
     <script type="text/javascript" src="/js/projectile.js"></script>
+    <script type="text/javascript" src="/js/publish.js"></script>
     <script type="text/javascript" src="/js/init.js"></script>
 
   </head>

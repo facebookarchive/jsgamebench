@@ -263,7 +263,7 @@ var WebGLDebug = (function() {
       'viewport': { 0:{'type':'int'},
                     1:{'type':'int'},
                     2:{'type':'sizei'},
-                    3:{'type':'sizei'}},
+                    3:{'type':'sizei'}}
     };
 
     function getArgumentString(function_name, arg_index, value) {

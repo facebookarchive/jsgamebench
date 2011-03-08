@@ -14,16 +14,29 @@
 
 (function() {
 
-  var box_model_data = {"verts":[0,0,0,0,0,0,0,-1,1,1,0,0,1,0,0,-1,1,0,0,1,1,0,0,-1,0,1,0,1,0,0,0,-1,0,0,0,0,0,-1,0,0,0,1,1,0,1,-1,0,0,0,1,0,1,1,-1,0,0,0,0,1,1,0,-1,0,0,0,1,0,0,0,0,1,0,1,1,1,0,1,0,1,0,1,1,0,1,1,0,1,0,0,1,1,1,0,0,1,0,1,0,0,0,0,1,0,0,1,1,0,0,1,1,0,0,1,1,1,1,1,1,0,0,1,0,1,1,0,1,0,0,0,0,0,0,0,0,-1,0,1,0,0,0,1,0,-1,0,1,0,1,1,1,0,-1,0,0,0,1,1,0,0,-1,0,0,0,1,0,0,0,0,1,1,0,1,0,1,0,0,1,1,1,1,1,1,0,0,1,0,1,1,1,0,0,0,1],"indices":[0,1,2,0,3,1,4,5,6,4,7,5,8,9,10,8,11,9,12,13,14,12,14,15,16,17,18,16,18,19,20,21,22,20,22,23],"materials":["default"],"counts":[36]};
-
   var max_delta = 0.1; // max frame time delta, in seconds
 
   var render_inited = false;
   var box_model = null;
+  var ship_model = null;
   var play_game = false;
   var needs_reset = true;
 
   function tick() {
+    if (!client_user.fb_logged_in) {
+      UI.addButton('buttons', 'login', {
+          pos: [200, 0], width: 80, height: 40,
+          fontsize: '100%', text: 'Login', command: {cmd: 'login' }
+        });
+      UI.del('request');
+    } else {
+      UI.addButton('buttons', 'request', {
+          pos: [200, 0], width: 80, height: 40,
+          fontsize: '100%', text: 'Request', command: {cmd: 'sendGame' }
+        });
+      UI.del('login');
+    }
+
     if (!render_inited && WebGLRender.isInitialized()) {
       render_inited = true;
 
@@ -32,9 +45,10 @@
       var viewport = WebGLRender.getViewport();
 
       TrenchMaterials.registerMaterials(WebGLRender.getMaterialTable());
-      box_model = model_context.createModel(box_model_data);
+      box_model = model_context.createModel(Box_Model);
+      ship_model = model_context.createModel(Ship_Junebug_01);
 
-      TrenchPlayer.init(box_model);
+      TrenchPlayer.init(ship_model);
       TrenchCamera.init(viewport);
       TrenchTrack.init(box_model);
       TrenchProjectile.init(box_model);
@@ -71,8 +85,15 @@
     play_game = false;
   }
 
+  function sendGameCmd() {
+    Publish.sendRequest({key:0});
+  }
+
   function init() {
     Init.reset();
+
+    window.console && window.console.log('fb_app_id ' + fb_app_id);
+    Publish.fbInit(fb_app_id);
 
     GameFrame.updateSettings({
       render_mode: GameFrame.WEBGL3D,
@@ -85,6 +106,8 @@
 
     ClientCmd.install('start', startCmd);
     ClientCmd.install('reset', resetCmd);
+    ClientCmd.install('login', Publish.fbLogin);
+    ClientCmd.install('sendGame', sendGameCmd);
   }
 
   function resize() {
@@ -102,7 +125,7 @@
           fontsize: '100%', text: 'Reset',
           command: {cmd: 'reset' }
       });
- }
+  }
 
   Init.setFunctions({
     app: tick,
