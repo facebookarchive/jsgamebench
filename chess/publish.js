@@ -170,7 +170,11 @@ var Publish = (function() {
   }
 
   function sendMove() {
-    Publish.sendRequest('I made my move!',{board: Board.getState()});
+    if (player.active_req) {
+      Publish.sendRequest(player.active_req.message,{board: Board.getState()});
+    } else {
+      Publish.sendRequest('I made my move! (game: '+(new Date).getTime()+')',{board: Board.getState()});
+    }
   }
 
   function publishStory() {
