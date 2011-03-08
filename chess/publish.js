@@ -184,7 +184,9 @@ var Publish = (function() {
     if (player.active_req) {
       Publish.sendRequest(player.active_req.message,payload);
     } else {
-      Publish.sendRequest('I made my move! (game: '+(new Date).getTime()+')',payload);
+      var t = new Date;
+      var time_str = (t.getHours() % 12) +':'+ t.getMinutes() + (t.getHours()<=12 ? 'AM' : 'PM') + ' ' + t.toString().split(' ')[0];
+      Publish.sendRequest('I made my move! (game started '+time_str+')',payload);
     }
   }
 
