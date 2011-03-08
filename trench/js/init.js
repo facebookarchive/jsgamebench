@@ -23,6 +23,20 @@
   var needs_reset = true;
 
   function tick() {
+    if (!client_user.fb_logged_in) {
+      UI.addButton('buttons', 'login', {
+          pos: [200, 0], width: 80, height: 40,
+          fontsize: '100%', text: 'Login', command: {cmd: 'login' }
+        });
+      UI.del('request');
+    } else {
+      UI.addButton('buttons', 'request', {
+          pos: [200, 0], width: 80, height: 40,
+          fontsize: '100%', text: 'Request', command: {cmd: 'sendGame' }
+        });
+      UI.del('login');
+    }
+
     if (!render_inited && WebGLRender.isInitialized()) {
       render_inited = true;
 
@@ -71,8 +85,15 @@
     play_game = false;
   }
 
+  function sendGameCmd() {
+    Publish.sendRequest({key:0});
+  }
+
   function init() {
     Init.reset();
+
+    window.console && window.console.log('fb_app_id ' + fb_app_id);
+    Publish.fbInit(fb_app_id);
 
     GameFrame.updateSettings({
       render_mode: GameFrame.WEBGL3D,
@@ -85,6 +106,8 @@
 
     ClientCmd.install('start', startCmd);
     ClientCmd.install('reset', resetCmd);
+    ClientCmd.install('login', Publish.fbLogin);
+    ClientCmd.install('sendGame', sendGameCmd);
   }
 
   function resize() {
@@ -102,7 +125,7 @@
           fontsize: '100%', text: 'Reset',
           command: {cmd: 'reset' }
       });
- }
+  }
 
   Init.setFunctions({
     app: tick,
