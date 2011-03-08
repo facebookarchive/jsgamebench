@@ -19,7 +19,8 @@ var World3D = (function() {
     var matrix_state = {
       view_matrix : Math3D.mat4x4(),
       projection_matrix : Math3D.mat4x4(),
-      viewprojection : Math3D.mat4x4()
+      viewprojection : Math3D.mat4x4(),
+      camera_pos : [0,0,0]
     };
 
     function checkCollision(old_mid, new_mid, radius, source, callback) {
@@ -138,6 +139,9 @@ var World3D = (function() {
       matrix_state.viewprojection =
         Math3D.mulMat4x4(matrix_state.projection_matrix,
                          matrix_state.view_matrix);
+      matrix_state.camera_pos[0] = camera_matrix[12];
+      matrix_state.camera_pos[1] = camera_matrix[13];
+      matrix_state.camera_pos[2] = camera_matrix[14];
     }
 
     function drawElement(model_context, element) {
@@ -146,8 +150,6 @@ var World3D = (function() {
       }
 
       // inject model matrix into matrix state
-      matrix_state.modelviewproj =
-        Math3D.mulMat4x4(matrix_state.viewprojection, element.matrix);
       matrix_state.model_matrix = element.matrix;
 
       model_context.drawModel(element.model, -1, matrix_state);
