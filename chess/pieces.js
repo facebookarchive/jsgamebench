@@ -310,7 +310,6 @@ var Pieces = (function() {
           square.piece = selected;
           selected = false;
           Chess.newGameState('moved');
-          Publish.sendMove();
         }
       }
     }
