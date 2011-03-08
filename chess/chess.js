@@ -6,6 +6,7 @@ var Chess = (function() {
     var pbframe = 0;
     var menu_time,request_time;
     var explo;
+    var replay = {};
 
     function startPlayback() {
       playback = true;
@@ -48,7 +49,6 @@ var Chess = (function() {
     }
 
     function makeExplosion(pos,scale) {
-      console.log('make explo: ' + pos + ': ' + scale);
       explo = explo || Gob.add(Utils.uuidv4(), 'small_explo', 0, pos, [0,0], 10, scale / 7);
     }
 
@@ -144,7 +144,7 @@ var Chess = (function() {
         }
       }
       if (old_game_state != game_state) {
-        console.log('game state: ' + game_state);
+        var size = [300,55];
         old_game_state = game_state;
         switch (game_state) {
           case 'login':
@@ -157,7 +157,6 @@ var Chess = (function() {
             button('Send Move', [End,End], { cmd:['sendRequest'] });
           case 'playing':
             button('Menu',[Start,Start], { cmd:['newGameState', 'menu'] });
-            var size = [300,55];
             var req = Publish.hasOpponent();
             if (req && game_state != 'moved') {
               if (req.concede) {
@@ -170,6 +169,11 @@ var Chess = (function() {
             }
             Publish.addMyName(uiPos([Middle,End],size),size);
             break;
+          case 'replay':
+            button('Menu',[Start,Start], { cmd:['newGameState', 'menu'] });
+            Publish.addReplayName(replay.p1,uiPos([Middle,Start],size),size);
+            Publish.addReplayName(replay.p2,uiPos([Middle,End],size),size);
+            break;
         }
       }
     }
@@ -177,10 +181,16 @@ var Chess = (function() {
     function postImageLoad() {
       Board.init();
       Pieces.init();
-    }
-
-    function clickButton() {
-
+      var hash = window.location.hash;
+      hash = hash.length && hash.substr(1);
+      if (hash) {
+        replay = JSON.parse(decodeURIComponent(hash));
+        Gob.delAll();
+        Board.init();
+        Chess.newGameState('replay');
+        Board.loadState(replay.board);
+        Chess.startPlayback();
+      }
     }
 
     function newGame() {

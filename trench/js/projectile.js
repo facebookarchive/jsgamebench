@@ -31,6 +31,11 @@ var TrenchProjectile = (function() {
       projectile_pool[proj.idx] = undefined;
     }
 
+    function collisionHandler(result) {
+      result.source.lifespan = 0;
+      return true;
+    }
+
     function reset() {
       for (var ii = 0; ii < projectile_pool.length; ++ii) {
         if (typeof proj !== 'undefined') {
@@ -62,7 +67,7 @@ var TrenchProjectile = (function() {
 
         if (typeof proj.id === 'undefined') {
           proj.id = World3D.addDynamic(projectile_model, proj_matrix,
-                                       proj.pos, proj.radius);
+                                       proj.pos, proj.radius, proj);
         } else {
           World3D.moveDynamic(proj.id, proj_matrix, proj.pos, null);
         }

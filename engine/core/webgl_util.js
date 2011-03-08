@@ -36,6 +36,12 @@ var WebGLUtil = (function() {
     }
 
     var bind_table = {};
+    bind_table['float'] = function(gl, loc) {
+      return function(f) {
+        gl.uniform1f(loc, f);
+      }
+    };
+
     bind_table['vec2'] = function(gl, loc) {
       return function(v) {
         gl.uniform2f(loc, v[0], v[1]);

@@ -78,7 +78,6 @@ var Publish = (function() {
     Chess.newGameState('playing');
     Board.loadState(data.board);
     Chess.startPlayback();
-    console.log('playing against: ' + req.from.id);
    }
 
   function getInfo() {
@@ -93,7 +92,6 @@ var Publish = (function() {
 
   function addName(name,uid,pos,size) {
     markup = '<img src="http://graph.facebook.com/'+uid+'/picture" /> '+FB.String.escapeHTML(name);
-   // UI.addButton('buttons', 'name_'+uid, { pos: pos, width: size[0], height: size[1], fontsize: '200%',text: markup });
     UI.addHTML('buttons', 'name_'+uid, { pos: pos, width: size[0], height: size[1], uiclass: 'chess',markup: markup });
   }
 
@@ -103,6 +101,10 @@ var Publish = (function() {
 
   function addReqName(req,pos,size) {
     addName(req.from.name,req.from.id,pos,size);
+  }
+
+  function addReplayName(p,pos,size) {
+    addName(p.name,p.id,pos,size);
   }
 
   function addRequestButton(req,x,y) {
@@ -148,7 +150,6 @@ var Publish = (function() {
   }
 
   function sendRequest(msg,payload) {
-    console.log('payload:\n'+JSON.stringify(payload));
     var req = player.active_req;
     var cmd = {
       method: 'apprequests',
@@ -158,7 +159,6 @@ var Publish = (function() {
 
     if (req) {
       cmd.to = req.from.id;
-      console.log('send to: ['+cmd.to+']');
     }
     FB.ui(cmd, function(response) {
       if (response && !response.error) {
@@ -170,21 +170,35 @@ var Publish = (function() {
   }
 
   function sendMove() {
-    Publish.sendRequest('I made my move!',{board: Board.getState()});
+    if (player.active_req) {
+      Publish.sendRequest(player.active_req.message,{board: Board.getState()});
+    } else {
+      Publish.sendRequest('I made my move! (game: '+(new Date).getTime()+')',{board: Board.getState()});
+    }
   }
 
   function publishStory() {
-    var payload = Board.getState();
+    var req = player.active_req;
+    var payload = {
+      board: Board.getState(),
+      p1: {
+        id: req.from.id,
+        name: req.from.name
+      },
+      p2: {
+        id: fb_logged_in.uid,
+        name: player.name
+      }
+    };
     var loc = window.location;
     var url = loc.protocol + '//' + loc.host + '/chess#' + encodeURIComponent(FB.JSON.stringify(payload));
-    console.log('url: ' + url);
     var cmd = {
       method: 'stream.publish',
       attachment: {
         name: 'Watch Replay',
         caption: 'Checkmate!',
         description: (
-          'Check out my awesome game of pirate chess i played with a friend'
+          'Check out my awesome game of pirate chess i played with '+req.from.name
         ),
         href: url
       }
@@ -211,6 +225,7 @@ var Publish = (function() {
     removeRequest: removeRequest,
     addReqName : addReqName,
     addMyName : addMyName,
+    addReplayName : addReplayName,
     sendMove : sendMove
   };
 })();

@@ -20,6 +20,10 @@ var TrenchCamera = (function() {
     var farplane = 1000.0;
     var camera_distance = 6;
 
+    var rotation_distance = 4;
+    var rotation_rate = Math.PI * -0.2;
+    var rotation = 0;
+
     function init(viewport) {
       // set up projection matrix, and thus the coordinate system as well
       aspect_ratio = viewport.width / viewport.height;
@@ -34,22 +38,37 @@ var TrenchCamera = (function() {
       World3D.setCamera(camera_matrix);
     }
 
-    function tick(dt) {
+    function tick(dt, paused) {
       var camera_pos = [0,0,0];
       var camera_dir = [0,1,0];
       var camera_up = [0,0,1];
 
       var player_pos = TrenchPlayer.getPosition();
-      camera_pos[1] = player_pos[1] - camera_distance;
-      player_pos[1] = 0;
-      var dist = Math3D.normalizeVec3(player_pos);
-      var cam_dist = dist * dist * 0.25;
-      if (cam_dist > dist * 0.75) {
-        cam_dist = dist * 0.75;
+      if (paused) {
+        camera_dir[0] = Math.sin(rotation);
+        camera_dir[1] = Math.cos(rotation);
+        Math3D.addVec3Self(camera_pos,
+                           Math3D.scaleVec3(camera_dir,
+                                            -rotation_distance)
+                          );
+        rotation += dt * rotation_rate;
+        while (rotation > 2 * Math.PI) {
+          rotation -= 2 * Math.PI;
+        }
+      } else {
+        camera_pos[1] = player_pos[1] - camera_distance;
+        player_pos[1] = 0;
+        var dist = Math3D.normalizeVec3(player_pos);
+        var cam_dist = dist * dist * 0.25;
+        if (cam_dist > dist * 0.75) {
+          cam_dist = dist * 0.75;
+        }
+        Math3D.scaleVec3Self(player_pos, cam_dist);
+        camera_pos[0] = player_pos[0];
+        camera_pos[2] = player_pos[2] + 2.5;
+
+        rotation = 0;
       }
-      Math3D.scaleVec3Self(player_pos, cam_dist);
-      camera_pos[0] = player_pos[0];
-      camera_pos[2] = player_pos[2] + 2.5;
 
       var camera_matrix = Math3D.mat4x4();
       Math3D.orientMat4x4(camera_matrix, camera_dir, camera_up);

@@ -19,26 +19,37 @@ var World3D = (function() {
     var matrix_state = {
       view_matrix : Math3D.mat4x4(),
       projection_matrix : Math3D.mat4x4(),
-      viewprojection : Math3D.mat4x4()
+      viewprojection : Math3D.mat4x4(),
+      camera_pos : [0,0,0]
     };
 
-    function checkCollision(old_mid, new_mid, radius, callback) {
+    function checkCollision(old_mid, new_mid, radius, source, callback) {
+
+      var result = null;
 
       for (var id in static_elements) {
         var element = static_elements[id];
         if (Math3D.boxSphereCollision(new_mid, radius,
                                       element.min, element.max,
                                       element.mid, element.radius)) {
-          var result = Math3D.sweptSphereBoxIntersection(element.min,
-                                                         element.max,
-                                                         element.mid,
-                                                         element.radius,
-                                                         old_mid,
-                                                         new_mid,
-                                                         radius);
-          if (result.t >= 0 && callback(result)) {
-            return false;
+          var result2 = Math3D.sweptSphereBoxIntersection(element.min,
+                                                          element.max,
+                                                          element.mid,
+                                                          element.radius,
+                                                          old_mid,
+                                                          new_mid,
+                                                          radius);
+
+          if (result2.t >= 0 && (!result || result2.t < result.t)) {
+            result = result2;
           }
+        }
+      }
+
+      if (result) {
+        result.source = source;
+        if (callback(result)) {
+          return false;
         }
       }
 
@@ -68,12 +79,13 @@ var World3D = (function() {
       static_elements[id] = undefined;
     }
 
-    function addDynamic(model, world_matrix, bounds_mid, bounds_radius) {
+    function addDynamic(model, world_matrix, bounds_mid, bounds_radius, owner) {
       var element = {
         model: model,
         matrix: Math3D.dupMat4x4(world_matrix),
         mid : Math3D.dupVec3(bounds_mid),
-        radius : bounds_radius
+        radius : bounds_radius,
+        owner : owner
       };
 
       var id = dynamic_elements.length;
@@ -91,8 +103,8 @@ var World3D = (function() {
       if (element) {
         var do_update = true;
         if (collision_callback) {
-          do_update = checkCollision(element.mid, bounds_mid,
-                                     element.radius, collision_callback);
+          do_update = checkCollision(element.mid, bounds_mid, element.radius,
+                                     element.owner, collision_callback);
         }
 
         if (do_update) {
@@ -127,6 +139,9 @@ var World3D = (function() {
       matrix_state.viewprojection =
         Math3D.mulMat4x4(matrix_state.projection_matrix,
                          matrix_state.view_matrix);
+      matrix_state.camera_pos[0] = camera_matrix[12];
+      matrix_state.camera_pos[1] = camera_matrix[13];
+      matrix_state.camera_pos[2] = camera_matrix[14];
     }
 
     function drawElement(model_context, element) {
@@ -135,8 +150,6 @@ var World3D = (function() {
       }
 
       // inject model matrix into matrix state
-      matrix_state.modelviewproj =
-        Math3D.mulMat4x4(matrix_state.viewprojection, element.matrix);
       matrix_state.model_matrix = element.matrix;
 
       model_context.drawModel(element.model, -1, matrix_state);

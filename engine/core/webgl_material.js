@@ -72,7 +72,7 @@ var WebGLMaterial = (function() {
         var material_program = gl.loadProgram(data.vertex_shader,
                                               data.fragment_shader);
         if (!material_program) {
-          console.log('Failed to load program for material type: ' + data.name);
+          gl.log('Failed to load program for material type: ' + data.name);
           return;
         }
 
@@ -117,7 +117,7 @@ var WebGLMaterial = (function() {
       material_table.getMaterialType = function(name) {
         var material_type = material_type_dictionary[name];
         if (!material_type) {
-          console.log('Failed to find material type: ' + name);
+          gl.log('Failed to find material type: ' + name);
           material_type = material_type_dictionary[ERROR_MAT_NAME];
         }
         return material_type;
@@ -154,7 +154,12 @@ var WebGLMaterial = (function() {
 
           if (show_unloaded_materials) {
             var error_material = material_dictionary[ERROR_MAT_NAME];
-            material.bind = error_material.bind;
+            material.bind = function() {
+              // show error once, then rebind
+              error_material.bind.apply(error_material, arguments);
+              gl.log('Bound dummy material for "' + name + '"');
+              material.bind = error_material.bind;
+            };
             material.bindMatrixState = error_material.bindMatrixState;
             material.getMaterialType = error_material.getMaterialType;
           }

@@ -479,7 +479,7 @@ var UI = (function() {
           text = ui.textarray ? ui.textarray[ui.target[ui.tkey]] : ui.text;
           size = ui.fontsize ? 'font-size:' + ui.fontsize + ';' : '';
           var color = ui.color ? 'background:' + ui.color + ';' : '';
-          str = '<button id="' + ui.id + '" class="' + uiclass + '" style="cursor:hand;' + posstring + size + color + zindex + '" ' + unclick + '="event.cancelBubble=true;return false;" ' + click + '="return UI.call(event,\'' + ui.id + '\');"' + '><div>' + text + '</div></button>';
+          str = '<button id="' + ui.id + '" class="' + uiclass + '" style="' + posstring + size + color + zindex + '" ' + unclick + '="event.cancelBubble=true;return false;" ' + click + '="return UI.call(event,\'' + ui.id + '\');"' + '><div>' + text + '</div></button>';
           upel.innerHTML = str;
         } else if (ui.type == HTML) {
           str = '<div class="' + uiclass + '" id="' + ui.id + '" style="' + posstring + '">';

@@ -13,81 +13,154 @@
 // under the License.
 
 var TrenchMaterials = (function() {
-  var default_material_type_def = {
-    name : 'default',
-
-    vertex_shader : {
-      attribute: {
-        vposition : 'vec3',
-        vtexcoord : 'vec2',
-        vnormal : 'vec3'
-      },
-
-      varying: {
-        v_Texcoord : 'vec2',
-        v_Normal : 'vec3'
-      },
-
-      uniform: {
-        modelviewproj : 'mat4',
-        model_matrix : 'mat4'
-      },
-
-      text: [
-        'void main() {',
-        '  vec4 hpos = vec4(vposition, 1);',
-        '  gl_Position.x = dot(modelviewproj0, hpos);',
-        '  gl_Position.y = dot(modelviewproj1, hpos);',
-        '  gl_Position.z = dot(modelviewproj2, hpos);',
-        '  gl_Position.w = dot(modelviewproj3, hpos);',
-        '  v_Texcoord = vtexcoord;',
-        '  v_Normal.x = dot(model_matrix0.xyz, vnormal);',
-        '  v_Normal.y = dot(model_matrix1.xyz, vnormal);',
-        '  v_Normal.z = dot(model_matrix2.xyz, vnormal);',
-        '}'
-      ]
+  var default_vertex_shader = {
+    attribute: {
+      vposition : 'vec3',
+      vtexcoord : 'vec2',
+      vnormal : 'vec3'
     },
 
-    fragment_shader : {
-      fprecision: 'mediump',
+    varying: {
+      v_Texcoord : 'vec2',
+      v_Normal : 'vec3',
+      v_View : 'vec3'
+    },
 
-      varying : {
-        v_Texcoord : 'vec2',
-        v_Normal : 'vec3'
-      },
+    uniform: {
+      viewprojection : 'mat4',
+      camera_pos : 'vec3',
+      model_matrix : 'mat4'
+    },
 
-      uniform : {
-        surfacetex : 'sampler2D'
-      },
-
-      text : [
-        'void main() {',
-        '  float dp = dot(normalize(v_Normal), normalize(vec3(1,-2,3)));',
-        '  float lighting = 0.2 + 0.5 * clamp(dp, 0.0, 1.0);',
-        '  gl_FragColor = texture2D(surfacetex, v_Texcoord);',
-        '  gl_FragColor.xyz *= lighting;',
-        '}'
-      ]
-    }
+    text: [
+      'void main() {',
+      '  vec4 vpos = vec4(vposition, 1);',
+      '  vec4 wpos;',
+      '  wpos.x = dot(model_matrix0, vpos);',
+      '  wpos.y = dot(model_matrix1, vpos);',
+      '  wpos.z = dot(model_matrix2, vpos);',
+      '  wpos.w = 1.0;',
+      '  gl_Position.x = dot(viewprojection0, wpos);',
+      '  gl_Position.y = dot(viewprojection1, wpos);',
+      '  gl_Position.z = dot(viewprojection2, wpos);',
+      '  gl_Position.w = dot(viewprojection3, wpos);',
+      '  v_Texcoord = vec2(vtexcoord.x, 1.0 - vtexcoord.y);',
+      '  v_Normal.x = dot(model_matrix0.xyz, vnormal);',
+      '  v_Normal.y = dot(model_matrix1.xyz, vnormal);',
+      '  v_Normal.z = dot(model_matrix2.xyz, vnormal);',
+      '  v_View = camera_pos - wpos.xyz;',
+      '}'
+    ]
   };
 
-  var default_material_def = {
+  var default_fragment_shader = {
+    fprecision: 'mediump',
+
+    varying : {
+      v_Texcoord : 'vec2',
+      v_Normal : 'vec3'
+    },
+
+    uniform : {
+      surfacetex : 'sampler2D'
+    },
+
+    text : [
+      'void main() {',
+      '  float dp = dot(normalize(v_Normal), normalize(vec3(1,-2,3)));',
+      '  float lighting = 0.15 + 0.6 * clamp(dp, 0.0, 1.0);',
+      '  gl_FragColor = texture2D(surfacetex, v_Texcoord);',
+      '  gl_FragColor.xyz *= lighting;',
+      '}'
+    ]
+  };
+
+  var default_material_type_def = {
     name : 'default',
-    type : 'default',
-    alphaBlend : false,
-    params : {},
-    textures : {
-      surfacetex : '/textures/default.png'
-    }
+    vertex_shader : default_vertex_shader,
+    fragment_shader : default_fragment_shader
   };
+
+  var ship_fragment_shader = {
+    fprecision: 'mediump',
+
+    varying : {
+      v_Texcoord : 'vec2',
+      v_Normal : 'vec3',
+      v_View : 'vec3'
+    },
+
+    uniform : {
+      spec_power : 'float',
+      diffusemap : 'sampler2D',
+      colormap : 'sampler2D',
+      specmap : 'sampler2D',
+      lummap : 'sampler2D'
+    },
+
+    text : [
+      'void main() {',
+      '  vec3 light = normalize(vec3(1,-2,3));',
+      '  vec3 norm = normalize(v_Normal);',
+      '  vec3 reflection = reflect(-light, norm);',
+      '  float dp = max(dot(light, norm), 0.0);',
+      '  float rv = dot(reflection, normalize(v_View));',
+      '  float specular = pow(max(rv, 0.0), spec_power) * dp;',
+      '  float lighting = 0.15 + 0.6 * dp;',
+      '  vec4 diffuse = texture2D(diffusemap, v_Texcoord);',
+      '  vec4 color = texture2D(colormap, v_Texcoord);',
+      '  vec4 spec = texture2D(specmap, v_Texcoord);',
+      '  vec4 lum = texture2D(lummap, v_Texcoord);',
+      '  lighting = (1.0 - lum.x) * lighting + lum.x;',
+      '  gl_FragColor.xyz = diffuse.xyz * lighting + specular * spec.xyz;',
+      '  gl_FragColor.w = diffuse.w;',
+      '}'
+    ]
+  };
+
+  var ship_material_type_def = {
+    name : 'ship',
+    vertex_shader : default_vertex_shader,
+    fragment_shader : ship_fragment_shader
+  };
+
+  var all_material_defs = [
+    {
+      name : 'default',
+      type : 'default',
+      alphaBlend : false,
+      params : {},
+      textures : {
+        surfacetex : '/textures/Checker_512_DIFF.png'
+      }
+    },
+
+    {
+      name : 'Ship_01_DIFF',
+      type : 'ship',
+      alphaBlend : false,
+      params : {
+        spec_power : 20
+      },
+      textures : {
+        diffusemap : '/textures/Ship_01_DIFF.png',
+        colormap : '/textures/Ship_01_COL.png',
+        specmap : '/textures/Ship_01_SPEC.png',
+        lummap : '/textures/Ship_01_LUM.png'
+      }
+    }
+  ];
 
   function registerMaterials(material_table) {
     material_table.createMaterialType(default_material_type_def);
-    material_table.createMaterial(default_material_def);
+    material_table.createMaterialType(ship_material_type_def);
+    for (var ii = 0; ii < all_material_defs.length; ++ii) {
+      material_table.createMaterial(all_material_defs[ii]);
+    }
   }
 
   return {
-    registerMaterials: registerMaterials,
+    registerMaterials: registerMaterials
   };
 
 })();
