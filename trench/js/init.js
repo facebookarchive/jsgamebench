@@ -71,9 +71,10 @@
     if (play_game) {
       TrenchProjectile.tick(delta_time);
       TrenchPlayer.tick(delta_time);
-      TrenchCamera.tick(delta_time);
       TrenchTrack.tick(delta_time);
     }
+
+    TrenchCamera.tick(delta_time, !play_game);
   }
 
   function startCmd() {
