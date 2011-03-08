@@ -125,9 +125,8 @@ var Board = (function() {
         for (var j=0;j<8;j++) {
           var square = board[i+8*j];
           if (square.piece) {
-            pieces.push(i*8+j);
-            pieces.push(square.piece.type);
-            pieces.push(square.piece.color);
+            pieces.push(i+8*j);
+            pieces.push(square.piece.type*6+square.piece.color);
           }
         }
       }
@@ -158,56 +157,47 @@ var Board = (function() {
     }
 
     function getState() {
-      var packed = "";
-      var c;
-      for (var i=0;i<state.length;i++) {
-        c = state[i].from[0]+8*state[i].from[1];
-        c = c.toString(16);
-        if (c.length == 1)
-          c = "0" + c;
-        packed += c;
-        c = state[i].to[0]+8*state[i].to[1];
-        c = c.toString(16);
-        if (c.length == 1)
-          c = "0" + c;
-        packed += c;
-      }
+      var last = state[state.length - 1];
+      var from = last.from[0]+8*last.from[1];
+      var to = last.to[0]+8*last.to[1];
+      var packed = [last.board,[from,to],tomove];
       return packed;
     }
 
-    function initState() {
+    function initState(board, settomove) {
       move = 0;
-      tomove = false;
+      tomove = settomove || false;
       state = [];
       Board.init(true);
-      Pieces.init();
+      Pieces.init(board);
     }
 
     function loadState(reqstate) {
-      initState();
-      for (var i=0;i<reqstate.length;i += 4) {
-        var s = parseInt(reqstate.substring(i,i+2),16);
-        var x = s % 8;
-        var y = (s / 8)|0;
-        var os = getSquare(x,y);
-        s = parseInt(reqstate.substring(i+2,i+4),16);
-        x = s % 8;
-        y = (s / 8)|0;
-        var ns = getSquare(x,y);
-        makeMove(os,ns,os.piece);
-        if (ns.piece) {
-          Gob.del(ns.piece.id);
-        }
-        ns.piece = os.piece;
-        os.piece = null;
+      var board = [];
+      var x,y;
+      for (var i=0;i<reqstate[0].length;i += 2) {
+        var pos = reqstate[0][i];
+        x = pos % 8;
+        y = (pos / 8) | 0;
+        var ct = reqstate[0][i+1];
+        var type = (ct / 6) | 0;
+        var color = ct % 6;
+        board.push([type,color,x,y]);
       }
+      initState(board, reqstate[2]);
+      x = reqstate[1][0] % 8;
+      y = (reqstate[1][0] / 8) | 0;
+      var os = getSquare(x,y);
+      x = reqstate[1][1] % 8;
+      y = (reqstate[1][1] / 8) | 0;
+      var ns = getSquare(x,y);
+      ++move;
+      state.push({board: dumpBoard(), piece:os.piece.type, from: [os.i,os.j], to: [ns.i,ns.j], capture: ns.piece ? true : false});
       Pieces.resetBoardGobs();
     }
 
     function setState(m) {
       if (m <= move) {
-        Board.init(true);
-        Pieces.init();
         for (var i=0;i<m;i++) {
           var s = state[i];
           var os = getSquare(s.from[0],s.from[1]);

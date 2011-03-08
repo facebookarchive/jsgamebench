@@ -23,5 +23,5 @@ var PieceNames = ["","Pawn","Rook","Bishop","Knight","Queen","King"];
 var piecescales = [0,100,128,96,96,80,96];
 var RankNames = ["1","2","3","4","5","6","7","8"];
 var FileNames = ["a","b","c","d","e","f","g","h"];
-var White = false;
-var Black = true;
+var White = 0;
+var Black = 1;
