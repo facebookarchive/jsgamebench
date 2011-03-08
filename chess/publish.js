@@ -159,6 +159,7 @@ var Publish = (function() {
   }
 
   function sendRequest(msg,payload) {
+    payload.v = BoardVersion;
     var req = player.active_req;
     var cmd = {
       method: 'apprequests',
@@ -179,7 +180,7 @@ var Publish = (function() {
   }
 
   function sendMove() {
-    var payload = {v: BoardVersion, board: Board.getState()};
+    var payload = {board: Board.getState()};
     if (player.active_req) {
       Publish.sendRequest(player.active_req.message,payload);
     } else {
