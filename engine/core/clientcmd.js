@@ -12,6 +12,17 @@
 // License for the specific language governing permissions and limitations
 // under the License.
 
+var world_grid = {idx: 0};
+var ent_grid = {idx: 1, interp: {} };
+
+var client_user = {
+  unique_id: 0,
+  world_grid: world_grid,
+  ent_grid: ent_grid,
+  grids: [world_grid, ent_grid]
+};
+
+
 var ClientCmd = (function() {
     function resetSession() {
       client_user.unique_id = 0;

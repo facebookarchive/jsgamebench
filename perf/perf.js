@@ -184,8 +184,8 @@ var Perf = (function() {
     function canvasDemo() {
       UI.del('buttons');
       UI.del('perf');
-      var sprite = JSGlobal.mobile ? 'aahalf' : 'aa';
-      var fps = JSGlobal.mobile ? 20 : 30;
+      var sprite = Browser.mobile ? 'aahalf' : 'aa';
+      var fps = Browser.mobile ? 20 : 30;
 
       PerfTest.addTest(
         {
@@ -204,8 +204,8 @@ var Perf = (function() {
     function htmlDemo() {
       UI.del('buttons');
       UI.del('perf');
-      var sprite = JSGlobal.mobile ? 'aahalf' : 'aa';
-      var fps = JSGlobal.mobile ? 20 : 30;
+      var sprite = Browser.mobile ? 'aahalf' : 'aa';
+      var fps = Browser.mobile ? 20 : 30;
 
       PerfTest.addTest(
         {
@@ -271,7 +271,7 @@ var Perf = (function() {
     function scrollDemo() {
       UI.del('buttons');
       UI.del('perf');
-      if (JSGlobal.os == "Android") {
+      if (Browser.os == "Android") {
         UI.addScroll('', 'scroll', {pos: [0,82], width: 400, height: 600, sheight: 110, x: 10, y: 200});
       } else {
         UI.addScroll('', 'scroll', {pos: [0,82], width: 400, height: 600, sheight: 110, x: 10, y: 200});
@@ -297,13 +297,13 @@ var Perf = (function() {
     }
 
     function logPerf(browser, result) {
-      if (!JSGlobal.mobile) {
+      if (!Browser.mobile) {
         Xhr.toServer({cmd: 'logperf', args: [browser, result]});
       }
     }
 
     function perfQuery(query) {
-      if (!JSGlobal.mobile) {
+      if (!Browser.mobile) {
         Xhr.toServer({cmd: 'perfquery', args: [query]});
       }
     }
@@ -322,13 +322,13 @@ var Perf = (function() {
       UI.addButton('buttons', 'idemo', {pos: [530, 5], width: 95, height: 40, text: 'iPhone Demo', command: {cmd: 'idemo', args: []}});
       UI.addButton('buttons', 'rotdemo', {pos: [635, 5], width: 95, height: 40, text: 'Rotate Demo', command: {cmd: 'rotdemo', args: []}});
       UI.addCollection(null, 'perf', {pos: [100, 60], width: 260});
-      if (JSGlobal.myscore) {
-        UI.addHTML('perf', 'myscore', {pos: [350, 50], width:1000,uiclass: 'perfscore', markup: "Your score is " + JSGlobal.myscore + " sprites!"});
+      if (Perf.myscore) {
+        UI.addHTML('perf', 'myscore', {pos: [350, 50], width:1000,uiclass: 'perfscore', markup: "Your score is " + Perf.myscore + " sprites!"});
       }
       if (data) {
         for (var i = 0, len = data.length; i < len; i++) {
           UI.addCollection('perf', 'perfblock' + i, {uiclass: 'perfblock', pos: [0, 82 * i], height: 78, width: 260, command: {cmd:'showdetails', args:[data[i]]}});
-          var b = data[i].browser;
+          var b = data[i].browser || 'unknown';
           var browser = b.match(/(\w+) \d+/);
           if (browser) {
             browser = browser[1];
@@ -364,14 +364,14 @@ var Perf = (function() {
       ClientCmd.install('perfresp', perfResponse);
       ClientCmd.install('perfquery', perfQuery);
       Input.hookEvents('gamebody');
-      if (!JSGlobal.mobile) {
+      if (!Browser.mobile) {
         Xhr.init();
         Xhr.toServer({cmd: '', args: []});
       }
     }
 
     function setup() {
-      if (!JSGlobal.mobile) {
+      if (!Browser.mobile) {
         Xhr.toServer({cmd: 'perfquery', args: [['browser']]});
       } else {
         ClientCmd.perfresp(null);
@@ -386,7 +386,7 @@ var Perf = (function() {
     }
 
     function quit() {
-      if (!JSGlobal.mobile) {
+      if (!Browser.mobile) {
         Xhr.toServer({cmd: 'logout', args: []});
       }
     }
@@ -402,6 +402,7 @@ var Perf = (function() {
     Perf.init = init;
     Perf.teardown = teardown;
     Perf.quit = quit;
+    Perf.myscore = null;
     return Perf;
   })();
 

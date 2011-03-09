@@ -41,11 +41,11 @@ var GameFrame = (function() {
 
     function updateSettings(newset, force_rendermode) {
       if (newset.css_transitions) {
-        if (JSGlobal.browser != JSGlobal.CHROME && JSGlobal.browser != JSGlobal.WEBKIT) {
+        if (Browser.browser != Browser.CHROME && Browser.browser != Browser.WEBKIT) {
           newset.css_transitions = false;
         }
       }
-      if (newset.transform3d && !JSGlobal.threeD) {
+      if (newset.transform3d && !Browser.threeD) {
         newset.transform3d = false;
       }
       if (newset.render_mode == CANVAS_ONLY) {
@@ -205,25 +205,25 @@ var GameFrame = (function() {
       } else {
         viewport = settings.viewport;
       }
-      JSGlobal.w = viewports[viewport][0] || JSGlobal.winsize[0];
-      JSGlobal.h = viewports[viewport][1] || JSGlobal.winsize[1];
-      JSGlobal.h -= settings.offset;
+      Browser.w = viewports[viewport][0] || Browser.winsize[0];
+      Browser.h = viewports[viewport][1] || Browser.winsize[1];
+      Browser.h -= settings.offset;
 
       setFrame('gamebody', 'gameframe', 'gameframe',
-                         {left: JSGlobal.winpos[0],
-                             top: JSGlobal.winpos[1],
-                             width: JSGlobal.winsize[0],
-                             height: JSGlobal.winsize[1]},
+                         {left: Browser.winpos[0],
+                             top: Browser.winpos[1],
+                             width: Browser.winsize[0],
+                             height: Browser.winsize[1]},
                          '#f2f2f2');
 
-      var midx = 0.5 * (JSGlobal.winsize[0] - JSGlobal.winpos[0]);
-      var midy = settings.offset*0.5 + 0.5 * (JSGlobal.winsize[1] - (JSGlobal.winpos[1]));
+      var midx = 0.5 * (Browser.winsize[0] - Browser.winpos[0]);
+      var midy = settings.offset*0.5 + 0.5 * (Browser.winsize[1] - (Browser.winpos[1]));
 
       setViewport('gameframe', 'gameviewport', 'gameviewport',
-                            {left: midx - (JSGlobal.w * 0.5),
-                                top: midy - (JSGlobal.h * 0.5),
-                             width: JSGlobal.w,
-                             height: JSGlobal.h},
+                            {left: midx - (Browser.w * 0.5),
+                                top: midy - (Browser.h * 0.5),
+                             width: Browser.w,
+                             height: Browser.h},
                             '#112');
       layout();
       updateSettings({},true);

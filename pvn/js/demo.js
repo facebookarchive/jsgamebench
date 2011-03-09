@@ -39,7 +39,7 @@ var run_physics_sync = true;
       FB.Demo.playing = true;
       FB.Demo.in_replay = false;
       cam_pos = [0,0];
-      display = new FB.Game.Display(2000 * JSGlobal.h/650, JSGlobal.h);
+      display = new FB.Game.Display(2000 * Browser.h/650, Browser.h);
       physics = new FB.Game.Physics(display);
       physics.run();
       uw = display.lW / 100;
@@ -86,7 +86,7 @@ var run_physics_sync = true;
         return;
       }
       var pos = FB.Demo.pirate.GetPosition();
-      var x = pos.x * display.getScale() - JSGlobal.w/2;
+      var x = pos.x * display.getScale() - Browser.w/2;
       var y = pos.y * display.getScale();
       run_physics_sync && physics && physics.onUpdate();
       var timeElapsed = (new Date()).getTime() - FB.Demo.fireTime;
@@ -100,14 +100,14 @@ var run_physics_sync = true;
         this.last_pos[0] = xi;
         this.last_pos[1] = yi;
 
-        var pos = new Box2D.Common.Math.b2Vec2(display.device2logic(JSGlobal.mouse.x + cam_pos[0]),
-                      display.device2logic(JSGlobal.mouse.y + cam_pos[1]));
+        var pos = new Box2D.Common.Math.b2Vec2(display.device2logic(Input.mouse.x + cam_pos[0]),
+                      display.device2logic(Input.mouse.y + cam_pos[1]));
 
-        if (JSGlobal.mouse.buttons[0]==1) { // mouse down / start touch
+        if (Input.mouse.buttons[0]==1) { // mouse down / start touch
           if (FB.Demo.did_shoot) {
             FB.Demo.playing = false;
           }
-          JSGlobal.mouse.buttons[0]++;
+          Input.mouse.buttons[0]++;
           FB.Demo.action = null;
           FB.Demo._clearJoint();
           var adjust_pos = {x: pos.x, y:pos.y-2};
@@ -117,17 +117,17 @@ var run_physics_sync = true;
             FB.Demo._mouseJoint = physics.addMouseJoint(FB.Demo.pirate, piratePos.x, piratePos.y, 1000);
             FB.Demo._firing = false;
           }
-          this.last_x = JSGlobal.mouse.x;
-        } else if (JSGlobal.mouse.buttons[0]) {
+          this.last_x = Input.mouse.x;
+        } else if (Input.mouse.buttons[0]) {
           if (FB.Demo.action && FB.Demo.action.type == 'aim') {
             FB.Demo._mouseJoint.SetTarget(pos);
           } else {
             if (this.last_x != undefined) {
-              var dx = this.last_x - JSGlobal.mouse.x;
+              var dx = this.last_x - Input.mouse.x;
               this.setCanvasViewPort(cam_pos[0] + dx,undefined);
             }
           }
-          this.last_x = JSGlobal.mouse.x;
+          this.last_x = Input.mouse.x;
         }
         else {
           this.last_x = undefined;
@@ -159,10 +159,10 @@ var run_physics_sync = true;
 
     setCanvasViewPort: function(x,y) {
       if (x !== undefined) {
-        cam_pos[0] = Math.max(Math.min(display.dW - JSGlobal.w, x), 0);
+        cam_pos[0] = Math.max(Math.min(display.dW - Browser.w, x), 0);
       }
       if (y !== undefined) {
-        cam_pos[1] = Math.max(Math.min(display.dH - JSGlobal.h, y), 0);
+        cam_pos[1] = Math.max(Math.min(display.dH - Browser.h, y), 0);
       }
     },
 
@@ -292,7 +292,7 @@ var run_physics_sync = true;
     },
 
     setupBackground: function() {
-      World.add('bg_idx', 'background', [JSGlobal.w*0.45,JSGlobal.h - 768 + 768/2], 0);
+      World.add('bg_idx', 'background', [Browser.w*0.45,Browser.h - 768 + 768/2], 0);
     },
     
     setupCaptain: function() {

@@ -325,7 +325,7 @@ var UI = (function() {
 
       ui.vel = 0;
       ui.velc = 0;
-      ui.scrollstart = JSGlobal.mouse.y;
+      ui.scrollstart = Input.mouse.y;
       if (ui.tid) {
         clearInterval(ui.tid);
       }

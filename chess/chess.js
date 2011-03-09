@@ -55,7 +55,7 @@ var Chess = (function() {
     var Start = 1, Middle = 2, End = 3;
     function uiPos(pos_type,size) {
       var pos = [];
-      var winsize = [JSGlobal.w,JSGlobal.h];
+      var winsize = [Browser.w,Browser.h];
       for(var i=0;i<2;i++) {
         switch(pos_type[i]) {
           case Start:
@@ -101,23 +101,23 @@ var Chess = (function() {
        }
       if (!playback) {
         if (game_state == 'playing') {
-          if (JSGlobal.mouse.buttons[0]) {
-            JSGlobal.mouse.buttons[0] = 0;
-            var dx = JSGlobal.mouse.x;
-            var dy = JSGlobal.mouse.y;
+          if (Input.mouse.buttons[0]) {
+            Input.mouse.buttons[0] = 0;
+            var dx = Input.mouse.x;
+            var dy = Input.mouse.y;
             if (move == Board.getMove()) {
               Pieces.select(dx,dy);
               move = Board.getMove();
             }
-          } else if (JSGlobal.key_state[32]) {
-            JSGlobal.key_state[32] = 0;
+          } else if (Input.key_state[32]) {
+            Input.key_state[32] = 0;
             startPlayback();
-          } else if (JSGlobal.key_state[Key.LEFT]) {
-            JSGlobal.key_state[Key.LEFT] = 0;
+          } else if (Input.key_state[Key.LEFT]) {
+            Input.key_state[Key.LEFT] = 0;
             move > 0 ? --move : 0;
             Board.setState(move);
-          } else if (JSGlobal.key_state[Key.RIGHT]) {
-            JSGlobal.key_state[Key.RIGHT] = 0;
+          } else if (Input.key_state[Key.RIGHT]) {
+            Input.key_state[Key.RIGHT] = 0;
             move < Board.getMove() ? move++ : move;
             Board.setState(move);
           }

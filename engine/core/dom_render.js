@@ -20,40 +20,40 @@ var DomRender = (function() {
 
       transition = null;
 
-      switch (JSGlobal.browser) {
-        case JSGlobal.CHROME:
+      switch (Browser.browser) {
+        case Browser.CHROME:
           transform = '-webkit-transform';
           transformprop = 'webkitTransform';
           transformoriginstring = '-webkit-transform-origin';
           transformorigin = 'webkitTransformOrigin';
           transition = 'webkitTransition';
           break;
-        case JSGlobal.FIREFOX:
+        case Browser.FIREFOX:
           transform = '-moz-transform';
           transformprop = 'MozTransform';
           transformoriginstring = '-moz-transform-origin';
           transformorigin = 'MozTransformOrigin';
           break;
-        case JSGlobal.WEBKIT:
+        case Browser.WEBKIT:
           transform = '-webkit-transform';
           transformprop = 'webkitTransform';
           transformoriginstring = '-webkit-transform-origin';
           transformorigin = 'webkitTransformOrigin';
           transition = 'webkitTransition';
           break;
-        case JSGlobal.IE:
+        case Browser.IE:
           transform = 'filter';
           transformprop = 'filter';
           transformoriginstring = null;
           transformorigin = null;
           break;
-        case JSGlobal.IE9:
+        case Browser.IE9:
           transform = '-ms-transform';
           transformprop = 'msTransform';
           transformoriginstring = '-ms-transform-origin';
           transformorigin = 'msTransformOrigin';
           break;
-        case JSGlobal.OPERA:
+        case Browser.OPERA:
           transform = '-o-transform';
           transformprop = 'OTransform';
           transformoriginstring = '-o-transform-origin';
@@ -103,8 +103,8 @@ var DomRender = (function() {
           dstyle[transformprop] = 'translate(' + pos[0] + 'px, ' + pos[1] + 'px)' + ' scale('+scale+')';
         }
       } else {
-        switch (JSGlobal.browser) {
-          case JSGlobal.IE:
+        switch (Browser.browser) {
+          case Browser.IE:
             dstyle.left = pos[0]+'px';
             dstyle.top = pos[1]+'px';
             break;
@@ -133,7 +133,7 @@ var DomRender = (function() {
     }
 
     function transformed(pos, size, theta, scale) {
-      if (theta == 0 && (scale == 1.0 || JSGlobal.browser != JSGlobal.IE)) {
+      if (theta == 0 && (scale == 1.0 || Browser.browser != Browser.IE)) {
         return transform + ":" + axisAlignedTranslate(pos)+ + ' scale('+scale+');';
       }
 
@@ -141,8 +141,8 @@ var DomRender = (function() {
       var st = Math.sin(theta);
       var nst = -st;
 
-      switch (JSGlobal.browser) {
-        case JSGlobal.IE:
+      switch (Browser.browser) {
+        case Browser.IE:
           return 'width:' + size[0] + 'px;height:' + size[1] + 'px;left:' +
             pos[0] + 'px;top:' + pos[1] +
             'px;filter:progid:DXImageTransform.Microsoft.Matrix(M11=\'' +
@@ -154,7 +154,7 @@ var DomRender = (function() {
     }
 
     function transformed3d(pos, size, theta, scale) {
-      if (theta == 0 && (scale == 1.0 || JSGlobal.browser != JSGlobal.IE)) {
+      if (theta == 0 && (scale == 1.0 || Browser.browser != Browser.IE)) {
         return transform + ":" + axisAlignedTranslate3d(pos)+' scale('+scale+');';
       }
 
@@ -162,8 +162,8 @@ var DomRender = (function() {
       var st = Math.sin(theta);
       var nst = -st;
 
-      switch (JSGlobal.browser) {
-        case JSGlobal.IE:
+      switch (Browser.browser) {
+        case Browser.IE:
           return 'width:' + size[0] + 'px;height:' + size[1] + 'px;left:' +
             pos[0] + 'px;top:' + pos[1] +
             'px;filter:progid:DXImageTransform.Microsoft.Matrix(M11=\'' +
@@ -176,7 +176,7 @@ var DomRender = (function() {
 
     function transformedProp(domel, pos, theta, scale, discon) {
       var dstyle = domel.style;
-      if (theta == 0 && (scale == 1.0 || JSGlobal.browser != JSGlobal.IE)) {
+      if (theta == 0 && (scale == 1.0 || Browser.browser != Browser.IE)) {
         axisAlignedProp(domel, pos, theta, scale, discon);
         return;
       }
@@ -184,8 +184,8 @@ var DomRender = (function() {
       var st = Math.sin(theta);
       var nst = -st;
 
-      switch (JSGlobal.browser) {
-        case JSGlobal.IE:
+      switch (Browser.browser) {
+        case Browser.IE:
           dstyle.left = pos[0] + 'px';
           dstyle.top = pos[1] + 'px';
           dstyle.filter = 'progid:DXImageTransform.Microsoft.Matrix(M11=\'' +
@@ -213,7 +213,7 @@ var DomRender = (function() {
 
     function transformedProp3d(domel, pos, theta, scale, discon) {
       var dstyle = domel.style;
-      if (theta == 0 && (scale == 1.0 || JSGlobal.browser != JSGlobal.IE)) {
+      if (theta == 0 && (scale == 1.0 || Browser.browser != Browser.IE)) {
         axisAlignedProp3d(domel, pos, theta, scale, discon);
         return;
       }
@@ -221,8 +221,8 @@ var DomRender = (function() {
       var st = Math.sin(theta);
       var nst = -st;
 
-      switch (JSGlobal.browser) {
-        case JSGlobal.IE:
+      switch (Browser.browser) {
+        case Browser.IE:
           dstyle.left = pos[0] + 'px';
           dstyle.top = pos[1] + 'px';
           dstyle.filter = 'progid:DXImageTransform.Microsoft.Matrix(M11=\'' +

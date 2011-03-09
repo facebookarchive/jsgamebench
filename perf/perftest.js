@@ -245,7 +245,7 @@ var PerfTest = (function() {
             framepos: [[0, 0]],
             width: 1024, height: 768});
 
-      World.add('ninja', 'ninja', [0.5 * JSGlobal.w, 0.5 * JSGlobal.h]);
+      World.add('ninja', 'ninja', [0.5 * Browser.w, 0.5 * Browser.h]);
     }
 
     function noBackground() {
@@ -274,8 +274,7 @@ var PerfTest = (function() {
           World.reset();
 
           var tid = {};
-          tid.useragent = JSGlobal.user_agent;
-          tid.browser = JSGlobal.browser;
+          tid.browser = Browser.browser;
           tid.viewport = test.viewport;
           tid.render_path = '';
           for (var id in test.settings) {
@@ -305,8 +304,8 @@ var PerfTest = (function() {
                 dec: sprites[test.sprites].dec ? sprites[test.sprites].dec : dec,
                 tfps: test.tfps,
                 num: num,
-                w: JSGlobal.w,
-                h: JSGlobal.h,
+                w: Browser.w,
+                h: Browser.h,
                 tid: tid,
                 nodel: sprites[test.sprites].nodel ? true : false,
                 demo: test.demo});
@@ -334,12 +333,12 @@ var PerfTest = (function() {
       for (var sp in spar) {
         for (var t3=0;t3<2;t3++) {
           if (t3) {
-            if (JSGlobal.browser == JSGlobal.IE || JSGlobal.browser == JSGlobal.IE9 || JSGlobal.browser == JSGlobal.FIREFOX || JSGlobal.browser == JSGlobal.OPERA) {
+            if (Browser.browser == Browser.IE || Browser.browser == Browser.IE9 || Browser.browser == Browser.FIREFOX || Browser.browser == Browser.OPERA) {
               continue;
             }
           }
-          if (JSGlobal.browser == JSGlobal.CHROME || JSGlobal.browser == JSGlobal.WEBKIT) {
-            if (0 && JSGlobal.ios) {
+          if (Browser.browser == Browser.CHROME || Browser.browser == Browser.WEBKIT) {
+            if (0 && Browser.ios) {
               addTest({viewport: vp, settings: {render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: true,  css_transitions: true, sprite_sheets: true, css_keyframe: true, int_snap: is ? true : false, transform3d: t3 ? true : false}, tfps: 30, background: bg, sprites: sp });
               addTest({viewport: vp, settings: {render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: false, css_transitions: true, sprite_sheets: true, css_keyframe: true, int_snap: is ? true : false, transform3d: t3 ? true : false}, tfps: 30, background: bg, sprites: sp });
             }
@@ -351,7 +350,7 @@ var PerfTest = (function() {
           addTest({viewport: vp, settings: {render_mode: GameFrame.CANVAS_ONLY, canvas_background: false, sprite_sheets: false, int_snap: is ? true : false}, tfps: 30, background: bg, sprites: sp });
           addTest({viewport: vp, settings: {render_mode: GameFrame.CANVAS_ONLY, canvas_background: true, sprite_sheets: false, int_snap: is ? true : false}, tfps: 30, background: bg, sprites: sp });
         }
-        if (!JSGlobal.mobile && WebGLUtil.isSupported()) {
+        if (!Browser.mobile && WebGLUtil.isSupported()) {
           addTest({viewport: vp, settings: {render_mode: GameFrame.WEBGL, webgl_blended_canvas: false, sprite_sheets: false, int_snap: false}, tfps: 30, background: bg, sprites: sp });
           addTest({viewport: vp, settings: {render_mode: GameFrame.WEBGL, webgl_blended_canvas: false, sprite_sheets: true, int_snap: false}, tfps: 30, background: bg, sprites: sp });
           addTest({viewport: vp, settings: {render_mode: GameFrame.WEBGL, webgl_blended_canvas: true, sprite_sheets: false, int_snap: false}, tfps: 30, background: bg, sprites: sp });
@@ -387,9 +386,9 @@ var PerfTest = (function() {
         tests[current]();
       } else {
         var result = FBmark.peak();
-        JSGlobal.myscore = parseInt(result.score);
-        ClientCmd.logperf(JSGlobal.browser_version, result);
-        alert("Your score was " + JSGlobal.myscore + " sprites!");
+        Perf.myscore = parseInt(result.score);
+        ClientCmd.logperf(Perf.browser_version, result);
+        alert("Your score was " + Perf.myscore + " sprites!");
         FBmark.reset();
         PerfTest.stop();
       }

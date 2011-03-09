@@ -187,12 +187,12 @@ var Game = (function() {
   }
 
   function keyDown(ascii) {
-    return JSGlobal.key_state[ascii.charCodeAt(0)] > 0;
+    return Input.key_state[ascii.charCodeAt(0)] > 0;
   }
 
   function keyDownReset(ascii) {
-    var ret = JSGlobal.key_state[ascii.charCodeAt(0)] > 0;
-    JSGlobal.key_state[ascii.charCodeAt(0)] = 0;
+    var ret = Input.key_state[ascii.charCodeAt(0)] > 0;
+    Input.key_state[ascii.charCodeAt(0)] = 0;
     return ret;
   }
 
@@ -239,25 +239,25 @@ var Game = (function() {
     var angle = me.angle;
     var new_vel = [0,0];
 
-    if ((JSGlobal.mouse.buttons[0]) || JSGlobal.key_state[16]) {
-      var dx = JSGlobal.mouse.x / JSGlobal.w - 0.5;
-      var dy = JSGlobal.mouse.y / JSGlobal.h - 0.5;
+    if ((Input.mouse.buttons[0]) || Input.key_state[16]) {
+      var dx = Input.mouse.x / Browser.w - 0.5;
+      var dy = Input.mouse.y / Browser.h - 0.5;
       if (!(Math.abs(dx) < 0.1 && Math.abs(dy) < 0.1)) {
         var a = Math.atan2(-dy,dx) - Math.PI/2;
         angle = a;
         var new_vel = [dx,dy];
       }
     } else {
-      if (JSGlobal.key_state[Key.UP] > 0 || keyDown('W')) {
+      if (Input.key_state[Key.UP] > 0 || keyDown('W')) {
         forward = 1;
       }
-      if (JSGlobal.key_state[Key.DOWN] > 0 || keyDown('S')) {
+      if (Input.key_state[Key.DOWN] > 0 || keyDown('S')) {
         //forward = -1;
       }
-      if (JSGlobal.key_state[Key.RIGHT] > 0 || keyDown('D')) {
+      if (Input.key_state[Key.RIGHT] > 0 || keyDown('D')) {
         angle -= 0.2;
       }
-      if (JSGlobal.key_state[Key.LEFT] > 0 || keyDown('A')) {
+      if (Input.key_state[Key.LEFT] > 0 || keyDown('A')) {
         angle += 0.2;
       }
       new_vel[0] += -forward * Math.sin(angle);
@@ -341,9 +341,9 @@ var Game = (function() {
       }
       GridClient.transform(client_user.ent_grid, horngirl_id, {angle:angle, extent: [Utils.clone(plr_pos), [TILE_X, TILE_Y]], vel: vel, state:me.state});
     }
-    if (JSGlobal.key_state[32] > 0 || JSGlobal.mouse.buttons[0]==1) {
-      JSGlobal.key_state[32] = 0;
-      JSGlobal.mouse.buttons[0]++;
+    if (Input.key_state[32] > 0 || Input.mouse.buttons[0]==1) {
+      Input.key_state[32] = 0;
+      Input.mouse.buttons[0]++;
       shootForward(me);
     }
   }
@@ -380,8 +380,8 @@ var Game = (function() {
     client_user.id = getCookie('id');
     Xhr.toServer({cmd: 'userid', args: [client_user.id]});
     var wsize = 510;
-    for(var y=0;y<=Math.ceil(JSGlobal.h/wsize);y++) {
-      for(var x=0;x<=Math.ceil(JSGlobal.w/wsize);x++) {
+    for(var y=0;y<=Math.ceil(Browser.h/wsize);y++) {
+      for(var x=0;x<=Math.ceil(Browser.w/wsize);x++) {
         World.add(Utils.uuidv4(), 'world', [x*wsize,y*wsize], 0);
       }
     }
@@ -390,7 +390,7 @@ var Game = (function() {
     var obj = { extent: [Utils.clone(plr_pos), [TILE_X, TILE_Y]], vel: [0, 0], angle:0, uuid: horngirl_id, name: sprite, state: 0, z: 10, user_name: 'unknown' };
     GridClient.add(client_user.ent_grid, obj);
     Xhr.toServer({cmd: 'linktouser', args: [horngirl_id]});
-    Xhr.toServer({cmd: 'setview', args: [[-JSGlobal.w/2,-JSGlobal.h/2], [JSGlobal.w, JSGlobal.h]]});
+    Xhr.toServer({cmd: 'setview', args: [[-Browser.w/2,-Browser.h/2], [Browser.w, Browser.h]]});
   }
 
   function tick() {
@@ -466,11 +466,11 @@ var Game = (function() {
 
     moveMobs((new Date()).getTime());
     var old_pos = scr_pos;
-    var half = Vec.scale(JSGlobal.winsize, 0.5);
+    var half = Vec.scale(Browser.winsize, 0.5);
     scr_pos = Vec.sub(plr_pos, half);
     if ((parseInt(old_pos[0] / TILE_X) != parseInt(scr_pos[0] / TILE_X))
         || (parseInt(old_pos[1] / TILE_Y) != parseInt(scr_pos[1] / TILE_Y))) {
-      Xhr.toServer({cmd: 'setview', args: [scr_pos, [JSGlobal.w, JSGlobal.h]]});
+      Xhr.toServer({cmd: 'setview', args: [scr_pos, [Browser.w, Browser.h]]});
     }
     if (stand_alone) {
       SvrGame.tick();
@@ -479,7 +479,7 @@ var Game = (function() {
     // GridClient.interpReceived(client_user.world_grid); // maybe not?
     // Draw entities
     //Gob.delAll();
-    var list = Grid.findByArea(client_user.ent_grid, scr_pos,[TILE_X + JSGlobal.w, TILE_Y + JSGlobal.h]);
+    var list = Grid.findByArea(client_user.ent_grid, scr_pos,[TILE_X + Browser.w, TILE_Y + Browser.h]);
 
     for (var i in list) {
       var obj = list[i];
@@ -489,10 +489,10 @@ var Game = (function() {
           obj.dir = Vec.norm(obj.vel);
         }
         var th = thrust[me ? me.state : 0];
-        Gob.addSimple(obj.uuid, th, pos, obj.z ? obj.z : -1000, 0, JSGlobal.lowres ? 1 : 2);
+        Gob.addSimple(obj.uuid, th, pos, obj.z ? obj.z : -1000, 0, Browser.lowres ? 1 : 2);
         Gob.gobs[obj.uuid].theta = Math.PI*1.5 - obj.angle;
       } else {
-        var scale = JSGlobal.lowres ? 1 : 2;
+        var scale = Browser.lowres ? 1 : 2;
         if (obj.name == 'boom')
           scale *= 2;
         else if (obj.name == "shot")
@@ -515,7 +515,7 @@ var Game = (function() {
     }
     // Draw world
     var list = Grid.findByArea(client_user.world_grid, scr_pos,
-      [TILE_X + JSGlobal.w, TILE_Y + JSGlobal.h]);
+      [TILE_X + Browser.w, TILE_Y + Browser.h]);
       for (var i in list) {
         var obj = list[i];
         World.add(obj.uuid, obj.name, Vec.sub(obj.extent[0], scr_pos), 0);

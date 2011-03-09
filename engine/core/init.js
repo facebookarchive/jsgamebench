@@ -45,7 +45,6 @@ var Init = (function() {
     }
 
     function timer_kick_off() {
-      JSGlobal.TIMERS_LAUNCHED = true;
       Render.setupBrowserSpecific();
       setInterval('Init.tick();', parseInt(1000/maxFPS));
       initFunc();
@@ -81,7 +80,7 @@ var Init = (function() {
 
     function hideBar() {
       window.scrollTo(0,1);
-      Clientutils.getWindowSize();
+      Browser.getWindowSize();
       GameFrame.setXbyY();
       resizeFunc();
       var hidediv = document.getElementById('hidebardiv');
@@ -89,21 +88,21 @@ var Init = (function() {
     }
 
     function winresize() {
-      var last_width = JSGlobal.winsize[0];
-      var last_height = JSGlobal.winsize[1];
+      var last_width = Browser.winsize[0];
+      var last_height = Browser.winsize[1];
 
-      Clientutils.getWindowSize();
+      Browser.getWindowSize();
 
-      var width = JSGlobal.winsize[0];
-      var height = JSGlobal.winsize[1];
+      var width = Browser.winsize[0];
+      var height = Browser.winsize[1];
 
       if (last_height == height && last_width == width) {
         return;
       }
 
-      JSGlobal.winpos[0] = 0;
-      JSGlobal.winpos[1] = 0;
-      if (JSGlobal.mobile) {
+      Browser.winpos[0] = 0;
+      Browser.winpos[1] = 0;
+      if (Browser.mobile) {
         var hidediv = document.createElement('div');
         hidediv.id = 'hidebardiv';
         hidediv.style.cssText = 'position:absolute;z-index:10000;left:0px;top:-1000px;width:5000px;height:5000px;background:#000';
@@ -132,14 +131,14 @@ var Init = (function() {
       var meta_viewport = document.querySelector &&
         document.querySelector("meta[name=viewport]");
       if (meta_viewport && window.devicePixelRatio >= 2 ) {
-        JSGlobal.lowres = false;
+        Browser.lowres = false;
         meta_viewport.setAttribute('content', 'user-scalable=no, width=device-width, height=device-height, initial-scale=0.5, maximum-scale=0.5');
-      } else if (JSGlobal.mobile) {
-        JSGlobal.lowres = true;
+      } else if (Browser.mobile) {
+        Browser.lowres = true;
       }
 
 
-      if (JSGlobal.mobile) {
+      if (Browser.mobile) {
         var hidediv = document.createElement('div');
         hidediv.id = 'hidebardiv';
         hidediv.style.cssText = 'position:absolute;z-index:10000;left:0px;top:-1000px;width:5000px;height:5000px;background:#000';

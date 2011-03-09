@@ -13,30 +13,7 @@
 // under the License.
 
 var Clientutils = (function() {
-    function getWindowSize() {
-      var width = 0;
-      var height = 0;
-
-      if (typeof(window.innerWidth) == 'number') {
-        width = window.innerWidth;
-        height = window.innerHeight;
-      } else if (document.documentElement &&
-                 (document.documentElement.clientWidth ||
-                  document.documentElement.clientHeight)) {
-        width = document.documentElement.clientWidth;
-        height = document.documentElement.clientHeight;
-      } else if (document.body &&
-                 (document.body.clientWidth ||
-                  document.body.clientHeight)) {
-        width = document.body.clientWidth;
-        height = document.body.clientHeight;
-      }
-
-      JSGlobal.winsize[0] = width;
-      JSGlobal.winsize[1] = height;
-    }
 
     var Clientutils = {};
-    Clientutils.getWindowSize = getWindowSize;
     return Clientutils;
   })();

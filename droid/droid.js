@@ -79,7 +79,7 @@ var Perf = (function() {
     }
 
     function quit() {
-      if (!JSGlobal.mobile) {
+      if (!Browser.mobile) {
         Xhr.toServer({cmd: 'logout', args: []});
       }
     }

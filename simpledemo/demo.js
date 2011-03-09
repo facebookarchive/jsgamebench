@@ -16,7 +16,7 @@ function tick() {
   pirate.pos[0] += pirate_dir;
   if (pirate.pos[0] < 0) {
     pirate_dir = 1;
-  } else if (pirate.pos[0] > JSGlobal.w) {
+  } else if (pirate.pos[0] > Browser.w) {
     pirate_dir = -1;
   }
   pirate.dirty = 1;
@@ -28,10 +28,10 @@ function tick() {
   p2.pos[1] = 200 + Math.cos(rot) * 100;
   p2.dirty = true;
 
-  if (JSGlobal.mouse.buttons[0]) {
-    JSGlobal.mouse.buttons[0] = 0;
-    var dx = JSGlobal.mouse.x;
-    var dy = JSGlobal.mouse.y;
+  if (Input.mouse.buttons[0]) {
+    Input.mouse.buttons[0] = 0;
+    var dx = Input.mouse.x;
+    var dy = Input.mouse.y;
     console.log([dx.dy]);
   }
   if (!client_user.fb_logged_in) {
@@ -44,7 +44,7 @@ function tick() {
 var size = 75;
 
 function postImageLoad() {
-  World.add('bg_idx', 'background', [JSGlobal.w*0.5,JSGlobal.h*0.5], 0);
+  World.add('bg_idx', 'background', [Browser.w*0.5,Browser.h*0.5], 0);
   pirate = Gob.add(Utils.uuidv4(), 'bouncing_pirate', 0, [100,150], [0,0], 10, 1);
   p2 = Gob.add(Utils.uuidv4(), 'bouncing_pirate', 0, [100,150], [0,0], 10, 1);
 }

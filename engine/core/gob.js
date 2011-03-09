@@ -131,18 +131,18 @@ var Gob = (function() {
       gob.discon = false;
       gob.time = t;
 
-      if (gob.pos[0] > JSGlobal.w) {
+      if (gob.pos[0] > Browser.w) {
         gob.pos[0] = 0;
         gob.discon = true;
       } else if (gob.pos[0] < 0) {
-        gob.pos[0] = JSGlobal.w - 1;
+        gob.pos[0] = Browser.w - 1;
         gob.discon = true;
       }
-      if (gob.pos[1] > JSGlobal.h) {
+      if (gob.pos[1] > Browser.h) {
         gob.pos[1] = 0;
         gob.discon = true;
       } else if (gob.pos[1] < 0) {
-        gob.pos[1] = JSGlobal.h - 1;
+        gob.pos[1] = Browser.h - 1;
         gob.discon = true;
       }
     }

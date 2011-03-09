@@ -17,10 +17,21 @@ var Input = (function() {
     var last_click_time = 0;
     var DOUBLE_CLICK_TIME = 250;
 
+    key_state = [];
+
+    mouse = {
+      x: 0,
+      y: 0,
+      left: 0,
+      right: 0,
+      wheel: 0,
+      buttons: [],
+      double_click: false
+    };
 
     function getMouseXY(event,down) {
 //    document.getElementById('gamebody').focus();
-      var prev = JSGlobal.mouse.buttons.slice(0);
+      var prev = Input.mouse.buttons.slice(0);
       var button = 0;
       if (!event) {
         event = window.event;
@@ -48,22 +59,22 @@ var Input = (function() {
       if (down > 0) {
         var now = (new Date).getTime();
         if (now - last_click_time < DOUBLE_CLICK_TIME) {
-          JSGlobal.mouse.double_click = true;
+          Input.mouse.double_click = true;
         } else {
           last_click_time = now;
-          JSGlobal.mouse.double_click = false;
+          Input.mouse.double_click = false;
         }
-        if (!JSGlobal.mouse.buttons[button]) {
-          JSGlobal.mouse.buttons[button] = 1;
+        if (!Input.mouse.buttons[button]) {
+          Input.mouse.buttons[button] = 1;
         }
       }
 
       if (down < 0) {
-        JSGlobal.mouse.buttons[button] = 0;
+        Input.mouse.buttons[button] = 0;
       }
 
-      JSGlobal.mouse.x = px;
-      JSGlobal.mouse.y = py;
+      Input.mouse.x = px;
+      Input.mouse.y = py;
       return false;
     }
 
@@ -72,8 +83,8 @@ var Input = (function() {
     }
 
     function clearFocusAndState() {
-      for (var i = 0, len = JSGlobal.key_state.length; i < len; i++) {
-        JSGlobal.key_state[i] = 0;
+      for (var i = 0, len = Input.key_state.length; i < len; i++) {
+        Input.key_state[i] = 0;
       }
       document.activeElement.blur();
       document.body.focus();
@@ -82,7 +93,7 @@ var Input = (function() {
     function keyPress(event, down) {
       var code = event.which;
       var return_value = true;
-      JSGlobal.key_state[code] = down;
+      Input.key_state[code] = down;
       if (code == 27) {
         Input.clearFocusAndState();
         return false;
@@ -96,21 +107,21 @@ var Input = (function() {
     function handleTyping(event) {
       if (document.activeElement.tagName == 'INPUT' || document.activeElement.tagName == 'TEXTAREA')
         return true;
-      else if (JSGlobal.key_state[16]) // shift
+      else if (Input.key_state[16]) // shift
         return true;
-      else if (JSGlobal.key_state[17]) // control
+      else if (Input.key_state[17]) // control
         return true;
-      else if (JSGlobal.key_state[18]) // alt
+      else if (Input.key_state[18]) // alt
         return true;
-      else if (JSGlobal.key_state[91]) // command
+      else if (Input.key_state[91]) // command
         return true;
-      else if (JSGlobal.key_state[224]) // command
+      else if (Input.key_state[224]) // command
         return true;
-      else if (JSGlobal.key_state[27]) // escape
+      else if (Input.key_state[27]) // escape
         return true;
-      else if (JSGlobal.key_state[8]) // del
+      else if (Input.key_state[8]) // del
         return true;
-      else if (JSGlobal.key_state[26]) // delete
+      else if (Input.key_state[26]) // delete
         return true;
       else {
         var text = String.fromCharCode(event.charCode);
@@ -156,7 +167,7 @@ var Input = (function() {
     }
 
     function hookEvents(eid) {
-      touch = JSGlobal.mobile;
+      touch = Browser.mobile;
       var el = document.getElementById(eid);
       if (el) {
         el[touch ? 'ontouchstart' : 'onmousedown'] = function(event) {
@@ -188,8 +199,8 @@ var Input = (function() {
         el['onmousewheel'] = function(event) {
           Input.getMouseWheel(event, event.wheelDelta / 120);
         };
-        if (JSGlobal.BROWSER != JSGlobal.IE &&
-            JSGlobal.BROWSER != JSGlobal.IE9) {
+        if (Browser.browser != Browser.IE &&
+            Browser.browser != Browser.IE9) {
           el['DOMMouseScroll'] = function(event) {
             Input.getMouseWheel(event, event.detail / -3);
           }
@@ -198,10 +209,6 @@ var Input = (function() {
         el['onkeypress'] = function(event) {return Input.handleTyping(event)};
         el['onkeyup'] = function(event) {return Input.keyPress(event, 0)};
         el['onkeydown'] = function(event) {return Input.keyPress(event, 1)};
-        if (JSGlobal.FIREFOX) {
-          document.onkeyup = function(event) {return Input.keyPress(event, 0)};
-          document.onkeydown = function(event) {return Input.keyPress(event, 1)};
-        }
       }
     }
 
@@ -217,5 +224,15 @@ var Input = (function() {
     Input.gestureEnd = gestureEnd;
     Input.getGesture = getGesture;
     Input.hookEvents = hookEvents;
+    Input.key_state = key_state;
+    Input.mouse = mouse;
     return Input;
   })();
+
+var Key = {
+  UP: 38,
+  DOWN: 40,
+  LEFT: 37,
+  RIGHT: 39
+};
+

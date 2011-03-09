@@ -44,12 +44,6 @@ var TrenchPlayer = (function() {
 
     function reset() {
       player_matrix = Math3D.mat4x4();
-      player_matrix[0] = 0.01;
-      player_matrix[5] = 0;
-      player_matrix[6] = 0.01;
-      player_matrix[9] = -0.01;
-      player_matrix[10] = 0;
-
       player_pos = [0,0,0];
       player_velocity = [0,0,0];
       gun_cooldown = 0;
@@ -62,12 +56,12 @@ var TrenchPlayer = (function() {
     }
 
     function keyDown(ascii) {
-      return JSGlobal.key_state[ascii.charCodeAt(0)] > 0;
+      return Input.key_state[ascii.charCodeAt(0)] > 0;
     }
 
     function keyDownReset(ascii) {
-      var ret = JSGlobal.key_state[ascii.charCodeAt(0)] > 0;
-      JSGlobal.key_state[ascii.charCodeAt(0)] = 0;
+      var ret = Input.key_state[ascii.charCodeAt(0)] > 0;
+      Input.key_state[ascii.charCodeAt(0)] = 0;
       return ret;
     }
 
@@ -79,7 +73,9 @@ var TrenchPlayer = (function() {
       // update the position, no collision
       // the offset is to center the model
       player_pos = result.p;
-      Math3D.setTranslationMat4x4(player_matrix, player_pos);
+      player_matrix[12] = player_pos[0] - 0.5;
+      player_matrix[13] = player_pos[1] - 0.5;
+      player_matrix[14] = player_pos[2] - 0.5;
       World3D.moveDynamic(player_id, player_matrix,
                           player_pos, null);
       return true;
@@ -88,16 +84,16 @@ var TrenchPlayer = (function() {
     function tick(dt) {
 
       var player_thrust = [0,0,0];
-      if (JSGlobal.key_state[Key.UP]) {
+      if (Input.key_state[Key.UP]) {
         player_thrust[2] += 1;
       }
-      if (JSGlobal.key_state[Key.DOWN]) {
+      if (Input.key_state[Key.DOWN]) {
         player_thrust[2] -= 1;
       }
-      if (JSGlobal.key_state[Key.RIGHT]) {
+      if (Input.key_state[Key.RIGHT]) {
         player_thrust[0] += 1;
       }
-      if (JSGlobal.key_state[Key.LEFT]) {
+      if (Input.key_state[Key.LEFT]) {
         player_thrust[0] -= 1;
       }
       if (keyDown(' ')) {
@@ -123,7 +119,9 @@ var TrenchPlayer = (function() {
       Math3D.addVec3Self(player_pos, Math3D.scaleVec3(actual_velocity, dt));
 
       // the offset is to center the model
-      Math3D.setTranslationMat4x4(player_matrix, player_pos);
+      player_matrix[12] = player_pos[0] - 0.5;
+      player_matrix[13] = player_pos[1] - 0.5;
+      player_matrix[14] = player_pos[2] - 0.5;
       World3D.moveDynamic(player_id, player_matrix,
                           player_pos, collision);
 

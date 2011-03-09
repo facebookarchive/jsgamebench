@@ -39,12 +39,12 @@ var Tick = (function() {
           var name = Benchmark.name;
           UI.addHTML(null, 'fps', {uiclass: 'testype ui_html', pos: [5, 55], resetlast: true, markup: 'fps: ' + lastfps + '<br />' +
                 name.render_mode + ':' + name.sprites + ':' + name.render_path + '<br />' +
-                JSGlobal.winsize[0] + 'x' + JSGlobal.winsize[1] + '<br />' +
+                Browser.winsize[0] + 'x' + Browser.winsize[1] + '<br />' +
                 GameFrame.getViewport().dstyle.width + 'x' + GameFrame.getViewport().dstyle.height + '<br />' +
                 Benchmark.count()});
         } else {
           UI.addHTML(null, 'fps', {uiclass: 'testype ui_html', pos: [5, 55], resetlast: true, markup: 'fps: ' + lastfps + '<br />' +
-                JSGlobal.winsize[0] + 'x' + JSGlobal.winsize[1]});
+                Browser.winsize[0] + 'x' + Browser.winsize[1]});
         }
       }
     }
@@ -59,7 +59,7 @@ var Tick = (function() {
       Tick.start = Tick.current = (new Date).getTime();
     }
 
-    Tick.delta = JSGlobal.TARGET_MS_PER_FRAME;
+    Tick.delta = 0;
     Tick.start = Tick.current = (new Date).getTime();
     Tick.last = Tick.current - Tick.delta;
 
