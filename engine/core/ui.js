@@ -389,56 +389,6 @@ var UI = (function() {
       return [ax, ay, az];
     }
 
-    function hookUIEvents(eid) {
-      touch = JSGlobal.mobile;
-      var el = document.getElementById(eid);
-      if (el) {
-        el[touch ? 'ontouchstart' : 'onmousedown'] = function(event) {
-          return Input.getMouseXY(event, 1);
-        };
-        el[touch ? 'ontouchmove' : 'onmousemove'] = function(event) {
-          return Input.getMouseXY(event, 0);
-        };
-        el[touch ? 'ontouchend' : 'onmouseup'] = function(event) {
-          return Input.getMouseXY(event, -1);
-        };
-
-        if (touch) {
-          el['ongesturestart'] = Input.gestureStart;
-          el['ongesturechange'] = Input.gestureChange;
-          el['ongestureend'] = Input.gestureEnd;
-
-          window.ondeviceorientation = function(event) {
-            alpha = event.alpha;
-            beta = event.beta;
-            gamma = event.gamma;
-          };
-          window.ondevicemotion = function(event) {
-            ax = event.accelerationIncludingGravity.x;
-            ay = event.accelerationIncludingGravity.y;
-            az = event.accelerationIncludingGravity.z;
-          };
-        }
-        el['onmousewheel'] = function(event) {
-          Input.getMouseWheel(event, event.wheelDelta / 120);
-        };
-        if (JSGlobal.BROWSER != JSGlobal.IE &&
-            JSGlobal.BROWSER != JSGlobal.IE9) {
-          el['DOMMouseScroll'] = function(event) {
-            Input.getMouseWheel(event, event.detail / -3);
-          }
-        }
-
-        el['onkeypress'] = function(event) {return Input.handleTyping(event)};
-        el['onkeyup'] = function(event) {return Input.keyPress(event, 0)};
-        el['onkeydown'] = function(event) {return Input.keyPress(event, 1)};
-        if (JSGlobal.FIREFOX) {
-          document.onkeyup = function(event) {return Input.keyPress(event, 0)};
-          document.onkeydown = function(event) {return Input.keyPress(event, 1)};
-        }
-      }
-    }
-
     function drawElement(parent, ui) {
       var click = touch ? 'ontouchstart' : 'onmousedown';
       var move = touch ? 'ontouchmove' : 'onmousemove';
@@ -533,7 +483,6 @@ var UI = (function() {
     UI.addButton = addButton;
     UI.addScroll = addScroll;
     UI.setAllDirty = setAllDirty;
-    UI.hookUIEvents = hookUIEvents;
     UI.getGyro = getGyro;
     UI.getAccel = getAccel;
     UI.exists = exists;

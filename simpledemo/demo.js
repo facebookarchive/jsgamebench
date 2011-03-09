@@ -73,7 +73,7 @@ function init() {
     transform3d:true});
 
   GameFrame.setXbyY();
-  UI.hookUIEvents('gamebody');
+  Input.hookEvents('gamebody');
   loadImageList('/pvn/images/',['bouncing_pirate.png','background.jpg']);
   ClientCmd.install('clickButton',clickButton);
   ClientCmd.install('sendRequest',sendMove);

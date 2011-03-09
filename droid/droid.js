@@ -69,7 +69,7 @@ var Perf = (function() {
       ClientCmd.install('htmldemo', htmlDemo);
       ClientCmd.install('htmldemo', htmlDemo);
       ClientCmd.install('stopperftest', stopPerfTest);
-      UI.hookUIEvents('gamebody');
+      Input.hookEvents('gamebody');
     }
 
     function teardown() {
