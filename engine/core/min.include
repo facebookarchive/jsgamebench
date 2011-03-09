@@ -1,0 +1,19 @@
+<script type="text/javascript" src="/engine/core/globals.js"> </script>
+<script type="text/javascript" src="/engine/core/browser.js"> </script>
+
+ <script type="text/javascript" src="/engine/core/clientutils.js"> </script>
+ <script type="text/javascript" src="/engine/utils/utils.js"> </script>
+ <script type="text/javascript" src="/engine/core/ui.js"> </script>
+ <script type="text/javascript" src="/engine/core/clientcmd.js"> </script>
+
+
+<script type="text/javascript" src="/engine/core/tick.js"> </script>
+<script type="text/javascript" src="/engine/core/gameframe.js"> </script>
+<script type="text/javascript" src="/engine/core/gob.js"> </script>
+<script type="text/javascript" src="/engine/core/world.js"> </script>
+<script type="text/javascript" src="/engine/core/sprites.js"> </script>
+<script type="text/javascript" src="/engine/core/render.js"> </script>
+<script type="text/javascript" src="/engine/core/dom_render.js"> </script>
+<script type="text/javascript" src="/engine/core/canvas_render.js"> </script>
+<script type="text/javascript" src="/engine/core/input.js"> </script>
+<script type="text/javascript" src="/engine/core/init.js"> </script>
