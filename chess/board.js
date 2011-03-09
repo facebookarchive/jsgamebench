@@ -25,6 +25,7 @@ var Board = (function() {
     var state = [];
     var tomove = 0;
     var move = false;
+    var check = false;
 
     function init(erase) {
       dirty = true;
@@ -117,6 +118,28 @@ var Board = (function() {
 
     function toMove() {
       return tomove;
+    }
+
+    function inCheck() {
+      return check;
+    }
+
+    function setCheck(c) {
+      check = c;
+    }
+
+    function dumpBoard() {
+      var pieces = [];
+      for (var i=0;i<8;i++) {
+        for (var j=0;j<8;j++) {
+          var square = board[i+8*j];
+          if (square.piece) {
+            pieces.push(i+8*j);
+            pieces.push(square.piece.type*6+square.piece.color);
+          }
+        }
+      }
+      return pieces;
     }
 
     function makeMove(os,ns,piece) {
@@ -228,5 +251,7 @@ var Board = (function() {
     Board.setState = setState;
     Board.loadState = loadState;
     Board.initState = initState;
+    Board.inCheck = inCheck;
+    Board.setCheck = setCheck;
     return Board;
   })();

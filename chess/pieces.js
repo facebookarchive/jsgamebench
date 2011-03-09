@@ -101,64 +101,99 @@ var Pieces = (function() {
     }
 
     var possible_move = false;
+    var possible_check = false;
 
-    function tryMove(x,y,color,move,capture) {
-      if (x >= 0 && x < 8) {
-        if (y >= 0 && y < 8) {
-          var square = Board.getSquare(x,y);
-          if ((move && !square.piece) || (capture && square.piece && square.piece.color != color)) {
-            possible_move = true;
-            square.bright = true;
-            return true;
+    function checkCheck(color) {
+      possible_check = false;
+      for (var i=0;i<8;i++) {
+        for (var j=0;j<8;j++) {
+          var square = Board.getSquare(i,j);
+          if (square.piece && square.piece.color != color) {
+            if (possibleMoves(i,j,square.piece,true))
+              return true;
           }
         }
       }
       return false;
     }
 
-    function possibleMoves(x,y,piece) {
+    function tryMove(ox,oy,nx,ny,color,move,capture,testcheck) {
+      if (nx >= 0 && nx < 8) {
+        if (ny >= 0 && ny < 8) {
+          var square = Board.getSquare(nx,ny);
+          var osquare = Board.getSquare(ox,oy);
+          if (testcheck) {
+            if (capture && square.piece && square.piece.color != color && square.piece.type == King) {
+              possible_check = true;
+              return false;
+            } else if (move && !square.piece) {
+              return true;
+            }
+          } else {
+            if ((move && !square.piece) || (capture && square.piece && square.piece.color != color)) {
+              var tmp = square.piece;
+              square.piece = osquare.piece;
+              osquare.piece = null;
+              var check = checkCheck(color);
+              osquare.piece = square.piece;
+              square.piece = tmp;
+              if (!check) {
+                possible_move = true;
+                square.bright = true;
+                return true;
+              }
+            }
+          }
+        }
+      }
+      return false;
+    }
+
+    function possibleMoves(x,y,piece,testcheck) {
       var color = piece.color;
       var dir = -1;
       if (color == Black) {
         dir = 1;
       }
-      possible_move = false;
+      if (!testcheck) {
+        possible_move = false;
+      }
       switch(piece.type) {
         case Pawn:
-          if (tryMove(x,y+dir,color,true,false)) {
+          if (tryMove(x,y,x,y+dir,color,true,false,testcheck)) {
             if ((color == White && y == 6) || (y == 1))
-              tryMove(x,y+2*dir,color,true,false);
+              tryMove(x,y,x,y+2*dir,color,true,false,testcheck);
           }
-          tryMove(x-1,y+dir,color,false,true);
-          tryMove(x+1,y+dir,color,false,true);
+          tryMove(x,y,x-1,y+dir,color,false,true,testcheck);
+          tryMove(x,y,x+1,y+dir,color,false,true,testcheck);
           break;
         case Rook:
           var open = true;
           var step = 1;
           while(open) {
-            tryMove(x+step*dir,y,color,true,true);
-            open = tryMove(x+step*dir,y,color,true,false);
+            tryMove(x,y,x+step*dir,y,color,true,true,testcheck);
+            open = tryMove(x,y,x+step*dir,y,color,true,false,testcheck);
             step++;
           }
           open = true;
           step = 1;
           while(open) {
-            tryMove(x-step*dir,y,color,true,true);
-            open = tryMove(x-step*dir,y,color,true,false);
+            tryMove(x,y,x-step*dir,y,color,true,true,testcheck);
+            open = tryMove(x,y,x-step*dir,y,color,true,false,testcheck);
             step++;
           }
           open = true;
           step = 1;
           while(open) {
-            tryMove(x,y+step*dir,color,true,true);
-            open = tryMove(x,y+step*dir,color,true,false);
+            tryMove(x,y,x,y+step*dir,color,true,true,testcheck);
+            open = tryMove(x,y,x,y+step*dir,color,true,false,testcheck);
             step++;
           }
           open = true;
           step = 1;
           while(open) {
-            tryMove(x,y-step*dir,color,true,true);
-            open = tryMove(x,y-step*dir,color,true,false);
+            tryMove(x,y,x,y-step*dir,color,true,true,testcheck);
+            open = tryMove(x,y,x,y-step*dir,color,true,false,testcheck);
             step++;
           }
           break;
@@ -166,29 +201,29 @@ var Pieces = (function() {
           var open = true;
           var step = 1;
           while(open) {
-            tryMove(x+step*dir,y+step*dir,color,true,true);
-            open = tryMove(x+step*dir,y+step*dir,color,true,false);
+            tryMove(x,y,x+step*dir,y+step*dir,color,true,true,testcheck);
+            open = tryMove(x,y,x+step*dir,y+step*dir,color,true,false,testcheck);
             step++;
           }
           open = true;
           step = 1;
           while(open) {
-            tryMove(x-step*dir,y-step*dir,color,true,true);
-            open = tryMove(x-step*dir,y-step*dir,color,true,false);
+            tryMove(x,y,x-step*dir,y-step*dir,color,true,true,testcheck);
+            open = tryMove(x,y,x-step*dir,y-step*dir,color,true,false,testcheck);
             step++;
           }
           open = true;
           step = 1;
           while(open) {
-            tryMove(x+step*dir,y-step*dir,color,true,true);
-            open = tryMove(x+step*dir,y-step*dir,color,true,false);
+            tryMove(x,y,x+step*dir,y-step*dir,color,true,true,testcheck);
+            open = tryMove(x,y,x+step*dir,y-step*dir,color,true,false,testcheck);
             step++;
           }
           open = true;
           step = 1;
           while(open) {
-            tryMove(x-step*dir,y+step*dir,color,true,true);
-            open = tryMove(x-step*dir,y+step*dir,color,true,false);
+            tryMove(x,y,x-step*dir,y+step*dir,color,true,true,testcheck);
+            open = tryMove(x,y,x-step*dir,y+step*dir,color,true,false,testcheck);
             step++;
           }
           break;
@@ -196,82 +231,86 @@ var Pieces = (function() {
           var open = true;
           var step = 1;
           while(open) {
-            tryMove(x+step*dir,y+step*dir,color,true,true);
-            open = tryMove(x+step*dir,y+step*dir,color,true,false);
+            tryMove(x,y,x+step*dir,y+step*dir,color,true,true,testcheck);
+            open = tryMove(x,y,x+step*dir,y+step*dir,color,true,false,testcheck);
             step++;
           }
           open = true;
           step = 1;
           while(open) {
-            tryMove(x-step*dir,y-step*dir,color,true,true);
-            open = tryMove(x-step*dir,y-step*dir,color,true,false);
+            tryMove(x,y,x-step*dir,y-step*dir,color,true,true,testcheck);
+            open = tryMove(x,y,x-step*dir,y-step*dir,color,true,false,testcheck);
             step++;
           }
           open = true;
           step = 1;
           while(open) {
-            tryMove(x+step*dir,y-step*dir,color,true,true);
-            open = tryMove(x+step*dir,y-step*dir,color,true,false);
+            tryMove(x,y,x+step*dir,y-step*dir,color,true,true,testcheck);
+            open = tryMove(x,y,x+step*dir,y-step*dir,color,true,false,testcheck);
             step++;
           }
           open = true;
           step = 1;
           while(open) {
-            tryMove(x-step*dir,y+step*dir,color,true,true);
-            open = tryMove(x-step*dir,y+step*dir,color,true,false);
+            tryMove(x,y,x-step*dir,y+step*dir,color,true,true,testcheck);
+            open = tryMove(x,y,x-step*dir,y+step*dir,color,true,false,testcheck);
             step++;
           }
           open = true;
           step = 1;
           while(open) {
-            tryMove(x+step*dir,y,color,true,true);
-            open = tryMove(x+step*dir,y,color,true,false);
+            tryMove(x,y,x+step*dir,y,color,true,true,testcheck);
+            open = tryMove(x,y,x+step*dir,y,color,true,false,testcheck);
             step++;
           }
           open = true;
           step = 1;
           while(open) {
-            tryMove(x-step*dir,y,color,true,true);
-            open = tryMove(x-step*dir,y,color,true,false);
+            tryMove(x,y,x-step*dir,y,color,true,true,testcheck);
+            open = tryMove(x,y,x-step*dir,y,color,true,false,testcheck);
             step++;
           }
           open = true;
           step = 1;
           while(open) {
-            tryMove(x,y+step*dir,color,true,true);
-            open = tryMove(x,y+step*dir,color,true,false);
+            tryMove(x,y,x,y+step*dir,color,true,true,testcheck);
+            open = tryMove(x,y,x,y+step*dir,color,true,false,testcheck);
             step++;
           }
           open = true;
           step = 1;
           while(open) {
-            tryMove(x,y-step*dir,color,true,true);
-            open = tryMove(x,y-step*dir,color,true,false);
+            tryMove(x,y,x,y-step*dir,color,true,true,testcheck);
+            open = tryMove(x,y,x,y-step*dir,color,true,false,testcheck);
             step++;
           }
           break;
         case King:
-          tryMove(x,y+1,color,true,true);
-          tryMove(x+1,y+1,color,true,true);
-          tryMove(x+1,y,color,true,true);
-          tryMove(x+1,y-1,color,true,true);
-          tryMove(x,y-1,color,true,true);
-          tryMove(x-1,y-1,color,true,true);
-          tryMove(x-1,y,color,true,true);
-          tryMove(x-1,y+1,color,true,true);
+          tryMove(x,y,x,y+1,color,true,true,testcheck);
+          tryMove(x,y,x+1,y+1,color,true,true,testcheck);
+          tryMove(x,y,x+1,y,color,true,true,testcheck);
+          tryMove(x,y,x+1,y-1,color,true,true,testcheck);
+          tryMove(x,y,x,y-1,color,true,true,testcheck);
+          tryMove(x,y,x-1,y-1,color,true,true,testcheck);
+          tryMove(x,y,x-1,y,color,true,true,testcheck);
+          tryMove(x,y,x-1,y+1,color,true,true,testcheck);
           break;
         case Knight:
-          tryMove(x+1,y+2,color,true,true);
-          tryMove(x+2,y+1,color,true,true);
-          tryMove(x+2,y-1,color,true,true);
-          tryMove(x+1,y-2,color,true,true);
-          tryMove(x-1,y+2,color,true,true);
-          tryMove(x-2,y+1,color,true,true);
-          tryMove(x-2,y-1,color,true,true);
-          tryMove(x-1,y-2,color,true,true);
+          tryMove(x,y,x+1,y+2,color,true,true,testcheck);
+          tryMove(x,y,x+2,y+1,color,true,true,testcheck);
+          tryMove(x,y,x+2,y-1,color,true,true,testcheck);
+          tryMove(x,y,x+1,y-2,color,true,true,testcheck);
+          tryMove(x,y,x-1,y+2,color,true,true,testcheck);
+          tryMove(x,y,x-2,y+1,color,true,true,testcheck);
+          tryMove(x,y,x-2,y-1,color,true,true,testcheck);
+          tryMove(x,y,x-1,y-2,color,true,true,testcheck);
           break;
       }
-      return possible_move;
+      if (testcheck) {
+        return possible_check;
+      } else {
+        return possible_move;
+      }
     }
 
     function select(x,y) {
@@ -310,6 +349,7 @@ var Pieces = (function() {
           square.piece = selected;
           selected = false;
           Chess.newGameState('moved');
+          Publish.sendMove();
         }
       }
     }
