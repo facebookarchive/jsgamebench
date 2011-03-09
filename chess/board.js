@@ -25,6 +25,7 @@ var Board = (function() {
     var state = [];
     var tomove = 0;
     var move = false;
+    var check = false;
 
     function init(erase) {
       dirty = true;
@@ -117,6 +118,14 @@ var Board = (function() {
 
     function toMove() {
       return tomove;
+    }
+
+    function inCheck() {
+      return check;
+    }
+
+    function setCheck(c) {
+      check = c;
     }
 
     function dumpBoard() {
@@ -234,5 +243,7 @@ var Board = (function() {
     Board.setState = setState;
     Board.loadState = loadState;
     Board.initState = initState;
+    Board.inCheck = inCheck;
+    Board.setCheck = setCheck;
     return Board;
   })();
