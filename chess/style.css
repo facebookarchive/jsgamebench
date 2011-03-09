@@ -6,4 +6,6 @@
 
 img {
   -webkit-transition: -webkit-transform 1s linear;
+  -moz-transition: -moz-transform 1s linear;
+  transition: transform 1s linear;
 }
