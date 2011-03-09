@@ -363,7 +363,7 @@ var Perf = (function() {
       ClientCmd.install('logperf', logPerf);
       ClientCmd.install('perfresp', perfResponse);
       ClientCmd.install('perfquery', perfQuery);
-      UI.hookUIEvents('gamebody');
+      Input.hookEvents('gamebody');
       if (!JSGlobal.mobile) {
         Xhr.init();
         Xhr.toServer({cmd: '', args: []});

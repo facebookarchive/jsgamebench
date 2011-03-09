@@ -103,7 +103,7 @@
     });
 
     GameFrame.setXbyY();
-    UI.hookUIEvents('gamebody');
+    Input.hookEvents('gamebody');
 
     ClientCmd.install('start', startCmd);
     ClientCmd.install('reset', resetCmd);
@@ -112,7 +112,6 @@
   }
 
   function resize() {
-    //console.log('resize');
     render_inited = false;
 
     UI.addCollection('', 'buttons', {pos: [0, 0]});

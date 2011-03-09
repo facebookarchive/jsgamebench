@@ -184,7 +184,7 @@ var Chess = (function() {
       var hash = window.location.hash;
       hash = hash.length && hash.substr(1);
       if (hash) {
-        replay = JSON.parse(decodeURIComponent(hash));
+        replay = FB.JSON.parse(decodeURIComponent(hash));
         Gob.delAll();
         Board.init();
         Chess.newGameState('replay');
@@ -215,7 +215,7 @@ var Chess = (function() {
         transform3d:true});
 
       GameFrame.setXbyY();
-      UI.hookUIEvents('gamebody');
+      Input.hookEvents('gamebody');
       ClientCmd.install('sendRequest',Publish.sendMove);
       ClientCmd.install('publishStory',Publish.publishStory);
       ClientCmd.install('login',Publish.fbLogin);

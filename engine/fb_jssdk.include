@@ -1,6 +1,1 @@
-    <script src="http://static.ak.fbcdn.net/connect/en_US/core.debug.js"></script>
-    <script type="text/javascript">
-      if (window.fbrpc) {
-        window.fbrpc.call('setOrientation', '{"orientation": "landscape"}');
-      }
-    </script>
+<script src="http://connect.facebook.net/en_US/all.js"></script>
