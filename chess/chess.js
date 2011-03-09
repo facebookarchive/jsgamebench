@@ -91,15 +91,9 @@ var Chess = (function() {
     }
 
     function tick() {
-      if (explo) {
-        explo.frame += 1;
-        explo.dirty = 1;
-        if (explo.frame >= Gob.numFrames(explo.id)) {
-          Gob.del(explo.id);
-          explo = 0;
-        }
-       }
-      if (!playback) {
+      if (Pieces.isAnimating()) {
+        Pieces.updateMove();
+      } else if (!playback) {
         if (game_state == 'playing') {
           if (Input.mouse.buttons[0]) {
             Input.mouse.buttons[0] = 0;
@@ -123,14 +117,10 @@ var Chess = (function() {
           }
         }
       } else {
-        pbframe++;
-        if (pbframe == 20) {
-          pbframe = 0;
-          move++;
-          Board.setState(move);
-          if (move == Board.getMove()) {
-            playback = false;
-          }
+        move++;
+        Board.setState(move);
+        if (move == Board.getMove()) {
+          playback = false;
         }
       }
       if (game_state == 'login' && Publish.isLoggedIn()) {
@@ -152,6 +142,8 @@ var Chess = (function() {
             break;
           case 'menu':
             button('New Game',[Start,Start], { cmd:['newGame']});
+            break;
+          case 'moving':
             break;
           case 'moved':
             button('Send Move', [End,End], { cmd:['sendRequest'] });

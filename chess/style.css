@@ -3,9 +3,3 @@
   background: #5B74A8;
   font-size:22px;
 }
-
-img {
-  -webkit-transition: -webkit-transform 1s linear;
-  -moz-transition: -moz-transform 1s linear;
-  transition: transform 1s linear;
-}
