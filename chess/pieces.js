@@ -395,7 +395,7 @@ var Pieces = (function() {
           selected = false;
           setMoveTarget(selsquare, square, 1000);
           setAnimatingCB(Publish.sendMove);
-//          Chess.newGameState('moved');
+          Chess.newGameState('moved');
         }
       }
     }

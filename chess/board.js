@@ -234,6 +234,26 @@ var Board = (function() {
       return move;
     }
 
+    function undoMove() {
+      var board = [];
+      var last = state[state.length - 1].board;
+      var x,y;
+      for (var i=0;i<last.length;i += 2) {
+        var pos = last[i];
+        x = pos % 8;
+        y = (pos / 8) | 0;
+        var ct = last[i+1];
+        var type = (ct / 6) | 0;
+        var color = ct % 6;
+        board.push([type,color,x,y]);
+      }
+      state.pop();
+      move--;
+      tomove = !tomove;
+      initState(board, tomove);
+      Chess.newGameState('playing');
+    }
+
     var Board = {};
     Board.init = init;
     Board.tick = tick;
@@ -253,5 +273,6 @@ var Board = (function() {
     Board.initState = initState;
     Board.inCheck = inCheck;
     Board.setCheck = setCheck;
+    Board.undoMove = undoMove;
     return Board;
   })();

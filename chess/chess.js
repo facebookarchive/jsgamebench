@@ -99,21 +99,8 @@ var Chess = (function() {
             Input.mouse.buttons[0] = 0;
             var dx = Input.mouse.x;
             var dy = Input.mouse.y;
-            if (move == Board.getMove()) {
-              Pieces.select(dx,dy);
-              move = Board.getMove();
-            }
-          } else if (Input.key_state[32]) {
-            Input.key_state[32] = 0;
-            startPlayback();
-          } else if (Input.key_state[Key.LEFT]) {
-            Input.key_state[Key.LEFT] = 0;
-            move > 0 ? --move : 0;
-            Board.setState(move);
-          } else if (Input.key_state[Key.RIGHT]) {
-            Input.key_state[Key.RIGHT] = 0;
-            move < Board.getMove() ? move++ : move;
-            Board.setState(move);
+            Pieces.select(dx,dy);
+            move = Board.getMove();
           }
         }
       } else {

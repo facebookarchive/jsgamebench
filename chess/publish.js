@@ -171,12 +171,14 @@ var Publish = (function() {
       cmd.to = req.from.id;
     }
     FB.ui(cmd, function(response) {
-      if (response && !response.error) {
-        player.active_req = 0;
-        removeRequest(req);
-        Chess.newGameState('menu');
-      }
-    });
+        if (response && !response.error) {
+          player.active_req = 0;
+          removeRequest(req);
+          Chess.newGameState('menu');
+        } else {
+          Board.undoMove();
+        }
+      });
   }
 
   function sendMove() {
