@@ -140,9 +140,25 @@ var Pieces = (function() {
               if (!check) {
                 possible_move = true;
                 square.bright = true;
-                return true;
               }
+              return true;
             }
+          }
+        }
+      }
+      return false;
+    }
+
+    function testEnpassant(ox,oy,nx,ny,color) {
+      if (nx >= 0 && nx < 8) {
+        if (ny >= 0 && ny < 8) {
+          var tsquare = Board.getSquare(nx,oy);
+          var square = Board.getSquare(nx,ny);
+          var osquare = Board.getSquare(ox,oy);
+          if (!square.piece && tsquare.piece && tsquare.piece.color != color && tsquare.piece.enpassant == Board.getMove()) {
+            possible_move = true;
+            square.bright = true;
+            return true;
           }
         }
       }
@@ -163,6 +179,10 @@ var Pieces = (function() {
           if (tryMove(x,y,x,y+dir,color,true,false,testcheck)) {
             if ((color == White && y == 6) || (y == 1))
               tryMove(x,y,x,y+2*dir,color,true,false,testcheck);
+          }
+          if (!testcheck) {
+            testEnpassant(x,y,x-1,y+dir,color);
+            testEnpassant(x,y,x+1,y+dir,color);
           }
           tryMove(x,y,x-1,y+dir,color,false,true,testcheck);
           tryMove(x,y,x+1,y+dir,color,false,true,testcheck);
@@ -294,6 +314,37 @@ var Pieces = (function() {
           tryMove(x,y,x-1,y-1,color,true,true,testcheck);
           tryMove(x,y,x-1,y,color,true,true,testcheck);
           tryMove(x,y,x-1,y+1,color,true,true,testcheck);
+          if (!piece.move && !testcheck) {
+            if ((color == White && y == 7 && x == 4) || (y == 0 && x == 4)) {
+              var square = Board.getSquare(3,y);
+              if (!square.piece) {
+                square = Board.getSquare(2,y);
+                if (!square.piece) {
+                  square = Board.getSquare(1,y);
+                  if (!square.piece) {
+                    square = Board.getSquare(0,y);
+                    if (square.piece.type == Rook && !square.piece.move) {
+                      square = Board.getSquare(2,y);
+                      possible_move = true;
+                      square.bright = true;
+                    }
+                  }
+                }
+              }
+              square = Board.getSquare(5,y);
+              if (!square.piece) {
+                square = Board.getSquare(6,y);
+                if (!square.piece) {
+                  square = Board.getSquare(7,y);
+                  if (square.piece.type == Rook && !square.piece.move) {
+                    square = Board.getSquare(6,y);
+                    possible_move = true;
+                    square.bright = true;
+                  }
+                }
+              }
+            }
+          }
           break;
         case Knight:
           tryMove(x,y,x+1,y+2,color,true,true,testcheck);
@@ -346,16 +397,39 @@ var Pieces = (function() {
         var am = moving[i];
         var delta = now - am.start;
         if (delta > am.time) {
+          if (am.os.piece.type == Pawn) {
+            if (Math.abs(am.ns.j - am.os.j) == 2) {
+              am.os.piece.enpassant = Board.getMove();
+            } else if (am.ns.i != am.os.i && !am.ns.piece) {
+              var ep = Board.getSquare(am.ns.i,am.ns.j+(am.os.piece.color == White ? 1 : -1));
+              if (ep.piece) {
+                Gob.del(ep.piece.id);
+                ep.piece = null;
+              }
+            } else if (am.ns.j == (am.os.piece.color == White ? 0 : 7)) {
+              var color = am.os.piece.color;
+              Gob.del(am.os.piece.id);
+              var tmp = addPieceGob(am.os, Queen, color, 0);
+            }
+          }
+          if (am.os.piece.type == King) {
+            if (Math.abs(am.ns.i - am.os.i) == 2) {
+              var rk = Board.getSquare(am.ns.i == 2 ? 0 : 7,am.ns.j);
+              var rkdst = Board.getSquare(am.ns.i == 2 ? 3 : 5,am.ns.j);
+              setMoveTarget(rk,rkdst, 1000);
+            }
+          }
           if (am.ns.piece) {
             Gob.del(am.ns.piece.id);
           }
           am.ns.piece = am.os.piece;
           am.os.piece = null;
           am.ns.piece.pos = [am.ns.left + am.ns.delta*0.5,am.ns.top + am.ns.delta*0.5];
+          am.ns.piece.move = Board.getMove();
           am.ns.piece.dirty = true;
           moving.splice(i,1);
         } else {
-          animating = true;;
+          animating = true;
           am.os.piece.pos = [am.sx + am.dx*delta/am.time,am.sy + am.dy*delta/am.time];
           am.os.piece.dirty = true;
         }
@@ -395,7 +469,7 @@ var Pieces = (function() {
           selected = false;
           setMoveTarget(selsquare, square, 1000);
           setAnimatingCB(Publish.sendMove);
-//          Chess.newGameState('moved');
+          Chess.newGameState('moved');
         }
       }
     }
