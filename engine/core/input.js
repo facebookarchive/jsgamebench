@@ -167,6 +167,7 @@ var Input = (function() {
     }
 
     function hookEvents(eid) {
+      Browser.mobile = true;
       touch = Browser.mobile;
       var el = document.getElementById(eid);
       if (el) {
