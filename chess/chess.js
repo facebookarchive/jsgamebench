@@ -89,6 +89,8 @@ var Chess = (function() {
       if (options.cmd) {
         options.command = { cmd: options.cmd[0], args: options.cmd.slice(1) };
       }
+      //var button = Publish.makeBox(FB.$('ui'),name,options.pos,size);
+      //button.innerHTML = name;
       UI.addButton('buttons', name, options);
     }
 
@@ -160,6 +162,7 @@ var Chess = (function() {
     }
 
     function postImageLoad() {
+      Publish.makeBox(FB.$('gamebody'),'ui',[0,0],[0,0]);
       Board.init();
       Pieces.init();
       var hash = window.location.hash;

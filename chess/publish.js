@@ -77,7 +77,7 @@ var Publish = (function() {
   }
 
   function makeBox(parent,name,pos,size) {
-    var style='left:'+pos[0]+'px;top:'+pos[1]+'px;width:'+size[0]+'px;'+size[1]+':60px;position:absolute;z-index:10000;align:top;'
+    var style='left:'+pos[0]+'px;top:'+pos[1]+'px;width:'+size[0]+'px;height:'+size[1]+'px;position:absolute;z-index:10000;align:top;'
     var el = FB.$(name);
     if (!el) {
       parent.innerHTML += '<div id="'+name+'" class="chess"></div>';
