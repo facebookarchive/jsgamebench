@@ -149,6 +149,22 @@ var Pieces = (function() {
       return false;
     }
 
+    function testEnpassant(ox,oy,nx,ny,color) {
+      if (nx >= 0 && nx < 8) {
+        if (ny >= 0 && ny < 8) {
+          var tsquare = Board.getSquare(nx,oy);
+          var square = Board.getSquare(nx,ny);
+          var osquare = Board.getSquare(ox,oy);
+          if (!square.piece && tsquare.piece && tsquare.piece.color != color && tsquare.piece.enpassant == Board.getMove()) {
+            possible_move = true;
+            square.bright = true;
+            return true;
+          }
+        }
+      }
+      return false;
+    }
+
     function possibleMoves(x,y,piece,testcheck) {
       var color = piece.color;
       var dir = -1;
@@ -163,6 +179,10 @@ var Pieces = (function() {
           if (tryMove(x,y,x,y+dir,color,true,false,testcheck)) {
             if ((color == White && y == 6) || (y == 1))
               tryMove(x,y,x,y+2*dir,color,true,false,testcheck);
+          }
+          if (!testcheck) {
+            testEnpassant(x,y,x-1,y+dir,color);
+            testEnpassant(x,y,x+1,y+dir,color);
           }
           tryMove(x,y,x-1,y+dir,color,false,true,testcheck);
           tryMove(x,y,x+1,y+dir,color,false,true,testcheck);
@@ -346,6 +366,17 @@ var Pieces = (function() {
         var am = moving[i];
         var delta = now - am.start;
         if (delta > am.time) {
+          if (am.os.piece.type == Pawn) {
+            if (Math.abs(am.ns.j - am.os.j) == 2) {
+              am.os.piece.enpassant = Board.getMove();
+            } else if (am.ns.i != am.os.i && !am.ns.piece) {
+              var ep = Board.getSquare(am.ns.i,am.ns.j+(am.os.piece.color == White ? 1 : -1));
+              if (ep.piece) {
+                Gob.del(ep.piece.id);
+                ep.piece = null;
+              }
+            }
+          }
           if (am.ns.piece) {
             Gob.del(am.ns.piece.id);
           }
@@ -355,7 +386,7 @@ var Pieces = (function() {
           am.ns.piece.dirty = true;
           moving.splice(i,1);
         } else {
-          animating = true;;
+          animating = true;
           am.os.piece.pos = [am.sx + am.dx*delta/am.time,am.sy + am.dy*delta/am.time];
           am.os.piece.dirty = true;
         }
