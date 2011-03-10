@@ -39,6 +39,8 @@ var Chess = (function() {
 
     function newGameState(state) {
       UI.del('buttons');
+      Publish.removeTree('ui');
+      Publish.makeBox(FB.$('gamebody'),'ui',[0,0],[0,0]);
       UI.addCollection('', 'buttons', {pos: [0, 0]});
       game_state = state;
       if (state == 'menu') {

@@ -15,7 +15,7 @@
 var Publish = (function() {
   var BoardVersion = 2;
   var fb_logged_in;
-  var player = {savedRequests: {}, active_req: 0};
+  var player = {savedRequests: {}, active_req: 0 };
 
   function clearOpponent() {
     player.active_req = 0;
@@ -66,11 +66,33 @@ var Publish = (function() {
     }
   }
 
-  function onReqClick(req) {
-    UI.del('req'+req.id);
-    if (player.savedRequests[req.id]) {
+  function removeTree(name) {
+    var cell = document.getElementById(name);
+    if (cell) {
+      while (cell.childNodes.length >= 1) {
+        cell.removeChild(cell.firstChild );       
+      } 
+      cell.parentNode.removeChild(cell);
+    }
+  }
+
+  function makeBox(parent,name,pos,size) {
+    var style='left:'+pos[0]+'px;top:'+pos[1]+'px;width:'+size[0]+'px;'+size[1]+':60px;position:absolute;z-index:10000;align:top;'
+    var el = FB.$(name);
+    if (!el) {
+      parent.innerHTML += '<div id="'+name+'" class="chess"></div>';
+      el = FB.$(name);
+    }
+    el.style.cssText = style;
+    return FB.$(name);
+  }
+
+  function onReqClick(req_id) {
+    var req = player.requests[req_id];
+    if (!req) {
       return;
     }
+    removeTree('requests');
     player.active_req = req;
     var data = req.data;
     req.concede = data.concede;
@@ -92,8 +114,8 @@ var Publish = (function() {
   }
 
   function addName(name,uid,pos,size) {
-    markup = '<img src="http://graph.facebook.com/'+uid+'/picture" /> '+FB.String.escapeHTML(name);
-    UI.addHTML('buttons', 'name_'+uid, { pos: pos, width: size[0], height: size[1], uiclass: 'chess',markup: markup });
+    var button = makeBox(FB.$('ui'),'name_'+uid,pos,size);
+    button.innerHTML = '<img src="http://graph.facebook.com/'+uid+'/picture" /> '+FB.String.escapeHTML(name);
   }
 
   function addMyName(pos,size) {
@@ -109,20 +131,13 @@ var Publish = (function() {
   }
 
   function addRequestButton(req,x,y) {
-    var req_label = 'req'+req.id;
-    if (UI.exists(req_label)) {
-      return;
-    }
-    markup = FB.String.format(
-      '<img src="http://graph.facebook.com/{0}/picture" />{1}: {2}',
-      req.from.id,
-      FB.String.escapeHTML(req.from.name) + '<br />',
-      FB.String.escapeHTML(req.message));
-    UI.addButton('buttons', req_label,
-    {pos: [x,y], width: 400, height: 60, fontsize: '150%',
-    text: markup, command: {cmd: 'onReqClick', args: [req] }, req: req});
+    var name = 'req_'+req.id;
+    var button = makeBox(FB.$('requests'),name,[x,y],[450,60]);
+    button.innerHTML = '<img src="http://graph.facebook.com/'+req.from.id+'/picture"/>';
+    var text = makeBox(button,'text_'+req.id,[60,0],[390,60]);
+    text.innerHTML = '<div onclick="Publish.onReqClick('+req.id+');">' + req.from.name + '<br>' + req.message + '</div>';
   }
-
+  
   function getRequests() {
     FB.api('me/apprequests', function(result) {
       var reqs = result.data;
@@ -134,17 +149,17 @@ var Publish = (function() {
       for(var i=reqs.length-1;i>=0;i--) {
         var req = reqs[i];
         req.data = req.data && FB.JSON.parse(req.data);
-        if (!req.data.v || req.data.v != BoardVersion) {
+        if (!req.data.v || req.data.v != BoardVersion || player.savedRequests[req.id]) {
           removeRequest(req);
           reqs.splice(i,1);
         }
       }
+      player.requests = {};
+      makeBox(FB.$('gameframe'),'requests',[0,0],[0,0]).innerHTML = '';
       for(var i=0;i<reqs.length;i++) {
         var req = reqs[i];
-        if (player.savedRequests[req.id]) {
-          continue;
-        }
-        addRequestButton(req,60, 70 + 65*i);
+        player.requests[req.id] = req;
+        addRequestButton(req,60, 70 + 75*i);
       }
     });
   }
@@ -186,7 +201,7 @@ var Publish = (function() {
     } else {
       var t = new Date;
       var time_str = (t.getHours() % 12) +':'+ t.getMinutes() + (t.getHours()<=12 ? 'AM' : 'PM') + ' ' + t.toString().split(' ')[0];
-      Publish.sendRequest('I made my move! (game started '+time_str+')',payload);
+      Publish.sendRequest('(game started '+time_str+')',payload);
     }
   }
 
@@ -239,6 +254,9 @@ var Publish = (function() {
     addReqName : addReqName,
     addMyName : addMyName,
     addReplayName : addReplayName,
-    sendMove : sendMove
+    onReqClick : onReqClick,
+    sendMove : sendMove,
+    removeTree: removeTree,
+    makeBox: makeBox
   };
 })();
