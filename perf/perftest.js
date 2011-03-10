@@ -387,7 +387,7 @@ var PerfTest = (function() {
       } else {
         var result = FBmark.peak();
         Perf.myscore = parseInt(result.score);
-        ClientCmd.logperf(Perf.browser_version, result);
+        ClientCmd.logperf(Browser.browser_version, result);
         alert("Your score was " + Perf.myscore + " sprites!");
         FBmark.reset();
         PerfTest.stop();

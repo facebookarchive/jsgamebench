@@ -29,7 +29,7 @@ var Browser = (function() {
       ios: false,
       threeD: false,
       os: '',
-      
+
       winsize: [0,0],
       winpos: [0,0]
     }
