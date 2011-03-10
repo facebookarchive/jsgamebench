@@ -140,8 +140,8 @@ var Pieces = (function() {
               if (!check) {
                 possible_move = true;
                 square.bright = true;
-                return true;
               }
+              return true;
             }
           }
         }
@@ -314,6 +314,37 @@ var Pieces = (function() {
           tryMove(x,y,x-1,y-1,color,true,true,testcheck);
           tryMove(x,y,x-1,y,color,true,true,testcheck);
           tryMove(x,y,x-1,y+1,color,true,true,testcheck);
+          if (!piece.move && !testcheck) {
+            if ((color == White && y == 7 && x == 4) || (y == 0 && x == 4)) {
+              var square = Board.getSquare(3,y);
+              if (!square.piece) {
+                square = Board.getSquare(2,y);
+                if (!square.piece) {
+                  square = Board.getSquare(1,y);
+                  if (!square.piece) {
+                    square = Board.getSquare(0,y);
+                    if (square.piece.type == Rook && !square.piece.move) {
+                      square = Board.getSquare(2,y);
+                      possible_move = true;
+                      square.bright = true;
+                    }
+                  }
+                }
+              }
+              square = Board.getSquare(5,y);
+              if (!square.piece) {
+                square = Board.getSquare(6,y);
+                if (!square.piece) {
+                  square = Board.getSquare(7,y);
+                  if (square.piece.type == Rook && !square.piece.move) {
+                    square = Board.getSquare(6,y);
+                    possible_move = true;
+                    square.bright = true;
+                  }
+                }
+              }
+            }
+          }
           break;
         case Knight:
           tryMove(x,y,x+1,y+2,color,true,true,testcheck);
@@ -375,6 +406,17 @@ var Pieces = (function() {
                 Gob.del(ep.piece.id);
                 ep.piece = null;
               }
+            } else if (am.ns.j == (am.os.piece.color == White ? 0 : 7)) {
+              var color = am.os.piece.color;
+              Gob.del(am.os.piece.id);
+              var tmp = addPieceGob(am.os, Queen, color, 0);
+            }
+          }
+          if (am.os.piece.type == King) {
+            if (Math.abs(am.ns.i - am.os.i) == 2) {
+              var rk = Board.getSquare(am.ns.i == 2 ? 0 : 7,am.ns.j);
+              var rkdst = Board.getSquare(am.ns.i == 2 ? 3 : 5,am.ns.j);
+              setMoveTarget(rk,rkdst, 1000);
             }
           }
           if (am.ns.piece) {
@@ -383,6 +425,7 @@ var Pieces = (function() {
           am.ns.piece = am.os.piece;
           am.os.piece = null;
           am.ns.piece.pos = [am.ns.left + am.ns.delta*0.5,am.ns.top + am.ns.delta*0.5];
+          am.ns.piece.move = Board.getMove();
           am.ns.piece.dirty = true;
           moving.splice(i,1);
         } else {
