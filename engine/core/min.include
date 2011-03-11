@@ -1,10 +1,6 @@
 <script type="text/javascript" src="/engine/core/browser.js"> </script>
-
- <script type="text/javascript" src="/engine/core/clientutils.js"> </script>
- <script type="text/javascript" src="/engine/utils/utils.js"> </script>
- <script type="text/javascript" src="/engine/core/ui.js"> </script>
- <script type="text/javascript" src="/engine/core/clientcmd.js"> </script>
-
+<script type="text/javascript" src="/engine/core/min_ui.js"> </script>
+<script type="text/javascript" src="/engine/utils/utils.js"> </script>
 <script type="text/javascript" src="/engine/core/tick.js"> </script>
 <script type="text/javascript" src="/engine/core/gameframe.js"> </script>
 <script type="text/javascript" src="/engine/core/gob.js"> </script>
