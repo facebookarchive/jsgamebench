@@ -119,10 +119,10 @@ var Publish = (function() {
     }
   }
   
-  function getRequests() {
+  function getRequests(valid_state) {
     FB.api('me/apprequests', function(result) {
       var reqs = result.data;
-      if (!reqs) {
+      if (!reqs || valid_state != Chess.gameState()) {
         return;
       }
       player.savedRequests = player.savedRequests || {};

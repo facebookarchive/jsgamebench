@@ -9,6 +9,10 @@ var Chess = (function() {
     var replay = {};
     var Start = UI.Start, Middle = UI.Middle, End = UI.End;
 
+    function gameState() {
+      return game_state;
+    }
+    
     function startPlayback() {
       playback = true;
       move = 0;
@@ -39,11 +43,14 @@ var Chess = (function() {
     }
 
     function newGameState(state) {
+      if (state == game_state) {
+        return;
+      }
       UI.removeTree('ui');
       UI.makeBox(FB.$('gamebody'),'ui',[0,0],[0,0]);
       game_state = state;
       if (state == 'menu') {
-        Publish.getRequests();
+        Publish.getRequests(game_state);
         request_time = 0;
         menu_time = (new Date).getTime();
       }
@@ -54,6 +61,9 @@ var Chess = (function() {
     }
 
     function tick() {
+      if (!FB.$('ui')) {
+        UI.makeBox(FB.$('gamebody'),'ui',[0,0],[0,0]);
+      }
       if (Pieces.isAnimating()) {
         Pieces.updateMove();
       } else if (!playback) {
@@ -79,7 +89,7 @@ var Chess = (function() {
       if (game_state == 'menu') {
         var dt = parseInt(((new Date).getTime() - menu_time) / 1000);
         if (dt > request_time) {
-          Publish.getRequests();
+          Publish.getRequests(game_state);
           request_time += Math.sqrt(dt);
         }
       }
@@ -122,7 +132,6 @@ var Chess = (function() {
     }
 
     function postImageLoad() {
-      UI.makeBox(FB.$('gamebody'),'ui',[0,0],[0,0]);
       Board.init();
       Pieces.init();
       var hash = window.location.hash;
@@ -189,6 +198,7 @@ var Chess = (function() {
       newGameState: newGameState,
       startPlayback: startPlayback,
       makeExplosion: makeExplosion,
+      gameState : gameState
     }
 })();
 

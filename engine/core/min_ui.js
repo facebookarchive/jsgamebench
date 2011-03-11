@@ -33,6 +33,9 @@ var UI = (function() {
         el.id = name;
         el.className = class_name;
         parent.appendChild(el);
+        if (!el) {
+          console.log('xx');
+        }
       }
       el.style.cssText = style;
       return el;
