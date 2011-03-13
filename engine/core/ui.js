@@ -22,7 +22,6 @@ var UI = (function() {
     var globals = {};
     var histories = {};
     var all_dirty = true;
-    var touch = false;
 
     var last_settings = {};
 
@@ -373,23 +372,8 @@ var UI = (function() {
       setCollectionID(collectionid, id);
     }
 
-    var alpha = 0, beta = 0, gamma = 0;
-    var lalpha = 0, lbeta = 0, lgamma = 0;
-
-    function getGyro() {
-      return [alpha - lalpha, beta - lbeta, gamma - lgamma];
-      lalpha = alpha;
-      lbeta = beta;
-      lgamma = gamma;
-    }
-
-    var ax, ay, az;
-
-    function getAccel() {
-      return [ax, ay, az];
-    }
-
     function drawElement(parent, ui) {
+      var touch = Browser.mobile;
       var click = touch ? 'ontouchstart' : 'onmousedown';
       var move = touch ? 'ontouchmove' : 'onmousemove';
       var unclick = touch ? 'ontouchend' : 'onmouseup';
@@ -483,8 +467,6 @@ var UI = (function() {
     UI.addButton = addButton;
     UI.addScroll = addScroll;
     UI.setAllDirty = setAllDirty;
-    UI.getGyro = getGyro;
-    UI.getAccel = getAccel;
     UI.exists = exists;
     return UI;
   })();
