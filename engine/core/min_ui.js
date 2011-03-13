@@ -65,7 +65,8 @@ var UI = (function() {
       pos = uiPos(pos_type,size);
       var button = makeBox(FB.$('ui'),name,pos,size,'button_class');
       button.innerHTML = name;
-      button.onclick = cb;
+      var click = Browser.mobile ? 'ontouchstart' : 'onmousedown';
+      button[click] = cb;
     }
 
     function init() {
