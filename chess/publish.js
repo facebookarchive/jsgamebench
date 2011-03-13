@@ -13,7 +13,7 @@
 // under the License.
 
 var Publish = (function() {
-  var BoardVersion = 2;
+  var BoardVersion = 3;
   var fb_logged_in;
   var player = { savedRequests: {}, active_req: 0 };
 
@@ -130,6 +130,7 @@ var Publish = (function() {
         var req = reqs[i];
         req.data = req.data && FB.JSON.parse(req.data);
         if (!req.data.v || req.data.v != BoardVersion || player.savedRequests[req.id]) {
+          console.log('remove req: ' + req.id + ' ver: ' + req.data.v);
           removeRequest(req);
           reqs.splice(i,1);
         }

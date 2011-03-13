@@ -34,120 +34,123 @@ var Browser = (function() {
       winpos: [0,0]
     }
 
-    var user_agent = navigator.userAgent.toLowerCase();
+    function detect() {
+      var user_agent = navigator.userAgent.toLowerCase();
 
-    if (/chrome/.test(user_agent)) {
-      Browser.browser = Browser.CHROME;
-      Browser.threeD = true;
-    }
-    else if (/webkit/.test(user_agent)) {
-      Browser.browser = Browser.WEBKIT;
-      Browser.threeD = true;
-    }
-    else if (/gecko/.test(user_agent)) {
-      Browser.browser = Browser.FIREFOX;
-      Browser.threeD = false;
-    }
-    else if (/msie 9/.test(user_agent)) {
-      Browser.browser = Browser.IE9;
-      Browser.threeD = false;
-    }
-    else if (/msie/.test(user_agent)) {
-      Browser.browser = Browser.IE;
-      Browser.threeD = false;
-    }
-    else if (/opera/.test(user_agent)) {
-      Browser.browser = Browser.OPERA;
-      Browser.threeD = false;
-    }
-    else {
-      Browser.browser = Browser.OTHER;
-      Browser.threeD = false;
-    }
+      if (/chrome/.test(user_agent)) {
+        Browser.browser = Browser.CHROME;
+        Browser.threeD = true;
+      }
+      else if (/webkit/.test(user_agent)) {
+        Browser.browser = Browser.WEBKIT;
+        Browser.threeD = true;
+      }
+      else if (/gecko/.test(user_agent)) {
+        Browser.browser = Browser.FIREFOX;
+        Browser.threeD = false;
+      }
+      else if (/msie 9/.test(user_agent)) {
+        Browser.browser = Browser.IE9;
+        Browser.threeD = false;
+      }
+      else if (/msie/.test(user_agent)) {
+        Browser.browser = Browser.IE;
+        Browser.threeD = false;
+      }
+      else if (/opera/.test(user_agent)) {
+        Browser.browser = Browser.OPERA;
+        Browser.threeD = false;
+      }
+      else {
+        Browser.browser = Browser.OTHER;
+        Browser.threeD = false;
+      }
 
-    if (/iphone/.test(user_agent)) {
-      Browser.threeD = true;
-      Browser.mobile = true;
-      Browser.ios = true;
-      Browser.os = 'iPhone';
-    }
-    else if (/ipod/.test(user_agent)) {
-      Browser.threeD = true;
-      Browser.mobile = true;
-      Browser.os = 'iPod';
-    }
-    else if (/ipad/.test(user_agent)) {
-      Browser.threeD = true;
-      Browser.mobile = true;
-      Browser.ios = true;
-      Browser.os = 'iPad';
-    }
-    else if (/os x/.test(user_agent)) {
-      Browser.os = 'OS X';
-    }
-    else if (/android/.test(user_agent)) {
-      Browser.mobile = true;
-      Browser.threeD = false;
-      Browser.os = 'Android';
-    }
-    else if (/linux/.test(user_agent)) {
-      Browser.os = 'Linux';
-    }
-    else if (/windows phone/.test(user_agent)) {
-      Browser.os = 'Win Mobile';
-    }
-    else if (/windows/.test(user_agent)) {
-      Browser.os = 'Windows';
-    }
-    else {
-      Browser.os = '?';
-    }
+      if (/iphone/.test(user_agent)) {
+        Browser.threeD = true;
+        Browser.mobile = true;
+        Browser.ios = true;
+        Browser.os = 'iPhone';
+      }
+      else if (/ipod/.test(user_agent)) {
+        Browser.threeD = true;
+        Browser.mobile = true;
+        Browser.os = 'iPod';
+      }
+      else if (/ipad/.test(user_agent)) {
+        Browser.threeD = true;
+        Browser.mobile = true;
+        Browser.ios = true;
+        Browser.os = 'iPad';
+      }
+      else if (/os x/.test(user_agent)) {
+        Browser.os = 'OS X';
+      }
+      else if (/android/.test(user_agent)) {
+        Browser.mobile = true;
+        Browser.threeD = false;
+        Browser.os = 'Android';
+      }
+      else if (/linux/.test(user_agent)) {
+        Browser.os = 'Linux';
+      }
+      else if (/windows phone/.test(user_agent)) {
+        Browser.os = 'Win Mobile';
+      }
+      else if (/windows/.test(user_agent)) {
+        Browser.os = 'Windows';
+      }
+      else {
+        Browser.os = '?';
+      }
 
-    switch (Browser.browser) {
-      case Browser.CHROME:
-        version = user_agent.toLowerCase().match(/chrome\/([\d\w\.]+)\s/);
-        if (version) {
-          Browser.browser_version = 'Chrome ' + version[1].match(/(\d+)\..*/)[1];
-        } else {
-          Browser.browser_version = 'Chrome';
-        }
+      switch (Browser.browser) {
+        case Browser.CHROME:
+          version = user_agent.toLowerCase().match(/chrome\/([\d\w\.]+)\s/);
+          if (version) {
+            Browser.browser_version = 'Chrome ' + version[1].match(/(\d+)\..*/)[1];
+          } else {
+            Browser.browser_version = 'Chrome';
+          }
+          break;
+        case Browser.FIREFOX:
+          version = user_agent.toLowerCase().match(/firefox\/([\d\w\.]+)/);
+          if (version) {
+            Browser.browser_version = 'Firefox ' + version[1].match(/(\d+)\..*/)[1];
+          } else {
+            Browser.browser_version = 'Firefox';
+          }
+          break;
+        case Browser.WEBKIT:
+          version = user_agent.toLowerCase().match(/safari\/([\d\w\.]+)/);
+          if (version) {
+            Browser.browser_version = 'Safari ' + version[1].match(/(\d+)\..*/)[1];
+          } else {
+            Browser.browser_version = 'Safari';
+          }
+          break;
+        case Browser.IE:
+        case Browser.IE9:
+          version = user_agent.toLowerCase().match(/msie ([\d\w\.]+);/);
+          if (version) {
+            Browser.browser_version = 'IE ' + version[1].match(/(\d+)\..*/)[1];
+          } else {
+            Browser.browser_version = 'IE';
+          }
         break;
-      case Browser.FIREFOX:
-        version = user_agent.toLowerCase().match(/firefox\/([\d\w\.]+)/);
-        if (version) {
-          Browser.browser_version = 'Firefox ' + version[1].match(/(\d+)\..*/)[1];
-        } else {
-          Browser.browser_version = 'Firefox';
-        }
-        break;
-      case Browser.WEBKIT:
-        version = user_agent.toLowerCase().match(/safari\/([\d\w\.]+)/);
-        if (version) {
-          Browser.browser_version = 'Safari ' + version[1].match(/(\d+)\..*/)[1];
-        } else {
-          Browser.browser_version = 'Safari';
-        }
-        break;
-      case Browser.IE:
-      case Browser.IE9:
-        version = user_agent.toLowerCase().match(/msie ([\d\w\.]+);/);
-        if (version) {
-          Browser.browser_version = 'IE ' + version[1].match(/(\d+)\..*/)[1];
-        } else {
-          Browser.browser_version = 'IE';
-        }
-      break;
-      case Browser.OPERA:
-        version = user_agent.toLowerCase().match(/version\/([\d\w\.]+)/);
-        if (version) {
-          Browser.browser_version = 'Opera ' + version[1].match(/(\d+)\..*/)[1];
-        } else {
-          Browser.browser_version = 'Opera';
-        }
-        break;
+        case Browser.OPERA:
+          version = user_agent.toLowerCase().match(/version\/([\d\w\.]+)/);
+          if (version) {
+            Browser.browser_version = 'Opera ' + version[1].match(/(\d+)\..*/)[1];
+          } else {
+            Browser.browser_version = 'Opera';
+          }
+          break;
+      }
+      Browser.browser_version = Browser.os + ' ' + Browser.browser_version;
+      console.log('browser_version ' + Browser.browser_version);
     }
-    Browser.browser_version = Browser.os + ' ' + Browser.browser_version;
-
+  
     function getWindowSize() {
       var width = 0;
       var height = 0;
@@ -169,8 +172,10 @@ var Browser = (function() {
 
       Browser.winsize[0] = width;
       Browser.winsize[1] = height;
+      console.log('winsize: ' + Browser.winsize);
     }
 
     Browser.getWindowSize = getWindowSize;
+    Browser.detect = detect;
     return Browser;
   })();
