@@ -166,25 +166,41 @@ var Input = (function() {
       return gesture;
     }
 
+    var alpha = 0, beta = 0, gamma = 0;
+    var lalpha = 0, lbeta = 0, lgamma = 0;
+
+    function getGyro() {
+      return [alpha - lalpha, beta - lbeta, gamma - lgamma];
+      lalpha = alpha;
+      lbeta = beta;
+      lgamma = gamma;
+    }
+
+    var ax, ay, az;
+
+    function getAccel() {
+      return [ax, ay, az];
+    }
+
     function hookEvents(eid) {
-      Browser.mobile = true;
-      touch = Browser.mobile;
+      var touch = Browser.mobile;
+
       var el = document.getElementById(eid);
       if (el) {
         el[touch ? 'ontouchstart' : 'onmousedown'] = function(event) {
-          return Input.getMouseXY(event, 1);
+          return getMouseXY(event, 1);
         };
         el[touch ? 'ontouchmove' : 'onmousemove'] = function(event) {
-          return Input.getMouseXY(event, 0);
+          return getMouseXY(event, 0);
         };
         el[touch ? 'ontouchend' : 'onmouseup'] = function(event) {
-          return Input.getMouseXY(event, -1);
+          return getMouseXY(event, -1);
         };
 
         if (touch) {
-          el['ongesturestart'] = Input.gestureStart;
-          el['ongesturechange'] = Input.gestureChange;
-          el['ongestureend'] = Input.gestureEnd;
+          el['ongesturestart'] = gestureStart;
+          el['ongesturechange'] = gestureChange;
+          el['ongestureend'] = gestureEnd;
 
           window.ondeviceorientation = function(event) {
             alpha = event.alpha;
@@ -198,18 +214,24 @@ var Input = (function() {
           };
         }
         el['onmousewheel'] = function(event) {
-          Input.getMouseWheel(event, event.wheelDelta / 120);
+          getMouseWheel(event, event.wheelDelta / 120);
         };
         if (Browser.browser != Browser.IE &&
             Browser.browser != Browser.IE9) {
           el['DOMMouseScroll'] = function(event) {
-            Input.getMouseWheel(event, event.detail / -3);
+            getMouseWheel(event, event.detail / -3);
           }
         }
 
-        el['onkeypress'] = function(event) {return Input.handleTyping(event)};
-        el['onkeyup'] = function(event) {return Input.keyPress(event, 0)};
-        el['onkeydown'] = function(event) {return Input.keyPress(event, 1)};
+        el['onkeypress'] = function(event) {return handleTyping(event)};
+        el['onkeyup'] = function(event) {return keyPress(event, 0)};
+        el['onkeydown'] = function(event) {return keyPress(event, 1)};
+
+
+       if (Browser.FIREFOX) {
+          document.onkeyup = function(event) {return keyPress(event, 0)};
+          document.onkeydown = function(event) {return keyPress(event, 1)};
+        }
       }
     }
 
@@ -227,6 +249,8 @@ var Input = (function() {
     Input.hookEvents = hookEvents;
     Input.key_state = key_state;
     Input.mouse = mouse;
+    Input.getGyro = getGyro;
+    Input.getAccel = getAccel;
     return Input;
   })();
 

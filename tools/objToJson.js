@@ -96,7 +96,7 @@ function toIntIndex(val) {
   return parseInt(val) - 1;
 }
 
-function parseObj(filedata) {
+function parseObj(filedata, file_options) {
   var cur_material = 'default';
   var raw_verts = { 0:[], 1:[], 2:[] };
   var vert_refs = {};
@@ -182,6 +182,24 @@ function parseObj(filedata) {
       if (vert.length !== 8) {
         throw {name:'Invalid vertex data!'};
       }
+
+      vert[0] *= file_options.model_scale;
+      vert[1] *= file_options.model_scale;
+      vert[2] *= file_options.model_scale;
+      if (file_options.invert_y_texcoord) {
+        vert[4] = 1.0 - vert[4];
+      }
+      if (file_options.transform_z_up) {
+        // transform position
+        var oldy = vert[1];
+        vert[1] = -vert[2];
+        vert[2] = oldy;
+
+        // transform normal
+        oldy = vert[6];
+        vert[6] = -vert[7];
+        vert[7] = oldy;
+      }
       vert_array = vert_array.concat(vert);
     });
 
@@ -219,6 +237,36 @@ files.each(function(filename) {
     }
 
     util.print('\n' + filename + '\n');
+
+    var filenameBase = filename.slice(0, -4);
+
+    var file_options;
+    try {
+      file_options = fs.readFileSync(filenameBase + '.opt');
+    } catch (e) {
+      file_options = null;
+    }
+
+    if (file_options) {
+      file_options = JSON.parse(file_options);
+    } else {
+      file_options = {};
+    }
+
+    if (typeof file_options.model_scale !== 'undefined') {
+      file_options.model_scale = toFloat(file_options.model_scale);
+    } else {
+      file_options.model_scale = 1;
+    }
+    if (typeof file_options.invert_y_texcoord === 'undefined') {
+      file_options.invert_y_texcoord = true;
+    }
+    if (typeof file_options.transform_z_up === 'undefined') {
+      file_options.transform_z_up = true;
+    } else {
+      file_options.transform_z_up = file_options.transform_z_up !== 'false';
+    }
+
     var filedata = fs.readFileSync(filename, 'ascii');
     if (!filedata) {
       util.print('Failed to read file\n');
@@ -226,13 +274,12 @@ files.each(function(filename) {
     }
 
     try {
-      var modelobj = parseObj(filedata);
+      var modelobj = parseObj(filedata, file_options);
     } catch (e) {
       util.print(e.name + '\n');
     }
 
     if (modelobj) {
-      var filenameBase = filename.slice(0, -4);
       var newFilename = filenameBase + '.js';
       var fileData = 'var ' + filenameBase + ' = ' +
                      JSON.stringify(modelobj) + ';';

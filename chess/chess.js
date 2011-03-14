@@ -7,7 +7,12 @@ var Chess = (function() {
     var menu_time,request_time;
     var explo;
     var replay = {};
+    var Start = UI.Start, Middle = UI.Middle, End = UI.End;
 
+    function gameState() {
+      return game_state;
+    }
+    
     function startPlayback() {
       playback = true;
       move = 0;
@@ -38,13 +43,14 @@ var Chess = (function() {
     }
 
     function newGameState(state) {
-      UI.del('buttons');
-      Publish.removeTree('ui');
-      Publish.makeBox(FB.$('gamebody'),'ui',[0,0],[0,0]);
-      UI.addCollection('', 'buttons', {pos: [0, 0]});
+      if (state == game_state) {
+        return;
+      }
+      UI.removeTree('ui');
+      UI.makeBox(FB.$('gamebody'),'ui',[0,0],[0,0]);
       game_state = state;
       if (state == 'menu') {
-        Publish.getRequests();
+        Publish.getRequests(game_state);
         request_time = 0;
         menu_time = (new Date).getTime();
       }
@@ -54,47 +60,10 @@ var Chess = (function() {
       explo = explo || Gob.add(Utils.uuidv4(), 'small_explo', 0, pos, [0,0], 10, scale / 7);
     }
 
-    var Start = 1, Middle = 2, End = 3;
-    function uiPos(pos_type,size) {
-      var pos = [];
-      var winsize = [Browser.w,Browser.h];
-      for(var i=0;i<2;i++) {
-        switch(pos_type[i]) {
-          case Start:
-            pos[i] = 0;
-            break;
-          case Middle:
-            pos[i] = (winsize[i] - size[i])/2;
-            break;
-          case End:
-            pos[i] = winsize[i] - size[i];
-            break;
-        }
-      }
-      return pos;
-    }
-
-    function button(name, pos_type, options) {
-      var size = options.size || [150, 60];
-      pos = uiPos(pos_type,size);
-      if (options.offset) {
-        pos[0] += options.offset[0] * size[0];
-        pos[1] += options.offset[1] * size[1];
-      }
-      options.pos = pos;
-      options.text = name;
-      options.fontsize = '250%';
-      options.width = size[0];
-      options.height = size[1];
-      if (options.cmd) {
-        options.command = { cmd: options.cmd[0], args: options.cmd.slice(1) };
-      }
-      //var button = Publish.makeBox(FB.$('ui'),name,options.pos,size);
-      //button.innerHTML = name;
-      UI.addButton('buttons', name, options);
-    }
-
     function tick() {
+      if (!FB.$('ui')) {
+        UI.makeBox(FB.$('gamebody'),'ui',[0,0],[0,0]);
+      }
       if (Pieces.isAnimating()) {
         Pieces.updateMove();
       } else if (!playback) {
@@ -120,49 +89,49 @@ var Chess = (function() {
       if (game_state == 'menu') {
         var dt = parseInt(((new Date).getTime() - menu_time) / 1000);
         if (dt > request_time) {
-          Publish.getRequests();
+          Publish.getRequests(game_state);
           request_time += Math.sqrt(dt);
         }
       }
+      
       if (old_game_state != game_state) {
         var size = [300,55];
         old_game_state = game_state;
         switch (game_state) {
           case 'login':
-            button('Login',[Start,Start], { cmd:['login'] });
+            UI.button('Login',[Start,Start], Publish.fbLogin);
             break;
           case 'menu':
-            button('New Game',[Start,Start], { cmd:['newGame']});
+            UI.button('New Game',[Start,Start], newGame);
             break;
           case 'moving':
             break;
           case 'moved':
-            button('Send Move', [End,End], { cmd:['sendRequest'] });
+            UI.button('Send Move', [End,End], Publish.sendMove);
           case 'playing':
-            button('Menu',[Start,Start], { cmd:['newGameState', 'menu'] });
+            UI.button('Menu',[Start,Start], function() { newGameState('menu'); });
             var req = Publish.hasOpponent();
             if (req && game_state != 'moved') {
               if (req.concede) {
-                button('Remove', [End,End], { cmd:['removeRequest', req] });
-                button('Publish',[Start,End], { cmd:['publishStory'] });
+                UI.button('Remove', [End,End], function() { Publish.removeRequest(req) });
+                UI.button('Publish',[Start,End], Publish.publishStory);
               } else {
-                button('Concede', [End,End], { cmd:['concede'] });
+                UI.button('Concede', [End,End], concede);
               }
-              Publish.addReqName(req,uiPos([Middle,Start],size),size);
+              Publish.addReqName(req,UI.uiPos([Middle,Start],size),size);
             }
-            Publish.addMyName(uiPos([Middle,End],size),size);
+            Publish.addMyName(UI.uiPos([Middle,End],size),size);
             break;
           case 'replay':
-            button('Menu',[Start,Start], { cmd:['newGameState', 'menu'] });
-            Publish.addReplayName(replay.p1,uiPos([Middle,Start],size),size);
-            Publish.addReplayName(replay.p2,uiPos([Middle,End],size),size);
+            UI.button('Menu',[Start,Start], function() { newGameState('menu'); });
+            Publish.addReplayName(replay.p1,UI.uiPos([Middle,Start],size),size);
+            Publish.addReplayName(replay.p2,UI.uiPos([Middle,End],size),size);
             break;
         }
       }
     }
 
     function postImageLoad() {
-      Publish.makeBox(FB.$('gamebody'),'ui',[0,0],[0,0]);
       Board.init();
       Pieces.init();
       var hash = window.location.hash;
@@ -200,14 +169,6 @@ var Chess = (function() {
 
       GameFrame.setXbyY();
       Input.hookEvents('gamebody');
-      ClientCmd.install('sendRequest',Publish.sendMove);
-      ClientCmd.install('publishStory',Publish.publishStory);
-      ClientCmd.install('login',Publish.fbLogin);
-      ClientCmd.install('newGame',newGame);
-      ClientCmd.install('newGameState',newGameState);
-      ClientCmd.install('concede',concede);
-      ClientCmd.install('removeRequest',Publish.removeRequest);
-
       newGameState('login');
       Publish.fbInit(fb_app_id);
       loadImageList('/chess/images/',['Pirate_King.png', 'Ninja_King.png', 'Pirate_Queen.png', 'Ninja_Queen.png', 'Pirate_Bishop.png', 'Ninja_Bishop.png', 'Pirate_Knight.png', 'Ninja_Knight.png', 'Pirate_Rook.png', 'Ninja_Rook.png', 'Pirate_Pawn.png', 'Ninja_Pawn.png']);
@@ -231,12 +192,13 @@ var Chess = (function() {
       Render.tick();
     }
 
-    Init.setFunctions({app: tick, init: init, draw: draw, ui: UI.tick, resize: resize, postLoad: postImageLoad, fps:60 });
+    Init.setFunctions({app: tick, init: init, draw: draw, resize: resize, postLoad: postImageLoad, fps:60 });
 
     return {
       newGameState: newGameState,
       startPlayback: startPlayback,
       makeExplosion: makeExplosion,
+      gameState : gameState
     }
 })();
 

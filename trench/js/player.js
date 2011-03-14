@@ -16,7 +16,7 @@ var TrenchPlayer = (function() {
 
     var player_model;
     var player_matrix;
-    var player_pos;
+    var player_pos = [0,0,0];
     var player_velocity;
     var player_id;
 

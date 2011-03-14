@@ -17,7 +17,7 @@ var Render = (function() {
     var version;
 
     function setupBrowserSpecific() {
-
+      Browser.detect();
       DomRender.setupBrowserSpecific();
     }
 

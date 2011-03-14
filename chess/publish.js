@@ -13,9 +13,9 @@
 // under the License.
 
 var Publish = (function() {
-  var BoardVersion = 2;
+  var BoardVersion = 3;
   var fb_logged_in;
-  var player = {savedRequests: {}, active_req: 0 };
+  var player = { savedRequests: {}, active_req: 0 };
 
   function clearOpponent() {
     player.active_req = 0;
@@ -66,33 +66,12 @@ var Publish = (function() {
     }
   }
 
-  function removeTree(name) {
-    var cell = document.getElementById(name);
-    if (cell) {
-      while (cell.childNodes.length >= 1) {
-        cell.removeChild(cell.firstChild );       
-      } 
-      cell.parentNode.removeChild(cell);
-    }
-  }
-
-  function makeBox(parent,name,pos,size) {
-    var style='left:'+pos[0]+'px;top:'+pos[1]+'px;width:'+size[0]+'px;height:'+size[1]+'px;position:absolute;z-index:10000;align:top;'
-    var el = FB.$(name);
-    if (!el) {
-      parent.innerHTML += '<div id="'+name+'" class="chess"></div>';
-      el = FB.$(name);
-    }
-    el.style.cssText = style;
-    return FB.$(name);
-  }
-
   function onReqClick(req_id) {
     var req = player.requests[req_id];
     if (!req) {
       return;
     }
-    removeTree('requests');
+    UI.removeTree('requests');
     player.active_req = req;
     var data = req.data;
     req.concede = data.concede;
@@ -114,7 +93,7 @@ var Publish = (function() {
   }
 
   function addName(name,uid,pos,size) {
-    var button = makeBox(FB.$('ui'),'name_'+uid,pos,size);
+    var button = UI.makeBox(FB.$('ui'),'name_'+uid,pos,size,'chess');
     button.innerHTML = '<img src="http://graph.facebook.com/'+uid+'/picture" /> '+FB.String.escapeHTML(name);
   }
 
@@ -132,30 +111,32 @@ var Publish = (function() {
 
   function addRequestButton(req,x,y) {
     var name = 'req_'+req.id;
-    var button = makeBox(FB.$('requests'),name,[x,y],[450,60]);
-    button.innerHTML = '<img src="http://graph.facebook.com/'+req.from.id+'/picture"/>';
-    var text = makeBox(button,'text_'+req.id,[60,0],[390,60]);
-    text.innerHTML = '<div onclick="Publish.onReqClick('+req.id+');">' + req.from.name + '<br>' + req.message + '</div>';
+    if (!FB.$(name)) {
+      var button = UI.makeBox(FB.$('requests'),name,[x,y],[450,60],'chess');
+      button.innerHTML = '<img src="http://graph.facebook.com/'+req.from.id+'/picture"/>';
+      var text = UI.makeBox(button,'text_'+req.id,[60,0],[390,60],'chess');
+      text.innerHTML = '<div onclick="Publish.onReqClick('+req.id+');">' + req.from.name + '<br>' + req.message + '</div>';
+    }
   }
   
-  function getRequests() {
+  function getRequests(valid_state) {
     FB.api('me/apprequests', function(result) {
       var reqs = result.data;
-      if (!reqs) {
+      if (!reqs || valid_state != Chess.gameState()) {
         return;
       }
-      ClientCmd.install('onReqClick',onReqClick);
       player.savedRequests = player.savedRequests || {};
       for(var i=reqs.length-1;i>=0;i--) {
         var req = reqs[i];
         req.data = req.data && FB.JSON.parse(req.data);
         if (!req.data.v || req.data.v != BoardVersion || player.savedRequests[req.id]) {
+          console.log('remove req: ' + req.id + ' ver: ' + req.data.v);
           removeRequest(req);
           reqs.splice(i,1);
         }
       }
       player.requests = {};
-      makeBox(FB.$('gameframe'),'requests',[0,0],[0,0]).innerHTML = '';
+      UI.makeBox(FB.$('ui'),'requests',[0,0],[0,0]);
       for(var i=0;i<reqs.length;i++) {
         var req = reqs[i];
         player.requests[req.id] = req;
@@ -190,6 +171,7 @@ var Publish = (function() {
           player.active_req = 0;
           removeRequest(req);
           Chess.newGameState('menu');
+          console.log('menu state');
         } else {
           Board.undoMove();
         }
@@ -258,7 +240,5 @@ var Publish = (function() {
     addReplayName : addReplayName,
     onReqClick : onReqClick,
     sendMove : sendMove,
-    removeTree: removeTree,
-    makeBox: makeBox
   };
 })();
