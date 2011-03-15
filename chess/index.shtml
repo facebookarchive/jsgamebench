@@ -1,18 +1,16 @@
 <html>
   <head>
-    #metatags
-    #include '/engine/style.include'
     <link rel="stylesheet" type="text/css" href="/chess/style.css" />
-    #include '/engine/fb_jssdk.include'
+    #include '/engine/include/fb_jssdk.include'
     #include 'app_id'
-    #include '/engine/core/min.include'
+    #include '/engine/include/min.include'
     <script type="text/javascript" src="/chess/constants.js"></script>
     <script type="text/javascript" src="/chess/board.js"></script>
     <script type="text/javascript" src="/chess/pieces.js"></script>
     <script type="text/javascript" src="/chess/publish.js"></script>
     <script type="text/javascript" src="/chess/chess.js"></script>
-
   </head>
+
   <body
     onresize="Init.winresize();"
     onload="Init.init();"

@@ -1,10 +1,8 @@
 <html>
   <head>
-    #metatags
-    #include '/engine/style.include'
-    #include '/engine/fb_jssdk.include'
+    #include '/engine/include/fb_jssdk.include'
     #include 'app_id'
-    #include '/engine/core/core.include'
+    #include '/engine/include/core.include'
     <script type="text/javascript" src="/simpledemo/publish.js"></script>
     <script type="text/javascript" src="/simpledemo/demo.js"></script>
 

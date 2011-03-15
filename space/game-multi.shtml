@@ -1,11 +1,10 @@
 <html>
 
   <head>
-    #include '/engine/style.include'
-    <script src="http://static.ak.fbcdn.net/connect/en_US/core.debug.js"></script>
+    #include '/engine/include/fb_jssdk.include'
     <script type="text/javascript">var stand_alone=false;</script>
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>
-    #include '/engine/core/core.include'
+    #include '/engine/include/core.include'
     <script type="text/javascript" src="/space/game.js"> </script>
     <script type="text/javascript" src="/space/svrgame.js"> </script>
   </head>

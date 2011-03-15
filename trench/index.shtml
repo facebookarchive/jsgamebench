@@ -1,14 +1,12 @@
 <html>
   <head>
     <title>Trench Runner</title>
-    #metatags
 
     <script type="text/javascript" src="http://static.ak.fbcdn.net/connect/en_US/core.debug.js"></script>
 
     <!-- engine includes -->
-    #include '../engine/style.include'
     #include 'app_id'
-    #include '../engine/core/core.include'
+    #include '../engine/include/core.include'
 
     <!-- game stuff -->
     <script type="text/javascript" src="/models/Box_Model.js"></script>
