@@ -78,9 +78,9 @@ var GameFrame = (function() {
         settings.last_render_mode = settings.render_mode;
         Tick.reset();
         Render.setAllDirty();
-        var viewel = document.getElementById(gameviewport.id);
+        var viewel = window.document.getElementById(gameviewport.id);
         viewel.innerHTML = '';
-        var backgroundel = document.getElementById('gamebackground');
+        var backgroundel = window.document.getElementById('gamebackground');
         backgroundel.innerHTML = '';
         switch (settings.render_mode) {
           case WEBGL:
@@ -107,7 +107,7 @@ var GameFrame = (function() {
     }
 
     function makeDiv(parentid, id, dclass, dstyle, color, hidden, add) {
-      var pel = document.getElementById(parentid);
+      var pel = window.document.getElementById(parentid);
       if (pel) {
         var stylestr = '';
         stylestr += dstyle && dstyle.left ? 'left:' + dstyle.left + 'px;' : 'left:0px;';
@@ -229,6 +229,7 @@ var GameFrame = (function() {
       updateSettings({},true);
       checkRenderMode();
       Render.setAllDirty();
+      console.log("setXbyY: " + Browser.winsize[0] + "x" + Browser.winsize[1]);
     }
 
 

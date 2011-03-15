@@ -150,29 +150,33 @@ var Browser = (function() {
       Browser.browser_version = Browser.os + ' ' + Browser.browser_version;
       console.log('browser_version ' + Browser.browser_version);
     }
-  
+
     function getWindowSize() {
       var width = 0;
       var height = 0;
 
-      if (typeof(window.innerWidth) == 'number') {
-        width = window.innerWidth;
-        height = window.innerHeight;
-      } else if (document.documentElement &&
-                 (document.documentElement.clientWidth ||
-                  document.documentElement.clientHeight)) {
-        width = document.documentElement.clientWidth;
-        height = document.documentElement.clientHeight;
-      } else if (document.body &&
-                 (document.body.clientWidth ||
-                  document.body.clientHeight)) {
-        width = document.body.clientWidth;
-        height = document.body.clientHeight;
+      if (window == window.top) {
+        if (typeof(window.innerWidth) == 'number') {
+          width = window.innerWidth;
+          height = window.innerHeight;
+        } else if (window.document.documentElement &&
+                   (window.document.documentElement.clientWidth ||
+                    window.document.documentElement.clientHeight)) {
+          width = window.document.documentElement.clientWidth;
+          height = window.document.documentElement.clientHeight;
+        } else if (window.document.body &&
+                   (window.document.body.clientWidth ||
+                    window.document.body.clientHeight)) {
+          width = window.document.body.clientWidth;
+          height = window.document.body.clientHeight;
+        }
+      } else {
+        width = window.document.body.clientWidth;
+        height = window.document.body.clientHeight;
       }
 
       Browser.winsize[0] = width;
       Browser.winsize[1] = height;
-      console.log('winsize: ' + Browser.winsize);
     }
 
     Browser.getWindowSize = getWindowSize;
