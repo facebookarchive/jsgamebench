@@ -1,11 +1,9 @@
 <html>
   <head>
-    #metatags
-    #include '/engine/style.include'
     #include 'app_id'
-    #include '/engine/fb_jssdk.include'
+    #include '/engine/include/fb_jssdk.include'
     <script type="text/javascript">var stand_alone=true;</script>
-    #include '/engine/core/core.include'
+    #include '/engine/include/core.include'
     <script type="text/javascript" src="/perf/benchmark.js"> </script>
     <script type="text/javascript" src="/perf/perftest.js"> </script>
     <script type="text/javascript" src="/space/game.js"> </script>

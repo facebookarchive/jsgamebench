@@ -1,10 +1,8 @@
 <html>
   <head>
-    #metatags
     #include 'app_id'
-    #include '/engine/style.include'
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>
-    #include '/engine/core/core.include'
+    #include '/engine/include/core.include'
     <script type="text/javascript" src="/perf/benchmark.js"> </script>
     <script type="text/javascript" src="/perf/perftest.js"> </script>
     <script type="text/javascript" src="/perf/fbmark.js"> </script>

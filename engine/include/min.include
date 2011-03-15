@@ -1,3 +1,10 @@
+<meta name="viewport" content="user-scalable=no, width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, target-densitydpi=device-dpi"/>
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-touch-fullscreen" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
+<link rel="stylesheet" type="text/css" href="/engine/css/style.css" />
+
 <script type="text/javascript" src="/engine/core/browser.js"> </script>
 <script type="text/javascript" src="/engine/core/min_ui.js"> </script>
 <script type="text/javascript" src="/engine/utils/utils.js"> </script>
