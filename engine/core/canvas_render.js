@@ -13,7 +13,7 @@
 // under the License.
 
 var CanvasRender = (function() {
-    var ctx, bctx, parel, canvasel, bgel, cwidth, cheight, first;
+    var ctx, bctx, parel, canvasel, bgel, cwidth, cheight, first, fdtctx;
 
     function init(pid,width,height,pixelwidth,pixelheight) {
       parel = document.getElementById(pid);
@@ -28,6 +28,33 @@ var CanvasRender = (function() {
       bctx = bgel.getContext('2d');
       canvasel = document.getElementById('gamecanvas');
       ctx = canvasel.getContext('2d');
+    }
+
+    function initFDT() {
+      var el = document.getElementById('framedraw');
+      if (!el) {
+        el = document.createElement('canvas');
+        el.id = "framedraw";
+        el.width = 1;
+        el.height = 1;
+        document.body.appendChild(el);
+      }
+      fdtctx = el.getContext('2d');
+    }
+
+    function setFDT(number) {
+      if (fdtctx) {
+        fdtctx.fillStyle = "#" + number;
+        fdtctx.fillRect(0,0,1,1);
+      }
+    }
+
+    function readFDT() {
+      if (fdtctx) {
+        var data = fdtctx.getImageData(0,0,1,1);
+        var value = data.data[0]*256*256+data.data[1]*256+data.data[2];
+      }
+      return value;
     }
 
     function clear() {
@@ -73,6 +100,8 @@ var CanvasRender = (function() {
     CanvasRender.draw = draw;
     CanvasRender.bgdraw = bgdraw;
     CanvasRender.bg2fg = bg2fg;
-
+    CanvasRender.initFDT = initFDT;
+    CanvasRender.setFDT = setFDT;
+    CanvasRender.readFDT = readFDT;
     return CanvasRender;
   })();
