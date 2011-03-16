@@ -2,10 +2,10 @@
   <head>
     <title>Trench Runner</title>
 
-    <script type="text/javascript" src="http://static.ak.fbcdn.net/connect/en_US/core.debug.js"></script>
+    <script type="text/javascript" src="http://connect.facebook.net/en_US/all.js"></script>
 
-    <!-- engine includes -->
-    #include 'app_id'
+    #include 'app$id'
+    #include 'app$url'
     #include '../engine/include/core.include'
 
     <!-- game stuff -->
