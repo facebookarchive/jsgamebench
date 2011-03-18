@@ -7,7 +7,7 @@
 
 <script type="text/javascript" src="/engine/core/browser.js"> </script>
 <script type="text/javascript" src="/engine/core/min_ui.js"> </script>
-<script type="text/javascript" src="/engine/utils/utils.js"> </script>
+<script type="text/javascript" src="/engine/core/utils.js"> </script>
 <script type="text/javascript" src="/engine/core/tick.js"> </script>
 <script type="text/javascript" src="/engine/core/gameframe.js"> </script>
 <script type="text/javascript" src="/engine/core/gob.js"> </script>
