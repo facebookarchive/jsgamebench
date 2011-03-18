@@ -7,7 +7,7 @@ var Chess = (function() {
     var menu_time,request_time;
     var explo;
     var replay = {};
-    var Start = UI.Start, Middle = UI.Middle, End = UI.End;
+    var Start = 'Start', Middle = 'Middle', End = 'End';
 
     function gameState() {
       return game_state;

@@ -84,7 +84,7 @@ var Publish = (function() {
   }
 
   function onReqClick(req) {
-    UI.del('req'+req.id);
+    UI.removeTree('req'+req.id);
     if (player.savedRequests[req.id]) {
       // Skip for processed ones
       return;
@@ -148,20 +148,21 @@ var Publish = (function() {
           return;
         }
         player.savedRequests = player.savedRequests || {};
-        ClientCmd.install('onReqClick',onReqClick);
         for(var i=0;i<reqs.length;i++) {
           var req = reqs[i];
-         if (player.savedRequests[req.id]) {
-           continue;
-         }
-         markup = FB.String.format(
-          '<img src="http://graph.facebook.com/{0}/picture" />{1}: {2}</p>', 
-           req.from.id,
-          FB.String.escapeHTML(req.from.name),
-          FB.String.escapeHTML(req.message));
-          UI.addButton('gameOpts', 'req'+req.id,
-            {pos: [60, 70 + 65*i], width: 400, height: 60, fontsize: '200%',
-            text: markup, command: {cmd: 'onReqClick', args: [req] }});
+          if (player.savedRequests[req.id]) {
+            continue;
+          }
+         
+          markup = FB.String.format(
+            '<img src="http://graph.facebook.com/{0}/picture" />{1}: {2}</p>', 
+             req.from.id,
+            FB.String.escapeHTML(req.from.name),
+            FB.String.escapeHTML(req.message));
+
+          var button = UI.makeBox(0,'req'+req.id,[60, 70 + 65*i],[400,60],'ui_button');
+          button.innerHTML = markup;
+          button[Browser.mobile ? 'ontouchstart' : 'onmousedown'] = function() { onReqClick(req) };
         }
       });
     }

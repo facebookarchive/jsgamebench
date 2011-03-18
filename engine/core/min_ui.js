@@ -13,8 +13,10 @@
 // under the License.
 
 var UI = (function() {
-    var Start = 1, Middle = 2, End = 3;
-    
+    function uiElement() {
+      return FB.$('ui') || UI.makeBox(FB.$('gamebody'),'ui',[0,0],[0,0]);
+    }
+
     function removeTree(name) {
       var cell = document.getElementById(name);
       if (cell) {
@@ -26,6 +28,9 @@ var UI = (function() {
     }
 
     function makeBox(parent,name,pos,size,class_name) {
+      if (!parent) {
+        parent = uiElement();
+      }
       var style='left:'+pos[0]+'px;top:'+pos[1]+'px;width:'+size[0]+'px;height:'+size[1]+'px;position:absolute;z-index:10000;align:top;'
       var el = FB.$(name);
       if (!el) {
@@ -46,15 +51,17 @@ var UI = (function() {
       var winsize = [Browser.w,Browser.h];
       for(var i=0;i<2;i++) {
         switch(pos_type[i]) {
-          case Start:
+          case 'Start':
             pos[i] = 0;
             break;
-          case Middle:
+          case 'Middle':
             pos[i] = (winsize[i] - size[i])/2;
             break;
-          case End:
+          case 'End':
             pos[i] = winsize[i] - size[i];
             break;
+          default:
+            pos[i] = pos_type[i];
         }
       }
       return pos;
@@ -63,12 +70,19 @@ var UI = (function() {
     function button(name, pos_type, cb) {
       var size = [150, 60];
       pos = uiPos(pos_type,size);
-      var button = makeBox(FB.$('ui'),name,pos,size,'button_class');
+      var button = makeBox(uiElement(),name,pos,size,'button_class');
       button.innerHTML = name;
       var click = Browser.mobile ? 'ontouchstart' : 'onmousedown';
       button[click] = cb;
     }
 
+    function addHTML(ignore,name,obj) {
+      var box = makeBox(uiElement(),name,obj.pos,[obj.width, obj.height],obj.uiclass);
+      if (box) {
+        box.innerHTML = obj.markup;
+      }
+    }
+    
     function init() {
     }
     
@@ -77,10 +91,7 @@ var UI = (function() {
       makeBox: makeBox,
       uiPos: uiPos,
       button: button,
-      init: init,
-      
-      Start: Start,
-      Middle: Middle,
-      End: End
+      addHTML: addHTML,
+      init: init
     };
   })();
