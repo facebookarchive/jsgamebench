@@ -28,7 +28,6 @@ function serverCallback(req, res) {
   if (pathname.length <= 1) {
     pathname = html_root;
   }
-  console.log('pathname ' + pathname);
   var split = pathname.split('/');
   Comm.sendFile(req, res, pathname);
 };
