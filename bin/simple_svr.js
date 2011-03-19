@@ -25,12 +25,30 @@ var fb_app_info={id:0,secret:0};
 function serverCallback(req, res) {
   var parse = url.parse(req.url);
   var pathname = parse.pathname;
+  if (pathname.length <= 1) {
+    pathname = html_root;
+  }
+  console.log('pathname ' + pathname);
   var split = pathname.split('/');
   Comm.sendFile(req, res, pathname);
 };
 
 
 console.log("starting server");
+
+var listenPort = 8081;
+var html_root = '/perf/static.html';
+
+for(var i=0;i<process.argv.length;i++) {
+  if (process.argv[i] === '-port' && i+1 < process.argv.length) {
+    i++;
+    var listenPort = process.argv[i];
+  } else if (process.argv[i] === '-html' && i+1 < process.argv.length) {
+    i++;
+    var html_root = process.argv[i];
+  }
+}
+
 fs.readFile('app_secret', 'binary', function(err, data) {
   if (err) {
     console.log('no app_secret file found, so no fb app login')
@@ -44,4 +62,4 @@ fs.readFile('app_secret', 'binary', function(err, data) {
   }
 });
 var svr = http.createServer(serverCallback);
-svr.listen(8081);
+svr.listen(listenPort);

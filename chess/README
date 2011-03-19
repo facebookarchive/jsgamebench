@@ -1,0 +1,14 @@
+Overview
+--------
+Pirate Chess is a multiplayer game that uses facebook requests instead of a server.
+Once you make a move and challenge some of your friends, the state of the board is
+stored in the request and passed back and forth. It runs on both mobile and desktop.
+
+It uses the code in the engine/ directory for rendering and input (this code is a stripped
+down version of the same code from https://github.com/facebook/jsgamebench )
+
+Installation
+------------
+Place the chess/ and engine/ directories into any webserver that can host static HTML files.
+
+Then, create a new Facebook Application, and set the fb_app_id in index.html to your app_id.
