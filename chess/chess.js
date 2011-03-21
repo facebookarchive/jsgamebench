@@ -137,12 +137,15 @@ var Chess = (function() {
       var hash = window.location.hash;
       hash = hash.length && hash.substr(1);
       if (hash) {
-        replay = FB.JSON.parse(decodeURIComponent(hash));
-        Gob.delAll();
-        Board.init();
-        Chess.newGameState('replay');
-        Board.loadState(replay.board);
-        Chess.startPlayback();
+        try {
+         replay = FB.JSON.parse(decodeURIComponent(hash));
+         Gob.delAll();
+         Board.init();
+         Chess.newGameState('replay');
+         Board.loadState(replay.board);
+         Chess.startPlayback();
+        } catch(e) {
+        }
       }
     }
 
