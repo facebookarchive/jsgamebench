@@ -1,0 +1,20 @@
+<html>
+  <head>
+    #include 'app_id'
+    #include '/engine/include/core.include'
+    <script type="text/javascript">var stand_alone=true;</script>
+    <script type="text/javascript" src="/perf/benchmark.js"> </script>
+    <script type="text/javascript" src="/perf/perftest.js"> </script>
+    <script type="text/javascript" src="/perf/fbmark.js"> </script>
+    <script type="text/javascript" src="/perf/perf.js"> </script>
+  </head>
+
+  <body id="gamebody"
+    style=""
+    onresize="Init.winresize()"
+    onload="Init.init()"
+    onorientationchange="Init.winresize();"
+    onunload="Init.quit()">
+  </body>
+
+</html>

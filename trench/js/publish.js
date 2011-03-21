@@ -25,7 +25,7 @@ var Publish = (function() {
       if (document.getElementById('fb-root')) {
         FB.init({
             appId  : fb_app_id,
-            channelUrl : 'http://www.conorwdickinson.dev1891.facebook.com:8080/channel.html',
+            channelUrl : fb_app_url + '/channel.html',
             status : true, // check login status
             cookie : true, // enable cookies to allow the server to access the session
             xfbml  : false  // parse XFBML
@@ -118,31 +118,7 @@ var Publish = (function() {
     });
   }
 
-  function publishStory() {
-    var loc = window.location;
-    var url = loc.protocol + '//' + loc.host + '/continue/' +
-      encodeURIComponent(FB.JSON.stringify({
-        player: {
-          id: 0,
-          name: 'name'
-        }
-      }));
-    FB.ui({
-      method: 'stream.publish',
-      attachment: {
-        name: 'Continue Game',
-        caption: 'Continue My Game!',
-        description: (
-          'Start where I left off in Trench Runner!'
-        ),
-        href: url
-      }
-    });
-  }
-
-
   return {
-    publishStory: publishStory,
     sendRequest: sendRequest,
     fbInit: fbInit,
     fbLogin: fbLogin

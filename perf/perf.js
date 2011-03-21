@@ -376,7 +376,7 @@ var Perf = (function() {
     }
 
     function setup() {
-      if (!Browser.mobile) {
+      if (!Browser.mobile &&typeof(stand_alone) == 'undefined') {
         Xhr.toServer({cmd: 'perfquery', args: [['browser']]});
       } else {
         ClientCmd.perfresp(null);

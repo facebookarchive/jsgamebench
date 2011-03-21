@@ -28,7 +28,7 @@ io = require('socket.io');
 Log = require('../lib/log');
 LogProc = require('../lib/logproc');
 
-Utils = require('../engine/utils/utils');
+Utils = require('../engine/core/utils');
 Users = require('../lib/users');
 Server = require('../lib/server');
 Comm = require('../lib/comm');

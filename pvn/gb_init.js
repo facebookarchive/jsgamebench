@@ -26,21 +26,21 @@ function tick() {
   {
     playing_state = FB.Demo.playing;
     if (FB.Demo.playing) {
-      UI.del('play');
-      UI.del('replay');
-      UI.del('publish');
-      UI.del('gift');
+      UI.removeTree('Play');
+      UI.removeTree('Replay');
+      UI.removeTree('Publish');
+      UI.removeTree('Gift');
     } else {
-      UI.addButton('gameOpts', 'play', {pos: [110, 100], width: 150, height: 60, fontsize: '300%', text: 'Play', command: {cmd: 'playGame', args: [true]}});
-      UI.addButton('gameOpts', 'replay', {pos: [300, 100], width: 150, height: 60, fontsize: '300%', text: 'Replay', command: {cmd: 'replay'}});
-      UI.addButton('gameOpts', 'publish', {pos: [110, 200], width: 150, height: 60, fontsize: '300%', text: 'Publish', command: {cmd: 'publishStory'}});
-      UI.addButton('gameOpts', 'gift', {pos: [300, 200], width: 150, height: 60, fontsize: '300%', text: 'Gift', command: {cmd: 'sendRequest'}});
-    }
+      UI.button('Play',[110, 100],function() { FB.Demo.play(true); });
+      UI.button('Replay',[300, 100],FB.Demo.replay);
+      UI.button('Publish',[110, 200],Publish.publishStory);
+      UI.button('Gift',[300, 200],Publish.sendRequest);
+     }
   }
   if (!FB.Demo.playing && !Publish.isLoggedIn()) {
-    UI.addButton('gameOpts', 'optin', {pos: [200, 300], width: 150, height: 60, fontsize: '300%', text: 'Opt In', command: {cmd: 'fblogin', args: [0]}});
+    UI.button('Opt In',[200, 300],function() { Publish.fbLogin(0); });
   } else {
-    UI.del('optin');
+    UI.removeTree('Opt In');
   }
   FB.Demo.tick();
 }
@@ -55,17 +55,18 @@ function loadImageList(path,list) {
 
 function init() {
   Publish.fbInit(fb_app_id);
+  /*
   ClientCmd.install('playGame',FB.Demo.play);
   ClientCmd.install('publishStory',Publish.publishStory);
   ClientCmd.install('sendRequest',Publish.sendRequest);
   ClientCmd.install('replay',FB.Demo.replay);
   ClientCmd.install('fblogin',Publish.fbLogin);
   ClientCmd.install('fblogout',Publish.fbLogout);
-
-  UI.addCollection('', 'gameOpts', {pos: [0, 0]});
+  */
+  
+  //UI.addCollection('', 'gameOpts', {pos: [0, 0]});
   GameFrame.settings.offset = 0;
   GameFrame.updateSettings({render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: true, css_transitions: false, css_keyframe: false, sprite_sheets: false, int_snap: true, transform3d:true});
-  client_user.game_active = true;
   Input.hookEvents('gamebody');
 }
 

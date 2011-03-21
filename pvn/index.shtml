@@ -3,15 +3,13 @@
     #include 'app_id'
     <link rel="stylesheet" type="text/css" href="/pvn/pvn.css">
     #include '/engine/include/fb_jssdk.include'
-    #include '/engine/include/core.include'
-    <script type="text/javascript" src="/perf/benchmark.js"> </script>
-    <script type="text/javascript" src="/perf/perftest.js"> </script>
+    #include '/engine/include/min.include'
 
-    <script type="text/javascript" src="/pvn/js/box2d.js"></script>
-    <script type="text/javascript" src="/pvn/js/engine.js"></script>
-    <script type="text/javascript" src="/pvn/js/publish.js"></script>
-    <script type="text/javascript" src="/pvn/js/demo.js"></script>
-    <script type="text/javascript" src="/pvn/js/gb_init.js"></script>
+    <script type="text/javascript" src="/pvn/box2d.js"></script>
+    <script type="text/javascript" src="/pvn/engine.js"></script>
+    <script type="text/javascript" src="/pvn/publish.js"></script>
+    <script type="text/javascript" src="/pvn/demo.js"></script>
+    <script type="text/javascript" src="/pvn/gb_init.js"></script>
 
 
   </head>

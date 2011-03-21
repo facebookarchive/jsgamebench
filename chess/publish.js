@@ -66,8 +66,7 @@ var Publish = (function() {
     }
   }
 
-  function onReqClick(req_id) {
-    var req = player.requests[req_id];
+  function onReqClick(req) {
     if (!req) {
       return;
     }
@@ -115,7 +114,8 @@ var Publish = (function() {
       var button = UI.makeBox(FB.$('requests'),name,[x,y],[450,60],'chess');
       button.innerHTML = '<img src="http://graph.facebook.com/'+req.from.id+'/picture"/>';
       var text = UI.makeBox(button,'text_'+req.id,[60,0],[390,60],'chess');
-      text.innerHTML = '<div onclick="Publish.onReqClick('+req.id+');">' + req.from.name + '<br>' + req.message + '</div>';
+      text.innerHTML = '<div>' + req.from.name + '<br>' + req.message + '</div>';
+      text[Browser.mobile ? 'ontouchstart' : 'onmousedown'] = function() { onReqClick(req) };
     }
   }
   

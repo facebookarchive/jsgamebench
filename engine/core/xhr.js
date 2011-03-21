@@ -16,6 +16,9 @@ var Xhr = (function() {
     var socket;
 
     function init() {
+      if (typeof(stand_alone) != 'undefined') {
+        return;
+      }
       var options = {transports: ['xhr-polling']};
       switch (Browser.browser) {
         case Browser.CHROME:
@@ -42,7 +45,7 @@ var Xhr = (function() {
     }
 
     function toServer(cmd) {
-      if (typeof(stand_alone) != 'undefined' && stand_alone) {
+      if (typeof(stand_alone) != 'undefined') {
          return;
       }
       var unique_id = client_user.unique_id;

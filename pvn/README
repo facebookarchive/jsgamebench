@@ -1,0 +1,14 @@
+Overview
+--------
+Pirates vs Ninjas is a physics based game where the pirates try to knock down the ninjas
+dojo by launching cannonball-pirates at them. The code style has some oddity to it because
+it was two projects grafted together. It runs on both mobile and desktop.
+
+It uses the code in the engine/ directory for rendering and input (this code is a stripped
+down version of the same code from https://github.com/facebook/jsgamebench )
+
+Installation
+------------
+Place the pvn/ and engine/ directories into any webserver that can host static HTML files.
+
+Then, create a new Facebook Application, and set the fb_app_id in index.html to your app_id.
