@@ -141,6 +141,9 @@ var Perf = (function() {
                     stats += 'css keyframe ';
                   }
                   break;
+                case 'multi':
+                  stats += 'multi ' + sub[det + 1] + " ";
+                  break;
               }
             }
             stats += (s == 0 ? '</b>' : '') + '<br />';
@@ -207,18 +210,20 @@ var Perf = (function() {
       var sprite = Browser.mobile ? 'aahalf' : 'aa';
       var fps = Browser.mobile ? 20 : 30;
 
-      PerfTest.addTest(
-        {
-          viewport: 'fluid',
-          settings:
+      for (var i=0;i<30;i++) {
+        PerfTest.addTest(
           {
-            render_mode: GameFrame.HTML_ONLY,
-            sprite_sheets: false, int_snap: true,
-              update_existing: true, use_div_background: true, multi_img: false,
-              css_transitions: false, css_keyframe: false, transform3d: Browser.mobile ? true : false
+            viewport: 'fluid',
+              settings:
+            {
+              render_mode: GameFrame.HTML_ONLY,
+                sprite_sheets: false, int_snap: true, multi: 1+i,
+                update_existing: true, use_div_background: true, multi_img: false,
+                css_transitions: false, css_keyframe: false, transform3d: Browser.mobile ? true : false
           },
-          tfps: fps, background: 'world', sprites: sprite, demo: true
-        });
+              tfps: fps, background: 'world', sprites: sprite, demo: false
+              });
+      }
       PerfTest.doAll();
     }
 

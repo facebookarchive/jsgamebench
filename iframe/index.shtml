@@ -4,7 +4,7 @@
   </head>
 
   <body>
-    <iframe src="/perf/index.shtml" marginheight="0px" marginwidth="0px" frameborder="0" scrolling="no" style="overflow:hidden;width:600px;height:700px;"></iframe>
+    <iframe src="/perf/index.shtml" marginheight="0px" marginwidth="0px" frameborder="0" scrolling="no" style="overflow:hidden;width:600px;height:700px;-webkit-transform:translate3d(0,0,0);"></iframe>
   </body>
 
 </html>

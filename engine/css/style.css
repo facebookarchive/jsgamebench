@@ -784,6 +784,7 @@ body {
 }
 
 #gamebody {
+    overflow:hidden;
 }
 
 .ui_html {

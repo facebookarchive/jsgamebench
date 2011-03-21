@@ -32,7 +32,14 @@ var FBmark = (function() {
 
     function peak() {
       var total = 1;
-      for (var sp in {aa: 0, rot: 0}) {
+      var sprites = {};
+      for (var sp in scores.canvas) {
+        sprites[sp] = 0;
+      }
+      for (var sp in scores.html) {
+        sprites[sp] = 0;
+      }
+      for (var sp in sprites) {
         if (scores.canvas[sp] && scores.html[sp]) {
           if (scores.canvas[sp][0].score >= scores.html[sp][0].score) {
             total *= scores.canvas[sp][0].score;

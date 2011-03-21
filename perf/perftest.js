@@ -138,6 +138,27 @@ var PerfTest = (function() {
       console.log(out);
     }
 
+    var multiSprites = 10;
+    var PerfTest = {};
+
+
+    function incShipMulti(count,x,y) {
+      var sprite = "mship" + (count % multiSprites);
+      Gob.add(Utils.uuidv4(), sprite, parseInt(Math.random() * 8), [Math.random() * x, Math.random() * y], [Math.random() * 10 + 1, 0], Math.random()*2000, 1);
+    }
+
+    function shipMulti() {
+      for (var i=0;i<multiSprites;i++) {
+        Sprites.add('mship'+i, {url: '/images/ship.png?'+Utils.uuidv4(), frames: 36,
+              framepos: [[0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0],
+                         [0, 1], [1, 1], [2, 1], [3, 1], [4, 1], [5, 1],
+                         [0, 2], [1, 2], [2, 2], [3, 2], [4, 2], [5, 2],
+                         [0, 3], [1, 3], [2, 3], [3, 3], [4, 3], [5, 3],
+                         [0, 4], [1, 4], [2, 4], [3, 4], [4, 4], [5, 4],
+                         [0, 5], [1, 5], [2, 5], [3, 5], [4, 5], [5, 5]],
+              width: 256, height: 256});
+      }
+    }
 
     function ship() {
       if (GameFrame.settings.sprite_sheets) {
@@ -253,8 +274,6 @@ var PerfTest = (function() {
 
     var background_loaders = {world: worldBackground, scroll: scrollBackground, none: noBackground, ninja: ninjaBackground, none:noBackground};
 
-    var PerfTest = {};
-
     var tests = [];
     PerfTest.pushTest = function(test) {
       tests.push(test);
@@ -272,6 +291,9 @@ var PerfTest = (function() {
       tests.push(function() {
           Gob.delAll();
           World.reset();
+          if (test.settings.multi) {
+            Sprites.deleteAll();
+          }
 
           var tid = {};
           tid.browser = Browser.browser;
@@ -292,7 +314,18 @@ var PerfTest = (function() {
             background_loaders[test.background]();
             tid.background = test.background;
           }
-          sprites[test.sprites].sp();
+
+          var tmp_inc = sprites[test.sprites].inc;
+          var tmp_dec = sprites[test.sprites].dec ? sprites[test.sprites].dec : dec;
+
+          if (test.settings.multi) {
+            multiSprites = test.settings.multi;
+            shipMulti();
+            tmp_inc = incShipMulti;
+            num = 1;
+          } else {
+            sprites[test.sprites].sp();
+          }
           tid.sprites = test.sprites;
 
           var num = sprites[test.sprites].num;
@@ -300,8 +333,8 @@ var PerfTest = (function() {
             num *= 5;
           }
 
-          Benchmark.setup({inc: sprites[test.sprites].inc,
-                dec: sprites[test.sprites].dec ? sprites[test.sprites].dec : dec,
+          Benchmark.setup({inc: tmp_inc,
+                dec: tmp_dec,
                 tfps: test.tfps,
                 num: num,
                 w: Browser.w,

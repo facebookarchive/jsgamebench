@@ -51,7 +51,7 @@ var Benchmark = (function() {
     }
 
     function tick() {
-      if (runtest && inc && dec && (frame++ > 5)) {
+      if (runtest && inc && dec && (frame++ > 2)) {
         frame = 0;
         var fps = Tick.fps();
         if (Tick.slowframe) {
@@ -73,7 +73,7 @@ var Benchmark = (function() {
               inc(count++, w, h);
             }
           } else if (fps < targetfps) {
-            if (!demo && backoff > 30) {
+            if (!demo && backoff > 20) {
               runtest = false;
               PerfTest.done(tid, count);
             } else {
