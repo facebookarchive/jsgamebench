@@ -49,7 +49,7 @@ var Init = (function() {
       setInterval('Init.tick();', parseInt(1000/maxFPS));
       initFunc();
       winresize();
-      reset();
+      setupFunc();
     }
 
     function tick() {
@@ -89,7 +89,6 @@ var Init = (function() {
     }
 
     function winresize() {
-      console.log('winsize: ' + arguments.callee.caller.toString());
       var last_width = Browser.winsize[0];
       var last_height = Browser.winsize[1];
 
