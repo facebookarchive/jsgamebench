@@ -106,7 +106,7 @@ var GameFrame = (function() {
       }
     }
 
-    function makeDiv(parentid, id, dclass, dstyle, color, hidden, add) {
+   function makeDiv(parentid, id, dclass, dstyle, color, hidden, add) {
       var pel = window.document.getElementById(parentid);
       if (pel) {
         var stylestr = '';
