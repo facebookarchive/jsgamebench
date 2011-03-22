@@ -20,7 +20,7 @@
     onorientationchange="Init.winresize();"
     onunload="Init.quit()">
     <div id="fb-root"></div>
-    <div id="gameui"></div>
+    <div id="gameui" style="position:absolute;z-index:10000;"></div>
     <div id="gamebody"></div>
   </body>
 </html>
