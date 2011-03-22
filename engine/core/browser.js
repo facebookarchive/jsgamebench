@@ -155,22 +155,17 @@ var Browser = (function() {
       var width = 0;
       var height = 0;
 
-      if (window == window.top) {
-        if (typeof(window.innerWidth) == 'number') {
-          width = window.innerWidth;
-          height = window.innerHeight;
-        } else if (window.document.documentElement &&
-                   (window.document.documentElement.clientWidth ||
-                    window.document.documentElement.clientHeight)) {
-          width = window.document.documentElement.clientWidth;
-          height = window.document.documentElement.clientHeight;
-        } else if (window.document.body &&
-                   (window.document.body.clientWidth ||
-                    window.document.body.clientHeight)) {
-          width = window.document.body.clientWidth;
-          height = window.document.body.clientHeight;
-        }
-      } else {
+      if (typeof(window.innerWidth) == 'number') {
+        width = window.innerWidth;
+        height = window.innerHeight;
+      } else if (window.document.documentElement &&
+                 (window.document.documentElement.clientWidth ||
+                  window.document.documentElement.clientHeight)) {
+        width = window.document.documentElement.clientWidth;
+        height = window.document.documentElement.clientHeight;
+      } else if (window.document.body &&
+                 (window.document.body.clientWidth ||
+                  window.document.body.clientHeight)) {
         width = window.document.body.clientWidth;
         height = window.document.body.clientHeight;
       }

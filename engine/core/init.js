@@ -68,7 +68,7 @@ var Init = (function() {
     function reset() {
       teardownFunc();
 
-      var gbel = window.document.getElementById('gamebody');
+      var gbel = document.getElementById('gamebody');
       gbel.innerHTML = '';
 
       var path = window.location.pathname;
@@ -79,10 +79,11 @@ var Init = (function() {
     }
 
     function hideBar() {
-      window.scrollTo(0,1);
-      var hidediv = window.document.getElementById('hidebardiv');
-      if (hidediv)
-        window.document.body.removeChild(hidediv);
+      var hidediv = document.getElementById('hidebardiv');
+      if (hidediv) {
+        window.scrollTo(0,1);
+        document.body.removeChild(hidediv);
+      }
       Browser.getWindowSize();
       GameFrame.setXbyY();
       resizeFunc();
@@ -106,20 +107,21 @@ var Init = (function() {
 
       Browser.winpos[0] = 0;
       Browser.winpos[1] = 0;
-      if (0 && (window==window.top) && Browser.mobile) {
-        var hidediv = window.document.getElementById('hidebardiv');
+      if (Browser.mobile && Browser.ios) {
+        var hidediv = document.getElementById('hidebardiv');
         if (!hidediv) {
-          hidediv = window.document.createElement('div');
+          hidediv = document.createElement('div');
           hidediv.id = 'hidebardiv';
           hidediv.style.cssText = 'position:absolute;z-index:10000;left:0px;top:-1000px;width:5000px;height:5000px;background:#000';
-          window.document.body.appendChild(hidediv);
-          setTimeout("Init.hideBar();", 100);
+          document.body.appendChild(hidediv);
+          setTimeout("Init.hideBar();", 10);
         }
       } else  {
         GameFrame.setXbyY();
         resizeFunc();
       }
     }
+
 
     function init() {
       // in case we left in some debugging by accident
@@ -136,8 +138,8 @@ var Init = (function() {
       Render.setupBrowserSpecific();
 
       if (window == window.top) {
-        var meta_viewport = window.document.querySelector &&
-          window.document.querySelector("meta[name=viewport]");
+        var meta_viewport = document.querySelector &&
+          document.querySelector("meta[name=viewport]");
         if (meta_viewport && window.devicePixelRatio >= 2 ) {
           Browser.lowres = false;
           meta_viewport.setAttribute('content', 'user-scalable=no, width=device-width, height=device-height, initial-scale=0.5, maximum-scale=0.5');
@@ -148,14 +150,14 @@ var Init = (function() {
 
       timer_kick_off();
 
-      if (0 && (window == window.top) && Browser.mobile) {
-        var hidediv = window.document.getElementById('hidebardiv');
+      if (Browser.mobile && Browser.ios) {
+        var hidediv = document.getElementById('hidebardiv');
         if (!hidediv) {
-          hidediv = window.document.createElement('div');
+          hidediv = document.createElement('div');
           hidediv.id = 'hidebardiv';
           hidediv.style.cssText = 'position:absolute;z-index:10000;left:0px;top:-1000px;width:5000px;height:5000px;background:#000';
-          window.document.body.appendChild(hidediv);
-          setTimeout("Init.hideBar();", 100);
+          document.body.appendChild(hidediv);
+          setTimeout("Init.hideBar();", 10);
         }
       }
     }
