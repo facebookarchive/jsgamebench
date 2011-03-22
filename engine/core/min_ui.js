@@ -72,7 +72,8 @@ var UI = (function() {
       pos = uiPos(pos_type,size);
       var button = makeBox(uiElement(),name,pos,size,'button_class');
       button.innerHTML = name;
-      var click = Browser.mobile ? 'ontouchstart' : 'onmousedown';
+      //var click = Browser.mobile ? 'ontouchstart' : 'onmousedown';
+      click = 'onclick';
       button[click] = cb;
     }
 
