@@ -106,7 +106,7 @@ var Init = (function() {
 
       Browser.winpos[0] = 0;
       Browser.winpos[1] = 0;
-      if ((window==window.top) && Browser.mobile) {
+      if (0 && (window==window.top) && Browser.mobile) {
         var hidediv = window.document.getElementById('hidebardiv');
         if (!hidediv) {
           hidediv = window.document.createElement('div');
@@ -148,14 +148,14 @@ var Init = (function() {
 
       timer_kick_off();
 
-      if ((window == window.top) && Browser.mobile) {
+      if (0 && (window == window.top) && Browser.mobile) {
         var hidediv = window.document.getElementById('hidebardiv');
         if (!hidediv) {
           hidediv = window.document.createElement('div');
           hidediv.id = 'hidebardiv';
           hidediv.style.cssText = 'position:absolute;z-index:10000;left:0px;top:-1000px;width:5000px;height:5000px;background:#000';
           window.document.body.appendChild(hidediv);
-          setTimeout("Init.hideBar();", 10);
+          setTimeout("Init.hideBar();", 100);
         }
       }
     }
