@@ -3,6 +3,7 @@
   <head>
     <link rel="stylesheet" type="text/css" href="/chess/style.css" />
     #include '/engine/include/fb_jssdk.include'
+    #include '/engine/include/portrait.include'
     #include 'app_id'
     #include '/engine/include/min.include'
     <script type="text/javascript" src="/chess/constants.js"></script>
@@ -18,6 +19,7 @@
     onorientationchange="Init.winresize();"
     onunload="Init.quit()">
     <div id="fb-root"></div>
+    <div id="gameui"></div>
     <div id="gamebody"></div>
   </body>
 </html>

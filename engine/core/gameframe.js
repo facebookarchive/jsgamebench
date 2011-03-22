@@ -199,7 +199,7 @@ var GameFrame = (function() {
     }
 
     function setXbyY(viewport) {
-      console.log('xbyy: ' + arguments.callee.caller.toString());
+      //console.log('xbyy: ' + arguments.callee.caller.toString());
       var viewports = {fluid: [null, null], fluid_width: [null, 640], normal: [960, 640], tiny: [320,320]};
       if (viewport) {
         settings.viewport = viewport;

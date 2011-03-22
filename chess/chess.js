@@ -47,7 +47,6 @@ var Chess = (function() {
         return;
       }
       UI.removeTree('ui');
-      UI.makeBox(FB.$('gamebody'),'ui',[0,0],[0,0]);
       game_state = state;
       if (state == 'menu') {
         Publish.getRequests(game_state);
@@ -61,9 +60,6 @@ var Chess = (function() {
     }
 
     function tick() {
-      if (!FB.$('ui')) {
-        UI.makeBox(FB.$('gamebody'),'ui',[0,0],[0,0]);
-      }
       if (Pieces.isAnimating()) {
         Pieces.updateMove();
       } else if (!playback) {
@@ -137,12 +133,15 @@ var Chess = (function() {
       var hash = window.location.hash;
       hash = hash.length && hash.substr(1);
       if (hash) {
-        replay = FB.JSON.parse(decodeURIComponent(hash));
-        Gob.delAll();
-        Board.init();
-        Chess.newGameState('replay');
-        Board.loadState(replay.board);
-        Chess.startPlayback();
+        try {
+         replay = FB.JSON.parse(decodeURIComponent(hash));
+         Gob.delAll();
+         Board.init();
+         Chess.newGameState('replay');
+         Board.loadState(replay.board);
+         Chess.startPlayback();
+        } catch(e) {
+        }
       }
     }
 

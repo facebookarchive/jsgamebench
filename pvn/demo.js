@@ -132,7 +132,7 @@ var run_physics_sync = true;
         else {
           this.last_x = undefined;
           if (FB.Demo.action && FB.Demo.action.type == 'aim') {
-            var piratePos = FB.Demo.pirate.GetPosition();
+            var piratePos = FB.Demo._mouseJoint.GetTarget();
             FB.Demo.firePirate();
             FB.Demo.replayData = {x:piratePos.x, y:piratePos.y};
             FB.Demo.action = null;
