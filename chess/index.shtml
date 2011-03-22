@@ -3,6 +3,7 @@
   <head>
     <link rel="stylesheet" type="text/css" href="/chess/style.css" />
     #include '/engine/include/fb_jssdk.include'
+    #include '/engine/include/portrait.include'
     #include 'app_id'
     #include '/engine/include/min.include'
     <script type="text/javascript" src="/chess/constants.js"></script>

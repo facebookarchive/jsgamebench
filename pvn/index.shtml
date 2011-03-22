@@ -3,6 +3,7 @@
     #include 'app_id'
     <link rel="stylesheet" type="text/css" href="/pvn/pvn.css">
     #include '/engine/include/fb_jssdk.include'
+    #include '/engine/include/portrait.include'
     #include '/engine/include/min.include'
 
     <script type="text/javascript" src="/pvn/box2d.js"></script>
