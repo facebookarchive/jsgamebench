@@ -14,7 +14,7 @@
 
 var UI = (function() {
     function uiElement() {
-      return FB.$('ui') || UI.makeBox(FB.$('gamebody'),'ui',[0,0],[0,0]);
+      return FB.$('ui') || UI.makeBox(FB.$('gameui'),'ui',[0,0],[0,0]);
     }
 
     function removeTree(name) {
