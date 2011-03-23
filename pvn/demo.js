@@ -48,6 +48,7 @@ var run_physics_sync = true;
       FB.Demo.setupBackground();
       FB.Demo.setupWalls();
       FB.Demo.setupWaitingPirates();
+      FB.Demo.setupTreasure();
       FB.Demo.setupCaptain();
       FB.Demo.setupSling();
       FB.Demo.setupNodes();
@@ -291,6 +292,18 @@ var run_physics_sync = true;
       }
     },
 
+    setupTreasure: function() {
+      var w = uh * 12;
+      var h = w * 1.8;
+      display.addVisual( {
+        x: w + w/2 + 40,
+        y: display.lH - h / 2,
+        width: w,
+        height: h,
+        imgSrc: 'images/treasure_chest.png'
+      });
+    },
+
     setupBackground: function() {
       World.add('bg_idx', 'background', [Browser.w*0.45,Browser.h - 768 + 768/2], 0);
     },
@@ -339,18 +352,18 @@ var run_physics_sync = true;
       var vertShapeInfo = {
         type: 'box',
         width: uh * 5,
-        height: uh * 24,
+        height: uh * 23.4,
       };
 
       var horzShapeInfo = {
         type: 'box',
-        width: uh * 25,
+        width: uh * 21,
         height: uh * 5,
       };
 
       var shortHorzShapeInfo = {
         type: 'box',
-        width: uh * 20,
+        width: uh * 21,
         height: uh * 5,
       };
 
@@ -376,7 +389,7 @@ var run_physics_sync = true;
       horzPic = 'images/board_horiz.png';
 
       var dx = display.lW - uh * 80;
-      var lh = display.lH;
+      var lh = display.lH - 0.7;
       physics.addBody(display.addVisual({
         x:  dx,
         y:  lh - vertShapeInfo.height / 2,
@@ -401,10 +414,9 @@ var run_physics_sync = true;
       };
       physics.addBody(display.addVisual(hz1), horzInfo);
 
-      dx += uh * 5;
       var dy = vertShapeInfo.height + horzShapeInfo.height;
       physics.addBody(display.addVisual({
-        x:  dx - 0.3,
+        x:  dx,
         y:  lh - (vertShapeInfo.height / 2 + dy),
         angle: 0,
         imgSrc: vertPic
@@ -412,7 +424,7 @@ var run_physics_sync = true;
 
 
       physics.addBody(display.addVisual({
-        x:  dx + shortHorzShapeInfo.width - 0.3,
+        x:  dx + shortHorzShapeInfo.width,
         y:  lh - (vertShapeInfo.height / 2 + dy),
         angle: 0,
         imgSrc: vertPic
@@ -440,7 +452,7 @@ var run_physics_sync = true;
       }), ninjaInfo);
 
       physics.addBody(display.addVisual({
-        x:  dx + shortHorzShapeInfo.width / 2 -0.2,
+        x:  dx + shortHorzShapeInfo.width / 2,
         y:  lh - (shortHorzShapeInfo.height / 2 + dy + vertShapeInfo.height),
         angle: 0,
         imgSrc: horzPic
@@ -451,6 +463,14 @@ var run_physics_sync = true;
         y:  lh - (ninjaShapeInfo.radius + dy + vertShapeInfo.height + shortHorzShapeInfo.height),
         angle: 0,
         imgSrc: ninjaPic,
+        scoreCb: scoreNinjaMotion
+      }), ninjaInfo);
+
+      physics.addBody(display.addVisual({
+        x:  dx - shortHorzShapeInfo.width / 2,
+        y:  lh - ninjaShapeInfo.radius,
+        angle: 0,
+        imgSrc: 'images/ninja_cartwheel.png',
         scoreCb: scoreNinjaMotion
       }), ninjaInfo);
 
@@ -472,8 +492,7 @@ var run_physics_sync = true;
 
       physics.addBody(display.addVisual({
         x: display.lW / 2,
-        y: display.lH
-        //cssClass: 'wall'
+        y: display.lH - 0.7
       }), info);
 
       info.shape.width = 0.0001;

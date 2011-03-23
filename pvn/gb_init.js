@@ -55,16 +55,6 @@ function loadImageList(path,list) {
 
 function init() {
   Publish.fbInit(fb_app_id);
-  /*
-  ClientCmd.install('playGame',FB.Demo.play);
-  ClientCmd.install('publishStory',Publish.publishStory);
-  ClientCmd.install('sendRequest',Publish.sendRequest);
-  ClientCmd.install('replay',FB.Demo.replay);
-  ClientCmd.install('fblogin',Publish.fbLogin);
-  ClientCmd.install('fblogout',Publish.fbLogout);
-  */
-  
-  //UI.addCollection('', 'gameOpts', {pos: [0, 0]});
   GameFrame.settings.offset = 0;
   GameFrame.updateSettings({render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: true, css_transitions: false, css_keyframe: false, sprite_sheets: false, int_snap: true, transform3d:true});
   Input.hookEvents('gamebody');
@@ -75,7 +65,7 @@ function setup() {
   loadImageList('/pvn/images/',[
                   'bouncing_pirate.png','Mate_01.png','Pirate_Captain_Idle_00.png','flying_pirate.png',
                   'ninja1.png','cannon_chassis.png','cannon_barrel.png','board_vert.png','wall.png',
-                  'board_horiz.png','background.jpg']);
+                  'board_horiz.png','background.jpg', 'ninja_cartwheel.png', 'treasure_chest.png']);
 
 }
 
