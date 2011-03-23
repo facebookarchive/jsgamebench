@@ -71,14 +71,18 @@ var Publish = (function() {
       return;
     }
     UI.removeTree('requests');
-    player.active_req = req;
-    var data = req.data;
-    req.concede = data.concede;
-    Gob.delAll();
-    Board.init();
-    Chess.newGameState('playing');
-    Board.loadState(data.board);
-    Chess.startPlayback();
+    try {
+      player.active_req = req;
+      var data = req.data;
+      req.concede = data.concede;
+      Gob.delAll();
+      Board.init();
+      Chess.newGameState('playing');
+      Board.loadState(data.board);
+      Chess.startPlayback();
+    } catch (e) {
+      removeRequest(req);
+    }
    }
 
   function getInfo() {
