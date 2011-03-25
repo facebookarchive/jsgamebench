@@ -323,7 +323,7 @@ var Pieces = (function() {
                   square = Board.getSquare(1,y);
                   if (!square.piece) {
                     square = Board.getSquare(0,y);
-                    if (square.piece.type == Rook && !square.piece.move) {
+                    if (square.piece && square.piece.type == Rook && !square.piece.move) {
                       square = Board.getSquare(2,y);
                       possible_move = true;
                       square.bright = true;
