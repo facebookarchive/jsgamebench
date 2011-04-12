@@ -226,13 +226,13 @@ var Perf = (function() {
     }
 
 
-    function memory_htmlDemo() {
+    function memory_test_htmlDemo() {
       UI.del('buttons');
       UI.del('perf');
       var sprite = Browser.mobile ? 'aahalf' : 'aa';
       var fps = Browser.mobile ? 20 : 30;
 
-      for (var i=0;i<10;i++) {
+      for (var i=0;i<20;i++) {
         PerfTest.addTest(
           {
             viewport: 'fluid',
