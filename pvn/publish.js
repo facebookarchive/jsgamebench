@@ -47,7 +47,7 @@ var Publish = (function() {
       return alert('have to play first!');
     }
     var loc = window.location;
-    var url = loc.protocol + '//' + loc.host + '/pvn/show/' + 
+    var url = loc.protocol + '//' + 'apps.facebook.com/pvn_ext' + '/pvn?show=' + 
       encodeURIComponent(FB.JSON.stringify({
         replay_data: replayData,
         player: {
@@ -202,8 +202,8 @@ var Publish = (function() {
   }
 
   function checkReplayUrl() {
-    var pathname = window.location.pathname,
-    prefix = 'show/',
+    var pathname = window.location.search,
+    prefix = '?show=',
     i = pathname.indexOf(prefix);
     if (i < 0) {
       return;
