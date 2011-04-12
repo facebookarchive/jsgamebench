@@ -215,7 +215,7 @@ var GameFrame = (function() {
                              top: Browser.winpos[1],
                              width: Browser.winsize[0],
                              height: Browser.winsize[1]},
-                         '#f2f2f2');
+                         '#111');
 
       var midx = 0.5 * (Browser.winsize[0] - Browser.winpos[0]);
       var midy = settings.offset*0.5 + 0.5 * (Browser.winsize[1] - (Browser.winpos[1]));
@@ -224,8 +224,7 @@ var GameFrame = (function() {
                             {left: midx - (Browser.w * 0.5),
                                 top: midy - (Browser.h * 0.5),
                              width: Browser.w,
-                             height: Browser.h},
-                            '#112');
+                             height: Browser.h});
       layout();
       updateSettings({},true);
       checkRenderMode();

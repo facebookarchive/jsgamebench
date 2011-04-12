@@ -160,6 +160,19 @@ var PerfTest = (function() {
       }
     }
 
+    function shipMultiSmall() {
+      for (var i=0;i<multiSprites;i++) {
+        Sprites.add('mship'+i, {url: '/images/ship_half.png?'+Utils.uuidv4(), frames: 36,
+              framepos: [[0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0],
+                         [0, 1], [1, 1], [2, 1], [3, 1], [4, 1], [5, 1],
+                         [0, 2], [1, 2], [2, 2], [3, 2], [4, 2], [5, 2],
+                         [0, 3], [1, 3], [2, 3], [3, 3], [4, 3], [5, 3],
+                         [0, 4], [1, 4], [2, 4], [3, 4], [4, 4], [5, 4],
+                         [0, 5], [1, 5], [2, 5], [3, 5], [4, 5], [5, 5]],
+              width: 128, height: 128});
+      }
+    }
+
     function ship() {
       if (GameFrame.settings.sprite_sheets) {
         Sprites.add('ship', {url: '/images/ship_fbmark.png', frames: 2,
@@ -320,7 +333,10 @@ var PerfTest = (function() {
 
           if (test.settings.multi) {
             multiSprites = test.settings.multi;
-            shipMulti();
+            if (test.sprites == 'aa')
+              shipMulti();
+            else
+              shipMultiSmall();
             tmp_inc = incShipMulti;
             num = 1;
           } else {
@@ -359,7 +375,7 @@ var PerfTest = (function() {
       tests = [];
       current = 0;
       var spar = {'aa':1, 'rot':1};
-      var vp = 'fluid_width';
+      var vp = 'normal';
       var bg = 'world';
       var is = true;
 
@@ -371,9 +387,8 @@ var PerfTest = (function() {
             }
           }
           if (Browser.browser == Browser.CHROME || Browser.browser == Browser.WEBKIT) {
-            if (0 && Browser.ios) {
+            if (Browser.ios) {
               addTest({viewport: vp, settings: {render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: true,  css_transitions: true, sprite_sheets: true, css_keyframe: true, int_snap: is ? true : false, transform3d: t3 ? true : false}, tfps: 30, background: bg, sprites: sp });
-              addTest({viewport: vp, settings: {render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: false, css_transitions: true, sprite_sheets: true, css_keyframe: true, int_snap: is ? true : false, transform3d: t3 ? true : false}, tfps: 30, background: bg, sprites: sp });
             }
             addTest({viewport: vp, settings: {render_mode: GameFrame.HTML_ONLY, update_existing: true, use_div_background: true, css_transitions: true, sprite_sheets: false, css_keyframe: false, int_snap: is ? true : false, transform3d: t3 ? true : false}, tfps: 30, background: bg, sprites: sp });
           }
@@ -386,8 +401,8 @@ var PerfTest = (function() {
         if (!Browser.mobile && WebGLUtil.isSupported()) {
           addTest({viewport: vp, settings: {render_mode: GameFrame.WEBGL, webgl_blended_canvas: false, sprite_sheets: false, int_snap: false}, tfps: 30, background: bg, sprites: sp });
           addTest({viewport: vp, settings: {render_mode: GameFrame.WEBGL, webgl_blended_canvas: false, sprite_sheets: true, int_snap: false}, tfps: 30, background: bg, sprites: sp });
-          addTest({viewport: vp, settings: {render_mode: GameFrame.WEBGL, webgl_blended_canvas: true, sprite_sheets: false, int_snap: false}, tfps: 30, background: bg, sprites: sp });
-          addTest({viewport: vp, settings: {render_mode: GameFrame.WEBGL, webgl_blended_canvas: true, sprite_sheets: true, int_snap: false}, tfps: 30, background: bg, sprites: sp });
+//          addTest({viewport: vp, settings: {render_mode: GameFrame.WEBGL, webgl_blended_canvas: true, sprite_sheets: false, int_snap: false}, tfps: 30, background: bg, sprites: sp });
+//          addTest({viewport: vp, settings: {render_mode: GameFrame.WEBGL, webgl_blended_canvas: true, sprite_sheets: true, int_snap: false}, tfps: 30, background: bg, sprites: sp });
         }
       }
       tests.sort(function(a,b) {return Math.random()-0.5;});
@@ -420,10 +435,13 @@ var PerfTest = (function() {
       } else {
         var result = FBmark.peak();
         Perf.myscore = parseInt(result.score);
-        ClientCmd.logperf(Browser.browser_version, result);
-        alert("Your score was " + Perf.myscore + " sprites!");
+        var temp = {};
+        temp.details = result;
+        temp.browser = Browser.browser_version;
+        temp.peak = result.score;
         FBmark.reset();
         PerfTest.stop();
+        ClientCmd.perfdisplay([temp]);
       }
     }
 

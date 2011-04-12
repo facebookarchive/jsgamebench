@@ -36,4 +36,3 @@
 <script type="text/javascript" src="/engine/core/input.js"> </script>
 <script type="text/javascript" src="/engine/core/clientcmd.js"> </script>
 <script type="text/javascript" src="/engine/core/init.js"> </script>
-<script type="text/javascript" src="/engine/core/xhr.js"> </script>
