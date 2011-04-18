@@ -11,12 +11,14 @@
     <script type="text/javascript" src="/perf/perf.js"> </script>
   </head>
 
-  <body id="gamebody"
+  <body
     style=""
     onresize="Init.winresize()"
     onload="Init.init()"
     onorientationchange="Init.winresize();"
     onunload="Init.quit()">
+    <a href="http://github.com/facebook/jsgamebench"><img style="position: absolute; top: 0; right: 0; border: 0; z-index:100000" src="/images/forkme.png" alt="Fork me on GitHub"></a>
+    <div id="gamebody"></div>
   </body>
 
 </html>
