@@ -259,7 +259,7 @@ var Perf = (function() {
           {
               render_mode: GameFrame.WEBGL,
               sprite_sheets: true, int_snap: false,
-              webgl_debug: false, webgl_blended_canvas: true
+              webgl_debug: false, webgl_blended_canvas: false
           },
           tfps: 30, background: 'world', sprites: 'rot', demo: true
         });

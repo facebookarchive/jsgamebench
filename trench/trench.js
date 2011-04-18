@@ -42,7 +42,7 @@ fs.readFile('app_secret', 'binary', function(err, data) {
 http.createServer(function(req, res) {
   var parse = url.parse(req.url);
   var pathname = parse.pathname;
-  var split = pathname.split('/');
+  var split = pathname && pathname.split('/');
   if (req.method === 'GET' || req.method === 'POST') {
     switch (split[1]) {
       case 'engine':
