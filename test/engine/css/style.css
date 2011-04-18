@@ -1,0 +1,147 @@
+/*
+  Copryright 2004-present Facebook, Inc.
+
+   Licensed under the Apache License, Version 2.0 (the "License"); you may
+   not use this file except in compliance with the License. You may obtain
+   a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+   WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+   License for the specific language governing permissions and limitations
+   under the License.
+*/
+
+* {
+  -webkit-touch-callout: none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -khtml-user-drag: none;
+  -webkit-user-drag: none;
+  user-select: none;
+  draggable: false;
+}
+
+
+img {
+  border: 0;
+}
+
+body {
+  font-family:'Lucida Grande',Tahoma,Verdana,Arial,sans-serif;
+  background:#FFFFFF;
+  font-size: 11px;
+  overflow: auto;
+}
+
+#gameframe, #gameviewport, #gamebackground {
+    overflow:hidden;
+}
+
+.ui_html {
+  background: #3B5998;
+  border: 1px solid #BDC7D8;
+  color: #000000;
+  white-space: nowrap;
+}
+
+.ui_button {
+  color: #ffffff;
+  background: #5B74A8;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #29447E #29447E #1A356E;
+  white-space: nowrap;
+}
+
+.spriteholder {
+  position:absolute;
+}
+
+.sprite {
+  position:absolute;
+}
+
+.gameviewport {
+}
+
+.testtype {
+  margin: 2px;
+}
+
+.perfblock {
+  background: #3B5998;
+  border: 1px solid #BDC7D8;
+}
+
+.perfscore {
+  font-size:45px;
+}
+
+.perfavescore {
+  font-size:24px;
+}
+
+.browsername {
+  font-size:24px;
+}
+
+.renderdetails {
+  font-size:15px;
+  line-height:15px
+}
+
+.center {
+  text-align: center;
+}
+
+.ui_scroll {
+  overflow: hidden;
+  background: #f2f2f2;
+}
+
+.scroll {
+  position: absolute;
+  overflow: hidden;
+  height: 110px;
+  border-top: 1px solid #e2e2e2;
+  background-position: 0px 40px;
+  background-repeat: no-repeat;
+}
+
+.scroll .title {
+  position: absolute;
+  font-size:32px;
+  left: 10px;
+}
+
+.scroll .text {
+  font-size: 12px;
+  position: absolute;
+  left: 160px;
+  top: 60px;
+  margin-right: 10px;
+}
+
+.fblogin {
+  height: 60px;
+  width: 200px;
+  border-top: 1px solid #e2e2e2;
+  background: #f2f2f2;
+  font-size:22px;
+}
+
+.button_class {
+  color: #fff;
+  background: #5B74A8;
+  font-size:28px;
+}
+
+.button_class_small {
+  color: #fff;
+  background: #5B74A8;
+  font-size:18px;
+}
