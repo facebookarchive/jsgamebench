@@ -36,7 +36,7 @@ function serverCallback(req, res) {
 console.log("starting server");
 
 var listenPort = 8081;
-var html_root = '/perf/static.html';
+var html_root = 'test/perf/index.html';
 
 for(var i=0;i<process.argv.length;i++) {
   if (process.argv[i] === '-port' && i+1 < process.argv.length) {
