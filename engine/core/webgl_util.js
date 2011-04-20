@@ -290,6 +290,10 @@ var WebGLUtil = (function() {
           return false;
         }
 
+        if (active_draw_context && active_draw_context.unsetContext) {
+          active_draw_context.unsetContext();
+        }
+
         active_draw_context = draw_context;
         return true;
       };
@@ -300,7 +304,7 @@ var WebGLUtil = (function() {
 
       var gl_flush = gl.flush;
       gl.flush = function() {
-        active_draw_context = undefined;
+        gl.setDrawContext(undefined);
         return gl_flush.apply(gl, arguments);
       };
     }

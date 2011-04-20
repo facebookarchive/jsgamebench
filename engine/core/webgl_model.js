@@ -27,6 +27,11 @@ var WebGLModel = (function() {
         gl.enable(gl.DEPTH_TEST);
         gl.depthFunc(gl.LESS);
 
+        gl.enableVertexAttribArray(0);
+        gl.enableVertexAttribArray(1);
+        gl.enableVertexAttribArray(2);
+        gl.disableVertexAttribArray(3);
+
         cur_model = undefined;
         cur_material_type = undefined;
         cur_material = undefined;
@@ -86,7 +91,6 @@ var WebGLModel = (function() {
           gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, model_ibo);
 
           // attrib 0 = positions
-          gl.enableVertexAttribArray(0);
           gl.vertexAttribPointer(0,
                                  3, // 3 components
                                  gl.FLOAT, // floats
@@ -95,7 +99,6 @@ var WebGLModel = (function() {
                                  0); // no offset
 
           // attrib 1 = texcoords
-          gl.enableVertexAttribArray(1);
           gl.vertexAttribPointer(1,
                                  2, // 2 components
                                  gl.FLOAT, // floats
@@ -104,7 +107,6 @@ var WebGLModel = (function() {
                                  12); // 12 bytes in, after positions
 
           // attrib 2 = normals
-          gl.enableVertexAttribArray(2);
           gl.vertexAttribPointer(2,
                                  3, // 3 components
                                  gl.FLOAT, // floats
