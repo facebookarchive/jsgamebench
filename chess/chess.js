@@ -187,6 +187,10 @@ var Chess = (function() {
        console.log('checking');
     }
     
+    function cacheError(e) {
+      console.log(count+ ' cacheError: ' + FB.JSON.stringify(e));
+    }
+    
     function sup(e,count) {
       console.log(count+ ' sup: ');// + JSON.stringify(e));
       console.log('');
@@ -196,7 +200,7 @@ var Chess = (function() {
       
       cache = window.applicationCache;
       cache.addEventListener('checking',  checking, false);
-      cache.addEventListener('error', function(e) { sup(e,2); }, false);
+      cache.addEventListener('error', cacheError, false);
       cache.addEventListener('update', function(e) { sup(e,3); }, false);
       cache.addEventListener('noupdate', noUpdate, false);
       cache.addEventListener('downloading', function(e) { sup(e,4); }, false);
