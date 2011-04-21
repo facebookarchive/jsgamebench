@@ -188,7 +188,7 @@ var Chess = (function() {
     }
     
     function cacheError(e) {
-      console.log(count+ ' cacheError: ' + FB.JSON.stringify(e));
+      console.log(' cacheError: ' + FB.JSON.stringify(e));
     }
     
     function sup(e,count) {

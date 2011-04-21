@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html manifest="chess/chess.manifest">
+<html manifest="/chess/chess.manifest">
   <head>
     <link rel="stylesheet" type="text/css" href="/chess/style.css" />
     #include '/engine/include/fb_jssdk.include'
