@@ -51,12 +51,17 @@ for(var i=0;i<process.argv.length;i++) {
     production_mode = true;
     listenPort = 80;
     sslPort = 443;
-  } else if (process.argv[i] === '--port' && i+1 < process.argv.length) {
-    i++;
-    listenPort = process.argv[i];
-  } else if (process.argv[i] === '--sslport' && i+1 < process.argv.length) {
-    i++;
-    sslPort = process.argv[i];
+  } else if (i+1 < process.argv.length) {
+    if (process.argv[i] === '--port') {
+      i++;
+      listenPort = process.argv[i];
+    } else if (process.argv[i] === '--sslport') {
+      i++;
+      sslPort = process.argv[i];
+    } else if (process.argv[i] === '--delay') {
+      i++;
+      Comm.setDelay(parseInt(process.argv[i]));
+    }
   }
 }
 

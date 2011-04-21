@@ -154,7 +154,42 @@ var Chess = (function() {
       newGameState('playing');
     }
 
+    function loading(e) {
+      console.log('loaded: '+e.loaded+' / '+e.total);
+      var size = [150,60];
+      pos = UI.uiPos([Middle,Middle],size);
+      var box = UI.makeBox(0,'loading',pos,size,'button_class');
+      box.innerHTML = 'Loading: ' + e.loaded+' / '+e.total;
+    }
+    
+    function updateReady(e) {
+      UI.removeTree('loading');
+      window.applicationCache.swapCache();
+    }
+    
+    function noUpdate(e) {
+    }
+    
+    function checking(e) {
+    }
+    
+    function sup(e,count) {
+      console.log(count+ ' sup: ' + JSON.stringify(e));
+      console.log('');
+    }
+    
     function init() {
+      
+      cache = window.applicationCache;
+      cache.addEventListener('checking',  checking, false);
+      cache.addEventListener('error', function(e) { sup(e,2); }, false);
+      cache.addEventListener('update', function(e) { sup(e,3); }, false);
+      cache.addEventListener('noupdate', noUpdate, false);
+      cache.addEventListener('downloading', function(e) { sup(e,4); }, false);
+      cache.addEventListener('progress', loading, false);
+      cache.addEventListener('updateready', updateReady, false);
+      cache.addEventListener('cached', function(e) { sup(e,7); }, false);
+
       GameFrame.updateSettings({
         render_mode: GameFrame.HTML_ONLY,
         update_existing: true,

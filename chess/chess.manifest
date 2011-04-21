@@ -1,0 +1,62 @@
+CACHE MANIFEST
+# version 1.3
+ 
+images/Ninja_Bishop.png
+images/Ninja_King.png
+images/Ninja_Knight.png
+images/Ninja_Pawn.png
+images/Ninja_Queen.png
+images/Ninja_Rook.png
+images/Pirate_128_0000.png
+images/Pirate_Bishop.png
+images/Pirate_Bishop_Gray.png
+images/Pirate_King.png
+images/Pirate_King_Gray.png
+images/Pirate_Knight.png
+images/Pirate_Knight_Gray.png
+images/Pirate_Pawn.png
+images/Pirate_Pawn_Gray.png
+images/Pirate_Queen.png
+images/Pirate_Queen_Gray.png
+images/Pirate_Rook.png
+images/Pirate_Rook_Gray.png
+images/chess_icon.png
+images/small_explo.png
+
+/engine/css/style.css
+/engine/core/min_ui.js
+/engine/core/browser.js
+/engine/core/utils.js
+/engine/core/tick.js
+/engine/core/gameframe.js
+/engine/core/gob.js
+/engine/core/world.js
+/engine/core/sprites.js
+/engine/core/render.js
+/engine/core/dom_render.js
+/engine/core/canvas_render.js
+/engine/core/input.js
+/engine/core/init.js
+
+/chess/style.css
+/chess/constants.js
+/chess/publish.js
+/chess/pieces.js
+/chess/board.js
+#/chess/chess.js
+
+NETWORK:
+# All URLs that start with the following lines
+# are whitelisted.
+*
+
+#http://example.com/examplepath/
+#http://www.example.org/otherexamplepath/
+ 
+#CACHE:
+# Additional items to cache.
+#demoimages/stonessmall.jpg
+ 
+#FALLBACK:
+#demoimages/ images/
+
