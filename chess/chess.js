@@ -8,7 +8,8 @@ var Chess = (function() {
     var explo;
     var replay = {};
     var Start = 'Start', Middle = 'Middle', End = 'End';
-
+    var load_count=0;
+    
     function gameState() {
       return game_state;
     }
@@ -155,26 +156,35 @@ var Chess = (function() {
     }
 
     function loading(e) {
-      console.log('loaded: '+e.loaded+' / '+e.total);
+      var msg = 'Loading: ';
+      if (e.total) {
+        msg += e.loaded+' / '+e.total;
+      } else {
+        msg += load_count++;
+      }
+      console.log(msg);
       var size = [150,60];
       pos = UI.uiPos([Middle,Middle],size);
       var box = UI.makeBox(0,'loading',pos,size,'button_class');
-      box.innerHTML = 'Loading: ' + e.loaded+' / '+e.total;
+      box.innerHTML = msg;
     }
     
     function updateReady(e) {
+      console.log('ready');
       UI.removeTree('loading');
       window.applicationCache.swapCache();
     }
     
     function noUpdate(e) {
-    }
+       console.log('noUpdate');
+   }
     
     function checking(e) {
+       console.log('checking');
     }
     
     function sup(e,count) {
-      console.log(count+ ' sup: ' + JSON.stringify(e));
+      console.log(count+ ' sup: ');// + JSON.stringify(e));
       console.log('');
     }
     
