@@ -79,7 +79,12 @@ var WebGLRender = (function() {
         return false;
       }
 
-      sprite_context = WebGLSprite.createContext(gl_context);
+      if (GameFrame.settings.webgl_batch_sprites) {
+        sprite_context = WebGLSprite.createBatchingContext(gl_context);
+      } else {
+        sprite_context = WebGLSprite.createContext(gl_context);
+      }
+
       if (!sprite_context) {
         initializing = false;
         return false;
