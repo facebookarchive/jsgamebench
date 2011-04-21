@@ -175,9 +175,13 @@ var Chess = (function() {
       window.applicationCache.swapCache();
     }
     
+    function cached(e) {
+      UI.removeTree('loading');
+    }
+    
     function noUpdate(e) {
        console.log('noUpdate');
-   }
+    }
     
     function checking(e) {
        console.log('checking');
@@ -198,7 +202,7 @@ var Chess = (function() {
       cache.addEventListener('downloading', function(e) { sup(e,4); }, false);
       cache.addEventListener('progress', loading, false);
       cache.addEventListener('updateready', updateReady, false);
-      cache.addEventListener('cached', function(e) { sup(e,7); }, false);
+      cache.addEventListener('cached', cached, false);
 
       GameFrame.updateSettings({
         render_mode: GameFrame.HTML_ONLY,
