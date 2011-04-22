@@ -155,6 +155,14 @@ var Chess = (function() {
       newGameState('playing');
     }
 
+    function loadStatus(msg) {
+      console.log(msg);
+      var size = [150,60];
+      pos = UI.uiPos([Middle,Middle],size);
+      var box = UI.makeBox(0,'loading',pos,size,'button_class');
+      box.innerHTML = msg;
+    }
+
     function loading(e) {
       var msg = 'Loading: ';
       if (e.total) {
@@ -162,11 +170,7 @@ var Chess = (function() {
       } else {
         msg += load_count++;
       }
-      console.log(msg);
-      var size = [150,60];
-      pos = UI.uiPos([Middle,Middle],size);
-      var box = UI.makeBox(0,'loading',pos,size,'button_class');
-      box.innerHTML = msg;
+      loadStatus(msg);
     }
     
     function updateReady(e) {
@@ -189,6 +193,7 @@ var Chess = (function() {
     
     function cacheError(e) {
       console.log(' cacheError: ' + FB.JSON.stringify(e));
+      loadStatus('cacheError');
     }
     
     function sup(e,count) {
