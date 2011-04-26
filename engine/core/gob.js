@@ -23,9 +23,11 @@ var Gob = (function() {
         // go looking for non-sprite sheet version
         sprite = Sprites.spritedictionary[spriteid+"0"];
       }
-      if (frame >= sprite.frames)
+      if (frame >= sprite.frames || sprite.no_anim) {
         frame = 0;
-      gobs[id] = {id: id, spriteid: basesprite, frame: frame, pos: pos, vel: (vel ? vel : vel), theta: (vel ? Math.atan2(vel[1],vel[0]) : 0), scale: (scale ? scale : 1), z: (z ? z : Math.random() * 2000), dirty: true, time: Tick.current, atime: Tick.current, animate: false, discon: true};
+      }
+      scale = (scale || 1.0) * GameFrame.settings.sprite_scale;
+      gobs[id] = {id: id, spriteid: basesprite, frame: frame, pos: pos, vel: vel, theta: (vel ? Math.atan2(vel[1],vel[0]) : 0), scale: scale, z: (z ? z : Math.random() * 2000), dirty: true, time: Tick.current, atime: Tick.current, animate: false, discon: true};
       return gobs[id];
     }
 

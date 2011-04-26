@@ -16,6 +16,9 @@ var World = (function() {
     var elements = {};
 
     function add(id, spriteid, pos, zindex) {
+      if (GameFrame.settings.disable_world_elements) {
+        return;
+      }
       if (!elements[id] || elements[id].pos[0] != pos[0] || elements[id].pos[1] != pos[1] || elements[id].spriteid != spriteid) {
         World.dirty = true;
         elements[id] = {id: id, spriteid: spriteid, pos: pos,
@@ -155,7 +158,7 @@ var World = (function() {
       var retval = {dirty: element.dirty,
                     pos: pos,
                     size: [sprite.width, sprite.height],
-                    theta: 0,scale:1,
+                    theta: 0, scale: GameFrame.settings.sprite_scale,
                     x: 0,
                     y: 0,
                     zindex: sprite.zindex,

@@ -48,6 +48,9 @@ var Sprites = (function() {
         data.width /= 2;
         data.height /= 2;
       }
+
+      data.url = GameFrame.settings.sprite_url_override || data.url;
+
       if (spritedictionary[id] === undefined) {
         if (data.left === undefined) {
           data.left = 0;
@@ -57,7 +60,7 @@ var Sprites = (function() {
         }
         spritedictionary[id] = data;
         spritedictionary[id].id = spriteid++;
-        spritedictionary[id].no_anim = data.no_anim;
+        spritedictionary[id].no_anim = data.no_anim || GameFrame.settings.disable_sprite_anim;
         spritedictionary[id].imageel = new Image();
         spritedictionary[id].imageel.id = id;
         spritedictionary[id].imageel.onload = function(event) {
