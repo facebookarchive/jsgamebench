@@ -51,6 +51,8 @@ for(var i=0;i<process.argv.length;i++) {
     production_mode = true;
     listenPort = 80;
     sslPort = 443;
+  } else if (process.argv[i] == '-cache') {
+    Comm.cacheSHTML();
   } else if (i+1 < process.argv.length) {
     if (process.argv[i] === '--port') {
       i++;
