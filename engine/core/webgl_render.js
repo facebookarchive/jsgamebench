@@ -167,6 +167,7 @@ var WebGLRender = (function() {
         return;
       }
 
+      gl.setDrawContext(null);
       gl.flush();
     }
 
