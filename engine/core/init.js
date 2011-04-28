@@ -21,6 +21,7 @@ var Init = (function() {
     var teardownFunc = null;
     var quitFunc = null;
     var resizeFunc = null;
+    var requestAnimationFrameFunc = null;
     var maxFPS = 1000;
     var spritesLoaded = false;
 
@@ -37,7 +38,7 @@ var Init = (function() {
       maxFPS = args.fps || undefined;
     }
 
-     function quit() {
+    function quit() {
       quitFunc();
     }
 
@@ -46,10 +47,18 @@ var Init = (function() {
 
     function timer_kick_off() {
       Render.setupBrowserSpecific();
-      setInterval('Init.tick();', parseInt(1000/maxFPS));
+      requestAnimationFrameFunc = (window.requestAnimationFrame ||
+                                   window.webkitRequestAnimationFrame ||
+                                   window.mozRequestAnimationFrame ||
+                                   window.oRequestAnimationFrame ||
+                                   window.msRequestAnimationFrame ||
+                                   function(callback, element) {
+                                     window.setTimeout(callback, 1000/maxFPS);
+                                   });
       initFunc();
       winresize();
       setupFunc();
+      kickoff_tick();
     }
 
     function tick() {
@@ -63,6 +72,15 @@ var Init = (function() {
         drawFunc();
       }
       uiFunc();
+      kickoff_tick();
+    }
+
+    function kickoff_tick() {
+      if (GameFrame.settings.use_request_animation_frame) {
+        requestAnimationFrameFunc(tick);
+      } else {
+        window.setTimeout(tick, 1000/maxFPS);
+      }
     }
 
     function reset() {
@@ -166,7 +184,6 @@ var Init = (function() {
     Init.init = init;
     Init.winresize = winresize;
     Init.quit = quit;
-    Init.tick = tick;
     Init.reset = reset;
     Init.hideBar = hideBar;
     Init.setFunctions = setFunctions;
