@@ -261,8 +261,7 @@ var WebGLSprite = (function() {
       var max_sprites_per_batch = 250;
       var sprite_buffers = [];
       var current_buffer = 0;
-      var current_textures = [null, null, null, null];
-      var texture_count = 0;
+      var current_textures = [{}, {}, {}, {}];
       var sprite_count = 0;
 
       function addBuffer() {
@@ -271,12 +270,22 @@ var WebGLSprite = (function() {
 
       var viewport_width, viewport_height;
 
-      function resetTextures() {
-        current_textures[0] = null;
-        current_textures[1] = null;
-        current_textures[2] = null;
-        current_textures[3] = null;
-        texture_count = 0;
+      function resetTextures(full_reset) {
+        if (full_reset) {
+          current_textures[0].tex = null;
+          current_textures[1].tex = null;
+          current_textures[2].tex = null;
+          current_textures[3].tex = null;
+        }
+        current_textures[0].uses = 0;
+        current_textures[1].uses = 0;
+        current_textures[2].uses = 0;
+        current_textures[3].uses = 0;
+
+        current_textures[0].reuse = false;
+        current_textures[1].reuse = false;
+        current_textures[2].reuse = false;
+        current_textures[3].reuse = false;
       }
 
       function setViewportParams() {
@@ -311,14 +320,22 @@ var WebGLSprite = (function() {
         sprite_buffers[current_buffer].bind();
         sprite_buffers[current_buffer].updateAttributes();
 
-        sprite_program.sprite_texture0(0);
-        gl.bindTexture(gl.TEXTURE_2D, current_textures[0]);
-        sprite_program.sprite_texture1(1);
-        gl.bindTexture(gl.TEXTURE_2D, current_textures[1]);
-        sprite_program.sprite_texture2(2);
-        gl.bindTexture(gl.TEXTURE_2D, current_textures[2]);
-        sprite_program.sprite_texture3(3);
-        gl.bindTexture(gl.TEXTURE_2D, current_textures[3]);
+        if (!current_textures[0].reuse) {
+          sprite_program.sprite_texture0(0);
+          gl.bindTexture(gl.TEXTURE_2D, current_textures[0].tex);
+        }
+        if (!current_textures[1].reuse) {
+          sprite_program.sprite_texture1(1);
+          gl.bindTexture(gl.TEXTURE_2D, current_textures[1].tex);
+        }
+        if (!current_textures[2].reuse) {
+          sprite_program.sprite_texture2(2);
+          gl.bindTexture(gl.TEXTURE_2D, current_textures[2].tex);
+        }
+        if (!current_textures[3].reuse) {
+          sprite_program.sprite_texture3(3);
+          gl.bindTexture(gl.TEXTURE_2D, current_textures[3].tex);
+        }
 
         gl.drawElements(gl.TRIANGLES, 6 * sprite_count, gl.UNSIGNED_SHORT, 0);
 
@@ -344,21 +361,29 @@ var WebGLSprite = (function() {
           setupContext();
         }
 
-        var tex_index;
-        for (tex_index = 0; tex_index < texture_count; ++tex_index) {
-          if (current_textures[tex_index] === tex) {
+        var tex_index, tex_available = 4;
+        for (tex_index = 3; tex_index >= 0; --tex_index) {
+          if (current_textures[tex_index].tex === tex) {
             break;
+          } else if (!current_textures[tex_index].uses) {
+            tex_available = tex_index;
           }
         }
 
-        if (tex_index > 3) {
+        if (tex_index >= 0) {
+          if (!current_textures[tex_index].uses) {
+            // same textures as last draw call, so don't rebind the texture
+            current_textures[tex_index].reuse = true;
+          }
+        } else if (tex_available < 4) {
+          tex_index = tex_available;
+        } else {
           flushSprites();
           tex_index = 0;
-          current_textures[tex_index] = tex;
-        } else if (tex_index >= texture_count) {
-          current_textures[tex_index] = tex;
-          texture_count++;
         }
+
+        current_textures[tex_index].tex = tex;
+        current_textures[tex_index].uses = 1 + (current_textures[tex_index].uses || 0);
 
         if (current_buffer >= sprite_buffers.length) {
           addBuffer();
@@ -391,6 +416,7 @@ var WebGLSprite = (function() {
         if (sprite_count > 0) {
           flushSprites();
         }
+        resetTextures(true);
       }
 
       gl.webgl_sprite_batch_context = sprite_context;
