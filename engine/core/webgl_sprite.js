@@ -246,7 +246,7 @@ var WebGLSprite = (function() {
         return quad_buffer;
       }
 
-    function createBatchingContext(gl) {
+    function createBatchingContext(gl, max_sprites_per_batch) {
 
       // don't create more than one for each gl context
       if (gl.webgl_sprite_batch_context) {
@@ -258,7 +258,6 @@ var WebGLSprite = (function() {
         return null;
       }
 
-      var max_sprites_per_batch = 250;
       var sprite_buffers = [];
       var current_buffer = 0;
       var current_textures = [{}, {}, {}, {}];

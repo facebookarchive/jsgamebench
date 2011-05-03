@@ -38,7 +38,7 @@ var GameFrame = (function() {
       sprite_scale: 1.0,
       webgl_blended_canvas: false,
       webgl_debug: false,
-      webgl_batch_sprites: false,
+      webgl_batch_sprites: 0,
       use_request_animation_frame: true,
       offset: 0,
       hidefps: false,

@@ -261,7 +261,7 @@ var Perf = (function() {
               sprite_sheets: true, int_snap: false,
               //disable_sprite_anim: true, sprite_url_override: 'images/white.png', sprite_scale: 0.01,
               disable_world_elements: true,
-              webgl_debug: false, webgl_blended_canvas: false, webgl_batch_sprites: true
+              webgl_debug: false, webgl_blended_canvas: false, webgl_batch_sprites: 3000
           },
           tfps: 30, background: 'world', sprites: 'rot', demo: true
         });

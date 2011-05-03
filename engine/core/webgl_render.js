@@ -64,7 +64,7 @@ var WebGLRender = (function() {
           alpha : GameFrame.settings.webgl_blended_canvas,
           depth : true,
           stencil : false,
-          antialias : true
+          antialias : false
         };
 
       var gl_context;
@@ -79,8 +79,8 @@ var WebGLRender = (function() {
         return false;
       }
 
-      if (GameFrame.settings.webgl_batch_sprites) {
-        sprite_context = WebGLSprite.createBatchingContext(gl_context);
+      if (GameFrame.settings.webgl_batch_sprites > 1) {
+        sprite_context = WebGLSprite.createBatchingContext(gl_context, GameFrame.settings.webgl_batch_sprites);
       } else {
         sprite_context = WebGLSprite.createContext(gl_context);
       }
