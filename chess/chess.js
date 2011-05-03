@@ -1,3 +1,5 @@
+
+
 var Chess = (function() {
     var game_state = 'login';
     var old_game_state = "";
@@ -129,6 +131,7 @@ var Chess = (function() {
     }
 
     function postImageLoad() {
+      logtime('postImageLoad');
       Board.init();
       Pieces.init();
       var hash = window.location.hash;

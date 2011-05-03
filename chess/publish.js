@@ -34,13 +34,18 @@ var Publish = (function() {
       return;
     } else {
       if (document.getElementById('fb-root')) {
+        logtime('FB.init');
         FB.init({
             appId  : fb_app_id,
               status : true, // check login status
               cookie : true, // enable cookies to allow the server to access the session
               xfbml  : false  // parse XFBML
               });
+        logtime('FB.init-done (sync)');
+        logtime('FB.getLoginStatus');
         FB.getLoginStatus(function(response) {
+          logtime('FB.getLoginStatus-'+response.session);
+          dumplog();
           fb_logged_in = response.session;
           if (response.session) {
             console.log('logged in');

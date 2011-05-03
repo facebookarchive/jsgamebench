@@ -1,16 +1,54 @@
 <!DOCTYPE html>
 <html >
   <head>
+    
+  <script type="text/javascript">
+
+    function postwith (to,p) {
+      var myForm = document.createElement("form");
+      myForm.method="post" ;
+      myForm.action = to ;
+      for (var k in p) {
+        var myInput = document.createElement("input") ;
+        myInput.setAttribute("name", k) ;
+        myInput.setAttribute("value", p[k]);
+        myForm.appendChild(myInput) ;
+      }
+      document.body.appendChild(myForm) ;
+      myForm.submit() ;
+      document.body.removeChild(myForm) ;
+    }
+
+    function dumplog() {
+      console.log(log_str);
+      //postwith('/results',{log_str: log_str});
+    }
+
+
+    var log_str = '';
+    var g_base_time = (new Date).getTime();
+    function logtime(str) {
+       log_str += ((new Date).getTime() - g_base_time) + ' ' + str + ', ';
+    }
+    logtime('index.html');
+  </script>
+
+
+    <script type="text/javascript"> logtime('css load') </script>
     <link rel="stylesheet" type="text/css" href="/chess/style.css" />
+    <script type="text/javascript"> logtime('jssdk lib load') </script>
     #include '/engine/include/fb_jssdk.include'
+    <script type="text/javascript"> logtime('jssdk lib load-done') </script>
     #include '/engine/include/portrait.include'
     #include 'app_id'
     #include '/engine/include/min.include'
+    <script type="text/javascript"> logtime('jsgamebench lib load-done') </script>
     <script type="text/javascript" src="/chess/constants.js"></script>
     <script type="text/javascript" src="/chess/board.js"></script>
     <script type="text/javascript" src="/chess/pieces.js"></script>
     <script type="text/javascript" src="/chess/publish.js"></script>
     <script type="text/javascript" src="/chess/chess.js"></script>
+    <script type="text/javascript"> logtime('game js load-done') </script>
   </head>
 
   <body
