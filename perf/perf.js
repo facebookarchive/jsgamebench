@@ -261,7 +261,26 @@ var Perf = (function() {
               sprite_sheets: true, int_snap: false,
               //disable_sprite_anim: true, sprite_url_override: 'images/white.png', sprite_scale: 0.01,
               disable_world_elements: true,
-              webgl_debug: false, webgl_blended_canvas: false, webgl_batch_sprites: 3000
+              webgl_debug: false, webgl_blended_canvas: false, webgl_batch_sprites: 5000
+          },
+          tfps: 30, background: 'world', sprites: 'rot', demo: true
+        });
+      PerfTest.doAll();
+    }
+
+    function webglSlowDemo() {
+      UI.del('buttons');
+      UI.del('perf');
+      PerfTest.addTest(
+        {
+          viewport: 'fluid',
+          settings:
+          {
+              render_mode: GameFrame.WEBGL,
+              sprite_sheets: true, int_snap: false,
+              //disable_sprite_anim: true, sprite_url_override: 'images/white.png', sprite_scale: 0.01,
+              disable_world_elements: true,
+              webgl_debug: false, webgl_blended_canvas: false, webgl_batch_sprites: 500
           },
           tfps: 30, background: 'world', sprites: 'rot', demo: true
         });
@@ -335,6 +354,7 @@ var Perf = (function() {
       UI.addButton('buttons', 'canvasdemo', {pos: [215, 5], width: 95, height: 40, text: 'Canvas Demo', command: {cmd: 'canvasdemo', args: []}});
 //      UI.addButton('buttons', 'scrollableddemo', {pos: [320, 5], width: 95, height: 40, text: 'Scroll Demo', command: {cmd: 'scrolldemo', args: []}});
       UI.addButton('buttons', 'webgldemo', {pos: [320, 5], width: 95, height: 40, text: 'WebGL Demo', command: {cmd: 'webgldemo', args: []}});
+      UI.addButton('buttons', 'webglslowdemo', {pos: [425, 5], width: 105, height: 40, text: 'WebGL Demo 2', command: {cmd: 'webglslowdemo', args: []}});
 //      UI.addButton('buttons', 'idemo', {pos: [530, 5], width: 95, height: 40, text: 'iPhone Demo', command: {cmd: 'idemo', args: []}});
 //      UI.addButton('buttons', 'rotdemo', {pos: [635, 5], width: 95, height: 40, text: 'Rotate Demo', command: {cmd: 'rotdemo', args: []}});
       UI.addCollection(null, 'perf', {pos: [100, 60], width: 260});
@@ -365,6 +385,7 @@ var Perf = (function() {
       ClientCmd.install('stopperftest', stopPerfTest);
       ClientCmd.install('canvasdemo', canvasDemo);
       ClientCmd.install('webgldemo', webglDemo);
+      ClientCmd.install('webglslowdemo', webglSlowDemo);
       ClientCmd.install('htmldemo', htmlDemo);
       ClientCmd.install('idemo', iDemo);
       ClientCmd.install('rotdemo', rotDemo);
