@@ -30,6 +30,7 @@ LogProc = require('../lib/logproc');
 
 Utils = require('../engine/core/utils');
 Users = require('../lib/users');
+Graph = require('../lib/graph');
 Server = require('../lib/server');
 Comm = require('../lib/comm');
 Grid = require('../engine/shared/grid');
@@ -67,9 +68,7 @@ for(var i=0;i<process.argv.length;i++) {
   }
 }
 
-if (sslPort) {
 https = require('https');
-}
 
 sys.puts("reading log file");
 LogProc.start('logs/stats.log',null);

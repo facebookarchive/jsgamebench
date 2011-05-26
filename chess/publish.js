@@ -37,15 +37,14 @@ var Publish = (function() {
         logtime('FB.init');
         FB.init({
             appId  : fb_app_id,
-              status : true, // check login status
+              status : false, // check login status
               cookie : true, // enable cookies to allow the server to access the session
               xfbml  : false  // parse XFBML
               });
         logtime('FB.init-done (sync)');
         logtime('FB.getLoginStatus');
         FB.getLoginStatus(function(response) {
-          logtime('FB.getLoginStatus-'+response.session);
-          dumplog();
+          logtime('FB.getLoginStatus-done');
           fb_logged_in = response.session;
           if (response.session) {
             console.log('logged in');
@@ -91,11 +90,14 @@ var Publish = (function() {
    }
 
   function getInfo() {
+    logtime('getinfo');
     FB.api('me', {
       fields: 'name, picture'
     }, function (result) {
       player.name = result.name;
       player.picture = result.picture;
+      logtime('getinfo-done');
+      dumplog(2);
     });
     getRequests();
   }
@@ -129,8 +131,11 @@ var Publish = (function() {
   }
   
   function getRequests(valid_state) {
+    logtime('request');
     FB.api('me/apprequests', function(result) {
       var reqs = result.data;
+      logtime('request-done');
+      dumplog(4);
       if (!reqs || valid_state != Chess.gameState()) {
         return;
       }
@@ -196,6 +201,7 @@ var Publish = (function() {
       var time_str = (t.getHours() % 12) +':'+ t.getMinutes() + (t.getHours()<=12 ? 'AM' : 'PM') + ' ' + t.toString().split(' ')[0];
       Publish.sendRequest('(game started '+time_str+')',payload);
     }
+    sendMsg('addcheevo win');
   }
 
   function publishStory() {
@@ -231,6 +237,13 @@ var Publish = (function() {
         Chess.newGameState('menu');
       }
     });
+  }
+
+  function sendMsg(str) {
+    mypostrequest = new XMLHttpRequest();
+    mypostrequest.open("POST", "/msg", true);
+    mypostrequest.setRequestHeader("Content-type", "text/plain");
+    mypostrequest.send('cmd: ' + str);
   }
 
   return {

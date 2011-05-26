@@ -1,0 +1,17 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:og="http://ogp.me/ns#"
+      xmlns:fb="https://www.facebook.com/2008/fbml">
+  <head>
+    <title>Win With Rook</title>
+    <meta property="og:type" content="og:games.achievement"/>
+    <meta property="og:url" content="http://pirateninjachess.com/chess/cheevo/win.shtml"/>
+    <meta property="og:title" content="Win A Game With Rook"/>
+    <meta property="og:description"
+          content="Win a game with rook"/>
+    <meta property="og:image" content="http://t0.gstatic.com/images?q=tbn:ANd9GcT4QORJxRO5bvS5MeAnmP18MUUynqAI2B_cN75zpsXSQB18jQZw" />
+    <meta property="og:points" content="10" />
+  </head>
+  <body>
+<h1>This Is For Open Graph Only, not for looking at! go-way!!</h1>
+  </body>
+</html>

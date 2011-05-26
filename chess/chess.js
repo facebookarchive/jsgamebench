@@ -87,7 +87,7 @@ var Chess = (function() {
       }
       if (game_state == 'menu') {
         var dt = parseInt(((new Date).getTime() - menu_time) / 1000);
-        if (dt > request_time) {
+        if (0 && dt > request_time) {
           Publish.getRequests(game_state);
           request_time += Math.sqrt(dt);
         }
@@ -132,6 +132,7 @@ var Chess = (function() {
 
     function postImageLoad() {
       logtime('postImageLoad');
+      dumplog(1);
       Board.init();
       Pieces.init();
       var hash = window.location.hash;
@@ -231,8 +232,9 @@ var Chess = (function() {
       Input.hookEvents('gamebody');
       newGameState('login');
       Publish.fbInit(fb_app_id);
-      loadImageList('/chess/images/',['Pirate_King.png', 'Ninja_King.png', 'Pirate_Queen.png', 'Ninja_Queen.png', 'Pirate_Bishop.png', 'Ninja_Bishop.png', 'Pirate_Knight.png', 'Ninja_Knight.png', 'Pirate_Rook.png', 'Ninja_Rook.png', 'Pirate_Pawn.png', 'Ninja_Pawn.png']);
-      loadAnimList('/chess/images/',[['small_explo.png', 6]]);
+      loadImageList('/chess/images/',['Pirate_King.png']);
+      //loadImageList('/chess/images/',['Pirate_King.png', 'Ninja_King.png', 'Pirate_Queen.png', 'Ninja_Queen.png', 'Pirate_Bishop.png', 'Ninja_Bishop.png', 'Pirate_Knight.png', 'Ninja_Knight.png', 'Pirate_Rook.png', 'Ninja_Rook.png', 'Pirate_Pawn.png', 'Ninja_Pawn.png']);
+      //loadAnimList('/chess/images/',[['small_explo.png', 6]]);
     }
 
      function concede() {
