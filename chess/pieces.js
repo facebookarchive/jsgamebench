@@ -65,7 +65,6 @@ var Pieces = (function() {
           sprite = color == White ? "Pirate_King" : "Ninja_King";
           break;
       }
-      sprite = "Pirate_King";
       square.piece = Gob.add(Utils.uuidv4(), sprite, 0, [square.left+square.delta*0.5,square.top+square.delta*0.5], [0,0], 10, default_scale*square.delta/piecescales[type]);
       square.piece.type = type;
       square.piece.color = color;

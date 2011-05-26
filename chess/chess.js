@@ -232,8 +232,8 @@ var Chess = (function() {
       Input.hookEvents('gamebody');
       newGameState('login');
       Publish.fbInit(fb_app_id);
-      loadImageList('/chess/images/',['Pirate_King.png']);
-      //loadImageList('/chess/images/',['Pirate_King.png', 'Ninja_King.png', 'Pirate_Queen.png', 'Ninja_Queen.png', 'Pirate_Bishop.png', 'Ninja_Bishop.png', 'Pirate_Knight.png', 'Ninja_Knight.png', 'Pirate_Rook.png', 'Ninja_Rook.png', 'Pirate_Pawn.png', 'Ninja_Pawn.png']);
+      //loadImageList('/chess/images/',['Pirate_King.png']);
+      loadImageList('/chess/images/',['Pirate_King.png', 'Ninja_King.png', 'Pirate_Queen.png', 'Ninja_Queen.png', 'Pirate_Bishop.png', 'Ninja_Bishop.png', 'Pirate_Knight.png', 'Ninja_Knight.png', 'Pirate_Rook.png', 'Ninja_Rook.png', 'Pirate_Pawn.png', 'Ninja_Pawn.png']);
       //loadAnimList('/chess/images/',[['small_explo.png', 6]]);
     }
 
