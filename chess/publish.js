@@ -201,7 +201,8 @@ var Publish = (function() {
       var time_str = (t.getHours() % 12) +':'+ t.getMinutes() + (t.getHours()<=12 ? 'AM' : 'PM') + ' ' + t.toString().split(' ')[0];
       Publish.sendRequest('(game started '+time_str+')',payload);
     }
-    sendMsg('addcheevo win');
+    //sendMsg('addcheevo win');
+    sendMsg('addaction take rook');
   }
 
   function publishStory() {
