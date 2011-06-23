@@ -18,6 +18,8 @@ var Tick = (function() {
     Tick.slowframe = 0
     var lastfps = 1;
     var timeac = 0;
+    var lastfps2 = 1;
+    var timeac2 = 0;
 
     function tick() {
       Tick.frames++;
@@ -31,20 +33,23 @@ var Tick = (function() {
       if (Tick.frames % 10 == 0) {
         lastfps = parseInt(10000 / timeac);
         timeac = 0;
+
+        lastfps2 = parseInt(10000 / (Tick.current - timeac2));
+        timeac2 = Tick.current;
       } else {
         timeac += Tick.delta;
       }
       if (!GameFrame.settings.hidefps) {
         if (typeof(Benchmark) !== 'undefined' && Benchmark !== undefined && Benchmark.name) {
           var name = Benchmark.name;
-          UI.addHTML(null, 'fps', {uiclass: 'testype ui_html', pos: [5, 55], resetlast: true, markup: 'fps: ' + lastfps + '<br />' +
+          UI.addHTML(null, 'fps', {uiclass: 'testype ui_html', pos: [5, 55], resetlast: true, markup: 'fps: ' + lastfps + ' ' + lastfps2 + '<br />' +
                 name.render_mode + ':' + name.sprites + ':' + name.render_path + '<br />' +
                 Browser.winsize[0] + 'x' + Browser.winsize[1] + '<br />' +
                 GameFrame.getViewport().dstyle.width + 'x' + GameFrame.getViewport().dstyle.height + '<br />' +
                 Benchmark.count()});
         } else {
           UI.addHTML(null, 'fps', {uiclass: 'testype ui_html', pos: [5, 55], resetlast: true, markup: 'fps: ' + lastfps + '<br />' +
-                Browser.winsize[0] + 'x' + Browser.winsize[1]});
+                Browser.winsize[0] + 'x' + Browser.winsize[1] + "<br />" + Tick.frames + "<br/>" + lastfps2});
         }
       }
     }
