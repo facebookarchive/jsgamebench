@@ -17,7 +17,7 @@ var Tick = (function() {
     Tick.frames = 0;
     Tick.slowframe = 0
     var lastfps = 1;
-    var timeac = 0;
+    var lasttimestamp = (new Date).getTime();
 
     function tick() {
       Tick.frames++;
@@ -29,10 +29,8 @@ var Tick = (function() {
       else
         Tick.slowframe = false;
       if (Tick.frames % 10 == 0) {
-        lastfps = parseInt(10000 / timeac);
-        timeac = 0;
-      } else {
-        timeac += Tick.delta;
+        lastfps = parseInt(10000 / (Tick.current - lasttimestamp));
+        lasttimestamp = Tick.current;
       }
       if (!GameFrame.settings.hidefps) {
         if (typeof(Benchmark) !== 'undefined' && Benchmark !== undefined && Benchmark.name) {
