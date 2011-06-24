@@ -43,43 +43,13 @@ var TrenchCamera = (function() {
       var camera_dir = [0,1,0];
       var camera_up = [0,0,1];
 
-// rotation_rate = 0;
-
-        camera_up[2] = -Math.sin(rotation);
-        camera_up[0] = Math.cos(rotation);
-        rotation += dt * rotation_rate;
-        while (rotation > 2 * Math.PI) {
-          rotation -= 2 * Math.PI;
-        }
-
-      /*
-      var player_pos = TrenchPlayer.getPosition();
-      if (paused) {
-        camera_dir[0] = Math.sin(rotation);
-        camera_dir[1] = Math.cos(rotation);
-        Math3D.addVec3Self(camera_pos,
-                           Math3D.scaleVec3(camera_dir,
-                                            -rotation_distance)
-                          );
-        rotation += dt * rotation_rate;
-        while (rotation > 2 * Math.PI) {
-          rotation -= 2 * Math.PI;
-        }
-      } else {
-        camera_pos[1] = player_pos[1] - camera_distance;
-        player_pos[1] = 0;
-        var dist = Math3D.normalizeVec3(player_pos);
-        var cam_dist = dist * dist * 0.25;
-        if (cam_dist > dist * 0.75) {
-          cam_dist = dist * 0.75;
-        }
-        Math3D.scaleVec3Self(player_pos, cam_dist);
-        camera_pos[0] = player_pos[0];
-        camera_pos[2] = player_pos[2] + 2.5;
-
-        rotation = 0;
+      camera_up[2] = -Math.sin(rotation);
+      camera_up[0] = Math.cos(rotation);
+      rotation += dt * rotation_rate;
+      while (rotation > 2 * Math.PI) {
+        rotation -= 2 * Math.PI;
       }
-*/
+
       var camera_matrix = Math3D.mat4x4();
       Math3D.orientMat4x4(camera_matrix, camera_dir, camera_up);
       Math3D.translateMat4x4(camera_matrix, camera_pos);

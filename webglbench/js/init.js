@@ -48,19 +48,15 @@
       box_model = model_context.createModel(Box_Model);
       ship_model = model_context.createModel(Ship_Junebug_01);
 
-//      TrenchPlayer.init(ship_model);
       TrenchCamera.init(viewport);
       GeometryScaling.init(box_model);
       TrenchTrack.init(box_model);
-//      TrenchProjectile.init(box_model);
     }
 
     if (render_inited && needs_reset) {
-//      TrenchPlayer.reset();
       TrenchCamera.reset();
-      GeometryScaling.reset(3, 3, 3);
+      GeometryScaling.reset(20, 13, 13);
       TrenchTrack.reset();
-//      TrenchProjectile.reset();
       needs_reset = false;
     }
 
@@ -71,8 +67,6 @@
     }
 
     if (play_game) {
-//      TrenchProjectile.tick(delta_time);
-//      TrenchPlayer.tick(delta_time);
       TrenchTrack.tick(delta_time);
       GeometryScaling.tick(delta_time);
     }
