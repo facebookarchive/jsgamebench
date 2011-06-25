@@ -368,6 +368,15 @@ var PerfTest = (function() {
 
     var current = 0;
 
+    PerfTest.postToServer = function(score, testName) {
+      var req = new XMLHttpRequest();
+      req.open('POST', 'benchmark_results', false);
+      var result={};
+      result.score=score;
+      result.testName=testName;
+      req.send(JSON.stringify(result));
+    }
+
     PerfTest.init = function() {
       UI.del('buttons');
       UI.del('perf');
@@ -441,6 +450,7 @@ var PerfTest = (function() {
         temp.peak = result.score;
         FBmark.reset();
         PerfTest.stop();
+        PerfTest.postToServer(result.score, [temp]);
         ClientCmd.perfdisplay([temp]);
       }
     }

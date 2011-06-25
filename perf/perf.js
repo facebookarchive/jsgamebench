@@ -182,6 +182,76 @@ var Perf = (function() {
       }
     }
 
+    // Score reporting
+    function getBrowser() {
+      var b = data.browser;
+      var browser = b.match(/(\w+) \d+/);
+      if (browser) {
+        browser = browser[1];
+      } else {
+        browser = b;
+      }
+    }
+
+    function getScores() {
+      var req = new XMLHttpRequest();
+      req.open('GET', 'benchmark_results', true);
+      req.onreadystatechange = function() {
+        var result;
+        var done = 4, ok = 200;
+        if (req.readyState == done && req.status == ok) {
+          result = JSON.parse(req.responseText);
+          outputScoresAsync(result);
+        }
+      }
+      req.send(null);
+      return "Loading result history...";
+    }
+
+    // Super hacky and likely unsafe sanitization function
+    // Still looking for the best way to sanitize strings in node.js
+    function sanitize(string) {
+      return string.replace(/[&<>]/g, '');
+    }
+
+    function outputScoresAsync(results) {
+      var scoreTable;
+      var maxResult;
+
+      scoreTable='<table class="hpadding">';
+      scoreTable+='<tr><th style="width:200px"></th><th>Score</th><th>Browser</th><th>Date</th></tr>';
+
+      if (results.length>0) {
+        maxResult = parseInt(results[0].score);
+      }
+
+      for (var i=0; i<results.length; i++) {
+        var date = new Date(results[i].time).toDateString();
+        var score = parseInt(results[i].score);
+        var barWidth = score*100/maxResult;
+        scoreTable+='<tr>';
+        scoreTable+='<td><div class="bar" style="width:'+barWidth+'%;"></div></td>';
+        scoreTable+='<td>'+score+'</td>';
+        scoreTable+='<td>'+sanitize(Browser.detectFromUA(results[i].browser))+'</td>';
+        scoreTable+='<td>'+sanitize(date)+'</td>';
+        scoreTable+='</tr>';
+      }
+      scoreTable+='</table>';
+
+      UI.addHTML('details', 'detailinfo', {pos: [5, 105], uiclass: 'renderdetails', markup: scoreTable});
+    }
+
+    function showHiscores() {
+      UI.del('details');
+      UI.addCollection('perf', 'details', {uiclass: 'perfblock', pos: [265, 0], width: 600, height: 1000});
+
+      var score = 'All time high scores:';
+      UI.addHTML('details', 'dperfscore', {pos: [3, 4], uiclass: 'perfscore', markup: score});
+
+      getScores();
+    }
+
+
     function canvasDemo() {
       UI.del('buttons');
       UI.del('perf');
@@ -358,6 +428,9 @@ var Perf = (function() {
 //      UI.addButton('buttons', 'idemo', {pos: [530, 5], width: 95, height: 40, text: 'iPhone Demo', command: {cmd: 'idemo', args: []}});
 //      UI.addButton('buttons', 'rotdemo', {pos: [635, 5], width: 95, height: 40, text: 'Rotate Demo', command: {cmd: 'rotdemo', args: []}});
       UI.addCollection(null, 'perf', {pos: [100, 60], width: 260});
+      UI.addButton('buttons', 'hiscore', {pos: [540, 5], width: 95, height: 40, text: 'Hi-Scores', command: {cmd: 'showHiscores', args: []}});
+
+
       if (data) {
         for (var i = 0, len = data.length; i < len; i++) {
           UI.addCollection('perf', 'perfblock' + i, {uiclass: 'perfblock', pos: [0, 82 * i], height: 78, width: 260, command: {cmd:'showdetails', args:[data[i]]}});
@@ -372,6 +445,9 @@ var Perf = (function() {
           var score = parseInt(data[i].peak);
           UI.addHTML('perfblock' + i, 'perfscore' + i, {pos: [5, 24], uiclass: 'perfscore', markup: score});
         }
+
+        // Display result browser
+        showHiscores();
       }
     }
 
@@ -390,6 +466,7 @@ var Perf = (function() {
       ClientCmd.install('idemo', iDemo);
       ClientCmd.install('rotdemo', rotDemo);
       ClientCmd.install('scrolldemo', scrollDemo);
+      ClientCmd.install('showHiscores', showHiscores);
       ClientCmd.install('playgame', playGame);
       ClientCmd.install('playgamehtml', playGameHTML);
       ClientCmd.install('showdetails', showDetails);
