@@ -1,0 +1,19 @@
+<html>
+  <head>
+    <title>Raw WebGL Benchmark</title>
+    <script type="text/javascript" src="http://connect.facebook.net/en_US/all.js"></script>
+
+    #include 'app$id'
+    #include 'app$url'
+    #include '../engine/include/core.include'
+    
+    <script type="text/javascript" src="/js/baseFunctionality.js"></script>
+  
+  </head>    
+  <body
+    onload="Init.init();"
+    >
+    Foo!
+    <canvas id="frontBuf" width="320" height="240"></canvas>
+  </body>
+</html>

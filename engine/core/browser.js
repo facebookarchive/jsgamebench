@@ -35,8 +35,13 @@ var Browser = (function() {
     }
 
     function detect() {
-      var user_agent = navigator.userAgent.toLowerCase();
+      var user_agent = navigator.userAgent;
+      Browser.browser_version = detectFromUA(user_agent);
+      console.log('browser_version ' + Browser.browser_version);
+    }
 
+    function detectFromUA(user_agent) {
+      user_agent = user_agent.toLowerCase();
       if (/chrome/.test(user_agent)) {
         Browser.browser = Browser.CHROME;
         Browser.threeD = true;
@@ -147,8 +152,8 @@ var Browser = (function() {
           }
           break;
       }
-      Browser.browser_version = Browser.os + ' ' + Browser.browser_version;
-      console.log('browser_version ' + Browser.browser_version);
+      var retVal = Browser.os + ' ' + Browser.browser_version;
+      return retVal;
     }
 
     function getWindowSize() {
@@ -176,5 +181,6 @@ var Browser = (function() {
 
     Browser.getWindowSize = getWindowSize;
     Browser.detect = detect;
+    Browser.detectFromUA = detectFromUA;
     return Browser;
   })();
