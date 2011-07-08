@@ -42,7 +42,7 @@ var Tick = (function() {
                 Benchmark.count()});
         } else {
           UI.addHTML(null, 'fps', {uiclass: 'testype ui_html', pos: [5, 55], resetlast: true, markup: 'fps: ' + lastfps + '<br />' +
-                Browser.winsize[0] + 'x' + Browser.winsize[1]});
+                Browser.winsize[0] + 'x' + Browser.winsize[1] + "<br />" + Tick.frames});
         }
       }
     }

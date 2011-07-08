@@ -1,0 +1,32 @@
+<html>
+  <head>
+    <title>Trench Runner</title>
+
+    <script type="text/javascript" src="http://connect.facebook.net/en_US/all.js"></script>
+
+    #include 'app$id'
+    #include 'app$url'
+    #include '../engine/include/core.include'
+
+    <!-- game stuff -->
+    <script type="text/javascript" src="/models/Box_Model.js"></script>
+    <script type="text/javascript" src="/models/Ship_Junebug_01.js"></script>
+    <script type="text/javascript" src="/js/materials.js"></script>
+    <script type="text/javascript" src="/js/track.js"></script>
+    <script type="text/javascript" src="/js/camera.js"></script>
+    <script type="text/javascript" src="/js/geometry_scaling.js"></script>
+    <script type="text/javascript" src="/js/player.js"></script>
+    <script type="text/javascript" src="/js/projectile.js"></script>
+    <script type="text/javascript" src="/js/publish.js"></script>
+    <script type="text/javascript" src="/js/init.js"></script>
+
+  </head>
+  <body
+    onresize="Init.winresize();"
+    onload="Init.init();"
+    onorientationchange="Init.winresize();"
+    onunload="Init.quit()">
+    <div id="fb-root"></div>
+    <div id="gamebody"></div>
+  </body>
+</html>

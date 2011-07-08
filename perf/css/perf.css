@@ -763,3 +763,24 @@ to { -webkit-transform: translate3d(-50px,-50px,200px) rotateZ(360deg); }
 #details {
   overflow: auto;
 }
+
+.bar {
+  background-color: #98F5FF;
+  position: relative;
+  height: 16px;
+  margin-top: 1px;
+  margin-bottom: 1px;
+  -moz-box-shadow: 5px 5px 5px #008;
+  -webkit-box-shadow: 5px 5px 5px #008;
+  box-shadow: 5px 5px 5px #008;
+}
+
+table.hpadding td {
+  padding-right: 10px;
+  text-align: left;
+}
+
+table.hpadding th {
+  padding-right: 10px;
+  text-align: left;
+}
