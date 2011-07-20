@@ -186,8 +186,8 @@ var DomRender = (function() {
 
       switch (Browser.browser) {
         case Browser.IE:
-          dstyle.left = pos[0] + 'px';
-          dstyle.top = pos[1] + 'px';
+          dstyle.left = (pos[0]+domel.clientWidth*0.5 - scale*domel.clientWidth*0.5) + 'px';
+          dstyle.top = (pos[1]+domel.clientHeight*0.5 - scale*domel.clientHeight*0.5) + 'px';
           dstyle.filter = 'progid:DXImageTransform.Microsoft.Matrix(M11=\'' +
             ct*scale + '\',M12=\'' + nst*scale + '\',M21=\'' + st*scale + '\',M22=\'' + ct*scale +
             '\',sizingMethod=\'auto expand\')';

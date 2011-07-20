@@ -46,7 +46,7 @@ var Input = (function() {
         button = 1;
       }
 
-      var pos = GameFrame.page2view([event.pageX, event.pageY]);
+      var pos = GameFrame.page2view([event.pageX||event.clientX, event.pageY||event.clientY]);
       var px = pos[0];
       var py = pos[1];
 
@@ -91,7 +91,9 @@ var Input = (function() {
     }
 
     function keyPress(event, down) {
-      var code = event.which;
+      event = event || window.event;
+      var code = event.which || event.keyCode;
+
       var return_value = true;
       Input.key_state[code] = down;
       if (code == 27) {
@@ -228,7 +230,7 @@ var Input = (function() {
         el['onkeydown'] = function(event) {return keyPress(event, 1)};
 
 
-       if (Browser.FIREFOX) {
+       if (0 && Browser.FIREFOX) {
           document.onkeyup = function(event) {return keyPress(event, 0)};
           document.onkeydown = function(event) {return keyPress(event, 1)};
         }

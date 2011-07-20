@@ -208,14 +208,16 @@ var Chess = (function() {
     function init() {
       
       cache = window.applicationCache;
-      cache.addEventListener('checking',  checking, false);
-      cache.addEventListener('error', cacheError, false);
-      cache.addEventListener('update', function(e) { sup(e,3); }, false);
-      cache.addEventListener('noupdate', noUpdate, false);
-      cache.addEventListener('downloading', function(e) { sup(e,4); }, false);
-      cache.addEventListener('progress', loading, false);
-      cache.addEventListener('updateready', updateReady, false);
-      cache.addEventListener('cached', cached, false);
+      if (cache) {
+        cache.addEventListener('checking',  checking, false);
+        cache.addEventListener('error', cacheError, false);
+        cache.addEventListener('update', function(e) { sup(e,3); }, false);
+        cache.addEventListener('noupdate', noUpdate, false);
+        cache.addEventListener('downloading', function(e) { sup(e,4); }, false);
+        cache.addEventListener('progress', loading, false);
+        cache.addEventListener('updateready', updateReady, false);
+        cache.addEventListener('cached', cached, false);
+      }
 
       GameFrame.updateSettings({
         render_mode: GameFrame.HTML_ONLY,

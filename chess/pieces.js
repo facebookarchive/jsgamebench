@@ -80,8 +80,10 @@ var Pieces = (function() {
       var square, sprite;
       for (var i=0,len=positions.length;i<len;i++) {
         var piece = positions[i];
-        square = Board.getSquare(piece[2],piece[3]);
-        addPieceGob(square, piece[0], piece[1], 0);
+        if (piece) {
+          square = Board.getSquare(piece[2],piece[3]);
+          addPieceGob(square, piece[0], piece[1], 0);
+        }
       }
     }
 
@@ -443,6 +445,9 @@ var Pieces = (function() {
     function select(x,y) {
       var pos = Board.nearestSquare(x,y);
       var square = Board.getSquare(pos[0],pos[1]);
+      if (!square) {
+        return;
+      }
       if (!selected) {
         if (square.piece && square.piece.color == Board.toMove()) {
           if (possibleMoves(square.i,square.j,square.piece)) {
