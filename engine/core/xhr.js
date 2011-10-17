@@ -16,25 +16,11 @@ var Xhr = (function() {
     var socket;
 
     function init() {
-      if (typeof(stand_alone) != 'undefined') {
+      if (stand_alone) {
         return;
       }
       var options = {transports: ['xhr-polling']};
-      switch (Browser.browser) {
-        case Browser.CHROME:
-        case Browser.WEBKIT:
-        options.transports = ['websocket', 'xhr-polling'];
-        break;
-      }
-      var transports = {'websocket':1, 'xhr-polling':1, 'flashsocket':1};
-      var list = document.URL.split('/');
-      for(var i in list) {
-        if (transports[list[i]]) {
-          options.transports = list[i];
-        }
-      }
-      socket = new io.Socket(null, options);
-      socket.connect();
+      socket = io.connect("http://localhost:8081", options);
 
       socket.on('message', function(data) {
           data = JSON.parse(data.replace('<', '&lt;').replace('>', '&gt;'));
@@ -45,9 +31,10 @@ var Xhr = (function() {
     }
 
     function toServer(cmd) {
-      if (typeof(stand_alone) != 'undefined') {
+      if (stand_alone) {
          return;
       }
+      console.log('sent cmd: '+JSON.stringify(cmd));
       var unique_id = client_user.unique_id;
       var script = document.createElement('script');
       var req_id = 'id' + unique_id + (new Date).getTime();

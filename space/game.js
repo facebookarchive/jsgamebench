@@ -155,7 +155,7 @@ var Game = (function() {
     dir[0] = -Math.sin(me.angle);
     dir[1] = -Math.cos(me.angle);
     dir = Vec.norm(dir);
-      makeMob(me.extent[0], dir, 'shot');
+    makeMob(me.extent[0], dir, 'shot');
   }
 
   function checkStanding() {
@@ -540,12 +540,17 @@ var Game = (function() {
       client_user.grids[1].removeCB = Gob.del;
     }
 
-    function initStandalone() {
+    function initGame() {
       Input.hookEvents('gamebody');
-      SvrGame.init(client_user.grids);
+      if (stand_alone) {
+        SvrGame.init(client_user.grids);
+      }
     }
 
     function playGame() {
+      if (!stand_alone) {
+        Xhr.init();
+      }
       UI.del('buttons');
       UI.del('perf');
       if (window.location.pathname.match(/canvas/)) {
@@ -561,9 +566,9 @@ var Game = (function() {
     Game.fbLogin = fbLogin;
     Game.tick = tick;
     Game.init = init;
-    Game.initStandalone = initStandalone;
     Game.playGame = playGame;
+    Game.initGame = initGame;
     return Game;
   })();
 
-Init.setFunctions({app: Game.tick, draw: Render.tick, ui: UI.tick, setup: Game.playGame, init: Game.initStandalone, fps:60});
+Init.setFunctions({app: Game.tick, draw: Render.tick, ui: UI.tick, setup: Game.playGame, init: Game.initGame, fps:60});

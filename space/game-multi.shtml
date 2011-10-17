@@ -5,8 +5,11 @@
     <script type="text/javascript">var stand_alone=false;</script>
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>
     #include '/engine/include/core.include'
+    
+    <script type="text/javascript" src="/engine/core/xhr.js"> </script>
+    <script type="text/javascript" src="/perf/benchmark.js"> </script>
+    <script type="text/javascript" src="/perf/perftest.js"> </script>
     <script type="text/javascript" src="/space/game.js"> </script>
-    <script type="text/javascript" src="/space/svrgame.js"> </script>
   </head>
 
   <body id="body_id" style="overflow:hidden;"
@@ -15,7 +18,7 @@
     onorientationchange="Init.winresize();"
     onunload="Init.quit()">
     <div id="fb-root"></div>
-    <div id="gamebody"></div>
+    <div id="gamebody" tabindex="0"></div>
   </body>
 
 </html>

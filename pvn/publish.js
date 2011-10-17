@@ -203,7 +203,7 @@ var Publish = (function() {
 
   function checkReplayUrl() {
     var pathname = window.location.search,
-    prefix = '?show=',
+    prefix = '?show=';
     i = pathname.indexOf(prefix);
     if (i < 0) {
       return;
