@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/loose.dtd">
+
+  <html lang="en" style="margin:0; padding:0; border: 2px solid
+#cb0000; background: #cccccc">
+
+  <style type="text/css">
+    <!--
+    .theStyle {
+      position: absolute;
+      left: 50px;
+      top: 1300px;
+      width: 150px;
+      height: 150px;
+      background-color:#00CCCC;
+    }
+    -->
+  </style>
+
+<body>
+
+
+ <h2>Canvas Height Test</h2>
+
+   <p>1</p>
+   <p>2</p>
+   <p>3</p>
+   <p>4</p>
+   <p>5</p>
+   <p>6</p>
+   <p>7</p>
+   <p>8</p>
+   <p>9</p>
+   <p>0</p>
+   <p>1</p>
+   <p>2</p>
+   <p>3</p>
+   <p>4</p>
+   <p>5</p>
+   <p>6</p>
+   <p>7</p>
+   <p>8</p>
+   <p>9</p>
+   <p>0</p>
+   <p>LAST</p>
+
+ <div id="theDivNameOne" class="theStyle" > The First Div </div>
+ <div id="fb-root"></div>
+
+ <script>
+   if (!window.console) {
+     console = { log: function() {} };
+   }
+
+     window.fbAsyncInit = function() {
+       console.log('a');
+     FB.init({appId: '193590574006082', status: true, cookie: true,
+xfbml: true, oauth: true});
+     FB.Canvas.setSize({width: 500, height: 200});
+     FB.getLoginStatus(function(response) {
+     });
+           FB.Canvas.setAutoResize();
+           //FB.Canvas.setSize({width: 500, height: 200});
+
+           FB.Canvas.getPageInfo(
+           function(info) {
+             for(var i in info) {
+               console.log('typeof '+i+': '+typeof(info[i])+' = '+info[i]);
+             }
+           }
+           );
+         };
+         (function() {
+     var e = document.createElement('script'); e.async = true;
+     e.src = document.location.protocol +
+     '//connect.facebook.net/en_US/all.js';
+     document.getElementById('fb-root').appendChild(e);
+     }());
+ </script>
+
+<body>
+</html>
+

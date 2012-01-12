@@ -45,8 +45,8 @@ var Publish = (function() {
         logtime('FB.getLoginStatus');
         FB.getLoginStatus(function(response) {
           logtime('FB.getLoginStatus-done');
-          fb_logged_in = response.session;
-          if (response.session) {
+          fb_logged_in = response.authResponse;
+          if (fb_logged_in) {
             console.log('logged in');
             getInfo();
           } else {
@@ -62,7 +62,7 @@ var Publish = (function() {
       return getInfo();
     } else {
       FB.login(function(response) {
-        fb_logged_in = response.session;
+        fb_logged_in = response.authResponse;
         if (fb_logged_in) {
           getInfo();
         }
@@ -104,11 +104,11 @@ var Publish = (function() {
 
   function addName(name,uid,pos,size) {
     var button = UI.makeBox(FB.$('ui'),'name_'+uid,pos,size,'chess');
-    button.innerHTML = '<img src="http://graph.facebook.com/'+uid+'/picture" /> '+FB.String.escapeHTML(name);
+    button.innerHTML = '<img src="https://graph.facebook.com/'+uid+'/picture" /> '+FB.String.escapeHTML(name);
   }
 
   function addMyName(pos,size) {
-    addName(player.name,fb_logged_in.uid,pos,size);
+    addName(player.name,fb_logged_in.userID,pos,size);
   }
 
   function addReqName(req,pos,size) {
@@ -123,7 +123,7 @@ var Publish = (function() {
     var name = 'req_'+req.id;
     if (!FB.$(name)) {
       var button = UI.makeBox(FB.$('requests'),name,[x,y],[450,60],'chess');
-      button.innerHTML = '<img src="http://graph.facebook.com/'+req.from.id+'/picture"/>';
+      button.innerHTML = '<img src="https://graph.facebook.com/'+req.from.id+'/picture"/>';
       var text = UI.makeBox(button,'text_'+req.id,[60,0],[390,60],'chess');
       text.innerHTML = '<div>' + req.from.name + '<br>' + req.message + '</div>';
       text.onclick = function() { onReqClick(req) };
@@ -202,7 +202,7 @@ var Publish = (function() {
       Publish.sendRequest('(game started '+time_str+')',payload);
     }
     //sendMsg('addcheevo win');
-    sendMsg('addaction take rook');
+    //sendMsg('addaction take rook');
   }
 
   function publishStory() {
@@ -214,7 +214,7 @@ var Publish = (function() {
         name: req.from.name
       },
       p2: {
-        id: fb_logged_in.uid,
+        id: fb_logged_in.userID,
         name: player.name
       }
     };

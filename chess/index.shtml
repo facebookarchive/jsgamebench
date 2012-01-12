@@ -16,6 +16,7 @@
       if (dump_count) {
         return;
       }
+      return;
       console.log(log_str);
       mypostrequest = new XMLHttpRequest();
       mypostrequest.open("POST", "/results", true);
