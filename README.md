@@ -1,3 +1,10 @@
+# Archived Repo
+
+This is an archived project and is not currently being developed by Facebook. Please do not file issues or pull-requests against this repo. If you wish to continue to develop this code yourself, we recommend you fork it.
+
+Proceed and be bold!
+
+
 # jsgamebench
 
 JSGameBench exists to explore HTML5’s game performance limits. For version 0.1, the focus is sprite performance a player is likely to see. Scoring is how many sprites are drawn, so large scores are better. Going forward, we want to collect peak and average scores for browsers across a range of hardware configurations. We hope JSGameBench helps the community improve game performance and we look forward to HTML5 game engine developers improving on our ideas and crushing these number!
